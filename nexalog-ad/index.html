@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="vendor/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #040815; }
+      :root { --cyan: #22e1ff; --orange: #ff8a1f; --ink: #eaf3ff; --mut: #8fa8d6; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: Montserrat, sans-serif; color: var(--ink); }
+      #cv { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; display: block; }
+      #vig { position: absolute; inset: 0; pointer-events: none;
+        background: radial-gradient(ellipse at 50% 48%, rgba(0,0,0,0) 52%, rgba(2,5,16,0.8) 100%); }
+      #shadeL { position: absolute; inset: 0; pointer-events: none; opacity: 0;
+        background: linear-gradient(90deg, rgba(3,7,20,0.88) 0%, rgba(3,7,20,0.55) 30%, rgba(3,7,20,0) 58%); }
+      #shadeS { position: absolute; inset: 0; pointer-events: none; opacity: 0;
+        background: radial-gradient(ellipse 1150px 820px at 0% 100%, rgba(3,7,20,0.93), rgba(3,7,20,0.0) 72%),
+                    radial-gradient(ellipse 900px 520px at 100% 0%, rgba(3,7,20,0.78), rgba(3,7,20,0.0) 70%); }
+      #shadeB { position: absolute; inset: 0; pointer-events: none;
+        background: linear-gradient(0deg, rgba(3,7,20,0.85) 0%, rgba(3,7,20,0) 34%); }
+      .mono { font-family: "JetBrains Mono", monospace; }
+      /* titre d'ouverture / fermeture */
+      .brand { position: absolute; left: 120px; top: 300px; width: 1000px; opacity: 0; }
+      .brand .eyebrow { font-family: "JetBrains Mono", monospace; font-size: 22px; letter-spacing: 0.32em; color: var(--cyan); display: flex; align-items: center; gap: 18px; }
+      .brand .eyebrow i { display: block; width: 64px; height: 3px; background: var(--orange); }
+      .brand h1 { font-weight: 900; font-size: 168px; line-height: 0.95; letter-spacing: -0.045em; margin: 22px 0 14px -8px; display: flex; }
+      .brand h1 span { display: inline-block; }
+      .brand h1 .x { color: var(--orange); }
+      .brand .tag { font-weight: 700; font-size: 38px; letter-spacing: -0.01em; color: #d8e8ff; max-width: 900px; line-height: 1.2; }
+      .brand .rail { display: flex; gap: 14px; margin-top: 34px; flex-wrap: wrap; }
+      .chip { font-family: "JetBrains Mono", monospace; font-size: 20px; letter-spacing: 0.14em; padding: 10px 18px; border: 1.5px solid rgba(34,225,255,0.55); border-radius: 4px; color: #bfeaff; background: rgba(10,26,64,0.55); }
+      /* cartes d'étape */
+      .step { position: absolute; left: 96px; bottom: 150px; width: 900px; opacity: 0; }
+      .step .num { font-weight: 900; font-size: 168px; line-height: 0.8; color: rgba(34,225,255,0.12); -webkit-text-fill-color: rgba(34,225,255,0.12); -webkit-text-stroke: 2.5px var(--cyan); letter-spacing: -0.04em; }
+      .step .ttl { font-weight: 900; font-size: 64px; line-height: 1.02; letter-spacing: -0.03em; margin-top: 16px; text-transform: uppercase; }
+      .step .sub { font-weight: 400; font-size: 28px; color: #b9d0f5; margin-top: 14px; max-width: 760px; line-height: 1.35; }
+      .step .bar { width: 120px; height: 5px; background: var(--orange); margin-top: 22px; transform-origin: left center; }
+      /* KPI */
+      .kpi { position: absolute; right: 96px; top: 96px; text-align: right; opacity: 0; }
+      .kpi .v { text-shadow: 0 4px 24px rgba(0,0,0,0.8); font-weight: 900; font-size: 128px; letter-spacing: -0.05em; line-height: 0.9; color: #fff; text-shadow: 0 0 40px rgba(34,225,255,0.35); }
+      .kpi .v b { color: var(--orange); font-weight: 900; }
+      .kpi .l { text-shadow: 0 2px 10px rgba(0,0,0,0.95); font-family: "JetBrains Mono", monospace; font-size: 22px; letter-spacing: 0.22em; color: var(--cyan); margin-top: 12px; text-transform: uppercase; }
+      /* rail de progression */
+      #rail { position: absolute; left: 96px; right: 96px; bottom: 58px; height: 52px; opacity: 0; }
+      #rail .line { position: absolute; left: 0; right: 0; top: 10px; height: 2px; background: rgba(143,168,214,0.35); }
+      #rail .fill { position: absolute; left: 0; top: 9px; height: 4px; width: 0; background: linear-gradient(90deg, var(--cyan), var(--orange)); box-shadow: 0 0 14px rgba(34,225,255,0.8); }
+      #rail .n { position: absolute; top: 0; transform: translateX(-50%); text-align: center; font-family: "JetBrains Mono", monospace; font-size: 17px; letter-spacing: 0.16em; color: var(--mut); white-space: nowrap; }
+      #rail .n i { display: block; width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--mut); margin: 0 auto 10px; background: #060d24; }
+      /* étiquette héros */
+      #heroTag { position: absolute; left: 0; top: 0; opacity: 0; will-change: transform; }
+      #heroTag .line { position: absolute; left: 0; top: -96px; width: 2px; height: 96px; background: linear-gradient(0deg, var(--orange), rgba(255,138,31,0)); }
+      #heroTag .card { position: absolute; left: 14px; top: -168px; width: 430px; white-space: nowrap; padding: 14px 18px 16px; border-left: 4px solid var(--orange);
+        background: linear-gradient(90deg, rgba(8,18,48,0.92), rgba(8,18,48,0.7)); border-radius: 2px; box-shadow: 0 0 30px rgba(255,138,31,0.25); }
+      #heroTag .a { font-family: "JetBrains Mono", monospace; font-size: 15px; letter-spacing: 0.14em; color: var(--orange); }
+      #heroTag .b { font-weight: 900; font-size: 25px; letter-spacing: -0.01em; margin-top: 4px; }
+      #heroTag .c { font-family: "JetBrains Mono", monospace; font-size: 16px; color: #9fd8ff; margin-top: 4px; letter-spacing: 0.06em; }
+      #heroTag .dot { position: absolute; left: -7px; top: -7px; width: 14px; height: 14px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 18px 6px rgba(255,138,31,0.8); }
+      /* bulles d'équipement */
+      .eq { position: absolute; left: 0; top: 0; opacity: 0; will-change: transform; }
+      .eq .l { position: absolute; left: 0; top: 0; width: 2px; height: 70px; background: linear-gradient(180deg, var(--cyan), rgba(34,225,255,0)); }
+      .eq .c { position: absolute; left: -12px; top: 70px; white-space: nowrap; padding: 9px 16px; font-family: "JetBrains Mono", monospace; font-size: 19px; letter-spacing: 0.1em; color: #dff6ff;
+        border: 1.5px solid rgba(34,225,255,0.65); background: rgba(6,18,48,0.82); border-radius: 3px; box-shadow: 0 0 22px rgba(34,225,255,0.22); }
+      .eq .c b { color: var(--cyan); font-weight: 700; }
+      .eq .d { position: absolute; left: -5px; top: -5px; width: 10px; height: 10px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 14px 4px rgba(34,225,255,0.8); }
+      #fade { position: absolute; inset: 0; background: #02040c; pointer-events: none; }
+      /* sous-titres voix off */
+      #sub { position: absolute; left: 0; right: 0; bottom: 26px; text-align: center; font-size: 22px; font-weight: 700; color: rgba(234,243,255,0.92); letter-spacing: 0.01em; opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="56" data-width="1920" data-height="1080">
+      <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
+      <div id="vig"></div>
+      <div id="shadeB"></div>
+      <div id="shadeL"></div>
+      <div id="shadeS"></div>
+
+      <div class="brand" id="open">
+        <div class="eyebrow mono"><i></i><span>HUB LOGISTIQUE 01</span></div>
+        <h1 id="openName"><span>N</span><span>E</span><span class="x">X</span><span>A</span><span>L</span><span>O</span><span>G</span></h1>
+        <div class="tag" id="openTag">La logistique, en mouvement intelligent.</div>
+      </div>
+
+      <div class="step" id="s1"><div class="num">01</div><div class="ttl">Réception<br />des marchandises</div><div class="sub">Quais connectés, déchargement automatisé et identification de chaque palette en quelques secondes.</div><div class="bar"></div></div>
+      <div class="step" id="s2"><div class="num">02</div><div class="ttl">Stockage<br />automatisé</div><div class="sub">Des navettes autonomes rangent chaque palette dans des milliers d’emplacements, sans une seconde perdue.</div><div class="bar"></div></div>
+      <div class="step" id="s3"><div class="num">03</div><div class="ttl">Tri<br />intelligent</div><div class="sub">Chaque colis est scanné sous tous les angles puis aiguillé vers sa destination à pleine vitesse.</div><div class="bar"></div></div>
+      <div class="step" id="s4"><div class="num">04</div><div class="ttl">Préparation<br />de commandes</div><div class="sub">Des bras robotisés saisissent, conditionnent et étiquettent chaque commande avec une précision chirurgicale.</div><div class="bar"></div></div>
+      <div class="step" id="s5"><div class="num">05</div><div class="ttl">Expédition<br />vers les magasins</div><div class="sub">Les camions sont chargés automatiquement et partent livrer les enseignes dès le lendemain.</div><div class="bar"></div></div>
+
+      <div class="kpi" id="k1"><div class="v"><span id="k1v">0</span></div><div class="l">palettes reçues / jour</div></div>
+      <div class="kpi" id="k2"><div class="v"><span id="k2v">0</span></div><div class="l">emplacements automatisés</div></div>
+      <div class="kpi" id="k3"><div class="v"><span id="k3v">0</span></div><div class="l">colis triés / heure</div></div>
+      <div class="kpi" id="k4"><div class="v"><span id="k4v">0</span><b>%</b></div><div class="l">précision de préparation</div></div>
+      <div class="kpi" id="k5"><div class="v"><b>J</b><span id="k5v">+0</span></div><div class="l">livraison en magasin</div></div>
+
+      <div class="eq" id="e1"><div class="l"></div><div class="d"></div><div class="c">QUAI Q3 · <b>DÉCHARGEMENT 6 MIN</b></div></div>
+      <div class="eq" id="e2"><div class="l"></div><div class="d"></div><div class="c">NAVETTE AUTONOME · <b>3 M/S</b></div></div>
+      <div class="eq" id="e3"><div class="l"></div><div class="d"></div><div class="c">PORTIQUE SCAN · <b>360° · 99,9 %</b></div></div>
+      <div class="eq" id="e4"><div class="l"></div><div class="d"></div><div class="c">BRAS ROBOTISÉ · <b>22 COLIS / MIN</b></div></div>
+      <div class="eq" id="e5"><div class="l"></div><div class="d"></div><div class="c">CHARGEMENT AUTO · <b>QUAI E2</b></div></div>
+
+      <div id="heroTag"><div class="line"></div><div class="dot"></div>
+        <div class="card"><div class="a">SUIVI PRODUIT · REF 48-2917</div><div class="b" id="heroSt">Réception</div><div class="c" id="heroSub">Quai Q3</div></div></div>
+
+      <div id="rail"><div class="line"></div><div class="fill" id="railFill"></div>
+        <div class="n" style="left:0%" data-i="0"><i></i>RÉCEPTION</div>
+        <div class="n" style="left:25%" data-i="1"><i></i>STOCKAGE</div>
+        <div class="n" style="left:50%" data-i="2"><i></i>TRI</div>
+        <div class="n" style="left:75%" data-i="3"><i></i>PRÉPARATION</div>
+        <div class="n" style="left:100%" data-i="4"><i></i>EXPÉDITION</div>
+      </div>
+
+      <div class="brand" id="outro" style="top: 330px">
+        <div class="eyebrow mono"><i></i><span>L’USINE QUI PENSE EN MOUVEMENT</span></div>
+        <h1 id="outName"><span>N</span><span>E</span><span class="x">X</span><span>A</span><span>L</span><span>O</span><span>G</span></h1>
+        <div class="tag">La logistique, en mouvement intelligent.</div>
+        <div class="rail"><span class="chip">RÉCEPTION</span><span class="chip">STOCKAGE</span><span class="chip">TRI</span><span class="chip">PRÉPARATION</span><span class="chip">EXPÉDITION</span></div>
+      </div>
+      <div id="fade"></div>
+      <audio id="aud-music" src="assets/music.wav" data-start="0" data-duration="56" data-track-index="1" data-volume="0.5"></audio>
+      <audio id="aud-sfx" src="assets/sfx.wav" data-start="0" data-duration="56" data-track-index="2" data-volume="0.7"></audio>
+      <audio id="aud-voice" src="assets/voiceover.wav" data-start="0" data-duration="56" data-track-index="3" data-volume="1"></audio>
+    </div>
+
+    <script src="js/engine.js"></script>
+    <script src="js/world.js"></script>
+    <script src="js/actors1.js"></script>
+    <script src="js/actors2.js"></script>
+    <script src="js/actors3.js"></script>
+    <script src="js/story.js"></script>
+    <script src="js/hud.js"></script>
+    <script>
+      window.addEventListener("hf-seek", (e) => window.renderAt(e.detail.time));
+      const tl = gsap.timeline({ paused: true });
+      const proxy = { t: 0 };
+      tl.to(proxy, { t: 56, duration: 56, ease: "none", onUpdate: () => window.renderAt(proxy.t) }, 0);
+      window.buildHudTimeline(tl);
+      window.__timelines["main"] = tl;
+      window.renderAt(0);
+    </script>
+  </body>
+</html>
