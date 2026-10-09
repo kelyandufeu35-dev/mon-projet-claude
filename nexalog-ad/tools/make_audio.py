@@ -152,7 +152,7 @@ def boom(d=2.2):
     nz = fft_filter(rng.standard_normal(n), "lp", 2500) * np.exp(-t * 6) * 0.5
     return reverb(x + nz, 2.0, 0.35)
 BM = boom(); BM /= np.max(np.abs(BM))
-place(sfx, BM, 3.25, 0.6); place(sfx, BM, 53.0, 0.55)
+# impacts du logo supprimés
 # bip de recul + chuintement des camions
 def beep(f=980, d=0.16):
     n = int(d * SR); t = tt(n); return np.sin(2 * np.pi * f * t) * np.minimum(1, np.minimum(t / 0.005, (d - t) / 0.01))
