@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="vendor/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #FFC72C; }
+      :root { --red: #DA291C; --red2: #B71C14; --yel: #FFC72C; --ink: #27251F; --mut: #6B6558; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: Montserrat, sans-serif; color: var(--ink); }
+      #cv { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; display: block; }
+      .mono { font-family: "JetBrains Mono", monospace; }
+      /* chapitres (haut gauche) */
+      #chips { position: absolute; left: 56px; top: 44px; display: flex; gap: 10px; opacity: 0; }
+      .chip { font-family: "JetBrains Mono", monospace; font-size: 15px; font-weight: 700; letter-spacing: 0.1em; padding: 9px 14px; border-radius: 30px; background: rgba(255,255,255,0.85); color: var(--mut); border: 2px solid rgba(39,37,31,0.12); box-shadow: 0 3px 10px rgba(0,0,0,0.08); transition: none; }
+      .chip.on { background: var(--red); color: #fff; border-color: var(--red); }
+      /* titre de chapitre (bas gauche) */
+      .chap { position: absolute; left: 56px; bottom: 54px; opacity: 0; max-width: 820px; }
+      .chap .n { font-family: "JetBrains Mono", monospace; font-size: 22px; font-weight: 700; color: #A5160E; text-shadow: 0 0 14px rgba(255,255,255,0.95); letter-spacing: 0.18em; }
+      .chap .t { font-weight: 900; font-size: 68px; line-height: 1; letter-spacing: -0.035em; text-transform: uppercase; color: var(--ink); margin-top: 8px; text-shadow: 0 2px 0 rgba(255,255,255,0.9), 0 0 24px rgba(255,255,255,0.85); }
+      .chap .t b { color: var(--red); font-weight: 900; }
+      .chap .s { font-weight: 700; font-size: 26px; color: #3b362c; margin-top: 12px; text-shadow: 0 0 16px rgba(255,255,255,0.95), 0 0 6px rgba(255,255,255,0.9); }
+      .chap .bar { width: 130px; height: 7px; background: var(--red); margin-top: 16px; border-radius: 4px; transform-origin: left; box-shadow: 14px 0 0 var(--yel); }
+      /* cartes de stats scène 1 */
+      #stats { position: absolute; left: 56px; top: 150px; width: 640px; }
+      .stat { background: #fff; border-radius: 18px; padding: 20px 26px; margin-bottom: 18px; border-left: 12px solid var(--red); box-shadow: 0 12px 30px rgba(120,60,0,0.18); opacity: 0; }
+      .stat .v { font-weight: 900; font-size: 84px; letter-spacing: -0.04em; line-height: 0.95; color: var(--red); }
+      .stat .v small { font-size: 40px; color: var(--ink); letter-spacing: -0.02em; }
+      .stat .l { font-family: "JetBrains Mono", monospace; font-size: 20px; font-weight: 700; letter-spacing: 0.12em; color: var(--mut); text-transform: uppercase; margin-top: 8px; }
+      .stat.k { border-left-color: var(--yel); }
+      .stat .tag { font-weight: 900; font-size: 46px; line-height: 1.05; letter-spacing: -0.03em; color: var(--ink); }
+      .stat .tag b { color: var(--red); }
+      #src { position: absolute; left: 56px; bottom: 30px; font-family: "JetBrains Mono", monospace; font-size: 15px; color: rgba(60,50,30,0.8); opacity: 0; }
+      /* étiquettes ancrées */
+      .tg { position: absolute; left: 0; top: 0; opacity: 0; will-change: transform; }
+      .tg .dot { position: absolute; left: -9px; top: -9px; width: 18px; height: 18px; border-radius: 50%; background: var(--red); border: 4px solid #fff; box-shadow: 0 0 0 5px rgba(218,41,28,0.3), 0 4px 10px rgba(0,0,0,0.3); }
+      .tg .ln { position: absolute; width: 3px; background: linear-gradient(0deg, var(--red), rgba(218,41,28,0.2)); left: -1px; }
+      .tg .cd { position: absolute; background: #fff; border-radius: 14px; padding: 12px 18px 13px; white-space: nowrap; box-shadow: 0 10px 28px rgba(60,30,0,0.28); border-top: 6px solid var(--red); }
+      .tg .cd .a { font-weight: 900; font-size: 27px; letter-spacing: -0.02em; color: var(--ink); }
+      .tg .cd .b { font-family: "JetBrains Mono", monospace; font-size: 15px; font-weight: 700; letter-spacing: 0.06em; color: var(--mut); margin-top: 3px; }
+      .tg.y .dot { background: #E5A900; box-shadow: 0 0 0 5px rgba(255,199,44,0.4), 0 4px 10px rgba(0,0,0,0.3); }
+      .tg.y .cd { border-top-color: var(--yel); }
+      .tg.b .dot { background: #2E7DD1; box-shadow: 0 0 0 5px rgba(46,125,209,0.3), 0 4px 10px rgba(0,0,0,0.3); }
+      .tg.b .cd { border-top-color: #2E7DD1; }
+      /* bannière centrale */
+      .ban { position: absolute; right: 56px; top: 110px; background: var(--red); color: #fff; font-weight: 900; font-size: 40px; letter-spacing: -0.02em; padding: 18px 36px; border-radius: 16px; box-shadow: 0 12px 30px rgba(120,0,0,0.35); opacity: 0; white-space: nowrap; border-bottom: 8px solid var(--yel); }
+      .ban small { display: block; font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 17px; letter-spacing: 0.16em; color: var(--yel); margin-top: 4px; text-transform: uppercase; }
+      /* grand pourcentage (franchise) */
+      #pct { position: absolute; right: 70px; bottom: 60px; width: 520px; background: #fff; border-radius: 22px; padding: 22px 30px; border-left: 14px solid var(--red); box-shadow: 0 14px 36px rgba(60,30,0,0.28); opacity: 0; }
+      #pct .v { font-weight: 900; font-size: 120px; letter-spacing: -0.05em; color: var(--red); line-height: 0.9; }
+      #pct .v small { font-size: 54px; color: var(--ink); }
+      #pct .l { font-weight: 700; font-size: 25px; line-height: 1.25; color: var(--ink); margin-top: 10px; }
+      #pct .f { font-family: "JetBrains Mono", monospace; font-size: 14px; color: var(--mut); margin-top: 8px; letter-spacing: 0.04em; }
+      /* final */
+      #fin { position: absolute; left: 0; right: 0; bottom: 120px; text-align: center; opacity: 0; color: #fff; }
+      #fin .m { font-weight: 900; font-size: 70px; letter-spacing: -0.04em; text-shadow: 0 6px 24px rgba(80,0,0,0.5); }
+      #fin .m b { color: var(--yel); }
+      #fin .t { font-weight: 700; font-size: 38px; margin-top: 10px; letter-spacing: -0.01em; text-shadow: 0 4px 16px rgba(80,0,0,0.5); }
+      #disc { position: absolute; left: 0; right: 0; bottom: 34px; text-align: center; font-family: "JetBrains Mono", monospace; font-size: 15px; color: rgba(255,255,255,0.88); letter-spacing: 0.04em; opacity: 0; }
+      .tilechip { position: absolute; left: 0; top: 0; opacity: 0; font-weight: 900; font-size: 24px; background: var(--red); color: #fff; padding: 9px 18px; border-radius: 30px; letter-spacing: 0.02em; box-shadow: 0 8px 20px rgba(120,0,0,0.3); border-bottom: 5px solid var(--yel); white-space: nowrap; will-change: transform; }
+ #chips { left: 24px !important; top: 110px !important; gap: 6px !important; }
+      .chip { font-size: 12.5px !important; padding: 7px 10px !important; letter-spacing: 0.04em !important; }
+      .chap { left: 44px !important; bottom: 330px !important; max-width: 960px !important; }
+      .chap .t { font-size: 78px !important; }
+      #stats { left: 44px !important; top: 230px !important; width: 960px !important; }
+      #src { left: 44px !important; bottom: 300px !important; }
+      .ban { right: auto !important; left: 44px !important; top: 190px !important; font-size: 40px !important; white-space: normal !important; width: 992px; }
+      #pct { right: auto !important; left: 44px !important; bottom: 660px !important; width: 880px !important; }
+      #fin { bottom: 360px !important; } #fin .m { font-size: 84px !important; } #fin .t { font-size: 40px !important; padding: 0 60px; }
+      #disc { bottom: 290px !important; padding: 0 50px; }
+      .tg .cd .a { font-size: 30px !important; } .tg .cd .b { font-size: 16px !important; }
+      #fade { position: absolute; inset: 0; background: #FFC72C; pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="85" data-width="1080" data-height="1920">
+      <canvas id="cv" width="1080" height="1920" data-layout-allow-overflow></canvas>
+
+      <div id="chips">
+        <span class="chip" data-s="0">1 · MONDE</span><span class="chip" data-s="1">2 · FOURNISSEURS</span><span class="chip" data-s="2">3 · FRANCHISE</span><span class="chip" data-s="3">4 · RESTAURANT</span><span class="chip" data-s="4">5 · CHIFFRES</span><span class="chip" data-s="5">6 · RÉSULTAT</span>
+      </div>
+
+      <div id="stats">
+        <div class="stat" id="st1"><div class="v"><span id="v1n">0</span><small> +</small></div><div class="l">restaurants dans le monde</div></div>
+        <div class="stat k" id="st2"><div class="v"><span id="v2n">0</span><small> +</small></div><div class="l">pays et marchés</div></div>
+        <div class="stat" id="st3" style="border-left-color:#27251F"><div class="tag">Une marque <b>mondiale</b>,<br />des entreprises <b>locales</b>.</div></div>
+      </div>
+      <div id="src">Source : McDonald’s Corporation, rapport annuel (10-K) 2025</div>
+
+      <div class="chap" id="c1"><div class="n">CHAPITRE 01</div><div class="t">Un empire <b>mondial</b></div><div class="s">Une présence sur tous les continents</div><div class="bar"></div></div>
+      <div class="chap" id="c2"><div class="n">CHAPITRE 02</div><div class="t">Des champs aux <b>usines</b></div><div class="s">Un réseau de fournisseurs partenaires</div><div class="bar"></div></div>
+      <div class="chap" id="c3"><div class="n">CHAPITRE 03</div><div class="t">Le <b>modèle</b> franchise</div><div class="s">Marque, site, franchisé : qui fait quoi</div><div class="bar"></div></div>
+      <div class="chap" id="c4"><div class="n">CHAPITRE 04</div><div class="t">Dans le <b>restaurant</b></div><div class="s">De la borne de commande au client</div><div class="bar"></div></div>
+      <div class="chap" id="c5"><div class="n">CHAPITRE 05</div><div class="t">Comment l’<b>argent</b> circule</div><div class="s">Chiffres 2025 · Source : rapport annuel (10-K)</div><div class="bar"></div></div>
+      <div class="chap" id="c6"><div class="n">CHAPITRE 06</div><div class="t">Chaque <b>commande</b></div><div class="s">Du champ jusqu’au plateau</div><div class="bar"></div></div>
+
+      <div id="tags"></div>
+      <div class="ban" id="ban3">La marque fixe le cadre, le franchisé exploite<small>Chacun son rôle, avec des standards communs</small></div>
+      <div class="ban" id="ban5">Marque, franchisés et fournisseurs : un système partagé<small>Les revenus viennent surtout des loyers et redevances</small></div>
+      <div id="pct"><div class="v"><span id="pctn">0</span><small> %</small></div><div class="l">des restaurants sont <b>franchisés</b> : exploités par des entrepreneurs indépendants</div><div class="f">Environ, fin 2025 · Source : McDonald’s Corp. 10-K</div></div>
+
+      <div class="tilechip" data-k="0">Agriculture</div><div class="tilechip" data-k="1">Production</div><div class="tilechip" data-k="2">Distribution</div><div class="tilechip" data-k="3">Restaurant</div><div class="tilechip" data-k="4">Client</div>
+
+      <div id="fin"><div class="m">McDonald’s<b> —</b></div><div class="t">Un monde d’organisation derrière chaque commande.</div></div>
+      <div id="disc">Création de motion design indépendante, non affiliée à McDonald’s · Logo stylisé · Chiffres : McDonald’s Corporation (fin 2025)</div>
+      <div id="fade"></div>
+      <audio id="aud-music" src="assets/music.wav" data-start="0" data-duration="85" data-track-index="1" data-volume="0.16"></audio>
+      <audio id="aud-sfx" src="assets/sfx.wav" data-start="0" data-duration="85" data-track-index="2" data-volume="0.3"></audio>
+      <audio id="aud-voice" src="assets/voiceover.wav" data-start="0" data-duration="85" data-track-index="3" data-volume="1"></audio>
+    </div>
+
+    <script src="js/engine.js"></script>
+    <script src="js/engine_ext.js"></script>
+    <script src="js/landdots.js"></script>
+    <script src="js/lib.js"></script>
+    <script src="js/sc1_globe.js"></script>
+    <script src="js/sc2_supply.js"></script>
+    <script src="js/sc3_logi.js"></script>
+    <script src="js/sc4_resto.js"></script>
+    <script src="js/sc5_franchise.js"></script>
+    <script src="js/sc6_finale.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/hud.js"></script>
+    <script>
+      window.addEventListener("hf-seek", (e) => window.renderAt(e.detail.time));
+      const tl = gsap.timeline({ paused: true });
+      const proxy = { t: 0 };
+      tl.to(proxy, { t: 85, duration: 85, ease: "none", onUpdate: () => window.renderAt(proxy.t) }, 0);
+      window.buildHudTimeline(tl);
+      window.__timelines["main"] = tl;
+      window.renderAt(0);
+    </script>
+  </body>
+</html>
