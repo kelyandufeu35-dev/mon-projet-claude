@@ -3,10 +3,16 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "npx --yes hyperframes@0.8.143 preview",
-    "check": "npx --yes hyperframes@0.8.143 check",
-    "render": "npx --yes hyperframes@0.8.143 render",
-    "publish": "npx --yes hyperframes@0.8.143 publish"
+    "build": "node scripts/build.mjs",
+    "dev": "npm run build && npx --yes hyperframes@0.8.143 preview",
+    "preview:standalone": "npm run build && npx --yes http-server -p 4173 -c-1 .",
+    "lint": "npx --yes hyperframes@0.8.143 lint",
+    "check": "npm run build && npx --yes hyperframes@0.8.143 check",
+    "render": "npm run build && npx --yes hyperframes@0.8.143 render -f 30 -q looks -o renders/mcdonalds-inside-the-organization.mp4",
+    "shoot": "node scripts/shoot.mjs",
+    "voice": "python3 scripts/tts.py",
+    "music": "python3 scripts/music.py",
+    "audio:tags": "node scripts/audio-tags.mjs"
   },
   "devDependencies": {
     "@fontsource/inter": "^5.3.0",
@@ -15,5 +21,6 @@
     "gsap": "^3.14.2",
     "playwright-core": "^1.64.0",
     "three": "^0.181.2"
-  }
+  },
+  "description": "McDonald's — Inside the Organization : vidéo explicative en motion design 3D isométrique (Hyperframes + Three.js)"
 }

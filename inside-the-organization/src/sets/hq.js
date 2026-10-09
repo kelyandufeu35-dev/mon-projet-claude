@@ -134,7 +134,7 @@ export function buildHQ(ctx) {
   const tags = ctx.labels;
   tags.add({ kind: 'card', title: 'Conseil d’administration', sub: 'Supervise la gouvernance', color: 0xffffff, anchor: boardAnchor, dx: -300, dy: -110, t0: 8.9, t1: 14.6, align: 'right' });
   tags.add({ kind: 'card', title: 'Directeur général (PDG)', sub: 'Pilote l’entreprise', color: C.red, anchor: ceoAnchor, dx: 270, dy: -150, t0: 10.6, t1: 14.6, align: 'left' });
-  tags.add({ kind: 'card', title: 'Équipe de direction générale', sub: 'Dirigeants exécutifs · mènent l’activité', color: C.yellow, anchor: execAnchor, dx: 230, dy: 90, t0: 12.0, t1: 14.6, align: 'left' });
+  tags.add({ kind: 'card', title: 'Équipe de direction générale', sub: 'Dirigeants exécutifs · pilotent l’activité', color: C.yellow, anchor: execAnchor, dx: 230, dy: 90, t0: 12.0, t1: 14.6, align: 'left' });
 
   function update(t) {
     // — construction de la tour

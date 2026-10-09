@@ -54,7 +54,7 @@ export class Labels {
         const x0 = it.align === 'center' ? bx - bw / 2 : it.align === 'right' ? bx - bw : bx;
         const y0 = by - bh / 2;
         let nx = x0, ny = y0;
-        const minY = x0 < 1010 ? 168 : 44, maxY = 884 - bh;
+        const minY = x0 < 1010 ? 212 : 44, maxY = 884 - bh;
         ny = Math.min(Math.max(ny, minY), maxY); nx = Math.min(Math.max(nx, 40), W - 40 - bw);
         if (Math.abs(nx - x0) > 0.5 || Math.abs(ny - y0) > 0.5) {
           dx += nx - x0; dy += ny - y0;

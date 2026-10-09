@@ -43,7 +43,8 @@ html, body { width: 1920px; height: 1080px; overflow: hidden; background: #10111
 #overlay, #fx { position: absolute; inset: 0; pointer-events: none; }
 #fx .vignette { position: absolute; inset: 0; background: radial-gradient(120% 100% at 50% 50%, rgba(0,0,0,0) 55%, rgba(0,0,0,.42) 100%); }
 #fx .flash { position: absolute; inset: 0; background: radial-gradient(80% 80% at 50% 50%, #fff 0%, #ffe9a8 45%, #ffc72c 100%); opacity: 0; mix-blend-mode: screen; }
-#fx .scrim { position: absolute; inset: 0; background: radial-gradient(90% 80% at 50% 50%, rgba(10,10,12,.86) 0%, rgba(10,10,12,.94) 100%); opacity: 0; }
+#fx .pulse { position: absolute; inset: 0; background: radial-gradient(70% 70% at 50% 50%, rgba(255,255,255,.55) 0%, rgba(255,255,255,.18) 55%, rgba(255,255,255,0) 100%); opacity: 0; mix-blend-mode: screen; }
+#overlay .scrim { position: absolute; inset: 0; background: radial-gradient(90% 80% at 50% 50%, rgba(10,10,12,.86) 0%, rgba(10,10,12,.94) 100%); opacity: 0; }
 
 .intro { position: absolute; left: 110px; bottom: 270px; width: 1100px; }
 .intro .k { font: 700 22px 'Poppins'; letter-spacing: .32em; color: var(--yellow); display: flex; align-items: center; gap: 18px; }
@@ -67,7 +68,8 @@ html, body { width: 1920px; height: 1080px; overflow: hidden; background: #10111
 
 .legend { position: absolute; background: rgba(17,18,22,.8); border: 1px solid rgba(255,255,255,.14); border-radius: 16px; padding: 16px 24px 18px; box-shadow: 0 14px 36px rgba(0,0,0,.45); }
 .legend.bl { left: 70px; bottom: 170px; }
-.legend.mid-l { left: 70px; top: 168px; }
+.legend.bl.hi { bottom: 214px; }
+.legend.mid-l { left: 70px; top: 560px; }
 .legend .foot { margin-top: 8px; font: 500 16px 'Inter'; color: #c9ccd1; font-style: italic; max-width: 420px; }
 .legend h4 { font: 700 14px 'Poppins'; letter-spacing: .22em; color: #aeb2b9; margin-bottom: 10px; }
 .legend .row { display: flex; align-items: center; gap: 16px; padding: 6px 0; }
@@ -82,6 +84,7 @@ html, body { width: 1920px; height: 1080px; overflow: hidden; background: #10111
 .note span { font: 500 18px 'Inter'; color: #f0eee6; }
 .note.tr { left: 70px; top: 166px; }
 .note.tl { left: 70px; top: 172px; }
+.note.bl { left: 70px; bottom: 160px; }
 .note.mid { left: 50%; translate: -50% 0; bottom: 150px; }
 
 .final { position: absolute; left: 0; right: 0; top: 50%; translate: 0 -50%; text-align: center; }

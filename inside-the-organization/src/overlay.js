@@ -14,7 +14,9 @@ export function buildOverlay(root) {
   const tl = gsap.timeline({ paused: true });
   const layer = el('div', ''); layer.id = 'overlay'; root.appendChild(layer);
   const fx = el('div', ''); fx.id = 'fx'; root.appendChild(fx);
-  fx.innerHTML = '<div class="vignette"></div><div class="flash"></div><div class="scrim"></div>';
+  fx.innerHTML = '<div class="vignette"></div><div class="pulse"></div><div class="flash"></div>';
+  // l'assombrissement du final vit DANS la couche de textes, sous le message (sinon il le ternit)
+  const scrimEl = el('div', 'scrim'); layer.prepend(scrimEl);
 
   // ---------- Titre d'ouverture ----------
   const intro = el('div', 'intro', `<div class="k"><i></i>INSIDE THE ORGANIZATION</div><h1>McDonald’s</h1><p>Qui dirige, comment l’entreprise s’organise, comment franchisés et équipes locales s’y intègrent.</p>`);
@@ -70,16 +72,16 @@ export function buildOverlay(root) {
     { color: '#ffc72c', label: 'Licencié de développement', sub: 'partenaire' },
     { color: '#ffffff', label: 'Société affiliée', sub: 'participation', style: 'dash' },
   ] });
-  legend({ t0: 51.6, t1: 59.4, title: 'RELATIONS', cls: 'bl', rows: [
+  legend({ t0: 51.6, t1: 55.6, title: 'RELATIONS', cls: 'bl hi', rows: [
     { color: '#ffc72c', label: 'Contrat de franchise' },
     { color: '#ffe6a0', label: 'Standards de marque', style: 'dash' },
     { color: '#ff4638', label: 'Hiérarchie du franchisé' },
   ] });
-  legend({ t0: 85.7, t1: 88.3, title: 'LES QUATRE RELATIONS', cls: 'mid-l big', foot: 'Illustration pédagogique : ce n’est pas l’organigramme officiel de McDonald’s.', rows: [
+  legend({ t0: 85.7, t1: 88.3, title: 'LES QUATRE RELATIONS', cls: 'mid-l big', rows: [
     { color: '#ffffff', label: 'Gouvernance' },
     { color: '#ff4638', label: 'Hiérarchie interne' },
-    { color: '#ffc72c', label: 'Relations contractuelles', sub: 'franchisés' },
-    { color: '#74d7ff', label: 'Coordination entre fonctions', style: 'dash' },
+    { color: '#ffc72c', label: 'Contrats', sub: 'franchisés' },
+    { color: '#74d7ff', label: 'Coordination', sub: 'fonctions', style: 'dash' },
   ] });
 
   // ---------- Notes de prudence ----------
@@ -90,6 +92,7 @@ export function buildOverlay(root) {
     if (t1 < TOTAL) tl.to(n, { opacity: 0, y: 10, duration: 0.5 }, t1);
   };
   note('Organisation simplifiée à des fins pédagogiques — non officielle.', 16.4, 29.0, 'tr');
+  note('Illustration pédagogique : ce n’est pas l’organigramme officiel de McDonald’s.', 85.9, 88.3, 'bl');
   note('Exemples illustratifs : les structures réelles diffèrent selon les marchés.', 37.8, 44.2, 'tr');
   note('Selon le pays, le restaurant et son mode d’exploitation, l’organisation précise varie.', 72.4, 74.4, 'mid');
 
@@ -111,14 +114,16 @@ export function buildOverlay(root) {
     .to(flash, { opacity: 1, duration: 0.55, ease: 'power2.in' }, 44.45)
     .to(flash, { opacity: 0, duration: 0.7, ease: 'power2.out' }, 45.0);
   // petit pouls de lumière entre scènes 1 → 2 et 2 → 3
-  [[15.0, 0.18], [30.4, 0.22], [60.2, 0.16], [75.2, 0.2]].forEach(([t, a]) => {
-    tl.to(flash, { opacity: a, duration: 0.3, ease: 'power2.out' }, t).to(flash, { opacity: 0, duration: 0.6, ease: 'power2.in' }, t + 0.3);
+  const pulse = fx.querySelector('.pulse');
+  tl.set(pulse, { opacity: 0 }, 0);
+  [[15.0, 0.34], [30.4, 0.4], [60.2, 0.3], [75.2, 0.38]].forEach(([t, a]) => {
+    tl.to(pulse, { opacity: a, duration: 0.25, ease: 'power2.out' }, t).to(pulse, { opacity: 0, duration: 0.7, ease: 'power2.in' }, t + 0.25);
   });
 
   // ---------- Message final ----------
   const fin = el('div', 'final', `<div class="mark"></div><p>McDonald’s&nbsp;: une <em>organisation mondiale</em>,<br>des <em>milliers d’entrepreneurs</em> et d’<em>équipes locales</em>.</p>`);
   layer.appendChild(fin);
-  const scrim = fx.querySelector('.scrim');
+  const scrim = scrimEl;
   tl.set(fin, { opacity: 0 }, 0).set(scrim, { opacity: 0 }, 0)
     .to(scrim, { opacity: 1, duration: 1.1, ease: 'power2.inOut' }, 88.0)
     .fromTo(fin, { opacity: 0 }, { opacity: 1, duration: 0.01 }, 88.5)

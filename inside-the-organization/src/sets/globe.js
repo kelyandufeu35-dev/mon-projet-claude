@@ -190,7 +190,7 @@ export function buildGlobe(ctx) {
     labels.add({
       kind: 'card', title: m.name, sub: m.note, color: st.color, scale: 0.8,
       anchor: (t, out) => { const p = mk.group.getWorldPosition(out); out.y += 1.2; return out; },
-      dx: m.id === 'de' ? 90 : m.id === 'jp' ? 80 : m.id === 'cn' ? -120 : -130, dy: m.id === 'de' ? -95 : -110, t0: m.t + 1.0, t1: m.t + 3.6, align: m.id === 'de' || m.id === 'jp' ? 'left' : 'right',
+      dx: m.id === 'de' ? 90 : m.id === 'jp' ? 80 : m.id === 'cn' ? -120 : -130, dy: m.id === 'de' ? -95 : -110, t0: m.t + 1.0, t1: Math.min(m.t + 3.6, 43.5), align: m.id === 'de' || m.id === 'jp' ? 'left' : 'right',
     });
     return mk;
   });

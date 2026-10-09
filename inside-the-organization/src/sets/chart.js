@@ -187,7 +187,7 @@ export function buildChart(ctx, cityCtx) {
   card('Responsables et équipes', 'Dans chaque restaurant', C.red, restSlots[1].clone().addScaledVector(uB, -9).add(new THREE.Vector3(0, 2.4, 0)), 90, 120, 84.8, T_END, 'left', 1.0, 'BASE');
   // vue d'ensemble : étiquettes compactes
   const F0 = 85.8, fs = 0.8;
-  const tag = (title, color, pos, dx, dy, align) => labels.add({ kind: 'tag', title, color, scale: 1.05, anchor: (t, v) => { v.copy(pos).add(CITY_POS); return v; }, dx, dy, t0: F0, t1: 88.3, align, stem: true, className: 'fin' });
+  const tag = (title, color, pos, dx, dy, align) => labels.add({ kind: 'tag', title, color, scale: 1.22, anchor: (t, v) => { v.copy(pos).add(CITY_POS); return v; }, dx, dy, t0: F0, t1: 88.3, align, stem: true, className: 'fin' });
   tag('McDonald’s Corporation', C.red, up(hqP, 13), 0, -46, 'center');
   tag('Conseil d’administration', 0xffffff, up(bP, 3.5), -60, -40, 'right');
   tag('Direction générale', C.red, up(eP, 3.5), 60, -40, 'left');
@@ -196,8 +196,8 @@ export function buildChart(ctx, cityCtx) {
   tag('Structures locales', C.grey1, up(pM1, 5.6), -70, -34, 'right');
   tag('Franchisés indépendants', C.yellow, up(offSlots[1], 5.6), 30, -52, 'center');
   tag('Restaurants de la société', C.red, up(restSlots[4], 4.6), -40, 40, 'right');
-  tag('Restaurants franchisés', C.yellow, up(restSlots[2], 4.6), 50, 56, 'left');
-  tag('Responsables et équipes', C.red, restSlots[1].clone().addScaledVector(uB, -9).add(new THREE.Vector3(0, 2.4, 0)), -30, 56, 'center');
+  tag('Restaurants franchisés', C.yellow, up(restSlots[3], 4.6), 70, -30, 'left');
+  tag('Responsables et équipes', C.red, restSlots[1].clone().addScaledVector(uB, -9).add(new THREE.Vector3(0, 1.2, 0)), 0, 46, 'center');
 
   // ---- mise à jour ----
   const tmp = new THREE.Vector3();

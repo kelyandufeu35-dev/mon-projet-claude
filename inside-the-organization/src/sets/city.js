@@ -146,28 +146,28 @@ export function buildCity(ctx) {
   const franchisee = new Actor(makeCharacter(OUTFIT.franchisee()), {
     path: [
       { t: 0, x: OFFICE_A.x + 1, z: OFFICE_A.z + 3.2 }, { t: CT.walk0 - 0.2, x: OFFICE_A.x + 1, z: OFFICE_A.z + 3.2 },
-      { t: CT.walk0 + 2.2, x: OFFICE_A.x + 4, z: R0.z + 9.5 }, { t: CT.walk0 + 3.9, x: doorA.x - 1.5, z: doorA.z + 2.2 },
-      { t: CT.shake + 2.2, x: doorA.x - 1.5, z: doorA.z + 2.2 }, { t: CT.shake + 3.6, x: doorA.x, z: doorA.z },
+      { t: CT.walk0 + 2.2, x: OFFICE_A.x + 4, z: R0.z + 9.5 }, { t: CT.walk0 + 3.9, x: doorA.x - 0.9, z: doorA.z + 2.3 },
+      { t: CT.shake + 2.2, x: doorA.x - 0.9, z: doorA.z + 2.3 }, { t: CT.shake + 3.6, x: doorA.x, z: doorA.z },
       { t: 59.6, x: R0.x + 3.2, z: R0.z + 3.4 }, { t: 61.4, x: R0.x + 5.0, z: R0.z - 3.4 }, { t: 90, x: R0.x + 5.0, z: R0.z - 3.4 },
     ],
-    face: [fr(0)], acts: [{ t0: CT.shake, t1: CT.shake + 2.1, act: 'shake' }, { t0: 61.4, t1: 66.0, act: 'typeStand' }, { t0: 66.0, t1: 90, act: 'talk' }],
+    face: [fr(0), { t: CT.walk0 + 3.9, a: 0 }, { t: CT.walk0 + 4.6, a: -Math.PI / 2 }, { t: CT.shake + 2.2, a: -Math.PI / 2 }], acts: [{ t0: CT.shake, t1: CT.shake + 2.1, act: 'shake' }, { t0: 61.4, t1: 66.0, act: 'typeStand' }, { t0: 66.0, t1: 90, act: 'talk' }],
     appear: { t: 47.9, dur: 0.5 }, vanish: { t: 74.6, dur: 0.5 }, phase: 0.3,
   });
   city.add(franchisee.root);
   const mgrSpec = OUTFIT.manager();
   const manager = new Actor(makeCharacter(mgrSpec), {
     path: [
-      { t: 0, x: doorA.x - 4.2, z: doorA.z + 2.0 }, { t: CT.shake + 2.2, x: doorA.x - 4.2, z: doorA.z + 2.0 },
+      { t: 0, x: doorA.x - 2.3, z: doorA.z + 2.3 }, { t: CT.shake + 2.2, x: doorA.x - 2.3, z: doorA.z + 2.3 },
       { t: CT.shake + 3.6, x: doorA.x - 3.2, z: doorA.z + 0.2 }, { t: 61.0, x: R0.x + 0.5, z: R0.z + 0.6 }, { t: 90, x: R0.x + 0.5, z: R0.z + 0.6 },
     ],
-    face: [fr(Math.PI * 0.75), { t: CT.shake + 2.2, a: Math.PI * 0.75 }], acts: [{ t0: CT.shake, t1: CT.shake + 2.1, act: 'shake' }],
+    face: [fr(Math.PI / 2), { t: CT.shake + 2.2, a: Math.PI / 2 }], acts: [{ t0: CT.shake, t1: CT.shake + 2.1, act: 'shake' }],
     appear: { t: 49.0, dur: 0.5 }, vanish: { t: 74.6, dur: 0.5 }, phase: 1.4,
   });
   city.add(manager.root);
   const crewOut = [0, 1, 2].map((i) => {
     const a = new Actor(makeCharacter({ ...OUTFIT.crew(i), scale: 1.0 }), {
-      path: [{ t: 0, x: doorA.x - 6 + i * 1.3, z: doorA.z + 3.4 + (i % 2) * 0.6 }, { t: 90, x: doorA.x - 6 + i * 1.3, z: doorA.z + 3.4 + (i % 2) * 0.6 }],
-      face: [fr(Math.PI * 0.2 + i * 0.2)], acts: [{ t0: 0, t1: 999, act: i === 1 ? 'talk' : 'idle' }], appear: { t: 55.4 + i * 0.2, dur: 0.5 }, vanish: { t: 59.7 + i * 0.12, dur: 0.4 }, phase: i * 2.2,
+      path: [{ t: 0, x: doorA.x - 8.6 + i * 1.1, z: doorA.z + 4.2 + (i % 2) * 0.7 }, { t: 90, x: doorA.x - 8.6 + i * 1.1, z: doorA.z + 4.2 + (i % 2) * 0.7 }],
+      face: [fr(Math.PI * 0.45 + i * 0.15)], acts: [{ t0: 0, t1: 999, act: i === 1 ? 'talk' : 'idle' }], appear: { t: 55.4 + i * 0.2, dur: 0.5 }, vanish: { t: 59.7 + i * 0.12, dur: 0.4 }, phase: i * 2.2,
     });
     city.add(a.root); return a;
   });
@@ -192,18 +192,18 @@ export function buildCity(ctx) {
   const wpos = (x, y, z) => new THREE.Vector3(x, y, z);
   const corpTop = wpos(TIER.x - 8, TIER.y + 10.6, TIER.z), mktTop = wpos(TIER.x + 8, TIER.y + 7.2, TIER.z);
   const officeTop = wpos(OFFICE_A.x, 5.2, OFFICE_A.z);
-  links.add({ curve: new THREE.QuadraticBezierCurve3(corpTop.clone().add(wpos(0.6, -2.2, 0)), wpos(TIER.x, TIER.y + 12.5, TIER.z), mktTop.clone().add(wpos(-1.0, -0.6, 0))), parent: city, type: 'hierarchie', t0: CT.linkRed, drawDur: 1.0, t1: 60, radius: 0.12, pulses: 3 });
+  links.add({ curve: new THREE.QuadraticBezierCurve3(corpTop.clone().add(wpos(0.6, -2.2, 0)), wpos(TIER.x, TIER.y + 12.5, TIER.z), mktTop.clone().add(wpos(-1.0, -0.6, 0))), parent: city, type: 'hierarchie', t0: CT.linkRed, drawDur: 1.0, t1: 59.2, radius: 0.12, pulses: 3 });
   const cContract = new THREE.CubicBezierCurve3(mktTop.clone().add(wpos(0, -1.2, 1.5)), wpos(TIER.x + 14, TIER.y - 2, TIER.z + 10), wpos(OFFICE_A.x - 3, 14, OFFICE_A.z + 8), officeTop.clone().add(wpos(0, 0.6, 1.6)));
-  const lContract = links.add({ curve: cContract, parent: city, type: 'contrat', t0: CT.linkContract, drawDur: 1.2, t1: 60, radius: 0.16, pulses: 2, speed: 0.3 });
+  const lContract = links.add({ curve: cContract, parent: city, type: 'contrat', t0: CT.linkContract, drawDur: 1.2, t1: 59.2, radius: 0.16, pulses: 2, speed: 0.3 });
   const restaurantTop = wpos(R0.x + 2, 6.6, R0.z + 3);
   const cStd = new THREE.CubicBezierCurve3(mktTop.clone().add(wpos(1.5, -2.0, 3)), wpos(TIER.x + 26, TIER.y - 4, TIER.z + 10), wpos(R0.x - 8, 10, R0.z + 8), restaurantTop);
-  const lStd = links.add({ curve: cStd, parent: city, type: 'contrat', color: 0xffe6a0, t0: CT.linkStd, drawDur: 1.2, t1: 60, radius: 0.1, pulses: 2, speed: 0.5, dash: 0.7 });
+  const lStd = links.add({ curve: cStd, parent: city, type: 'contrat', color: 0xffe6a0, t0: CT.linkStd, drawDur: 1.2, t1: 59.2, radius: 0.1, pulses: 2, speed: 0.5, dash: 0.7 });
   const cOwn = new THREE.QuadraticBezierCurve3(officeTop.clone().add(wpos(1.5, 0.4, 0)), wpos((OFFICE_A.x + R0.x) / 2 + 2, 9.0, (OFFICE_A.z + R0.z) / 2), restaurantTop.clone().add(wpos(-3.2, 0.0, -2.0)));
-  links.add({ curve: cOwn, parent: city, type: 'hierarchie', t0: 54.0, drawDur: 1.0, t1: 60, radius: 0.1, pulses: 3 });
+  links.add({ curve: cOwn, parent: city, type: 'hierarchie', t0: 54.0, drawDur: 1.0, t1: 59.2, radius: 0.1, pulses: 3 });
   const stdOthers = [restaurants[1], restaurants[2], restaurants[3], restaurants[4], restaurants[5], restaurants[6]].map((r, i) => {
     const top = wpos(r.x + 2, 6.0, r.z + 3);
     const c = new THREE.CubicBezierCurve3(mktTop.clone().add(wpos(0, -2, 3)), wpos(TIER.x + 20 + i * 4, TIER.y - 3, TIER.z + 6), wpos(r.x - 6, 12, r.z - 8), top);
-    return links.add({ curve: c, parent: city, type: 'contrat', color: 0xffe6a0, t0: 57.6 + i * 0.16, drawDur: 1.0, t1: 60, radius: 0.08, pulses: 2, speed: 0.5, dash: 0.7 });
+    return links.add({ curve: c, parent: city, type: 'contrat', color: 0xffe6a0, t0: 57.6 + i * 0.16, drawDur: 1.0, t1: 59.2, radius: 0.08, pulses: 2, speed: 0.5, dash: 0.7 });
   });
   // paquets (contrats / standards) qui circulent sur les liens jaunes
   const mkDoc = (col) => { const g = new THREE.Group(); const s = rbox(0.9, 0.05, 1.15, M.white(), { r: 0.02 }); g.add(s); const sl = cyl(0.17, 0.17, 0.06, col === 'y' ? M.yellow() : M.red(), 16); sl.position.set(0.2, 0.03, 0.38); g.add(sl); for (let i = 0; i < 3; i++) { const l = rbox(0.55, 0.055, 0.05, M.grey2(), { r: 0.005 }); l.position.set(-0.05, 0.03, -0.36 + i * 0.22); g.add(l); } city.add(g); return g; };
@@ -213,14 +213,14 @@ export function buildCity(ctx) {
 
   // ---------- étiquettes scène 4 ----------
   const L = labels;
-  L.add({ kind: 'card', title: 'McDonald’s Corporation', sub: 'Marque, standards, contrats de franchise', color: C.red, scale: 0.9, anchor: (t, v) => v.set(CITY_POS.x + TIER.x - 8, TIER.y + 11.5, TIER.z), dx: -40, dy: -110, t0: CT.tier + 0.9, t1: 59.4, align: 'center', num: 'ENTREPRISE' });
-  L.add({ kind: 'card', title: 'Structure de marché', sub: 'Filiale, marché exploité ou partenaire', color: C.grey1, scale: 0.9, anchor: (t, v) => v.set(CITY_POS.x + TIER.x + 8, TIER.y + 8.6, TIER.z), dx: 190, dy: -80, t0: CT.tier + 1.6, t1: 59.4, align: 'left', num: 'MARCHÉ' });
-  L.add({ kind: 'card', title: 'Franchisé indépendant', sub: 'Exploitant — pas un employé du siège', color: C.yellow, scale: 0.9, anchor: (t, v) => v.set(CITY_POS.x + OFFICE_A.x, 3.0, OFFICE_A.z + 2), dx: 70, dy: 120, t0: CT.office + 0.9, t1: 59.4, align: 'left', num: 'EXPLOITANT' });
-  L.add({ kind: 'chip', title: 'Contrat de franchise', sub: 'droits et obligations des deux parties', color: C.yellow, anchor: (t, v) => { cContract.getPointAt(0.55, v); v.add(CITY_POS); return v; }, dx: 120, dy: -34, t0: CT.linkContract + 0.9, t1: 59.4, align: 'left', stem: true });
-  L.add({ kind: 'chip', title: 'Standards de marque', sub: 'identité, qualité, service', color: 0xffe6a0, anchor: (t, v) => { cStd.getPointAt(0.6, v); v.add(CITY_POS); return v; }, dx: 130, dy: -10, t0: CT.linkStd + 0.9, t1: 59.4, align: 'left', stem: true });
-  L.add({ kind: 'card', title: 'Restaurant', sub: 'Exploité et staffé par le franchisé', color: C.red, scale: 0.9, anchor: (t, v) => v.set(CITY_POS.x + R0.x + 8, 3.6, R0.z + 6), dx: 190, dy: 30, t0: 54.6, t1: 59.4, align: 'left', num: 'RESTAURANT' });
-  L.add({ kind: 'card', title: 'Ses propres équipes', sub: 'Il emploie, planifie et encadre', color: C.yellow, scale: 0.9, anchor: (t, v) => { franchisee.anchor(v, 1.5); v.add(CITY_POS); return v; }, dx: -230, dy: 90, t0: CT.shake + 0.4, t1: 59.0, align: 'right' });
-  L.add({ kind: 'card', title: 'Des milliers d’exploitants', sub: 'chacun avec ses restaurants, tous sous la même marque', color: C.yellow, scale: 0.95, anchor: (t, v) => v.set(CITY_POS.x - 46, 6, -24), dx: 100, dy: -130, t0: CT.groups + 0.2, t1: 59.8, align: 'left' });
+  L.add({ kind: 'card', title: 'McDonald’s Corporation', sub: 'Marque, standards, contrats de franchise', color: C.red, scale: 0.9, anchor: (t, v) => v.set(CITY_POS.x + TIER.x - 8, TIER.y + 11.5, TIER.z), dx: -40, dy: -110, t0: CT.tier + 0.9, t1: 55.2, align: 'center', num: 'ENTREPRISE' });
+  L.add({ kind: 'card', title: 'Structure de marché', sub: 'Filiale, marché exploité ou partenaire', color: C.grey1, scale: 0.9, anchor: (t, v) => v.set(CITY_POS.x + TIER.x + 8, TIER.y + 8.6, TIER.z), dx: 190, dy: -80, t0: CT.tier + 1.6, t1: 55.2, align: 'left', num: 'MARCHÉ' });
+  L.add({ kind: 'card', title: 'Franchisé indépendant', sub: 'Exploitant — pas un employé du siège', color: C.yellow, scale: 0.9, anchor: (t, v) => v.set(CITY_POS.x + OFFICE_A.x, 3.0, OFFICE_A.z + 2), dx: 70, dy: 120, t0: CT.office + 0.9, t1: 56.4, align: 'left', num: 'EXPLOITANT' });
+  L.add({ kind: 'chip', title: 'Contrat de franchise', sub: 'droits et obligations des deux parties', color: C.yellow, anchor: (t, v) => { cContract.getPointAt(0.55, v); v.add(CITY_POS); return v; }, dx: 120, dy: -34, t0: CT.linkContract + 0.9, t1: 55.4, align: 'left', stem: true });
+  L.add({ kind: 'chip', title: 'Standards de marque', sub: 'identité, qualité, service', color: 0xffe6a0, anchor: (t, v) => { cStd.getPointAt(0.6, v); v.add(CITY_POS); return v; }, dx: 130, dy: -10, t0: CT.linkStd + 0.9, t1: 55.6, align: 'left', stem: true });
+  L.add({ kind: 'card', title: 'Restaurant', sub: 'Exploité et staffé par le franchisé', color: C.red, scale: 0.9, anchor: (t, v) => v.set(CITY_POS.x + R0.x + 8, 3.6, R0.z + 6), dx: 190, dy: 30, t0: 54.6, t1: 58.0, align: 'left', num: 'RESTAURANT' });
+  L.add({ kind: 'card', title: 'Ses propres équipes', sub: 'Il emploie, planifie et encadre', color: C.yellow, scale: 0.9, anchor: (t, v) => { franchisee.anchor(v, 1.5); v.add(CITY_POS); return v; }, dx: -230, dy: 90, t0: CT.shake + 0.5, t1: 58.9, align: 'right' });
+  L.add({ kind: 'card', title: 'Des milliers d’exploitants', sub: 'chacun avec ses restaurants, tous sous la même marque', color: C.yellow, scale: 0.95, anchor: (t, v) => v.set(CITY_POS.x - 46, 6, -24), dx: 100, dy: -130, t0: CT.groups + 0.6, t1: 59.8, align: 'left' });
 
   // ---------- paliers de franchisés supplémentaires (anneaux de propriété) ----------
   const owner = new THREE.Group(); city.add(owner);
@@ -234,7 +234,7 @@ export function buildCity(ctx) {
     rs.forEach((r, i) => {
       const a = wpos(off.position.x, 5.0, off.position.z), b = wpos(r.x + 1, 3.6, r.z + 2);
       const c = new THREE.QuadraticBezierCurve3(a, a.clone().lerp(b, 0.5).add(wpos(0, 8, 0)), b);
-      links.add({ curve: c, parent: city, type: 'hierarchie', t0: CT.groups + 0.6 + i * 0.25, drawDur: 0.9, t1: 60, radius: 0.09, pulses: 2 });
+      links.add({ curve: c, parent: city, type: 'hierarchie', t0: CT.groups + 0.6 + i * 0.25, drawDur: 0.9, t1: 59.2, radius: 0.09, pulses: 2 });
     });
   });
 
@@ -260,7 +260,8 @@ export function buildCity(ctx) {
     rings.forEach(({ r, d }) => { const k = d.group === 'A' ? seg(t, 54.4, 55.4, (x) => x) : seg(t, CT.groups + 0.2, CT.groups + 1.0, (x) => x); r.material.opacity = 0.85 * k * (1 - seg(t, 59.6, 60.4, (x) => x)); r.scale.setScalar(1 + 0.05 * Math.sin(t * 3 + d.x)); });
     // palier entreprise
     const pt = easeOutBack(clamp((t - CT.tier) / 1.1), 1.3);
-    tier.visible = pt > 0.001 && t < 61; tier.scale.setScalar(Math.max(0.0001, pt));
+    const pOut = 1 - easeInOutCubic(seg(t, 58.9, 59.7, (x) => x));
+    tier.visible = pt > 0.001 && pOut > 0.001; tier.scale.setScalar(Math.max(0.0001, pt * pOut));
     corp.build(clamp((t - CT.tier) / 1.3));
     market.userData.globe.rotation.y = t * 0.8;
     // paquets

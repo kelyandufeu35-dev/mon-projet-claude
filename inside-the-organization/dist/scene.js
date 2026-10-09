@@ -29776,7 +29776,7 @@ void main() {
           const x0 = it.align === "center" ? bx - bw / 2 : it.align === "right" ? bx - bw : bx;
           const y0 = by - bh / 2;
           let nx = x0, ny = y0;
-          const minY = x0 < 1010 ? 168 : 44, maxY = 884 - bh;
+          const minY = x0 < 1010 ? 212 : 44, maxY = 884 - bh;
           ny = Math.min(Math.max(ny, minY), maxY);
           nx = Math.min(Math.max(nx, 40), W - 40 - bw);
           if (Math.abs(nx - x0) > 0.5 || Math.abs(ny - y0) > 0.5) {
@@ -31995,14 +31995,14 @@ void main() {
         { t: 0, x: OFFICE_A.x + 1, z: OFFICE_A.z + 3.2 },
         { t: CT.walk0 - 0.2, x: OFFICE_A.x + 1, z: OFFICE_A.z + 3.2 },
         { t: CT.walk0 + 2.2, x: OFFICE_A.x + 4, z: R0.z + 9.5 },
-        { t: CT.walk0 + 3.9, x: doorA.x - 1.5, z: doorA.z + 2.2 },
-        { t: CT.shake + 2.2, x: doorA.x - 1.5, z: doorA.z + 2.2 },
+        { t: CT.walk0 + 3.9, x: doorA.x - 0.9, z: doorA.z + 2.3 },
+        { t: CT.shake + 2.2, x: doorA.x - 0.9, z: doorA.z + 2.3 },
         { t: CT.shake + 3.6, x: doorA.x, z: doorA.z },
         { t: 59.6, x: R0.x + 3.2, z: R0.z + 3.4 },
         { t: 61.4, x: R0.x + 5, z: R0.z - 3.4 },
         { t: 90, x: R0.x + 5, z: R0.z - 3.4 }
       ],
-      face: [fr(0)],
+      face: [fr(0), { t: CT.walk0 + 3.9, a: 0 }, { t: CT.walk0 + 4.6, a: -Math.PI / 2 }, { t: CT.shake + 2.2, a: -Math.PI / 2 }],
       acts: [{ t0: CT.shake, t1: CT.shake + 2.1, act: "shake" }, { t0: 61.4, t1: 66, act: "typeStand" }, { t0: 66, t1: 90, act: "talk" }],
       appear: { t: 47.9, dur: 0.5 },
       vanish: { t: 74.6, dur: 0.5 },
@@ -32012,13 +32012,13 @@ void main() {
     const mgrSpec = OUTFIT.manager();
     const manager = new Actor(makeCharacter(mgrSpec), {
       path: [
-        { t: 0, x: doorA.x - 4.2, z: doorA.z + 2 },
-        { t: CT.shake + 2.2, x: doorA.x - 4.2, z: doorA.z + 2 },
+        { t: 0, x: doorA.x - 2.3, z: doorA.z + 2.3 },
+        { t: CT.shake + 2.2, x: doorA.x - 2.3, z: doorA.z + 2.3 },
         { t: CT.shake + 3.6, x: doorA.x - 3.2, z: doorA.z + 0.2 },
         { t: 61, x: R0.x + 0.5, z: R0.z + 0.6 },
         { t: 90, x: R0.x + 0.5, z: R0.z + 0.6 }
       ],
-      face: [fr(Math.PI * 0.75), { t: CT.shake + 2.2, a: Math.PI * 0.75 }],
+      face: [fr(Math.PI / 2), { t: CT.shake + 2.2, a: Math.PI / 2 }],
       acts: [{ t0: CT.shake, t1: CT.shake + 2.1, act: "shake" }],
       appear: { t: 49, dur: 0.5 },
       vanish: { t: 74.6, dur: 0.5 },
@@ -32027,8 +32027,8 @@ void main() {
     city2.add(manager.root);
     const crewOut = [0, 1, 2].map((i) => {
       const a = new Actor(makeCharacter({ ...OUTFIT.crew(i), scale: 1 }), {
-        path: [{ t: 0, x: doorA.x - 6 + i * 1.3, z: doorA.z + 3.4 + i % 2 * 0.6 }, { t: 90, x: doorA.x - 6 + i * 1.3, z: doorA.z + 3.4 + i % 2 * 0.6 }],
-        face: [fr(Math.PI * 0.2 + i * 0.2)],
+        path: [{ t: 0, x: doorA.x - 8.6 + i * 1.1, z: doorA.z + 4.2 + i % 2 * 0.7 }, { t: 90, x: doorA.x - 8.6 + i * 1.1, z: doorA.z + 4.2 + i % 2 * 0.7 }],
+        face: [fr(Math.PI * 0.45 + i * 0.15)],
         acts: [{ t0: 0, t1: 999, act: i === 1 ? "talk" : "idle" }],
         appear: { t: 55.4 + i * 0.2, dur: 0.5 },
         vanish: { t: 59.7 + i * 0.12, dur: 0.4 },
@@ -32062,18 +32062,18 @@ void main() {
     const wpos = (x, y, z) => new Vector3(x, y, z);
     const corpTop = wpos(TIER.x - 8, TIER.y + 10.6, TIER.z), mktTop = wpos(TIER.x + 8, TIER.y + 7.2, TIER.z);
     const officeTop = wpos(OFFICE_A.x, 5.2, OFFICE_A.z);
-    links2.add({ curve: new QuadraticBezierCurve3(corpTop.clone().add(wpos(0.6, -2.2, 0)), wpos(TIER.x, TIER.y + 12.5, TIER.z), mktTop.clone().add(wpos(-1, -0.6, 0))), parent: city2, type: "hierarchie", t0: CT.linkRed, drawDur: 1, t1: 60, radius: 0.12, pulses: 3 });
+    links2.add({ curve: new QuadraticBezierCurve3(corpTop.clone().add(wpos(0.6, -2.2, 0)), wpos(TIER.x, TIER.y + 12.5, TIER.z), mktTop.clone().add(wpos(-1, -0.6, 0))), parent: city2, type: "hierarchie", t0: CT.linkRed, drawDur: 1, t1: 59.2, radius: 0.12, pulses: 3 });
     const cContract = new CubicBezierCurve3(mktTop.clone().add(wpos(0, -1.2, 1.5)), wpos(TIER.x + 14, TIER.y - 2, TIER.z + 10), wpos(OFFICE_A.x - 3, 14, OFFICE_A.z + 8), officeTop.clone().add(wpos(0, 0.6, 1.6)));
-    const lContract = links2.add({ curve: cContract, parent: city2, type: "contrat", t0: CT.linkContract, drawDur: 1.2, t1: 60, radius: 0.16, pulses: 2, speed: 0.3 });
+    const lContract = links2.add({ curve: cContract, parent: city2, type: "contrat", t0: CT.linkContract, drawDur: 1.2, t1: 59.2, radius: 0.16, pulses: 2, speed: 0.3 });
     const restaurantTop = wpos(R0.x + 2, 6.6, R0.z + 3);
     const cStd = new CubicBezierCurve3(mktTop.clone().add(wpos(1.5, -2, 3)), wpos(TIER.x + 26, TIER.y - 4, TIER.z + 10), wpos(R0.x - 8, 10, R0.z + 8), restaurantTop);
-    const lStd = links2.add({ curve: cStd, parent: city2, type: "contrat", color: 16770720, t0: CT.linkStd, drawDur: 1.2, t1: 60, radius: 0.1, pulses: 2, speed: 0.5, dash: 0.7 });
+    const lStd = links2.add({ curve: cStd, parent: city2, type: "contrat", color: 16770720, t0: CT.linkStd, drawDur: 1.2, t1: 59.2, radius: 0.1, pulses: 2, speed: 0.5, dash: 0.7 });
     const cOwn = new QuadraticBezierCurve3(officeTop.clone().add(wpos(1.5, 0.4, 0)), wpos((OFFICE_A.x + R0.x) / 2 + 2, 9, (OFFICE_A.z + R0.z) / 2), restaurantTop.clone().add(wpos(-3.2, 0, -2)));
-    links2.add({ curve: cOwn, parent: city2, type: "hierarchie", t0: 54, drawDur: 1, t1: 60, radius: 0.1, pulses: 3 });
+    links2.add({ curve: cOwn, parent: city2, type: "hierarchie", t0: 54, drawDur: 1, t1: 59.2, radius: 0.1, pulses: 3 });
     const stdOthers = [restaurants[1], restaurants[2], restaurants[3], restaurants[4], restaurants[5], restaurants[6]].map((r, i) => {
       const top = wpos(r.x + 2, 6, r.z + 3);
       const c = new CubicBezierCurve3(mktTop.clone().add(wpos(0, -2, 3)), wpos(TIER.x + 20 + i * 4, TIER.y - 3, TIER.z + 6), wpos(r.x - 6, 12, r.z - 8), top);
-      return links2.add({ curve: c, parent: city2, type: "contrat", color: 16770720, t0: 57.6 + i * 0.16, drawDur: 1, t1: 60, radius: 0.08, pulses: 2, speed: 0.5, dash: 0.7 });
+      return links2.add({ curve: c, parent: city2, type: "contrat", color: 16770720, t0: 57.6 + i * 0.16, drawDur: 1, t1: 59.2, radius: 0.08, pulses: 2, speed: 0.5, dash: 0.7 });
     });
     const mkDoc = (col) => {
       const g = new Group();
@@ -32094,26 +32094,26 @@ void main() {
     for (let k = 0; k < 4; k++) packets.push({ g: mkDoc("y"), curve: cContract, t0: CT.linkContract + 1.3, speed: 0.17, off: k / 4, kind: "contract" });
     for (let k = 0; k < 4; k++) packets.push({ g: mkDoc("r"), curve: cStd, t0: CT.linkStd + 1.3, speed: 0.19, off: k / 4, kind: "std" });
     const L = labels2;
-    L.add({ kind: "card", title: "McDonald\u2019s Corporation", sub: "Marque, standards, contrats de franchise", color: C.red, scale: 0.9, anchor: (t, v) => v.set(CITY_POS.x + TIER.x - 8, TIER.y + 11.5, TIER.z), dx: -40, dy: -110, t0: CT.tier + 0.9, t1: 59.4, align: "center", num: "ENTREPRISE" });
-    L.add({ kind: "card", title: "Structure de march\xE9", sub: "Filiale, march\xE9 exploit\xE9 ou partenaire", color: C.grey1, scale: 0.9, anchor: (t, v) => v.set(CITY_POS.x + TIER.x + 8, TIER.y + 8.6, TIER.z), dx: 190, dy: -80, t0: CT.tier + 1.6, t1: 59.4, align: "left", num: "MARCH\xC9" });
-    L.add({ kind: "card", title: "Franchis\xE9 ind\xE9pendant", sub: "Exploitant \u2014 pas un employ\xE9 du si\xE8ge", color: C.yellow, scale: 0.9, anchor: (t, v) => v.set(CITY_POS.x + OFFICE_A.x, 3, OFFICE_A.z + 2), dx: 70, dy: 120, t0: CT.office + 0.9, t1: 59.4, align: "left", num: "EXPLOITANT" });
+    L.add({ kind: "card", title: "McDonald\u2019s Corporation", sub: "Marque, standards, contrats de franchise", color: C.red, scale: 0.9, anchor: (t, v) => v.set(CITY_POS.x + TIER.x - 8, TIER.y + 11.5, TIER.z), dx: -40, dy: -110, t0: CT.tier + 0.9, t1: 55.2, align: "center", num: "ENTREPRISE" });
+    L.add({ kind: "card", title: "Structure de march\xE9", sub: "Filiale, march\xE9 exploit\xE9 ou partenaire", color: C.grey1, scale: 0.9, anchor: (t, v) => v.set(CITY_POS.x + TIER.x + 8, TIER.y + 8.6, TIER.z), dx: 190, dy: -80, t0: CT.tier + 1.6, t1: 55.2, align: "left", num: "MARCH\xC9" });
+    L.add({ kind: "card", title: "Franchis\xE9 ind\xE9pendant", sub: "Exploitant \u2014 pas un employ\xE9 du si\xE8ge", color: C.yellow, scale: 0.9, anchor: (t, v) => v.set(CITY_POS.x + OFFICE_A.x, 3, OFFICE_A.z + 2), dx: 70, dy: 120, t0: CT.office + 0.9, t1: 56.4, align: "left", num: "EXPLOITANT" });
     L.add({ kind: "chip", title: "Contrat de franchise", sub: "droits et obligations des deux parties", color: C.yellow, anchor: (t, v) => {
       cContract.getPointAt(0.55, v);
       v.add(CITY_POS);
       return v;
-    }, dx: 120, dy: -34, t0: CT.linkContract + 0.9, t1: 59.4, align: "left", stem: true });
+    }, dx: 120, dy: -34, t0: CT.linkContract + 0.9, t1: 55.4, align: "left", stem: true });
     L.add({ kind: "chip", title: "Standards de marque", sub: "identit\xE9, qualit\xE9, service", color: 16770720, anchor: (t, v) => {
       cStd.getPointAt(0.6, v);
       v.add(CITY_POS);
       return v;
-    }, dx: 130, dy: -10, t0: CT.linkStd + 0.9, t1: 59.4, align: "left", stem: true });
-    L.add({ kind: "card", title: "Restaurant", sub: "Exploit\xE9 et staff\xE9 par le franchis\xE9", color: C.red, scale: 0.9, anchor: (t, v) => v.set(CITY_POS.x + R0.x + 8, 3.6, R0.z + 6), dx: 190, dy: 30, t0: 54.6, t1: 59.4, align: "left", num: "RESTAURANT" });
+    }, dx: 130, dy: -10, t0: CT.linkStd + 0.9, t1: 55.6, align: "left", stem: true });
+    L.add({ kind: "card", title: "Restaurant", sub: "Exploit\xE9 et staff\xE9 par le franchis\xE9", color: C.red, scale: 0.9, anchor: (t, v) => v.set(CITY_POS.x + R0.x + 8, 3.6, R0.z + 6), dx: 190, dy: 30, t0: 54.6, t1: 58, align: "left", num: "RESTAURANT" });
     L.add({ kind: "card", title: "Ses propres \xE9quipes", sub: "Il emploie, planifie et encadre", color: C.yellow, scale: 0.9, anchor: (t, v) => {
       franchisee.anchor(v, 1.5);
       v.add(CITY_POS);
       return v;
-    }, dx: -230, dy: 90, t0: CT.shake + 0.4, t1: 59, align: "right" });
-    L.add({ kind: "card", title: "Des milliers d\u2019exploitants", sub: "chacun avec ses restaurants, tous sous la m\xEAme marque", color: C.yellow, scale: 0.95, anchor: (t, v) => v.set(CITY_POS.x - 46, 6, -24), dx: 100, dy: -130, t0: CT.groups + 0.2, t1: 59.8, align: "left" });
+    }, dx: -230, dy: 90, t0: CT.shake + 0.5, t1: 58.9, align: "right" });
+    L.add({ kind: "card", title: "Des milliers d\u2019exploitants", sub: "chacun avec ses restaurants, tous sous la m\xEAme marque", color: C.yellow, scale: 0.95, anchor: (t, v) => v.set(CITY_POS.x - 46, 6, -24), dx: 100, dy: -130, t0: CT.groups + 0.6, t1: 59.8, align: "left" });
     const owner = new Group();
     city2.add(owner);
     const ringCols = { A: C.yellow, B: C.white, C: C.red };
@@ -32128,7 +32128,7 @@ void main() {
       rs.forEach((r, i) => {
         const a = wpos(off.position.x, 5, off.position.z), b = wpos(r.x + 1, 3.6, r.z + 2);
         const c = new QuadraticBezierCurve3(a, a.clone().lerp(b, 0.5).add(wpos(0, 8, 0)), b);
-        links2.add({ curve: c, parent: city2, type: "hierarchie", t0: CT.groups + 0.6 + i * 0.25, drawDur: 0.9, t1: 60, radius: 0.09, pulses: 2 });
+        links2.add({ curve: c, parent: city2, type: "hierarchie", t0: CT.groups + 0.6 + i * 0.25, drawDur: 0.9, t1: 59.2, radius: 0.09, pulses: 2 });
       });
     });
     function update(t) {
@@ -32161,8 +32161,9 @@ void main() {
         r.scale.setScalar(1 + 0.05 * Math.sin(t * 3 + d.x));
       });
       const pt = easeOutBack(clamp2((t - CT.tier) / 1.1), 1.3);
-      tier.visible = pt > 1e-3 && t < 61;
-      tier.scale.setScalar(Math.max(1e-4, pt));
+      const pOut = 1 - easeInOutCubic(seg(t, 58.9, 59.7, (x) => x));
+      tier.visible = pt > 1e-3 && pOut > 1e-3;
+      tier.scale.setScalar(Math.max(1e-4, pt * pOut));
       corp.build(clamp2((t - CT.tier) / 1.3));
       market.userData.globe.rotation.y = t * 0.8;
       for (const pk of packets) {
@@ -32426,7 +32427,7 @@ void main() {
     card("Restaurants franchis\xE9s", "Exploit\xE9s par leurs franchis\xE9s", C.yellow, up(restSlots[2], 5.2), 40, 100, 84.2, T_END, "left", 1);
     card("Responsables et \xE9quipes", "Dans chaque restaurant", C.red, restSlots[1].clone().addScaledVector(uB, -9).add(new Vector3(0, 2.4, 0)), 90, 120, 84.8, T_END, "left", 1, "BASE");
     const F0 = 85.8, fs = 0.8;
-    const tag = (title, color, pos, dx, dy, align) => labels2.add({ kind: "tag", title, color, scale: 1.05, anchor: (t, v) => {
+    const tag = (title, color, pos, dx, dy, align) => labels2.add({ kind: "tag", title, color, scale: 1.22, anchor: (t, v) => {
       v.copy(pos).add(CITY_POS);
       return v;
     }, dx, dy, t0: F0, t1: 88.3, align, stem: true, className: "fin" });
@@ -32438,8 +32439,8 @@ void main() {
     tag("Structures locales", C.grey1, up(pM1, 5.6), -70, -34, "right");
     tag("Franchis\xE9s ind\xE9pendants", C.yellow, up(offSlots[1], 5.6), 30, -52, "center");
     tag("Restaurants de la soci\xE9t\xE9", C.red, up(restSlots[4], 4.6), -40, 40, "right");
-    tag("Restaurants franchis\xE9s", C.yellow, up(restSlots[2], 4.6), 50, 56, "left");
-    tag("Responsables et \xE9quipes", C.red, restSlots[1].clone().addScaledVector(uB, -9).add(new Vector3(0, 2.4, 0)), -30, 56, "center");
+    tag("Restaurants franchis\xE9s", C.yellow, up(restSlots[3], 4.6), 70, -30, "left");
+    tag("Responsables et \xE9quipes", C.red, restSlots[1].clone().addScaledVector(uB, -9).add(new Vector3(0, 1.2, 0)), 0, 46, "center");
     const tmp2 = new Vector3();
     let coordDone = false;
     function ensureCoord() {
@@ -32501,10 +32502,10 @@ void main() {
       { t: 0, tx: 0, ty: 9.5, tz: 0, H: 54, az: 30, el: 25, sx: -0.26 },
       { t: 3.4, tx: 0, ty: 10.5, tz: 0, H: 46, az: 38, el: 27, sx: -0.24 },
       { t: 5.9, tx: 0, ty: 15.5, tz: 0, H: 30, az: 45, el: 30, sx: 0 },
-      { t: 8.8, tx: 0, ty: yTop + 0.8, tz: -0.4, H: 11, az: 49, el: 34 },
-      { t: 14.6, tx: 0, ty: yTop + 0.8, tz: -0.2, H: 10.2, az: 58, el: 36 },
+      { t: 8.8, tx: 0, ty: yTop + 0.4, tz: -0.2, H: 12.8, az: 49, el: 35, sy: 0.05 },
+      { t: 14.6, tx: 0, ty: yTop + 0.4, tz: 0, H: 12.2, az: 58, el: 37, sy: 0.05 },
       // Scène 2 — les directions
-      { t: 18.6, tx: 0, ty: 8.5, tz: 0, H: 56, az: 46, el: 31 },
+      { t: 18.6, tx: 0, ty: 8.5, tz: 0, H: 56, az: 46, el: 31, sy: 0 },
       { t: 25, tx: 0, ty: 8, tz: 0, H: 58, az: 62, el: 32 },
       { t: 30, tx: 0, ty: 8, tz: 0, H: 60, az: 70, el: 33 },
       // Scène 3 — globe
@@ -32514,11 +32515,13 @@ void main() {
       // Scène 4 — plongeon dans le marché (zoom exponentiel), éclair, puis la ville se dévoile depuis les arches
       { t: 44.97, tx: dive.x, ty: dive.y, tz: dive.z, H: 2.6, az: 44, el: 26 },
       { t: 45, tx: 400 - 6.2, ty: 5.7, tz: 4 - 5.4, H: 3, az: 44, el: 26 },
-      { t: 47.8, tx: 400 - 12, ty: 9, tz: 6, H: 64, az: 44, el: 31 },
-      { t: 53, tx: 400 - 12, ty: 9, tz: 8, H: 62, az: 48, el: 31 },
-      { t: 56.4, tx: 400 - 8, ty: 3.2, tz: 8, H: 24, az: 52, el: 30 },
-      { t: 57, tx: 400 - 10, ty: 7, tz: -4, H: 70, az: 48, el: 33 },
-      { t: 59.6, tx: 400 - 8, ty: 6, tz: 0, H: 62, az: 50, el: 32 },
+      { t: 47.8, tx: 400 - 10, ty: 11, tz: 6, H: 66, az: 44, el: 31 },
+      { t: 53.4, tx: 400 - 10, ty: 10, tz: 8, H: 62, az: 48, el: 31 },
+      { t: 55, tx: 400 + 0.5, ty: 3.5, tz: 10.5, H: 30, az: 52, el: 29 },
+      { t: 55.9, tx: 400 + 2.6, ty: 1.7, tz: 12, H: 11.5, az: 52, el: 26 },
+      { t: 57.6, tx: 400 + 2.6, ty: 1.7, tz: 12, H: 12.5, az: 58, el: 26 },
+      { t: 58.7, tx: 400 - 8, ty: 7, tz: -2, H: 76, az: 48, el: 33 },
+      { t: 60, tx: 400 + 1, ty: 4, tz: 5, H: 40, az: 47, el: 34 },
       // Scène 5 — intérieur du restaurant
       { t: 62.6, tx: 400 + 2, ty: 2.2, tz: 4.4, H: 12.6, az: 46, el: 38 },
       { t: 74.4, tx: 400 + 1.8, ty: 2.2, tz: 3.8, H: 12.2, az: 54, el: 39 },
@@ -32527,8 +32530,8 @@ void main() {
       { t: 79.8, tx: W2(20, 37, 14).x, ty: W2(20, 37, 14).y, tz: W2(20, 37, 14).z, H: 108, az: 46, el: 33 },
       { t: 82.4, tx: W2(0, 62, 26).x, ty: W2(0, 62, 26).y, tz: W2(0, 62, 26).z, H: 70, az: 44, el: 33 },
       { t: 84.2, tx: W2(46, 22, 10).x, ty: W2(46, 22, 10).y, tz: W2(46, 22, 10).z, H: 74, az: 46, el: 33 },
-      { t: 85.7, tx: W2(18, 38, 13).x, ty: W2(18, 38, 13).y, tz: W2(18, 38, 13).z, H: 104, az: 45, el: 33, sx: -0.12, sy: 0.03 },
-      { t: 93.5, tx: W2(18, 38, 13).x, ty: W2(18, 38, 13).y, tz: W2(18, 38, 13).z, H: 98, az: 47, el: 33, sx: -0.12, sy: 0.03 }
+      { t: 85.7, tx: W2(18, 38, 13).x, ty: W2(18, 38, 13).y, tz: W2(18, 38, 13).z, H: 110, az: 45, el: 33, sx: -0.21, sy: 0.07 },
+      { t: 93.5, tx: W2(18, 38, 13).x, ty: W2(18, 38, 13).y, tz: W2(18, 38, 13).z, H: 104, az: 47, el: 33, sx: -0.21, sy: 0.07 }
     ]);
   }
 
@@ -32721,7 +32724,7 @@ void main() {
     const tags = ctx2.labels;
     tags.add({ kind: "card", title: "Conseil d\u2019administration", sub: "Supervise la gouvernance", color: 16777215, anchor: boardAnchor, dx: -300, dy: -110, t0: 8.9, t1: 14.6, align: "right" });
     tags.add({ kind: "card", title: "Directeur g\xE9n\xE9ral (PDG)", sub: "Pilote l\u2019entreprise", color: C.red, anchor: ceoAnchor, dx: 270, dy: -150, t0: 10.6, t1: 14.6, align: "left" });
-    tags.add({ kind: "card", title: "\xC9quipe de direction g\xE9n\xE9rale", sub: "Dirigeants ex\xE9cutifs \xB7 m\xE8nent l\u2019activit\xE9", color: C.yellow, anchor: execAnchor, dx: 230, dy: 90, t0: 12, t1: 14.6, align: "left" });
+    tags.add({ kind: "card", title: "\xC9quipe de direction g\xE9n\xE9rale", sub: "Dirigeants ex\xE9cutifs \xB7 pilotent l\u2019activit\xE9", color: C.yellow, anchor: execAnchor, dx: 230, dy: 90, t0: 12, t1: 14.6, align: "left" });
     function update(t) {
       tower.build(seg(t, HQ_T.build0, HQ_T.build1, easeInOutCubic));
       const built = t > HQ_T.build0 + 0.01;
@@ -33011,7 +33014,7 @@ void main() {
         dx: m.id === "de" ? 90 : m.id === "jp" ? 80 : m.id === "cn" ? -120 : -130,
         dy: m.id === "de" ? -95 : -110,
         t0: m.t + 1,
-        t1: m.t + 3.6,
+        t1: Math.min(m.t + 3.6, 43.5),
         align: m.id === "de" || m.id === "jp" ? "left" : "right"
       });
       return mk;
@@ -33440,7 +33443,9 @@ void main() {
     const fx = el("div", "");
     fx.id = "fx";
     root.appendChild(fx);
-    fx.innerHTML = '<div class="vignette"></div><div class="flash"></div><div class="scrim"></div>';
+    fx.innerHTML = '<div class="vignette"></div><div class="pulse"></div><div class="flash"></div>';
+    const scrimEl = el("div", "scrim");
+    layer.prepend(scrimEl);
     const intro = el("div", "intro", `<div class="k"><i></i>INSIDE THE ORGANIZATION</div><h1>McDonald\u2019s</h1><p>Qui dirige, comment l\u2019entreprise s\u2019organise, comment franchis\xE9s et \xE9quipes locales s\u2019y int\xE8grent.</p>`);
     layer.appendChild(intro);
     tl.set(intro, { opacity: 0 }, 0).fromTo(intro, { opacity: 0 }, { opacity: 1, duration: 0.01 }, 0.25).fromTo(intro.querySelector(".k"), { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.7, ease: "power3.out" }, 0.3).fromTo(intro.querySelector(".k i"), { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "power3.out" }, 0.35).fromTo(intro.querySelector("h1"), { y: 70, opacity: 0, clipPath: "inset(0 0 100% 0)" }, { y: 0, opacity: 1, clipPath: "inset(0 0 0% 0)", duration: 0.9, ease: "power4.out" }, 0.45).fromTo(intro.querySelector("p"), { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" }, 0.95).to(intro, { opacity: 0, x: -50, duration: 0.7, ease: "power2.in" }, 3.8).set(intro, { visibility: "hidden" }, 4.6);
@@ -33481,16 +33486,16 @@ void main() {
       { color: "#ffc72c", label: "Licenci\xE9 de d\xE9veloppement", sub: "partenaire" },
       { color: "#ffffff", label: "Soci\xE9t\xE9 affili\xE9e", sub: "participation", style: "dash" }
     ] });
-    legend({ t0: 51.6, t1: 59.4, title: "RELATIONS", cls: "bl", rows: [
+    legend({ t0: 51.6, t1: 55.6, title: "RELATIONS", cls: "bl hi", rows: [
       { color: "#ffc72c", label: "Contrat de franchise" },
       { color: "#ffe6a0", label: "Standards de marque", style: "dash" },
       { color: "#ff4638", label: "Hi\xE9rarchie du franchis\xE9" }
     ] });
-    legend({ t0: 85.7, t1: 88.3, title: "LES QUATRE RELATIONS", cls: "mid-l big", foot: "Illustration p\xE9dagogique : ce n\u2019est pas l\u2019organigramme officiel de McDonald\u2019s.", rows: [
+    legend({ t0: 85.7, t1: 88.3, title: "LES QUATRE RELATIONS", cls: "mid-l big", rows: [
       { color: "#ffffff", label: "Gouvernance" },
       { color: "#ff4638", label: "Hi\xE9rarchie interne" },
-      { color: "#ffc72c", label: "Relations contractuelles", sub: "franchis\xE9s" },
-      { color: "#74d7ff", label: "Coordination entre fonctions", style: "dash" }
+      { color: "#ffc72c", label: "Contrats", sub: "franchis\xE9s" },
+      { color: "#74d7ff", label: "Coordination", sub: "fonctions", style: "dash" }
     ] });
     const note = (text, t0, t1, cls = "") => {
       const n = el("div", "note " + cls, `<i>i</i><span>${text}</span>`);
@@ -33499,6 +33504,7 @@ void main() {
       if (t1 < TOTAL) tl.to(n, { opacity: 0, y: 10, duration: 0.5 }, t1);
     };
     note("Organisation simplifi\xE9e \xE0 des fins p\xE9dagogiques \u2014 non officielle.", 16.4, 29, "tr");
+    note("Illustration p\xE9dagogique : ce n\u2019est pas l\u2019organigramme officiel de McDonald\u2019s.", 85.9, 88.3, "bl");
     note("Exemples illustratifs : les structures r\xE9elles diff\xE8rent selon les march\xE9s.", 37.8, 44.2, "tr");
     note("Selon le pays, le restaurant et son mode d\u2019exploitation, l\u2019organisation pr\xE9cise varie.", 72.4, 74.4, "mid");
     narration_default.lines.forEach((l, i) => {
@@ -33511,12 +33517,14 @@ void main() {
     });
     const flash = fx.querySelector(".flash");
     tl.set(flash, { opacity: 0 }, 0).to(flash, { opacity: 1, duration: 0.55, ease: "power2.in" }, 44.45).to(flash, { opacity: 0, duration: 0.7, ease: "power2.out" }, 45);
-    [[15, 0.18], [30.4, 0.22], [60.2, 0.16], [75.2, 0.2]].forEach(([t, a]) => {
-      tl.to(flash, { opacity: a, duration: 0.3, ease: "power2.out" }, t).to(flash, { opacity: 0, duration: 0.6, ease: "power2.in" }, t + 0.3);
+    const pulse = fx.querySelector(".pulse");
+    tl.set(pulse, { opacity: 0 }, 0);
+    [[15, 0.34], [30.4, 0.4], [60.2, 0.3], [75.2, 0.38]].forEach(([t, a]) => {
+      tl.to(pulse, { opacity: a, duration: 0.25, ease: "power2.out" }, t).to(pulse, { opacity: 0, duration: 0.7, ease: "power2.in" }, t + 0.25);
     });
     const fin = el("div", "final", `<div class="mark"></div><p>McDonald\u2019s&nbsp;: une <em>organisation mondiale</em>,<br>des <em>milliers d\u2019entrepreneurs</em> et d\u2019<em>\xE9quipes locales</em>.</p>`);
     layer.appendChild(fin);
-    const scrim = fx.querySelector(".scrim");
+    const scrim = scrimEl;
     tl.set(fin, { opacity: 0 }, 0).set(scrim, { opacity: 0 }, 0).to(scrim, { opacity: 1, duration: 1.1, ease: "power2.inOut" }, 88).fromTo(fin, { opacity: 0 }, { opacity: 1, duration: 0.01 }, 88.5).fromTo(fin.querySelector(".mark"), { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.8, ease: "power3.out" }, 88.6).fromTo(fin.querySelector("p"), { y: 40, opacity: 0, clipPath: "inset(0 0 100% 0)" }, { y: 0, opacity: 1, clipPath: "inset(0 0 0% 0)", duration: 1.1, ease: "power4.out" }, 88.8);
     fin.querySelectorAll("em").forEach((e, i) => tl.fromTo(e, { color: "#f4f3ef" }, { color: "#ffc72c", duration: 0.6 }, 89.9 + i * 0.45));
     tl.to(fx.querySelector(".vignette"), { opacity: 1, duration: 0.01 }, 0);
