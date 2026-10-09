@@ -1,0 +1,28 @@
+{
+  "_readme": "Corrections de prononciation pour la voix de synthèse (Kokoro, fr-fr). Les SOUS-TITRES gardent l'orthographe normale ; seule la voix est corrigée. Le moteur lit « McDonald's » comme les lettres « M-C » + un mot anglais, et « marketing » à l'anglaise : on remplace donc les phonèmes produits par la prononciation française usuelle.",
+  "text_replace": {
+    "McDo": "Mac Do"
+  },
+  "phoneme_replace": [
+    [
+      "ˌɛmsˈe (en)dˈɒnəldz(fr)",
+      "mˈak dɔnˈalds"
+    ],
+    [
+      "mˈak (en)dˈɒnəldz(fr)",
+      "mˈak dɔnˈalds"
+    ],
+    [
+      "(en)mˈɑːkɪtɪŋ(fr)",
+      "maʁkətˈiŋ"
+    ],
+    [
+      "ˌɛmsˈe (en)dˈuː(fr)",
+      "mˈak dˈo"
+    ],
+    [
+      "mˈak (en)dˈuː(fr)",
+      "mˈak dˈo"
+    ]
+  ]
+}

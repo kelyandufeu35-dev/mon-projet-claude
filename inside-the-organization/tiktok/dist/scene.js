@@ -29445,7 +29445,7 @@ void main() {
   }
 
   // src/format.js
-  var PORTRAIT = false;
+  var PORTRAIT = true;
   var W = PORTRAIT ? 1080 : 1920;
   var H = PORTRAIT ? 1920 : 1080;
   var SAFE = PORTRAIT ? { left: 26, right: W - 26, top: () => 495, bottom: 1250 } : { left: 40, right: W - 40, top: (x) => x < 1010 ? 212 : 44, bottom: 884 };

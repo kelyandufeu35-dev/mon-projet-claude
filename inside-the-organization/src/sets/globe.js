@@ -230,7 +230,11 @@ export function buildGlobe(ctx) {
   function update(t) {
     const live = t > G_T.dots0 - 0.2 && t < 45.1;
     root.visible = live;
-    if (!live) return;
+    if (!live) {
+      // hors de la séquence globe, le siège reprend sa pose d'origine (le hook saute d'un instant à l'autre)
+      if (t < G_T.dots0 - 0.2) { const g = ctx.hq.group; g.position.set(0, 0, 0); g.quaternion.identity(); g.scale.setScalar(1); }
+      return;
+    }
     const m = seg(t, G_T.morph0, G_T.morph1, (x) => x);
     const s = spinAt(t);
     spin.quaternion.copy(s);

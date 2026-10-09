@@ -94,3 +94,92 @@ html, body { width: 1920px; height: 1080px; overflow: hidden; background: #10111
 
 .lbl.tag.fin .box { padding: 5px 14px 6px 11px; }
 .lbl.tag.fin b { font-size: calc(19px * var(--s)); }
+
+/* ======================= HOOK d'ouverture : « Comment McDo fonctionne ? » ======================= */
+.hook { position: absolute; inset: 0; opacity: 0; }
+.hook .hk-scrim { position: absolute; inset: 0; opacity: 0;
+  background: radial-gradient(75% 65% at 50% 46%, rgba(10,10,12,.82) 0%, rgba(10,10,12,.62) 60%, rgba(10,10,12,.45) 100%); }
+.hook .hk-top { position: absolute; left: 0; right: 0; top: 130px; display: flex; justify-content: center; align-items: center; gap: 22px;
+  font: 700 26px 'Poppins'; letter-spacing: .36em; color: var(--yellow); }
+.hook .hk-top i { display: block; width: 70px; height: 4px; background: var(--red); }
+.hook .hk-q { position: absolute; left: 0; right: 0; top: 50%; margin-top: -270px; height: 540px; display: flex; flex-direction: column; align-items: center; justify-content: center; transform-origin: 50% 50%; }
+.hook .hk-q span { display: block; font-family: 'Poppins'; font-weight: 800; line-height: .94; letter-spacing: -.035em; color: #fff; text-shadow: 0 8px 40px rgba(0,0,0,.55); white-space: nowrap; }
+.hook .hk-q .w1 { font-size: 132px; }
+.hook .hk-q .w2 { font-size: 330px; color: var(--yellow); letter-spacing: -.05em; margin: 4px 0 6px; text-shadow: 0 12px 0 var(--red), 0 26px 60px rgba(0,0,0,.55); }
+.hook .hk-q .w3 { font-size: 118px; }
+.hook .hk-sub { position: absolute; left: 0; right: 0; top: 690px; text-align: center; }
+.hook .hk-sub span { display: block; margin-top: 10px; font: 700 58px/1.1 'Poppins'; color: #fff; letter-spacing: -.015em; text-shadow: 0 4px 24px rgba(0,0,0,.7); }
+.hook .hk-sub i.br { display: none; }
+.hook .hk-sub b { color: var(--yellow); font-weight: 800; }
+
+/* ======================= Format PORTRAIT 1080 × 1920 (TikTok / Reels / Shorts) =======================
+ * Zones sûres TikTok : haut ≈ 150 px, bas ≈ 450 px (légende + boutons), côté droit ≈ 120 px dans la moitié basse. */
+html.portrait, html.portrait body { width: 1080px; height: 1920px; }
+.portrait #bg { background: radial-gradient(120% 70% at 50% 40%, #3a3d47 0%, #24262d 45%, #14151a 100%); }
+
+/* titre d'ouverture */
+.portrait .intro { left: 60px; right: 60px; bottom: auto; top: 220px; width: auto; }
+.portrait .intro .k { font-size: 28px; }
+.portrait .intro h1 { font-size: 150px; margin: 14px 0 14px -6px; }
+.portrait .intro p { font-size: 40px; width: 900px; }
+
+/* chapitre + repère de progression */
+.portrait .progress { right: auto; left: 50px; top: 150px; gap: 8px; }
+.portrait .progress .pd { width: 44px; height: 44px; }
+.portrait .progress .pd b { font-size: 18px; }
+.portrait .chapter { left: 50px; top: 212px; max-width: 900px; }
+.portrait .chapter .kk span { font-size: 36px; width: 72px; height: 72px; border-radius: 18px; }
+.portrait .chapter .kk i { width: 40px; }
+.portrait .chapter .kk em { font-size: 26px; }
+.portrait .chapter h2 { margin-top: 14px; font-size: 56px; line-height: 1.1; }
+
+/* sous-titres : au-dessus de la zone d'interface TikTok (≈ 450 px) */
+.portrait .cap { bottom: 450px; padding: 0 40px; }
+.portrait .cap span { max-width: 900px; font-size: 46px; line-height: 1.28; padding: 14px 30px 18px; border-radius: 22px; }
+
+/* légendes de liaisons : bandeau compact, 2 colonnes */
+.portrait .legend { padding: 18px 26px 20px; border-radius: 20px; display: grid; grid-template-columns: 1fr 1fr; column-gap: 28px; }
+.portrait .legend h4 { grid-column: 1 / -1; font-size: 20px; margin-bottom: 8px; }
+.portrait .legend .foot { grid-column: 1 / -1; font-size: 22px; max-width: none; }
+.portrait .legend .row { padding: 6px 0; gap: 14px; flex-wrap: wrap; }
+.portrait .legend .sw { width: 54px; height: 8px; flex: none; }
+.portrait .legend b { font-size: 28px; line-height: 1.15; }
+.portrait .legend small { font-size: 22px; }
+.portrait .legend.bl, .portrait .legend.bl.hi { left: 40px; right: 40px; top: auto; bottom: 690px; }
+.portrait .legend.mid-l { left: 40px; right: 40px; top: auto; bottom: 450px; }
+.portrait .legend.big { padding: 18px 26px 20px; } .portrait .legend.big b { font-size: 30px; } .portrait .legend.big .sw { width: 60px; height: 9px; }
+
+/* notes de prudence : sous le titre de chapitre */
+.portrait .note { left: 50px; right: 50px; top: 420px; bottom: auto; translate: none; border-radius: 16px; padding: 12px 20px; gap: 14px; }
+.portrait .note.tr, .portrait .note.tl, .portrait .note.mid { left: 50px; top: 420px; bottom: auto; translate: none; }
+.portrait .note.bl { left: 50px; top: 196px; bottom: auto; translate: none; }
+.portrait .note i { width: 32px; height: 32px; font-size: 21px; flex: none; }
+.portrait .note span { font-size: 25px; line-height: 1.25; }
+
+/* étiquettes ancrées en 3D : plus grandes pour la lecture sur téléphone */
+.portrait .lbl.card .box { padding: 14px 24px 15px 20px; border-radius: 16px; }
+.portrait .lbl.card em { font-size: 20px; }
+.portrait .lbl.chip .box { padding: 10px 18px; }
+.portrait .lbl.chip b { font-size: 25px; } .portrait .lbl.chip span { font-size: 21px; }
+.portrait .lbl.tag .box { padding: 8px 18px 9px 14px; gap: 10px; }
+.portrait .lbl.tag .box::before { width: 11px; height: 11px; }
+
+/* message final */
+.portrait .final { left: 50px; right: 50px; top: 46%; }
+.portrait .final .mark { width: 140px; height: 8px; margin-bottom: 34px; }
+.portrait .final p { font-size: 74px; line-height: 1.2; }
+
+/* hook en portrait */
+.portrait .hook .hk-top { top: 160px; font-size: 30px; }
+.portrait .hook .hk-q { margin-top: -330px; height: 660px; }
+.portrait .hook .hk-q .w1 { font-size: 152px; }
+.portrait .hook .hk-q .w2 { font-size: 318px; margin: 6px 0 8px; }
+.portrait .hook .hk-q .w3 { font-size: 112px; }
+.portrait .hook .hk-sub i.br { display: block; }
+.portrait .hook .hk-sub { top: 890px; padding: 0 50px; }
+.portrait .hook .hk-sub span { font-size: 70px; margin-top: 22px; }
+
+/* lisibilité : dégradé sombre sous la zone du titre (portrait), pastille « chip » plus opaque */
+.portrait #overlay::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 600px; pointer-events: none;
+  background: linear-gradient(180deg, rgba(10,11,14,.72) 0%, rgba(10,11,14,.5) 55%, rgba(10,11,14,0) 100%); }
+.portrait .lbl.chip .box { background: rgba(38,32,12,.9); }

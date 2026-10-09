@@ -2,18 +2,22 @@
 """Musique originale du film, synthétisée (numpy/scipy) — aucune banque sonore externe.
 Structure calée sur les scènes : 0–15 nappes & cloches, 15–45 pulsation + arpèges,
 45–75 plus intime, 75–93 montée finale. Montées/impacts aux transitions (15, 30, 45, 60, 75, 88).
-Usage : python3 scripts/music.py  ->  assets/audio/music.wav"""
-import numpy as np, soundfile as sf, os
+Le film commence par un HOOK de data/narration.json (hook.duration s) : montage rapide sur kick/basse/arpège + montée, puis la scène 1.
+Usage : python3 scripts/music.py  ->  assets/audio/music.wav   (puis : ffmpeg -i music.wav -b:a 192k music.mp3)"""
+import numpy as np, soundfile as sf, os, json
 from scipy import signal
 
-SR = 44100; DUR = 93.5; N = int(SR * DUR)
+SR = 44100; SCENE = 93.5
+HOOK = json.load(open('data/narration.json'))['hook']['duration']
+DUR = SCENE + HOOK; N = int(SR * DUR)
 BPM = 104.0; BEAT = 60.0 / BPM; BAR = 4 * BEAT
 rng = np.random.default_rng(7)
 L = np.zeros(N); R = np.zeros(N)
 
 def midi(m): return 440.0 * 2 ** ((m - 69) / 12)
-def add(buf_l, buf_r, t0, sig, pan=0.0, gain=1.0):
-    i0 = int(t0 * SR)
+def add(buf_l, buf_r, t0, sig, pan=0.0, gain=1.0, off=None):
+    """t0 en temps de SCÈNE (décalé de HOOK) ; off=0 pour un temps vidéo absolu (hook)."""
+    i0 = int((t0 + (HOOK if off is None else off)) * SR)
     if i0 >= N: return
     n = min(len(sig), N - i0)
     gl = gain * np.cos((pan + 1) * np.pi / 4); gr = gain * np.sin((pan + 1) * np.pi / 4)
@@ -78,7 +82,7 @@ CH = [  # Am, F, C, G
 ]
 PENTA = [69, 72, 74, 76, 79, 81]
 
-nb = int(DUR / BAR) + 1
+nb = int(SCENE / BAR) + 1
 for b in range(nb):
     t0 = b * BAR; c = CH[b % 4]
     sc = 1 if t0 < 15 else 2 if t0 < 30 else 3 if t0 < 45 else 4 if t0 < 60 else 5 if t0 < 75 else 6
@@ -111,6 +115,27 @@ for b in range(nb):
         if sc in (3, 6):
             for k in (1, 3): add(L, R, t0 + k * BEAT, clap(0.11), 0, 1.0)
 
+
+# --- HOOK (temps vidéo absolu) : 96 bpm, coupes tous les 1,25 s = 2 temps ---
+BH = 60.0 / 96.0
+add(L, R, 0.0, impact(0.28), 0, 1.0, off=0)
+for k in range(int(HOOK / BH) + 1):
+    th = k * BH
+    if th >= HOOK: break
+    ch = CH[0] if th < HOOK / 2 else CH[1]
+    add(L, R, th, kick(0.5 if k % 2 == 0 else 0.34), 0, 1.0, off=0)
+    add(L, R, th, bass(midi(ch['root']), BH * 1.3, 0.3), 0, 1.0, off=0)
+    add(L, R, th + BH / 2, hat(0.07), pan=0.3, off=0)
+    for q in range(2):
+        arp = ch['tri'] + [ch['tri'][0] + 12]
+        add(L, R, th + q * BH / 2, pluck(midi(arp[(k * 2 + q) % len(arp)] + 12), 0.4, 0.13), pan=-0.4 + 0.8 * q, off=0)
+    if k % 2 == 1: add(L, R, th, clap(0.1), 0, 1.0, off=0)
+add(L, R, 0.0, pad([midi(m) for m in CH[0]['tri']], HOOK / 2 + 0.5, 0.11), -0.1, 1.0, off=0)
+add(L, R, HOOK / 2, pad([midi(m) for m in CH[1]['tri']], HOOK / 2 + 0.6, 0.11), -0.1, 1.0, off=0)
+add(L, R, HOOK / 2, riser(HOOK / 2 - 0.1, 0.2), 0, 1.0, off=0)
+add(L, R, HOOK - 0.45, whoosh(1.0, 0.2), 0, 1.0, off=0)
+add(L, R, HOOK, impact(0.45), 0, 1.0, off=0)
+
 # transitions
 for tc in (14.2, 29.2, 41.9, 58.6, 73.6):
     add(L, R, tc, riser(max(1.0, {14.2: 0.9, 29.2: 1.2, 41.9: 3.1, 58.6: 1.4, 73.6: 1.4}[tc]) + 0.0, 0.16), 0, 1.0)
@@ -127,7 +152,7 @@ def haas(x, ms=14):
     d = int(SR * ms / 1000); y = np.zeros_like(x); y[d:] = x[:-d]; return y
 Lw = L + 0.25 * haas(R); Rw = R + 0.25 * haas(L, 19)
 y = np.stack([Lw, Rw], 1)
-fade_in = np.minimum(1, np.arange(N) / (SR * 1.5)); fade_out = np.minimum(1, (N - np.arange(N)) / (SR * 2.5))
+fade_in = np.minimum(1, np.arange(N) / (SR * 0.06)); fade_out = np.minimum(1, (N - np.arange(N)) / (SR * 2.5))
 y *= (fade_in * fade_out)[:, None]
 y = y / np.max(np.abs(y)) * 0.89
 os.makedirs('assets/audio', exist_ok=True)

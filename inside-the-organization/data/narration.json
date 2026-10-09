@@ -10,7 +10,7 @@
     {
       "id": "n01",
       "t": 0.5,
-      "text": "McDonald’s, c’est souvent un restaurant. Mais derrière l’enseigne, une organisation mondiale."
+      "text": "Derrière l’enseigne que l’on connaît, il y a une organisation mondiale."
     },
     {
       "id": "n02",
@@ -152,5 +152,20 @@
       "kicker": "L’ORGANIGRAMME D’ENSEMBLE",
       "title": "Quatre types de relations"
     }
-  ]
+  ],
+  "hook": {
+    "duration": 5.0,
+    "lines": [
+      {
+        "id": "h1",
+        "t": 0.25,
+        "text": "Comment McDo fonctionne ?"
+      },
+      {
+        "id": "h2",
+        "t": 2.15,
+        "text": "Qui dirige ? Qui décide ? Et qui est derrière le comptoir ?"
+      }
+    ]
+  }
 }

@@ -9,8 +9,8 @@ import { buildGlobe } from './sets/globe.js';
 import { buildCity } from './sets/city.js';
 import { buildInterior } from './sets/interior.js';
 import { buildChart } from './sets/chart.js';
-import { buildOverlay, TOTAL } from './overlay.js';
-import { TL } from './timeline.js';
+import { buildOverlay } from './overlay.js';
+import { HOOK, VIDEO_TOTAL, toScene } from './timeline.js';
 
 const stage = createStage();
 const links = new LinkSystem(stage.scene);
@@ -30,7 +30,7 @@ const interior = buildInterior(ctx, city);
 const chart = buildChart(ctx, city);
 ctx.chart = chart;
 
-export function renderAt(t) {
+function renderScene(t, withLabels) {
   const s = camAt(t);
   stage.rig.apply(s);
   stage.updateForCamera(s);
@@ -42,12 +42,18 @@ export function renderAt(t) {
   chart.update(t);
   stage.scene.updateMatrixWorld(true);
   links.update(t);
-  labels.update(t);
+  labels.update(withLabels ? t : -1e9);
   stage.renderer.render(stage.scene, stage.rig.cam);
 }
 
 const overlayTl = buildOverlay(document.getElementById('root'));
+// temps vidéo -> temps de scène (le hook d'ouverture échantillonne des moments clés du film)
+export function renderAt(tv) {
+  const { ts, hook } = toScene(tv);
+  renderScene(ts, !hook);
+}
 window.__overlayTimeline = overlayTl;
+window.__HOOK = HOOK; window.__VIDEO_TOTAL = VIDEO_TOTAL;
 window.__seek = (t) => { overlayTl.time(t, false); renderAt(t); };
 window.__renderAt = renderAt;
 window.__stage = stage;

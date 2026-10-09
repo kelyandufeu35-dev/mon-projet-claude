@@ -1,24 +1,24 @@
 // Capture d'images de contrôle à des instants précis (hors Hyperframes), pour itérer vite.
-// Usage : node scripts/shoot.mjs --out /tmp/shots 0 2.5 8 ...
+// Usage : node scripts/shoot.mjs [--portrait] --out /tmp/shots 0 2.5 8 ...   (--portrait : projet tiktok/, 1080x1920)
 import { chromium } from 'playwright-core';
 import { pathToFileURL } from 'node:url';
 import path from 'node:path';
 import fs from 'node:fs';
 
 const args = process.argv.slice(2);
-let out = '/tmp/shots'; const times = [];
-for (let i = 0; i < args.length; i++) { if (args[i] === '--out') out = args[++i]; else times.push(parseFloat(args[i])); }
+let out = '/tmp/shots'; const times = []; let portrait = false;
+for (let i = 0; i < args.length; i++) { if (args[i] === '--out') out = args[++i]; else if (args[i] === '--portrait') portrait = true; else times.push(parseFloat(args[i])); }
 fs.mkdirSync(out, { recursive: true });
 const exe = process.env.CHROME_PATH || '/opt/pw-browsers/chromium';
 const browser = await chromium.launch({
   executablePath: exe, headless: true,
   args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', '--no-sandbox', '--force-color-profile=srgb'],
 });
-const page = await browser.newPage({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1 });
+const page = await browser.newPage({ viewport: portrait ? { width: 1080, height: 1920 } : { width: 1920, height: 1080 }, deviceScaleFactor: 1 });
 const errors = [];
 page.on('console', (m) => { if (['error', 'warning'].includes(m.type())) errors.push(m.type() + ': ' + m.text()); });
 page.on('pageerror', (e) => errors.push('pageerror: ' + e.message));
-await page.goto(pathToFileURL(path.resolve('index.html')).href);
+await page.goto(pathToFileURL(path.resolve(portrait ? 'tiktok/index.html' : 'index.html')).href);
 await page.waitForFunction(() => typeof window.__renderAt === 'function', null, { timeout: 120000 });
 await page.evaluate(() => document.fonts.ready);
 for (const t of times) {

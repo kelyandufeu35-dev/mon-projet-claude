@@ -1,6 +1,7 @@
 # McDonald's — Inside the Organization
 
-Vidéo explicative d'environ **93 secondes** (16:9, 1920 × 1080, 30 i/s) en **motion design 3D isométrique miniature**.
+Vidéo explicative d'environ **98 secondes** (un **hook** de 5 s « Comment McDo fonctionne ? » + 93,5 s de film) en **motion design 3D isométrique miniature**,
+en deux formats générés depuis le même code : **16:9 (1920 × 1080)** et **9:16 TikTok / Reels / Shorts (1080 × 1920)**, 30 i/s.
 Elle montre **qui dirige McDonald's, comment l'organisation est structurée, comment fonctionne la franchise
 et comment la hiérarchie descend jusqu'aux équipes d'un restaurant**. Rien sur les burgers, les fournisseurs ou la logistique.
 
@@ -11,12 +12,21 @@ et comment la hiérarchie descend jusqu'aux équipes d'un restaurant**. Rien sur
 
 | Fichier | Contenu |
 |---|---|
-| `video/mcdonalds-inside-the-organization-web.mp4` | **Vidéo finale** (1920×1080, 30 i/s, 93,5 s, ≈ 30 Mo, voix + musique, volume normalisé à −16 LUFS). |
-| `renders/mcdonalds-inside-the-organization.mp4` | Master (CRF 15, ≈ 116 Mo) — non versionné (trop lourd pour git), régénérable avec `npm run render`. |
+| `video/mcdonalds-inside-the-organization-tiktok.mp4` | **Version TikTok** (1080×1920, 9:16, 30 i/s, 98,5 s, voix + musique, −16 LUFS). |
+| `video/mcdonalds-inside-the-organization-web.mp4` | **Version 16:9** (1920×1080, 30 i/s, 98,5 s, voix + musique, −16 LUFS). |
+| `renders/*.mp4` | Masters (CRF 15–16) — non versionnés (trop lourds pour git), régénérables avec `npm run render` / `npm run render:tiktok`. |
 | `docs/storyboard.jpg`, `docs/poster-*.jpg` | Planche de 9 images et affiches extraites de la vidéo finale. |
 | `preview.html` / Studio Hyperframes | Prévisualisation interactive (voir plus bas). |
 
+## Le hook d'ouverture (0 – 5 s)
+
+« **Comment McDo fonctionne ?** » : titre cinétique (COMMENT / **McDo** / FONCTIONNE ?) sur un montage de 4 plans clés du film (organigramme, globe, restaurant en coupe,
+salle du conseil) coupés toutes les 1,25 s avec punch de caméra, puis trois questions (« Qui dirige ? Qui décide ? Et qui est derrière le comptoir ? »).
+La voix du hook, les sous-questions et les coupes sont synchronisées (`data/narration.json` → `hook`, `src/timeline.js` → `CUTS`).
+
 ## Le film en six scènes
+
+Les temps ci-dessous sont des temps de **scène** ; ajoutez 5 s pour le temps vidéo (hook).
 
 | # | Temps | Contenu |
 |---|-------|---------|
@@ -36,43 +46,48 @@ Prérequis : Node 22+, ffmpeg, un Chromium (le rendu logiciel WebGL/SwiftShader 
 ```bash
 cd inside-the-organization
 npm install                       # three, gsap, esbuild, playwright-core, polices
-npm run build                     # src/ -> dist/scene.js (Three.js inclus, 100 % hors-ligne)
+npm run build                     # src/ -> dist/scene.js (16:9) et tiktok/dist/scene.js (9:16), Three.js inclus, 100 % hors-ligne
 
 # Prévisualisation
-npm run dev                       # Studio Hyperframes (timeline, scrub, édition)
-npm run preview:standalone        # puis http://localhost:4173/preview.html : lecture + son + chapitres
+npm run dev                       # Studio Hyperframes (timeline, scrub, édition) — 16:9 ;  npm run dev:tiktok pour le 9:16
+npm run preview:standalone        # puis http://localhost:4173/preview.html (16:9) ou /tiktok/preview.html (9:16) : lecture + son + chapitres
                                   # (ou : python3 -m http.server 4173)
 
 # Validation et rendu
-npm run lint                      # contrat Hyperframes
-npm run check                     # lint + exécution + mise en page + contraste (long en WebGL logiciel)
-PRODUCER_HEADLESS_SHELL_PATH=/chemin/vers/chrome-headless-shell npm run render
-# -> renders/mcdonalds-inside-the-organization.mp4
+npm run lint                      # contrat Hyperframes (les deux projets)
+npm run check                     # lint + exécution + mise en page + contraste (long en WebGL logiciel) ; check:tiktok pour le 9:16
+PRODUCER_HEADLESS_SHELL_PATH=/chemin/vers/chrome-headless-shell npm run render         # -> renders/mcdonalds-inside-the-organization.mp4
+PRODUCER_HEADLESS_SHELL_PATH=/chemin/vers/chrome-headless-shell npm run render:tiktok  # -> renders/mcdonalds-inside-the-organization-tiktok.mp4
 ```
 
-Durée de rendu observée : **≈ 50 min** pour les 2 805 images (4 cœurs, WebGL logiciel SwiftShader, sans GPU).
+Durée de rendu observée : **≈ 50 min par format** pour les ≈ 2 950 images (4 cœurs, WebGL logiciel SwiftShader, sans GPU).
 Une retouche locale n'oblige pas à tout refaire : `node scripts/render-segment.mjs <début> <fin> seg.mp4` re-rend une fenêtre de temps
 avec la même fonction pure du temps, et `scripts/splice.sh` l'épisse dans le master en conservant son audio
 (c'est ainsi que l'écran final et une légende ont été corrigés). `scripts/make-web.sh` produit la version allégée.
 
 Contrôle visuel rapide d'images isolées (sans Hyperframes) :
-`node scripts/shoot.mjs --out /tmp/shots 12.8 53.6 88` puis `scripts/sheet.sh` ou `scripts/look.sh 8 20 40 80` (planche 2×2).
+`node scripts/shoot.mjs --out /tmp/shots 12.8 53.6 88` puis `scripts/sheet.sh` ou `scripts/look.sh 8 20 40 80` (planche 2×2) ;
+en portrait : `scripts/pshots.sh planche.png 8 20 40 80` (temps de scène, planche horizontale de captures 1080×1920).
+`node scripts/determinism.mjs [--portrait] t1 t2 …` compare des images obtenues dans un ordre de lecture différent.
 
 ## Architecture
 
 ```
-index.html            composition Hyperframes (1920×1080, 93,5 s) : canvas WebGL + étiquettes + texte + <audio>
+index.html            composition Hyperframes 16:9 (1920×1080, 98,5 s) : canvas WebGL + étiquettes + texte + <audio>
 preview.html          lecteur autonome (lecture, scrub, chapitres, son)
+tiktok/               projet Hyperframes 9:16 (1080×1920) : même code (bundle compilé avec __PORTRAIT__=true), mêmes assets (copiés par le build)
 src/
   main.js             assemble le monde ; renderAt(t) = fonction pure du temps (écoute l'événement hf-seek)
-  cameraPlan.js       plan de caméra isométrique (zooms exponentiels, plongeon, ascension)
-  overlay.js          textes animés GSAP (titre, chapitres, légendes, sous-titres, message final)
+  format.js           format de sortie (paysage / portrait) fixé à la compilation : dimensions, zone de sécurité des étiquettes
+  timeline.js         découpage du film, hook d'ouverture et correspondance temps vidéo → temps de scène
+  cameraPlan.js       plan de caméra isométrique (zooms exponentiels, plongeon, ascension) ; surcharges `p:` pour le portrait
+  overlay.js          textes animés GSAP (hook, titre, chapitres, légendes, sous-titres, message final)
   engine/             stage (rendu, lumières, sol), camera, labels (HTML ancré en 3D), links (liaisons lumineuses)
   components/         character (personnages articulés), building (tours qui se construisent, arches),
                       restaurant (coupe), furniture, icons (icônes de toit des 7 fonctions)
   sets/               hq, plaza, globe, city, interior, chart  (une « scène » = un set)
   data/landmask.js    contours de continents simplifiés pour le globe en points
-data/                 narration.json (voix off + chapitres), facts.json (faits et statut de vérification), sfx.json
+data/                 narration.json (voix off, hook, chapitres), pronunciation.json (prononciation), facts.json (faits et statut de vérification), sfx.json
 scripts/              build, tts (Kokoro), music (synthèse), audio-tags, shoot/look/sheet (contrôle visuel)
 assets/               polices (Poppins/Inter), audio (voix off, musique, effets), GSAP
 ```
@@ -80,6 +95,11 @@ assets/               polices (Poppins/Inter), audio (voix off, musique, effets)
 **Déterminisme.** Tout l'état visuel est une fonction pure du temps `t` (pas de `Date.now`, de `Math.random` non seedé ni
 de boucle libre) : Hyperframes peut sauter à n'importe quelle image et obtenir exactement les mêmes pixels.
 La 3D passe par l'adaptateur Three.js de Hyperframes (`hf-seek`), le texte par une timeline GSAP en pause.
+
+**Deux formats, un code.** `scripts/build.mjs` compile `src/` deux fois (esbuild `define __PORTRAIT__`). Le portrait garde les mêmes scènes, avec : caméra plus haute et
+recentrée (la fenêtre visible est 3,2× plus étroite), organigramme final recomposé verticalement (`LY` dans `sets/chart.js`), étiquettes 3D 35 % plus grandes
+avec placement anti-chevauchement (`engine/labels.js`), sous-titres, légendes et notes déplacés hors des zones d'interface TikTok (≈ 150 px en haut, ≈ 450 px en bas),
+titre de chapitre agrandi. Textes dimensionnés pour un téléphone (titres de cartes ≈ 30–40 px, sous-titres 46 px, chapitre 56 px).
 
 **Composants réutilisables.** Personnages articulés (hanches, torse, tête, bras et jambes à deux segments ; actes : marche,
 assis, parole, frappe, poignée de main, plateau…) — acteurs pilotés par chemin et actes horodatés ; tours qui poussent étage par étage ;
@@ -116,7 +136,10 @@ Les faits utilisés sont consignés dans `data/facts.json`, **fait par fait**, a
 
 * **Voix off** : française, synthétisée hors ligne avec Kokoro-82M (voix `ff_siwis`), script dans `data/narration.json`.
   Régénération : `npm run voice` (modèle à télécharger, voir `scripts/tts.py`).
-* **Musique** : originale, synthétisée par `scripts/music.py` (aucune banque externe).
+  **Prononciation** : le moteur lisait « McDonald's » comme « M-C » + un mot anglais, et « marketing » à l'anglaise. `data/pronunciation.json` remplace les phonèmes fautifs
+  par la prononciation française usuelle (« mac-donalds », « mar-ké-tinng », « McDo » → « mac do ») ; les sous-titres gardent l'orthographe normale. Les corrections
+  ont été vérifiées au niveau des phonèmes (aucune balise anglaise résiduelle) mais **pas à l'oreille** : à écouter avant diffusion.
+* **Musique** : originale, synthétisée par `scripts/music.py` (aucune banque externe), avec une section dédiée au hook (kick, basse, arpège, montée, impact sur la scène 1).
 * **Effets** : banque libre de droits Pixabay fournie avec Hyperframes (`assets/audio/sfx/CREDITS.md`).
 
 ## Couleurs

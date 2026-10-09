@@ -2,7 +2,8 @@ import * as THREE from 'three';
 import { DEG } from '../util/math.js';
 import { CameraRig } from './camera.js';
 
-export const W = 1920, H = 1080;
+import { W, H } from '../format.js';
+export { W, H };
 
 /** Scène, rendu, éclairage « studio miniature » et sol à grille. */
 export function createStage() {

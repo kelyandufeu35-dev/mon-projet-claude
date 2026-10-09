@@ -1,13 +1,13 @@
 <!doctype html>
-<html lang="fr">
+<html lang="fr" class="portrait">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=1920, height=1080" />
-    <title>Prévisualisation — McDonald's · Inside the Organization</title>
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Prévisualisation TikTok 9:16 — McDonald's · Inside the Organization</title>
     <link rel="stylesheet" href="assets/style.css" />
     <style>
       html, body { background: #0b0b0d; }
-      #stage { position: relative; width: 1920px; height: 1080px; transform-origin: 0 0; }
+      #stage { position: relative; width: 1080px; height: 1920px; transform-origin: 0 0; }
       #bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 99; display: flex; align-items: center; gap: 12px; padding: 10px 16px;
         background: rgba(10,10,12,.92); color: #fff; font: 500 14px 'Inter', sans-serif; border-top: 1px solid #333; }
       #bar button { background: #ffc72c; color: #15161a; border: 0; border-radius: 8px; padding: 8px 14px; font: 700 14px 'Poppins', sans-serif; cursor: pointer; }
@@ -20,7 +20,7 @@
     <div id="stage">
       <div id="root">
         <div id="bg"></div>
-        <canvas id="gl" width="1920" height="1080"></canvas>
+        <canvas id="gl" width="1080" height="1920"></canvas>
         <div id="labels"></div>
       </div>
     </div>
@@ -36,7 +36,7 @@
     <script>
       // Contrôleur de prévisualisation : horloge de lecture -> window.__seek(t) (même fonction pure du temps que le rendu).
       const TOTAL = window.__VIDEO_TOTAL || 98.5, HOOK = window.__HOOK || 5, $ = (id) => document.getElementById(id);
-      const fit = () => { const k = Math.min(innerWidth / 1920, (innerHeight - 52) / 1080); $('stage').style.transform = `scale(${k})`; };
+      const fit = () => { const k = Math.min(innerWidth / 1080, (innerHeight - 52) / 1920); $('stage').style.transform = `scale(${k})`; };
       addEventListener('resize', fit); fit();
       // Pistes audio : lues depuis index.html (même source que le rendu)
       fetch('index.html').then((r) => r.text()).then((html) => {

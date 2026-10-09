@@ -8,6 +8,7 @@ import * as ICONS from '../components/icons.js';
 import { isLand } from '../data/landmask.js';
 import { FUNCTIONS } from './plaza.js';
 import { R0, CITY_POS } from './city.js';
+import { PORTRAIT } from '../format.js';
 import { roundedPath } from '../engine/links.js';
 import { seg, smooth, smoother, easeOutBack, easeOutCubic, easeInOutCubic, clamp, lerp, DEG, rng } from '../util/math.js';
 
@@ -28,7 +29,27 @@ const uL = new THREE.Vector3(Math.SQRT1_2, 0, -Math.SQRT1_2);   // latéral (dro
 const uB = new THREE.Vector3(-Math.SQRT1_2, 0, -Math.SQRT1_2);  // profondeur (vers le haut de l'écran)
 const ORG = new THREE.Vector3(R0.x, 0, R0.z).addScaledVector(uL, -26);
 export const at = (l, d, y = 0, out = new THREE.Vector3()) => out.copy(ORG).addScaledVector(uL, l).addScaledVector(uB, d).add(new THREE.Vector3(0, y, 0));
-export const TIERS = { T0: { d: 0, y: 0 }, T1: { d: 24, y: 10 }, T2: { d: 48, y: 20 }, T3: { d: 74, y: 31 } };
+// Disposition de l'organigramme. Paysage : large (branche franchise à droite). Portrait : étroit et plus haut.
+export const LY = PORTRAIT ? {
+  TIERS: { T0: { d: 0, y: 0 }, T1: { d: 22, y: 9 }, T2: { d: 44, y: 18 }, T3: { d: 66, y: 27 } },
+  hq: 0, bo: -20, ex: 20, s3: { l: 0, w: 60 },
+  fn: { l: 18, w: 34 }, intl: { l: -18, w: 22 },
+  mk: [-25, -11], sl: { l: -18, w: 28 },
+  of: [6, 17, 28], sf: { l: 17, w: 36 },
+  rc: [-25, -11], sc: { l: -18, w: 28 },
+  rf: [3, 11.5, 20, 28.5], sr: { l: 16, w: 40 },
+  trunk: [8, 32, 40, 38], trunkEnd: 17,
+} : {
+  TIERS: { T0: { d: 0, y: 0 }, T1: { d: 24, y: 10 }, T2: { d: 48, y: 20 }, T3: { d: 74, y: 31 } },
+  hq: 0, bo: -18, ex: 18, s3: { l: 0, w: 62 },
+  fn: { l: -30, w: 34 }, intl: { l: 2, w: 20 },
+  mk: [-6, 10], sl: { l: 2, w: 28 },
+  of: [32, 46, 60], sf: { l: 46, w: 40 },
+  rc: [-6, 6], sc: { l: 0, w: 24 },
+  rf: [26, 38, 50, 62], sr: { l: 46, w: 52 },
+  trunk: [8, 34, 58, 64], trunkEnd: 46,
+};
+export const TIERS = LY.TIERS;
 
 function pawn(color, s = 1, head = C.skin[0]) {
   const g = new THREE.Group();
@@ -59,28 +80,28 @@ export function buildChart(ctx, cityCtx) {
     g.rotation.y = Math.PI / 4; // aligné sur les axes iso (dalles définies dans le repère latéral/profondeur)
     root.add(g); slabs.push({ g, t0 }); g.scale.setScalar(0.0001); return g;
   };
-  mkSlab(0, 'T3', 62, 16, 0xffffff, 77.0);                 // gouvernance & direction
-  mkSlab(-30, 'T2', 34, 17, C.red, 77.2);                  // fonctions centrales
-  mkSlab(2, 'T2', 20, 17, C.red, 77.3);                    // organisations internationales
-  mkSlab(2, 'T1', 28, 15, C.red, 77.4);                    // structures locales
-  mkSlab(46, 'T1', 40, 15, C.yellow, 77.5);                // branche franchisés (distincte)
-  mkSlab(0, 'T0', 24, 15, C.red, 77.6);                    // restaurants exploités par la société
-  mkSlab(46, 'T0', 52, 17, C.yellow, 77.7);                // restaurants franchisés et équipes
+  mkSlab(LY.s3.l, 'T3', LY.s3.w, 16, 0xffffff, 77.0);      // gouvernance & direction
+  mkSlab(LY.fn.l, 'T2', LY.fn.w, 17, C.red, 77.2);         // fonctions centrales
+  mkSlab(LY.intl.l, 'T2', LY.intl.w, 17, C.red, 77.3);     // organisations internationales
+  mkSlab(LY.sl.l, 'T1', LY.sl.w, 15, C.red, 77.4);         // structures locales
+  mkSlab(LY.sf.l, 'T1', LY.sf.w, 15, C.yellow, 77.5);      // branche franchisés (distincte)
+  mkSlab(LY.sc.l, 'T0', LY.sc.w, 15, C.red, 77.6);         // restaurants exploités par la société
+  mkSlab(LY.sr.l, 'T0', LY.sr.w, 17, C.yellow, 77.7);      // restaurants franchisés et équipes
 
   // ---- T3 : siège, conseil, direction générale ----
   const hq = new THREE.Group();
   const hqt = makeTower({ w: 4.6, d: 4.6, floors: 12, fh: 1.1, wall: C.white, glass: C.glass, seed: 5, fins: C.red, bands: { at: [4, 8], color: C.red }, base: { w: 7.4, d: 7.4, h: 0.8, color: C.white } });
   hq.add(hqt.group);
   const ha = makeArches({ size: 1.4 }); ha.position.set(3.2, 0.85, 3.2); ha.rotation.y = 0.5; hq.add(ha);
-  addNode(hq, at(0, TIERS.T3.d, TIERS.T3.y + 0.0), 78.0, 1.25, 0);
+  addNode(hq, at(LY.hq, TIERS.T3.d, TIERS.T3.y + 0.0), 78.0, 1.25, 0);
   const boardNode = new THREE.Group();
   boardNode.add(makeTable({ w: 4.2, d: 2.8, h: 0.5, round: true }));
   for (let i = 0; i < 7; i++) { const a = (i / 7) * Math.PI * 2; const p = pawn(i % 2 ? C.grey1 : C.white, 0.85); p.position.set(Math.cos(a) * 2.5, 0, Math.sin(a) * 1.8); boardNode.add(p); }
-  addNode(boardNode, at(-18, TIERS.T3.d, TIERS.T3.y), 78.3, 1.5);
+  addNode(boardNode, at(LY.bo, TIERS.T3.d, TIERS.T3.y), 78.3, 1.5);
   const execNode = new THREE.Group();
   execNode.add(makeTable({ w: 4.2, d: 2.8, h: 0.5, round: true }));
   for (let i = 0; i < 6; i++) { const a = (i / 6) * Math.PI * 2; const p = pawn(i === 0 ? C.red : C.charcoal, i === 0 ? 1.0 : 0.85); p.position.set(Math.cos(a) * 2.5, 0, Math.sin(a) * 1.8); execNode.add(p); }
-  addNode(execNode, at(18, TIERS.T3.d, TIERS.T3.y), 78.6, 1.5);
+  addNode(execNode, at(LY.ex, TIERS.T3.d, TIERS.T3.y), 78.6, 1.5);
 
   // ---- T2 : fonctions centrales (7 mini-immeubles + icônes) ----
   const funcs = new THREE.Group(); const fIcons = [];
@@ -91,7 +112,7 @@ export function buildChart(ctx, cityCtx) {
     const ic = f.icon(); ic.group.scale.setScalar(0.62); ic.group.position.set(Math.cos(a) * rx, t.height + 0.15, Math.sin(a) * rz); funcs.add(ic.group); fIcons.push(ic);
     funcs.userData['p' + i] = new THREE.Vector3(Math.cos(a) * rx, t.height + 1.6, Math.sin(a) * rz);
   });
-  addNode(funcs, at(-30, TIERS.T2.d, TIERS.T2.y), 78.9, 1.3, Math.PI / 4);
+  addNode(funcs, at(LY.fn.l, TIERS.T2.d, TIERS.T2.y), 78.9, 1.3, Math.PI / 4);
 
   // ---- T2 : organisations internationales (mini-globe en points + 3 pins) ----
   const gl = new THREE.Group();
@@ -111,19 +132,19 @@ export function buildChart(ctx, cityCtx) {
   const pinsDef = [[C.red, -1.1, 0.4], [C.yellow, 0.5, -0.9], [0xffffff, 1.2, 0.8]];
   const pins = pinsDef.map(([col, lx, lz]) => { const v = new THREE.Vector3(lx, 1.7, lz).normalize().multiplyScalar(3.15).add(new THREE.Vector3(0, 4.2, 0)); const p = new THREE.Mesh(new THREE.ConeGeometry(0.18, 0.55, 10).rotateX(Math.PI), new THREE.MeshStandardMaterial({ color: col, emissive: col, emissiveIntensity: 0.6 })); p.position.copy(v).add(new THREE.Vector3(0, 0.35, 0)); gl.add(p); return p; });
   const gring = new THREE.Mesh(new THREE.RingGeometry(3.6, 3.85, 48).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: C.yellow })); gring.position.y = 0.05; gl.add(gring);
-  addNode(gl, at(2, TIERS.T2.d, TIERS.T2.y), 79.2, 1);
+  addNode(gl, at(LY.intl.l, TIERS.T2.d, TIERS.T2.y), 79.2, 1);
 
   // ---- T1 : structures locales (marchés) ----
-  const mk1 = makeMarketOffice(); mk1.scale.setScalar(0.5); addNode(mk1, at(-6, TIERS.T1.d, TIERS.T1.y), 79.4, 1);
-  const mk2 = makeMarketOffice(); mk2.scale.setScalar(0.5); addNode(mk2, at(10, TIERS.T1.d, TIERS.T1.y), 79.5, 1);
+  const mk1 = makeMarketOffice(); mk1.scale.setScalar(0.5); addNode(mk1, at(LY.mk[0], TIERS.T1.d, TIERS.T1.y), 79.4, 1);
+  const mk2 = makeMarketOffice(); mk2.scale.setScalar(0.5); addNode(mk2, at(LY.mk[1], TIERS.T1.d, TIERS.T1.y), 79.5, 1);
   // ---- T1 : franchisés (bureaux de la ville qui s'envolent) ----
   const offs = [cityCtx.officeA, cityCtx.officeB, cityCtx.officeC];
-  const offSlots = [at(32, TIERS.T1.d, TIERS.T1.y), at(46, TIERS.T1.d, TIERS.T1.y), at(60, TIERS.T1.d, TIERS.T1.y)];
+  const offSlots = LY.of.map((l) => at(l, TIERS.T1.d, TIERS.T1.y));
   // ---- T0 : restaurants (ceux de la ville s'envolent) ----
   const rest = cityCtx.restaurants; // 0 focal, 1..6
   const restSlots = [
-    at(26, 0, 0), at(38, 0, 0), at(50, 0, 0), at(62, 0, 0),    // franchisés : focal + R1,R2,R3
-    at(-6, 0, 0), at(6, 0, 0),                                  // exploités par la société : R5,R6 -> (R4 reste décor)
+    ...LY.rf.map((l) => at(l, 0, 0)),                           // franchisés : focal + R1,R2,R3
+    ...LY.rc.map((l) => at(l, 0, 0)),                           // exploités par la société : R5,R6 -> (R4 reste décor)
   ];
   const restIdx = [0, 1, 2, 3, 5, 6];
   const flyers = [];
@@ -141,25 +162,27 @@ export function buildChart(ctx, cityCtx) {
   // ---- liens ----
   const lk = (curve, type, t0, o = {}) => links.add({ curve, type, parent: city, t0, drawDur: 1.1, t1: Infinity, radius: 0.13, pulses: 3, speed: 0.4, ...o });
   const up = (v, h) => v.clone().add(new THREE.Vector3(0, h, 0));
-  const hqP = at(0, TIERS.T3.d, TIERS.T3.y), bP = at(-18, TIERS.T3.d, TIERS.T3.y), eP = at(18, TIERS.T3.d, TIERS.T3.y);
+  const hqP = at(LY.hq, TIERS.T3.d, TIERS.T3.y), bP = at(LY.bo, TIERS.T3.d, TIERS.T3.y), eP = at(LY.ex, TIERS.T3.d, TIERS.T3.y);
+  const D32 = (TIERS.T3.d + TIERS.T2.d) / 2, D21 = (TIERS.T2.d + TIERS.T1.d) / 2, D10 = TIERS.T1.d / 2;
   // gouvernance (blanc) : conseil -> direction générale -> siège
   lk(new THREE.CatmullRomCurve3([up(bP, 2.6), up(hqP, 7.5).add(new THREE.Vector3(0, 2, 0)), up(eP, 2.6)]), 'gouvernance', 80.2, { radius: 0.15 });
   // hiérarchie (rouge) : direction générale -> fonctions / international ; international -> structures locales -> restaurants -> équipes
-  const pFn = at(-30, TIERS.T2.d, TIERS.T2.y), pIn = at(2, TIERS.T2.d, TIERS.T2.y);
-  lk(roundedPath([up(eP, 1.2), up(eP, 1.2).add(new THREE.Vector3(0, 0, 0)), up(at(18, 61, TIERS.T3.y - 6), 0), up(at(-30, 61, TIERS.T2.y + 8), 0), up(pFn, 5.5)], 3), 'hierarchie', 80.6, {});
-  lk(roundedPath([up(eP, 1.2), up(at(18, 61, TIERS.T3.y - 6), 0), up(at(2, 61, TIERS.T2.y + 8), 0), up(pIn, 8.4)], 3), 'hierarchie', 80.8, {});
-  const pM1 = at(-6, TIERS.T1.d, TIERS.T1.y), pM2 = at(10, TIERS.T1.d, TIERS.T1.y);
-  lk(roundedPath([up(pIn, 1.0), up(at(2, 36, TIERS.T1.y + 4), 0), up(at(-6, 36, TIERS.T1.y + 4), 0), up(pM1, 4.8)], 2.4), 'hierarchie', 81.1, {});
-  lk(roundedPath([up(pIn, 1.0), up(at(2, 36, TIERS.T1.y + 4), 0), up(at(10, 36, TIERS.T1.y + 4), 0), up(pM2, 4.8)], 2.4), 'hierarchie', 81.2, {});
+  const pFn = at(LY.fn.l, TIERS.T2.d, TIERS.T2.y), pIn = at(LY.intl.l, TIERS.T2.d, TIERS.T2.y);
+  lk(roundedPath([up(eP, 1.2), up(eP, 1.2).add(new THREE.Vector3(0, 0, 0)), up(at(LY.ex, D32, TIERS.T3.y - 6), 0), up(at(LY.fn.l, D32, TIERS.T2.y + 8), 0), up(pFn, 5.5)], 3), 'hierarchie', 80.6, {});
+  lk(roundedPath([up(eP, 1.2), up(at(LY.ex, D32, TIERS.T3.y - 6), 0), up(at(LY.intl.l, D32, TIERS.T2.y + 8), 0), up(pIn, 8.4)], 3), 'hierarchie', 80.8, {});
+  const pM1 = at(LY.mk[0], TIERS.T1.d, TIERS.T1.y), pM2 = at(LY.mk[1], TIERS.T1.d, TIERS.T1.y);
+  lk(roundedPath([up(pIn, 1.0), up(at(LY.intl.l, D21, TIERS.T1.y + 4), 0), up(at(LY.mk[0], D21, TIERS.T1.y + 4), 0), up(pM1, 4.8)], 2.4), 'hierarchie', 81.1, {});
+  lk(roundedPath([up(pIn, 1.0), up(at(LY.intl.l, D21, TIERS.T1.y + 4), 0), up(at(LY.mk[1], D21, TIERS.T1.y + 4), 0), up(pM2, 4.8)], 2.4), 'hierarchie', 81.2, {});
   const pr5 = restSlots[4], pr6 = restSlots[5];
-  lk(roundedPath([up(pM1, 1.0), up(at(-6, 12, 5), 0), up(pr5, 3.6)], 2.4), 'hierarchie', 81.5, {});
-  lk(roundedPath([up(pM2, 1.0), up(at(10, 12, 5), 0), up(pr6, 3.6)], 2.4), 'hierarchie', 81.6, {});
+  lk(roundedPath([up(pM1, 1.0), up(at(LY.mk[0], D10, 5), 0), up(pr5, 3.6)], 2.4), 'hierarchie', 81.5, {});
+  lk(roundedPath([up(pM2, 1.0), up(at(LY.mk[1], D10, 5), 0), up(pr6, 3.6)], 2.4), 'hierarchie', 81.6, {});
   restSlots.forEach((p, k) => lk(roundedPath([up(p, 3.4), up(p.clone().addScaledVector(uB, -4.2), 1.0)], 1), 'hierarchie', 82.6 + k * 0.1, { radius: 0.09, drawDur: 0.7 }));
   // contractuel (jaune) : siège -> branche franchisés (branche distincte), puis vers chaque bureau
-  const trunkEnd = at(46, 30, TIERS.T1.y + 8);
-  lk(new THREE.CatmullRomCurve3([up(at(8, TIERS.T3.d, TIERS.T3.y), 9), up(at(34, 78, TIERS.T3.y), 11), up(at(58, 68, TIERS.T3.y), 8), up(at(64, 48, 24), 0), up(at(56, 36, 19), 0), trunkEnd]), 'contrat', 81.9, { radius: 0.17, drawDur: 1.8 });
+  const trunkEnd = at(LY.trunkEnd, TIERS.T1.d + 6, TIERS.T1.y + 8);
+  const [tA, tB, tC, tD] = LY.trunk, dTop = TIERS.T3.d;
+  lk(new THREE.CatmullRomCurve3([up(at(tA, TIERS.T3.d, TIERS.T3.y), 9), up(at(tB, dTop + 4, TIERS.T3.y), 11), up(at(tC, dTop - 6, TIERS.T3.y), 8), up(at(tD, (TIERS.T3.d + TIERS.T1.d) / 2, (TIERS.T3.y + TIERS.T1.y) / 2 + 4), 0), up(at((tD + LY.trunkEnd) / 2 + 4, TIERS.T1.d + 12, TIERS.T1.y + 9), 0), trunkEnd]), 'contrat', 81.9, { radius: 0.17, drawDur: 1.8 });
   offSlots.forEach((p, k) => {
-    lk(new THREE.QuadraticBezierCurve3(trunkEnd.clone(), at(46 + (k - 1) * 7, 28, TIERS.T1.y + 8), up(p, 3.6)), 'contrat', 83.2 + k * 0.15, { radius: 0.12, drawDur: 0.9 });
+    lk(new THREE.QuadraticBezierCurve3(trunkEnd.clone(), at(LY.of[1] + (k - 1) * 7, TIERS.T1.d + 4, TIERS.T1.y + 8), up(p, 3.6)), 'contrat', 83.2 + k * 0.15, { radius: 0.12, drawDur: 0.9 });
   });
   // franchisé -> restaurants (hiérarchie du franchisé)
   const own = [[0, [0]], [1, [1]], [2, [2, 3]]];
@@ -187,7 +210,7 @@ export function buildChart(ctx, cityCtx) {
   card('Responsables et équipes', 'Dans chaque restaurant', C.red, restSlots[1].clone().addScaledVector(uB, -9).add(new THREE.Vector3(0, 2.4, 0)), 90, 120, 84.8, T_END, 'left', 1.0, 'BASE');
   // vue d'ensemble : étiquettes compactes
   const F0 = 85.8, fs = 0.8;
-  const tag = (title, color, pos, dx, dy, align) => labels.add({ kind: 'tag', title, color, scale: 1.22, anchor: (t, v) => { v.copy(pos).add(CITY_POS); return v; }, dx, dy, t0: F0, t1: 88.3, align, stem: true, className: 'fin' });
+  const tag = (title, color, pos, dx, dy, align) => labels.add({ kind: 'tag', title, color, scale: PORTRAIT ? 1.08 : 1.22, anchor: (t, v) => { v.copy(pos).add(CITY_POS); return v; }, dx, dy, t0: F0, t1: 88.3, align, stem: true, className: 'fin' });
   tag('McDonald’s Corporation', C.red, up(hqP, 13), 0, -46, 'center');
   tag('Conseil d’administration', 0xffffff, up(bP, 3.5), -60, -40, 'right');
   tag('Direction générale', C.red, up(eP, 3.5), 60, -40, 'left');
@@ -215,7 +238,12 @@ export function buildChart(ctx, cityCtx) {
   }
   function update(t) {
     const live = t > CH_T.rise0 - 0.2;
-    root.visible = live; if (!live) return;
+    root.visible = live;
+    if (!live) {
+      // avant l'envol, les restaurants et bureaux reprennent leur place dans la ville (le hook saute dans le temps)
+      for (const f of flyers) f.g.position.copy(f.from);
+      return;
+    }
     ensureCoord();
     // dalles
     for (const s of slabs) { const p = easeOutBack(clamp((t - s.t0) / 0.9), 1.2); s.g.visible = p > 0.001; s.g.scale.setScalar(Math.max(0.0001, p)); }
