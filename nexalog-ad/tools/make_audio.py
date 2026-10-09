@@ -114,7 +114,7 @@ def riser(d, f0, f1, g=1.0):
         out += seg * w
     return out * (t / d) ** 1.6 * g
 RS = riser(3.1, 300, 7000, 1.0); RS /= np.max(np.abs(RS)) + 1e-9
-place(music, RS, 6.3, 0.22)
+# (riser supprimé : sonnait comme une sirène)
 # fin : accord final + fondu
 Z = np.zeros((N, 2))
 fin = np.zeros(int(4.0 * SR)); tf = tt(len(fin))
@@ -161,7 +161,7 @@ rev = [(0.05, 8.2), (4.5, 12.65), (8.0, 16.15), (31.0, 39.15), (26.0, 34.15), (3
 for s0, d in rev:
     t0 = s0 + 3.55
     while t0 < d - 0.2:
-        if t0 > 0.5: place(sfx, BP, t0, 0.045, 0.6)
+        pass  # bips de recul supprimés
         t0 += 0.55
 def hiss(d=0.9):
     n = int(d * SR); x = fft_filter(rng.standard_normal(n), "hp", 2500) * env_ad(n, 0.01, d, 3.5); return x
@@ -172,7 +172,7 @@ def blip(f=2200, d=0.09):
     n = int(d * SR); t = tt(n); return (np.sin(2 * np.pi * f * t) + 0.4 * np.sin(2 * np.pi * f * 2 * t)) * env_ad(n, 0.002, d, 4)
 for i in range(26):
     t0 = 28.8 + i * 0.29 + (0.11 if i % 3 == 0 else 0)
-    if t0 < 35.5: place(sfx, blip(1800 + (i % 4) * 300), t0, 0.05, -0.4 + (i % 5) * 0.2)
+    pass  # bips de scanner supprimés
 # servos des bras (cycles ~ toutes les 2.8 s à partir de 34 s)
 def servo(d=0.7, f0=300, f1=900):
     n = int(d * SR); t = tt(n); f = f0 + (f1 - f0) * np.sin(np.pi * t / d) ** 0.6
@@ -183,7 +183,7 @@ SV = servo()
 for c, t0a in enumerate((35.2, 34.6, 34.0, 33.5)):
     t = t0a
     while t < 50:
-        place(sfx, SV, t - 0.3, 0.05, -0.6 + c * 0.4); place(sfx, servo(0.55, 500, 300), t + 0.9, 0.04, -0.6 + c * 0.4)
+        pass  # servos supprimés
         t += 2.8
 # bruit de fond d'usine (très bas)
 hum = fft_filter(rng.standard_normal(N), "lp", 220) * 0.5
