@@ -54,7 +54,7 @@ def whoosh(d=1.2):
         fc = 300 * (8000 / 300) ** (s / steps); out += fft_filter(x, "bp", fc, fc * 1.8) * np.exp(-((t / d - s / steps) ** 2) / 0.012)
     return out * np.sin(np.pi * np.clip(t / d, 0, 1)) ** 1.6
 WH = whoosh(); WH /= np.max(np.abs(WH))
-for tw in (9.6, 24.6, 39.6, 54.6, 69.6, 79.4): place(sfx, WH, tw, 0.5)
+for tw in (3.0, 9.6, 24.6, 39.6, 54.6, 69.6, 79.4): place(sfx, WH, tw, 0.5)
 def chime(f, d=2.4):
     n = int(d * SR); t = tt(n); return (np.sin(2 * np.pi * f * t) + 0.4 * np.sin(2 * np.pi * 2 * f * t) + 0.15 * np.sin(2 * np.pi * 3 * f * t)) * env_ad(n, 0.004, d, 3.0)
 for k, f in enumerate((784, 988, 1175, 1568)): place(sfx, chime(f), 80.6 + k * 0.16, 0.3, -0.3 + k * 0.2)
@@ -64,7 +64,7 @@ for i in range(22): place(sfx, pop(480 + (i % 5) * 70), 0.9 + i * 0.28 + (i % 3)
 
 # ---------- voix off ----------
 vo = np.zeros((N, 2)); mask = np.zeros(N)
-for name, ts in (("v1", 0.8), ("v1b", 6.3), ("v2", 10.9), ("v2b", 22.6), ("v3", 26.0), ("v3b", 35.7), ("v4", 41.0), ("v4b", 50.8), ("v5", 55.6), ("v5b", 68.6), ("v6", 75.4)):
+for name, ts in (("v0", 0.15), ("v1", 3.0), ("v1c", 8.5), ("v2", 10.9), ("v2b", 22.6), ("v3", 26.0), ("v3b", 35.7), ("v4", 41.0), ("v4b", 50.8), ("v5", 55.6), ("v5b", 68.6), ("v6", 75.4)):
     x, sr = sf.read(os.path.join(OUT, "vo", name + ".wav"))
     if x.ndim > 1: x = x.mean(1)
     n2 = int(len(x) * SR / sr); x = np.interp(np.linspace(0, len(x) - 1, n2), np.arange(len(x)), x)
