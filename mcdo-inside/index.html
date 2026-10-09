@@ -44,7 +44,7 @@
       .tg.b .dot { background: #2E7DD1; box-shadow: 0 0 0 5px rgba(46,125,209,0.3), 0 4px 10px rgba(0,0,0,0.3); }
       .tg.b .cd { border-top-color: #2E7DD1; }
       /* bannière centrale */
-      .ban { position: absolute; right: 56px; bottom: 60px; background: var(--red); color: #fff; font-weight: 900; font-size: 40px; letter-spacing: -0.02em; padding: 18px 36px; border-radius: 16px; box-shadow: 0 12px 30px rgba(120,0,0,0.35); opacity: 0; white-space: nowrap; border-bottom: 8px solid var(--yel); }
+      .ban { position: absolute; right: 56px; top: 110px; background: var(--red); color: #fff; font-weight: 900; font-size: 40px; letter-spacing: -0.02em; padding: 18px 36px; border-radius: 16px; box-shadow: 0 12px 30px rgba(120,0,0,0.35); opacity: 0; white-space: nowrap; border-bottom: 8px solid var(--yel); }
       .ban small { display: block; font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 17px; letter-spacing: 0.16em; color: var(--yel); margin-top: 4px; text-transform: uppercase; }
       /* grand pourcentage (franchise) */
       #pct { position: absolute; right: 70px; bottom: 60px; width: 520px; background: #fff; border-radius: 22px; padding: 22px 30px; border-left: 14px solid var(--red); box-shadow: 0 14px 36px rgba(60,30,0,0.28); opacity: 0; }
@@ -67,7 +67,7 @@
       <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
 
       <div id="chips">
-        <span class="chip" data-s="0">1 · MONDE</span><span class="chip" data-s="1">2 · FOURNISSEURS</span><span class="chip" data-s="2">3 · LOGISTIQUE</span><span class="chip" data-s="3">4 · RESTAURANT</span><span class="chip" data-s="4">5 · MODÈLE</span><span class="chip" data-s="5">6 · RÉSULTAT</span>
+        <span class="chip" data-s="0">1 · MONDE</span><span class="chip" data-s="1">2 · FOURNISSEURS</span><span class="chip" data-s="2">3 · FRANCHISE</span><span class="chip" data-s="3">4 · RESTAURANT</span><span class="chip" data-s="4">5 · CHIFFRES</span><span class="chip" data-s="5">6 · RÉSULTAT</span>
       </div>
 
       <div id="stats">
@@ -79,14 +79,14 @@
 
       <div class="chap" id="c1"><div class="n">CHAPITRE 01</div><div class="t">Un empire <b>mondial</b></div><div class="s">Une présence sur tous les continents</div><div class="bar"></div></div>
       <div class="chap" id="c2"><div class="n">CHAPITRE 02</div><div class="t">Des champs aux <b>usines</b></div><div class="s">Un réseau de fournisseurs partenaires</div><div class="bar"></div></div>
-      <div class="chap" id="c3"><div class="n">CHAPITRE 03</div><div class="t">La <b>logistique</b> mondiale</div><div class="s">Stockage, chaîne du froid, livraison</div><div class="bar"></div></div>
+      <div class="chap" id="c3"><div class="n">CHAPITRE 03</div><div class="t">Le <b>modèle</b> franchise</div><div class="s">Marque, site, franchisé : qui fait quoi</div><div class="bar"></div></div>
       <div class="chap" id="c4"><div class="n">CHAPITRE 04</div><div class="t">Dans le <b>restaurant</b></div><div class="s">De la borne de commande au client</div><div class="bar"></div></div>
-      <div class="chap" id="c5"><div class="n">CHAPITRE 05</div><div class="t">Un modèle de <b>collaboration</b></div><div class="s">Marque, franchisés, fournisseurs</div><div class="bar"></div></div>
+      <div class="chap" id="c5"><div class="n">CHAPITRE 05</div><div class="t">Comment l’<b>argent</b> circule</div><div class="s">Chiffres 2025 · Source : rapport annuel (10-K)</div><div class="bar"></div></div>
       <div class="chap" id="c6"><div class="n">CHAPITRE 06</div><div class="t">Chaque <b>commande</b></div><div class="s">Du champ jusqu’au plateau</div><div class="bar"></div></div>
 
       <div id="tags"></div>
-      <div class="ban" id="ban3">Plusieurs réseaux régionaux, pas un entrepôt unique<small>Chaque région : fournisseurs · distribution · restaurants</small></div>
-      <div class="ban" id="ban5">La marque, les franchisés et les fournisseurs : une collaboration<small>Le modèle repose sur ces trois piliers</small></div>
+      <div class="ban" id="ban3">La marque fixe le cadre, le franchisé exploite<small>Chacun son rôle, avec des standards communs</small></div>
+      <div class="ban" id="ban5">Marque, franchisés et fournisseurs : un système partagé<small>Les revenus viennent surtout des loyers et redevances</small></div>
       <div id="pct"><div class="v"><span id="pctn">0</span><small> %</small></div><div class="l">des restaurants sont <b>franchisés</b> : exploités par des entrepreneurs indépendants</div><div class="f">Environ, fin 2025 · Source : McDonald’s Corp. 10-K</div></div>
 
       <div class="tilechip" data-k="0">Agriculture</div><div class="tilechip" data-k="1">Production</div><div class="tilechip" data-k="2">Distribution</div><div class="tilechip" data-k="3">Restaurant</div><div class="tilechip" data-k="4">Client</div>

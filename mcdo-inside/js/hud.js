@@ -23,9 +23,9 @@
     tl.to("#stats", { opacity: 0, x: -50, duration: 0.5, ease: "power2.in" }, 9.0);
     tl.fromTo("#src", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 3.0); tl.to("#src", { opacity: 0, duration: 0.4 }, 9.0);
     // bannières
-    tl.fromTo("#ban3", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, ease: "back.out(1.4)" }, 33.2); tl.to("#ban3", { opacity: 0, y: 20, duration: 0.5 }, 38.2);
-    tl.fromTo("#ban5", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, ease: "back.out(1.4)" }, 67.8); tl.to("#ban5", { opacity: 0, y: 20, duration: 0.5 }, 69.6);
-    tl.fromTo("#pct", { opacity: 0, x: 80 }, { opacity: 1, x: 0, duration: 0.7, ease: "back.out(1.3)" }, 60.2); tl.to("#pct", { opacity: 0, x: 60, duration: 0.5 }, 66.0);
+    tl.fromTo("#ban3", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, ease: "back.out(1.4)" }, 28.6); tl.to("#ban3", { opacity: 0, y: 20, duration: 0.5 }, 34.0);
+    tl.fromTo("#ban5", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, ease: "back.out(1.4)" }, 66.4); tl.to("#ban5", { opacity: 0, y: 20, duration: 0.5 }, 69.6);
+    tl.fromTo("#pct", { opacity: 0, x: 80 }, { opacity: 1, x: 0, duration: 0.7, ease: "back.out(1.3)" }, 57.4); tl.to("#pct", { opacity: 0, x: 60, duration: 0.5 }, 62.0);
     // final
     tl.fromTo("#fin .m", { opacity: 0, y: 40, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 81.2);
     tl.fromTo("#fin .t", { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, 81.9);
@@ -46,12 +46,10 @@
     ["fry", 19.4, 23.2, () => ST().fries, "Usine de transformation", "De la pomme de terre à la frite", "", 30, -170],
     ["qc", 22.2, 25.0, () => ST().qc, "Contrôle qualité", "Et sécurité alimentaire", "b", -330, -150],
     // scène 3
-    ["dc", 26.2, 29.2, () => LG().dc, "Centre de distribution", "Stockage et préparation des livraisons", "", 30, -170],
-    ["cold", 28.8, 31.4, () => LG().cold, "Chambres froides", "Surgelé et frais, températures suivies", "b", 30, -160],
-    ["stk", 30.8, 33.8, () => LG().stock, "Gestion des stocks", "Suivi en temps réel", "y", -40, -190],
-    ["tmp", 32.6, 35.8, () => LG().truck, "Températures contrôlées", "Pendant le transport vers les restaurants", "b", 20, -160],
-    ["r2", 35.4, 38.8, () => LG().r2, "Réseau régional", "Fournisseurs · distribution · restaurants", "", 20, -190],
-    ["r3", 37.2, 39.0, () => LG().r3, "Une autre région", "Son propre réseau d’approvisionnement", "y", 20, -190],
+    ["hq3", 26.0, 30.0, () => LG().hq, "McDonald’s Corporation", "La marque, les standards, le concept", "", 40, -190],
+    ["site", 30.4, 34.0, () => LG().site, "Le site : terrain + bâtiment", "Possédé ou loué par l’entreprise", "y", 30, -120],
+    ["frn", 34.2, 38.0, () => LG().fr, "Franchisé indépendant", "Exploite et gère le restaurant", "b", 40, -150],
+    ["rnt", 36.4, 40.0, () => LG().rent, "Loyer + redevance (% des ventes)", "Versés à McDonald’s Corporation", "y", -330, -150],
     // scène 4
     ["trk", 41.8, 44.6, () => RS().truck, "Réception des marchandises", "Livraison par camion", "", -380, -120],
     ["sto", 43.8, 46.4, () => RS().storage, "Stockage des ingrédients", "Réserve et chambre froide", "b", 30, -130],
@@ -61,11 +59,9 @@
     ["drv", 51.8, 54.2, () => RS().drive, "Drive", "Commande remise à la fenêtre", "b", 30, -130],
     ["dlv", 53.0, 54.9, () => RS().deliv, "Livraison", "Prête pour les coursiers", "", 30, -120],
     // scène 5
-    ["hq", 58.8, 62.2, () => FR().hq, "McDonald’s Corporation", "Marque, standards, grandes orientations", "", 40, -170],
-    ["eu", 62.0, 65.0, () => FR().eu, "Franchisés indépendants", "Exploitent la majorité des restaurants", "y", 40, -190],
-    ["sup", 65.0, 66.9, () => FR().sup, "Fournisseurs partenaires", "Approvisionnent les restaurants", "b", 40, -170],
-    ["cre", 67.0, 69.0, () => FR().crew, "Équipes locales", "Assurent le service", "y", 50, -150],
-    ["loc", 68.0, 69.8, () => FR().local, "Menus adaptés", "Aux marchés locaux", "", -300, -130],
+    ["own", 58.6, 62.0, () => FR().own, "Exploité en propre", "1 restaurant sur 20 (illustration)", "y", 40, -170],
+    ["b1", 62.0, 68.6, () => FR().b1, "Revenus franchisés 2025", "16,5 Md$ · loyers, redevances, frais", "", -330, -90],
+    ["b2", 63.0, 69.2, () => FR().b2, "Ventes des restaurants en propre", "9,7 Md$ en 2025", "b", 40, -110],
   ];
   const holder = $("#tags");
   const els = TAGS.map((t) => {
@@ -81,7 +77,7 @@
   window.HUD = function (t) {
     // chiffres
     v1.textContent = fmt(45000 * sm5(prog(t, 2.8, 5.0))); v2.textContent = fmt(100 * sm5(prog(t, 3.8, 5.6)));
-    pn.textContent = String(Math.round(95 * sm5(prog(t, 60.6, 62.4))));
+    pn.textContent = String(Math.round(95 * sm5(prog(t, 57.8, 59.6))));
     // chapitres
     const sc = t < 10.5 ? 0 : t < 25.5 ? 1 : t < 40.5 ? 2 : t < 55.5 ? 3 : t < 70.5 ? 4 : 5;
     chips.forEach((c, i) => { const on = i === sc; if (c._on !== on) { c._on = on; c.classList.toggle("on", on); } });
