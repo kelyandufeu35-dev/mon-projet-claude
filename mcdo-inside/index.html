@@ -59,6 +59,11 @@
       #fin .t { font-weight: 700; font-size: 38px; margin-top: 10px; letter-spacing: -0.01em; text-shadow: 0 4px 16px rgba(80,0,0,0.5); }
       #disc { position: absolute; left: 0; right: 0; bottom: 34px; text-align: center; font-family: "JetBrains Mono", monospace; font-size: 15px; color: rgba(255,255,255,0.88); letter-spacing: 0.04em; opacity: 0; }
       .tilechip { position: absolute; left: 0; top: 0; opacity: 0; font-weight: 900; font-size: 24px; background: var(--red); color: #fff; padding: 9px 18px; border-radius: 30px; letter-spacing: 0.02em; box-shadow: 0 8px 20px rgba(120,0,0,0.3); border-bottom: 5px solid var(--yel); white-space: nowrap; will-change: transform; }
+      #hook { position: absolute; left: 40px; right: 40px; top: 250px; text-align: center; font-weight: 900; font-size: 118px; line-height: 1.02; letter-spacing: -0.04em; text-transform: uppercase; color: var(--ink); text-shadow: 0 4px 0 rgba(255,255,255,0.9); opacity: 1; }
+      #hook .w { display: inline-block; margin: 0 8px; opacity: 0; } #hook .r { color: #fff; background: var(--red); padding: 0 18px; border-radius: 18px; box-shadow: 0 10px 0 var(--red2); }
+      #hook2 { position: absolute; left: 50%; margin-left: -230px; width: 460px; top: 735px; text-align: center; font-weight: 900; font-size: 50px; color: #fff; background: var(--red); border-radius: 40px; padding: 12px 0; border-bottom: 8px solid var(--yel); opacity: 0; } #hook2 { text-shadow: 0 4px 14px rgba(120,0,0,0.5); }
+      #hook { left: 880px !important; right: 40px !important; top: 250px !important; text-align: left !important; font-size: 100px !important; }
+      #hook2 { left: 1180px !important; margin-left: 0 !important; top: 800px !important; width: 440px !important; }
       #fade { position: absolute; inset: 0; background: #FFC72C; pointer-events: none; }
     </style>
   </head>
@@ -66,6 +71,8 @@
     <div id="root" data-composition-id="main" data-start="0" data-duration="85" data-width="1920" data-height="1080">
       <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
 
+      <div id="hook"><span class="w">Comment</span> <span class="w">Mac&nbsp;Donald’s</span><br><span class="w">gagne</span> <span class="w r">vraiment</span><br><span class="w">de&nbsp;l’argent&nbsp;?</span></div>
+      <div id="hook2">Je vous explique&nbsp;→</div>
       <div id="chips">
         <span class="chip" data-s="0">1 · MONDE</span><span class="chip" data-s="1">2 · FOURNISSEURS</span><span class="chip" data-s="2">3 · FRANCHISE</span><span class="chip" data-s="3">4 · RESTAURANT</span><span class="chip" data-s="4">5 · CHIFFRES</span><span class="chip" data-s="5">6 · RÉSULTAT</span>
       </div>
@@ -110,6 +117,8 @@
     <script src="js/sc5_franchise.js"></script>
     <script src="js/sc6_finale.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/presenter_env.js"></script>
+    <script src="js/presenter.js"></script>
     <script src="js/hud.js"></script>
     <script>
       window.addEventListener("hf-seek", (e) => window.renderAt(e.detail.time));

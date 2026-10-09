@@ -70,8 +70,9 @@
       #fin { bottom: 360px !important; } #fin .m { font-size: 84px !important; } #fin .t { font-size: 40px !important; padding: 0 60px; }
       #disc { bottom: 290px !important; padding: 0 50px; }
       .tg .cd .a { font-size: 30px !important; } .tg .cd .b { font-size: 16px !important; }
-      #hook { position: absolute; left: 40px; right: 40px; top: 250px; text-align: center; font-weight: 900; font-size: 118px; line-height: 1.02; letter-spacing: -0.04em; text-transform: uppercase; color: var(--ink); text-shadow: 0 4px 0 rgba(255,255,255,0.9); opacity: 1; }
+      #hook { position: absolute; left: 40px; right: 40px; top: 250px; text-align: center; font-weight: 900; font-size: 100px; line-height: 1.04; letter-spacing: -0.04em; text-transform: uppercase; color: var(--ink); text-shadow: 0 4px 0 rgba(255,255,255,0.9); opacity: 1; }
       #hook .w { display: inline-block; margin: 0 8px; opacity: 0; } #hook .r { color: #fff; background: var(--red); padding: 0 18px; border-radius: 18px; box-shadow: 0 10px 0 var(--red2); }
+      #hook2 { position: absolute; left: 50%; margin-left: -230px; width: 460px; top: 735px; text-align: center; font-weight: 900; font-size: 50px; color: #fff; background: var(--red); border-radius: 40px; padding: 12px 0; border-bottom: 8px solid var(--yel); opacity: 0; } #hook2 { text-shadow: 0 4px 14px rgba(120,0,0,0.5); }
       #fade { position: absolute; inset: 0; background: #FFC72C; pointer-events: none; }
     </style>
   </head>
@@ -80,6 +81,7 @@
       <canvas id="cv" width="1080" height="1920" data-layout-allow-overflow></canvas>
 
       <div id="hook"><span class="w">Comment</span> <span class="w">Mac&nbsp;Donald’s</span><br><span class="w">gagne</span> <span class="w r">vraiment</span><br><span class="w">de&nbsp;l’argent&nbsp;?</span></div>
+      <div id="hook2">Je vous explique&nbsp;→</div>
       <div id="chips">
         <span class="chip" data-s="0">1 · MONDE</span><span class="chip" data-s="1">2 · FOURNISSEURS</span><span class="chip" data-s="2">3 · FRANCHISE</span><span class="chip" data-s="3">4 · RESTAURANT</span><span class="chip" data-s="4">5 · CHIFFRES</span><span class="chip" data-s="5">6 · RÉSULTAT</span>
       </div>
@@ -124,6 +126,8 @@
     <script src="js/sc5_franchise.js"></script>
     <script src="js/sc6_finale.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/presenter_env.js"></script>
+    <script src="js/presenter.js"></script>
     <script src="js/hud.js"></script>
     <script>
       window.addEventListener("hf-seek", (e) => window.renderAt(e.detail.time));

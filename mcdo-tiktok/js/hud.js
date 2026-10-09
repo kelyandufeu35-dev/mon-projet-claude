@@ -3,15 +3,16 @@
   const E = window.ENG;
   const { clamp, lerp, sm, sm5, prog, eoutB } = E;
   const $ = (s) => document.querySelector(s);
-  const CH = [[3.4, 10], [11.2, 25], [26.0, 40], [41.0, 55], [56.0, 70], [71.0, 80]];
+  const CH = [[4.2, 10], [11.2, 25], [26.0, 40], [41.0, 55], [56.0, 70], [71.0, 80]];
 
   window.buildHudTimeline = function (tl) {
     tl.fromTo("#fade", { opacity: 1 }, { opacity: 0, duration: 0.3, ease: "power2.out" }, 0);
-    tl.fromTo("#hook .w", { opacity: 0, y: 70, scale: 0.7 }, { opacity: 1, y: 0, scale: 1, duration: 0.45, stagger: 0.16, ease: "back.out(2)" }, 0.12);
-    tl.fromTo("#hook", { scale: 1.0 }, { scale: 1.06, duration: 2.8, ease: "none" }, 0.12);
-    tl.to("#hook", { opacity: 0, y: -60, duration: 0.35, ease: "power2.in" }, 2.95);
+    [0.15, 0.5, 1.15, 1.45, 1.95].forEach((tt, i) => tl.fromTo(document.querySelectorAll("#hook .w")[i], { opacity: 0, y: 70, scale: 0.7 }, { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: "back.out(2)" }, tt));
+    tl.fromTo("#hook", { scale: 1.0 }, { scale: 1.05, duration: 3.2, ease: "none" }, 0.12);
+    tl.fromTo("#hook2", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.4, ease: "back.out(2)" }, 2.6);
+    tl.to(["#hook", "#hook2"], { opacity: 0, y: -60, duration: 0.35, ease: "power2.in" }, 3.4);
     tl.to("#fade", { opacity: 1, duration: 0.01 }, 84.99);
-    tl.fromTo("#chips", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 3.4);
+    tl.fromTo("#chips", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 4.2);
     CH.forEach((w, i) => {
       const sel = "#c" + (i + 1);
       tl.fromTo(sel, { opacity: 0, x: -60 }, { opacity: 1, x: 0, duration: 0.7, ease: "power3.out" }, w[0]);
@@ -20,11 +21,11 @@
       tl.to(sel, { opacity: 0, x: 40, duration: 0.5, ease: "power2.in" }, w[1] - 0.5);
     });
     // scène 1 : statistiques
-    tl.fromTo("#st1", { opacity: 0, x: -80 }, { opacity: 1, x: 0, duration: 0.7, ease: "back.out(1.4)" }, 3.5);
-    tl.fromTo("#st2", { opacity: 0, x: -80 }, { opacity: 1, x: 0, duration: 0.7, ease: "back.out(1.4)" }, 4.5);
-    tl.fromTo("#st3", { opacity: 0, x: -80 }, { opacity: 1, x: 0, duration: 0.7, ease: "back.out(1.4)" }, 5.9);
+    tl.fromTo("#st1", { opacity: 0, x: -80 }, { opacity: 1, x: 0, duration: 0.7, ease: "back.out(1.4)" }, 4.3);
+    tl.fromTo("#st2", { opacity: 0, x: -80 }, { opacity: 1, x: 0, duration: 0.7, ease: "back.out(1.4)" }, 5.3);
+    tl.fromTo("#st3", { opacity: 0, x: -80 }, { opacity: 1, x: 0, duration: 0.7, ease: "back.out(1.4)" }, 6.7);
     tl.to("#stats", { opacity: 0, x: -50, duration: 0.5, ease: "power2.in" }, 9.0);
-    tl.fromTo("#src", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 4.0); tl.to("#src", { opacity: 0, duration: 0.4 }, 9.0);
+    tl.fromTo("#src", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 4.8); tl.to("#src", { opacity: 0, duration: 0.4 }, 9.0);
     // bannières
     tl.fromTo("#ban3", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, ease: "back.out(1.4)" }, 28.6); tl.to("#ban3", { opacity: 0, y: 20, duration: 0.5 }, 34.0);
     tl.fromTo("#ban5", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, ease: "back.out(1.4)" }, 66.4); tl.to("#ban5", { opacity: 0, y: 20, duration: 0.5 }, 69.6);
@@ -79,7 +80,7 @@
   const fmt = (v) => String(Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   window.HUD = function (t) {
     // chiffres
-    v1.textContent = fmt(45000 * sm5(prog(t, 3.7, 6.0))); v2.textContent = fmt(100 * sm5(prog(t, 4.6, 6.6)));
+    v1.textContent = fmt(45000 * sm5(prog(t, 4.5, 6.8))); v2.textContent = fmt(100 * sm5(prog(t, 5.4, 7.4)));
     pn.textContent = String(Math.round(95 * sm5(prog(t, 57.8, 59.6))));
     // chapitres
     const sc = t < 10.5 ? 0 : t < 25.5 ? 1 : t < 40.5 ? 2 : t < 55.5 ? 3 : t < 70.5 ? 4 : 5;

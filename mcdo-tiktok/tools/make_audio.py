@@ -64,7 +64,7 @@ for i in range(22): place(sfx, pop(480 + (i % 5) * 70), 0.9 + i * 0.28 + (i % 3)
 
 # ---------- voix off ----------
 vo = np.zeros((N, 2)); mask = np.zeros(N)
-for name, ts in (("v0", 0.15), ("v1", 3.0), ("v1c", 8.5), ("v2", 10.9), ("v2b", 22.6), ("v3", 26.0), ("v3b", 35.7), ("v4", 41.0), ("v4b", 50.8), ("v5", 55.6), ("v5b", 68.6), ("v6", 75.4)):
+for name, ts in (("v0", 0.15), ("v1", 3.8), ("v1c", 9.3), ("v2", 10.9), ("v2b", 22.6), ("v3", 26.0), ("v3b", 35.7), ("v4", 41.0), ("v4b", 50.8), ("v5", 55.6), ("v5b", 68.6), ("v6", 75.4)):
     x, sr = sf.read(os.path.join(OUT, "vo", name + ".wav"))
     if x.ndim > 1: x = x.mean(1)
     n2 = int(len(x) * SR / sr); x = np.interp(np.linspace(0, len(x) - 1, n2), np.arange(len(x)), x)

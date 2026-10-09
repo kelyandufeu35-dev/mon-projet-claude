@@ -71,6 +71,7 @@
       const sc = SC[Math.min(idx, SC.length - 1)];
       drawScene(sc, t, 1);
     }
+    if (window.PRES) window.PRES.draw(ctx, t, W, H);
     if (window.HUD) window.HUD(t);
   };
   window.DURATION = 85;
