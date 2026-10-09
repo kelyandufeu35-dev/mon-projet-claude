@@ -1,0 +1,80 @@
+{
+  "_readme": "Fiche de faits utilisée par la vidéo. Chaque fait indique sa source et son statut de vérification. 'verified_via_search' = confirmé par les extraits de recherche web de documents officiels (10-K, 8-K, proxy SEC, site corporate). Les sites officiels (corporate.mcdonalds.com, sec.gov) sont bloqués par la politique réseau de l'environnement de build : aucune lecture directe n'a été possible. Les noms de dirigeants restent donc masqués dans la vidéo (display.showNames = false).",
+  "checkedOn": "2026-10-09",
+  "display": { "showNames": false },
+  "facts": [
+    {
+      "id": "board-governance",
+      "claim": "Un conseil d'administration supervise la gouvernance de McDonald's Corporation ; les administrateurs sont presque tous indépendants.",
+      "source": "Proxy statement DEF 14A 2026 (SEC) : tous les administrateurs sauf un sont indépendants, comités composés d'administrateurs indépendants.",
+      "status": "verified_via_search"
+    },
+    {
+      "id": "chair-ceo-lead-director",
+      "claim": "Depuis 2024, les fonctions de président du conseil et de PDG sont réunies ; un administrateur référent indépendant (Lead Independent Director) assure un contrepoids.",
+      "source": "Proxy statement 2026 (SEC), principes de gouvernance.",
+      "status": "verified_via_search",
+      "note": "Utilisé pour la scène 1 sous forme de fonctions uniquement."
+    },
+    {
+      "id": "leadership-functions",
+      "claim": "L'équipe de direction comprend des dirigeants de fonctions mondiales : finance, juridique, ressources humaines, marketing, information/technologie, stratégie, chaîne d'approvisionnement, impact, expérience restaurant, ainsi que les dirigeants des unités d'affaires (États-Unis, marchés internationaux exploités, marchés internationaux sous licence).",
+      "source": "Page leadership de corporate.mcdonalds.com (via extrait de recherche).",
+      "status": "verified_via_search",
+      "note": "Les sept directions de la scène 2 sont une présentation pédagogique simplifiée, pas l'organigramme officiel."
+    },
+    {
+      "id": "segments",
+      "claim": "McDonald's présente trois segments : États-Unis, International Operated Markets (marchés où la société exploite et franchise), International Developmental Licensed Markets & Corporate (licenciés de développement et sociétés affiliées).",
+      "source": "Formulaire 10-K FY2025 (SEC).",
+      "status": "verified_via_search"
+    },
+    {
+      "id": "franchise-share",
+      "claim": "Environ 95 % des restaurants sont franchisés fin 2025 (États-Unis 95 %, International Operated Markets 89 %, International Developmental Licensed Markets 99 %).",
+      "source": "Formulaire 10-K FY2025 (SEC).",
+      "status": "verified_via_search"
+    },
+    {
+      "id": "system-size",
+      "claim": "45 356 restaurants dans le système fin 2025.",
+      "source": "McDonald's Systemwide Restaurants by Market 2025 (corporate.mcdonalds.com) ; 10-K FY2025.",
+      "status": "verified_via_search"
+    },
+    {
+      "id": "franchise-structures",
+      "claim": "Les restaurants franchisés sont détenus et exploités selon trois structures : franchise conventionnelle, licence de développement (developmental license) ou société affiliée (affiliate).",
+      "source": "Formulaires 10-K successifs (SEC).",
+      "status": "verified_via_search"
+    },
+    {
+      "id": "franchisee-independence",
+      "claim": "Les franchisés sont des exploitants indépendants : ils gèrent leur restaurant et leurs équipes, y compris les questions d'emploi, dans le cadre du contrat de franchise et des standards de la marque.",
+      "source": "10-K : le franchisé garde le contrôle des questions d'emploi, de marketing local et de tarification dans le cadre du contrat ; page franchising de corporate.mcdonalds.com (non accessible directement).",
+      "status": "verified_via_search"
+    },
+    {
+      "id": "conventional-franchise-economics",
+      "claim": "En franchise conventionnelle, le franchisé verse à McDonald's un loyer et des redevances ; en licence de développement/affiliée, le licencié apporte le capital et verse une redevance en pourcentage des ventes.",
+      "source": "Formulaires 10-K (SEC).",
+      "status": "verified_via_search"
+    },
+    {
+      "id": "recent-leadership-change",
+      "claim": "Changement récent à la tête de McDonald's USA (août 2026) : raison supplémentaire de n'afficher que les fonctions et non des noms.",
+      "source": "Formulaire 8-K du 3 août 2026 (SEC).",
+      "status": "verified_via_search"
+    },
+    {
+      "id": "restaurant-roles",
+      "claim": "Rôles type dans un restaurant : exploitant/franchisé, responsable de restaurant, responsables adjoints, managers de quart, équipiers polyvalents. L'organisation exacte varie selon le pays, le restaurant et son mode d'exploitation.",
+      "source": "Brief du projet + usage courant ; présenté comme illustration, pas comme organigramme officiel.",
+      "status": "illustrative"
+    }
+  ],
+  "leadership_names": {
+    "_note": "NE PAS AFFICHER tant que non vérifié directement sur corporate.mcdonalds.com/leadership. Ces noms proviennent d'extraits de recherche web et peuvent être périmés.",
+    "ceo_and_chair": { "name": "Chris Kempczinski", "status": "seen_in_search_not_directly_verified" },
+    "lead_independent_director": { "name": "Miles White", "status": "seen_in_search_not_directly_verified" }
+  }
+}

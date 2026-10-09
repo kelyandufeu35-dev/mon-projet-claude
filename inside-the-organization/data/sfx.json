@@ -1,0 +1,21 @@
+{
+  "_readme": "Effets sonores ponctuels (banque libre de droits Pixabay fournie avec Hyperframes). t = instant (s).",
+  "music": { "file": "assets/audio/music.mp3", "volume": 0.34 },
+  "cues": [
+    { "f": "chime", "t": 8.95, "v": 0.3 }, { "f": "chime", "t": 10.65, "v": 0.3 }, { "f": "chime", "t": 12.05, "v": 0.3 },
+    { "f": "pop", "t": 16.05, "v": 0.22 }, { "f": "pop", "t": 16.83, "v": 0.22 }, { "f": "pop", "t": 17.61, "v": 0.22 },
+    { "f": "pop", "t": 18.39, "v": 0.22 }, { "f": "pop", "t": 19.17, "v": 0.22 }, { "f": "pop", "t": 19.95, "v": 0.22 }, { "f": "pop", "t": 20.73, "v": 0.22 },
+    { "f": "ping", "t": 23.1, "v": 0.2 }, { "f": "ping", "t": 24.0, "v": 0.2 },
+    { "f": "ping", "t": 36.05, "v": 0.26 }, { "f": "ping", "t": 37.55, "v": 0.26 }, { "f": "ping", "t": 38.95, "v": 0.26 }, { "f": "ping", "t": 40.25, "v": 0.26 },
+    { "f": "ping", "t": 41.25, "v": 0.26 }, { "f": "ping", "t": 41.65, "v": 0.26 }, { "f": "ping", "t": 42.45, "v": 0.26 },
+    { "f": "whoosh-short", "t": 45.55, "v": 0.32 },
+    { "f": "chime", "t": 47.65, "v": 0.28 }, { "f": "pop", "t": 48.75, "v": 0.3 },
+    { "f": "ping", "t": 50.05, "v": 0.28 }, { "f": "ping", "t": 50.95, "v": 0.28 }, { "f": "ping", "t": 52.25, "v": 0.28 },
+    { "f": "click-soft", "t": 56.35, "v": 0.4 },
+    { "f": "click-soft", "t": 63.45, "v": 0.4 }, { "f": "click-soft", "t": 65.55, "v": 0.4 }, { "f": "click-soft", "t": 67.55, "v": 0.4 },
+    { "f": "click-soft", "t": 69.45, "v": 0.4 }, { "f": "click-soft", "t": 70.95, "v": 0.4 },
+    { "f": "whoosh-short", "t": 76.3, "v": 0.3 },
+    { "f": "chime", "t": 80.25, "v": 0.3 }, { "f": "ping", "t": 82.95, "v": 0.3 }, { "f": "pop", "t": 84.3, "v": 0.3 },
+    { "f": "chime", "t": 88.6, "v": 0.5 }
+  ]
+}

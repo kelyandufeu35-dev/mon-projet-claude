@@ -1,0 +1,156 @@
+{
+  "_readme": "Voix off française. 't' = instant de départ (s) sur la timeline du film. 'text' = phrase dite ET sous-titrée (identique). Durée cible ≈ 0,37 s/mot. Aucun nom propre de dirigeant : seulement des fonctions.",
+  "voice": {
+    "engine": "kokoro-onnx",
+    "voice": "ff_siwis",
+    "lang": "fr-fr",
+    "speed": 0.98
+  },
+  "lines": [
+    {
+      "id": "n01",
+      "t": 0.5,
+      "text": "McDonald’s, c’est souvent un restaurant. Mais derrière l’enseigne, une organisation mondiale."
+    },
+    {
+      "id": "n02",
+      "t": 6.7,
+      "text": "Au sommet, le conseil d’administration supervise la gouvernance."
+    },
+    {
+      "id": "n03",
+      "t": 10.95,
+      "text": "Le directeur général et son équipe dirigent l’entreprise au quotidien."
+    },
+    {
+      "id": "n04",
+      "t": 15.7,
+      "text": "Autour du siège, de grandes fonctions spécialisées : finance, marketing, opérations,"
+    },
+    {
+      "id": "n05",
+      "t": 21.4,
+      "text": "ressources humaines, technologie, développement des franchises, juridique."
+    },
+    {
+      "id": "n06",
+      "t": 25.6,
+      "text": "Chacune a son rôle, et toutes coordonnent leurs efforts."
+    },
+    {
+      "id": "n08",
+      "t": 31.6,
+      "text": "À l’international, McDonald’s s’organise à travers différentes structures :"
+    },
+    {
+      "id": "n09",
+      "t": 36.9,
+      "text": "marchés exploités, filiales, partenaires licenciés, sociétés affiliées."
+    },
+    {
+      "id": "n10",
+      "t": 41.3,
+      "text": "Les responsabilités varient selon les pays."
+    },
+    {
+      "id": "n11",
+      "t": 46.6,
+      "text": "Dans les restaurants, le modèle repose sur la franchise."
+    },
+    {
+      "id": "n12",
+      "t": 50.2,
+      "text": "Le franchisé est un exploitant indépendant, lié par un contrat et par les standards de la marque."
+    },
+    {
+      "id": "n13",
+      "t": 56.3,
+      "text": "Il dirige son restaurant et ses équipes."
+    },
+    {
+      "id": "n14",
+      "t": 62.3,
+      "text": "Dans un restaurant, tout commence par l’exploitant."
+    },
+    {
+      "id": "n15",
+      "t": 65.3,
+      "text": "Le responsable dirige le quotidien, épaulé par des adjoints,"
+    },
+    {
+      "id": "n16",
+      "t": 69.2,
+      "text": "des managers de quart, et les équipiers polyvalents."
+    },
+    {
+      "id": "n17",
+      "t": 72.3,
+      "text": "L’organisation précise varie selon le pays et le restaurant."
+    },
+    {
+      "id": "n18",
+      "t": 76.2,
+      "text": "Voici l’organigramme d’ensemble."
+    },
+    {
+      "id": "n19",
+      "t": 78.4,
+      "text": "En haut, la gouvernance et la direction ; au milieu, les fonctions et l’international."
+    },
+    {
+      "id": "n20",
+      "t": 83.7,
+      "text": "Sur une branche distincte, les franchisés ; en bas, les équipes."
+    },
+    {
+      "id": "n21",
+      "t": 87.9,
+      "text": "McDonald’s : une organisation mondiale, des milliers d’entrepreneurs, des équipes locales.",
+      "caption": false
+    }
+  ],
+  "chapters": [
+    {
+      "n": "01",
+      "t0": 4.6,
+      "t1": 14.7,
+      "kicker": "GOUVERNANCE ET DIRECTION",
+      "title": "Au sommet : conseil et direction générale"
+    },
+    {
+      "n": "02",
+      "t0": 15.5,
+      "t1": 29.3,
+      "kicker": "LES GRANDES DIRECTIONS",
+      "title": "Sept fonctions qui collaborent"
+    },
+    {
+      "n": "03",
+      "t0": 30.7,
+      "t1": 44.2,
+      "kicker": "L’ORGANISATION INTERNATIONALE",
+      "title": "Des structures variables selon les marchés"
+    },
+    {
+      "n": "04",
+      "t0": 45.9,
+      "t1": 59.4,
+      "kicker": "LE SYSTÈME DE FRANCHISE",
+      "title": "Des exploitants indépendants, une marque"
+    },
+    {
+      "n": "05",
+      "t0": 60.5,
+      "t1": 74.4,
+      "kicker": "DANS LE RESTAURANT",
+      "title": "Cinq niveaux, de l’exploitant à l’équipier"
+    },
+    {
+      "n": "06",
+      "t0": 75.6,
+      "t1": 85.3,
+      "kicker": "L’ORGANIGRAMME D’ENSEMBLE",
+      "title": "Quatre types de relations"
+    }
+  ]
+}
