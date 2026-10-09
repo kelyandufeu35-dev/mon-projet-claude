@@ -9,6 +9,12 @@
   const KPI = [[1840, 0], [48000, 0], [12000, 0], [99.98, 2], [1, 0]];
 
   window.buildHudTimeline = function (tl) {
+    tl.fromTo("#hook", { opacity: 0, scale: 1.45 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(1.8)" }, 0.3);
+    tl.to("#hook", { opacity: 0, y: -60, duration: 0.35, ease: "power2.in" }, 2.8);
+    [6.6, 19.5, 28.2, 36.0, 44.0, 52.3].forEach((tt) => {
+      tl.fromTo("#flash", { opacity: 0 }, { opacity: 0.75, duration: 0.09, ease: "power1.out" }, tt - 0.05);
+      tl.to("#flash", { opacity: 0, duration: 0.4, ease: "power2.out" }, tt + 0.04);
+    });
     // fondu d'entrée / sortie
     tl.fromTo("#fade", { opacity: 1 }, { opacity: 0, duration: 1.0, ease: "power2.out" }, 0);
     tl.to("#fade", { opacity: 1, duration: 0.7, ease: "power2.in" }, 55.3);
@@ -74,7 +80,34 @@
   const nodes = Array.from(document.querySelectorAll("#rail .n"));
   const kvals = [$("k1v"), $("k2v"), $("k3v"), $("k4v"), $("k5v")];
 
+  const VT = [["Chaque jour, des milliers de produits traversent un seul endroit.", 0.9, 3.2], ["Bienvenue chez Nexalog.", 4.3, 1.5], ["Suivons le parcours d'un produit.", 7.1, 1.7],
+    ["D'abord, la réception. Les camions arrivent, et chaque palette est identifiée en quelques secondes.", 11.0, 5.5],
+    ["Puis le stockage automatisé. Des navettes autonomes rangent chaque palette, parmi des milliers d'emplacements.", 20.2, 5.8],
+    ["Les colis sont triés à pleine vitesse, scannés sous tous les angles, puis aiguillés vers leur destination.", 28.8, 5.8],
+    ["Des bras robotisés préparent chaque commande, avec une précision quasi parfaite.", 36.8, 4.4],
+    ["Enfin, l'expédition. Les camions chargés partent livrer vos magasins, dès le lendemain.", 44.6, 4.7], ["Nexalog. La logistique, en mouvement intelligent.", 53.0, 2.7]];
+  const WORDS = [];
+  VT.forEach((s) => {
+    const w = s[0].split(" "), tot = w.reduce((a, x) => a + x.length + 2, 0); let c = s[1];
+    const chunks = [];
+    for (let i = 0; i < w.length; i += 3) chunks.push(w.slice(i, i + 3));
+    let idx = 0;
+    chunks.forEach((ch) => {
+      const t0 = c; const items = ch.map((x) => { const d = (x.length + 2) / tot * (s[2] - 0.1); const o = { x, a: c, b: c + d }; c += d; return o; });
+      WORDS.push({ t0, t1: c, items });
+    });
+  });
+  const capEl = document.getElementById("cap"), pfill = document.getElementById("pfill");
+  let capKey = "";
   window.HUD = function (t) {
+    pfill.style.width = (clamp(t / 56, 0, 1) * 100).toFixed(2) + "%";
+    let key = "", ch = null;
+    for (const c of WORDS) if (t >= c.t0 - 0.05 && t < c.t1 + 0.18) { ch = c; break; }
+    if (ch) { let on = -1; ch.items.forEach((it, i) => { if (t >= it.a) on = i; }); key = ch.t0 + ":" + on; }
+    if (key !== capKey) {
+      capKey = key;
+      capEl.innerHTML = ch ? ch.items.map((it, i) => '<span class="' + (i === (key.split(":")[1] | 0) ? "on" : "") + '">' + it.x + "</span>").join("") : "";
+    }
     // compteurs
     for (let i = 0; i < 5; i++) {
       const w = STEPS[i], u = sm5(prog(t, w[0] + 0.5, w[0] + 2.6));

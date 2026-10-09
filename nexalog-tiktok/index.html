@@ -21,7 +21,7 @@
         background: linear-gradient(0deg, rgba(3,7,20,0.85) 0%, rgba(3,7,20,0) 34%); }
       .mono { font-family: "JetBrains Mono", monospace; }
       /* titre d'ouverture / fermeture */
-      .brand { position: absolute; left: 70px; top: 1180px; width: 940px; opacity: 0; }
+      .brand { position: absolute; left: 70px; top: 1350px; width: 940px; opacity: 0; }
       .brand .eyebrow { font-family: "JetBrains Mono", monospace; font-size: 22px; letter-spacing: 0.32em; color: var(--cyan); display: flex; align-items: center; gap: 18px; }
       .brand .eyebrow i { display: block; width: 64px; height: 3px; background: var(--orange); }
       .brand h1 { font-weight: 900; font-size: 150px; line-height: 0.95; letter-spacing: -0.045em; margin: 22px 0 14px -8px; display: flex; }
@@ -31,10 +31,10 @@
       .brand .rail { display: flex; gap: 14px; margin-top: 34px; flex-wrap: wrap; }
       .chip { font-family: "JetBrains Mono", monospace; font-size: 20px; letter-spacing: 0.14em; padding: 10px 18px; border: 1.5px solid rgba(34,225,255,0.55); border-radius: 4px; color: #bfeaff; background: rgba(10,26,64,0.55); }
       /* cartes d'étape */
-      .step { position: absolute; left: 70px; bottom: 230px; width: 940px; opacity: 0; }
+      .step { position: absolute; left: 70px; bottom: 250px; width: 940px; opacity: 0; }
       .step .num { font-weight: 900; font-size: 150px; line-height: 0.8; color: rgba(34,225,255,0.12); -webkit-text-fill-color: rgba(34,225,255,0.12); -webkit-text-stroke: 2.5px var(--cyan); letter-spacing: -0.04em; }
       .step .ttl { font-weight: 900; font-size: 58px; line-height: 1.02; letter-spacing: -0.03em; margin-top: 16px; text-transform: uppercase; }
-      .step .sub { font-weight: 400; font-size: 30px; color: #b9d0f5; margin-top: 14px; max-width: 760px; line-height: 1.35; }
+      .step .sub { display: none; font-weight: 400; font-size: 30px; color: #b9d0f5; margin-top: 14px; max-width: 760px; line-height: 1.35; }
       .step .bar { width: 120px; height: 5px; background: var(--orange); margin-top: 22px; transform-origin: left center; }
       /* KPI */
       .kpi { position: absolute; right: 70px; top: 130px; text-align: right; opacity: 0; }
@@ -63,6 +63,16 @@
         border: 1.5px solid rgba(34,225,255,0.65); background: rgba(6,18,48,0.82); border-radius: 3px; box-shadow: 0 0 22px rgba(34,225,255,0.22); }
       .eq .c b { color: var(--cyan); font-weight: 700; }
       .eq .d { position: absolute; left: -5px; top: -5px; width: 10px; height: 10px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 14px 4px rgba(34,225,255,0.8); }
+
+      #hook { position: absolute; left: 0; right: 0; top: 330px; text-align: center; opacity: 0; }
+      #hook .a { font-weight: 900; font-size: 104px; letter-spacing: -0.04em; line-height: 0.95; text-shadow: 0 6px 40px rgba(0,0,0,0.85); }
+      #hook .b { font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 34px; letter-spacing: 0.16em; color: var(--orange); margin-top: 22px; text-shadow: 0 4px 20px rgba(0,0,0,0.9); }
+      #flash { position: absolute; inset: 0; opacity: 0; pointer-events: none; background: radial-gradient(ellipse at 50% 40%, rgba(255,255,255,0.95), rgba(34,225,255,0.55) 55%, rgba(34,225,255,0.2)); mix-blend-mode: screen; }
+      #pbar { position: absolute; left: 70px; right: 70px; top: 72px; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.18); }
+      #pfill { height: 100%; width: 0; border-radius: 3px; background: linear-gradient(90deg, var(--cyan), var(--orange)); box-shadow: 0 0 14px rgba(34,225,255,0.8); }
+      #cap { position: absolute; left: 50px; right: 50px; bottom: 640px; text-align: center; font-weight: 900; font-size: 74px; line-height: 1.05; letter-spacing: -0.03em; text-transform: uppercase; text-shadow: 0 5px 28px rgba(0,0,0,0.95), 0 0 6px rgba(0,0,0,0.8); }
+      #cap span { display: inline-block; margin: 0 16px; color: #fff; }
+      #cap span.on { color: var(--orange); transform: scale(1.12); }
       #fade { position: absolute; inset: 0; background: #02040c; pointer-events: none; }
       /* sous-titres voix off */
       #sub { position: absolute; left: 0; right: 0; bottom: 26px; text-align: center; font-size: 22px; font-weight: 700; color: rgba(234,243,255,0.92); letter-spacing: 0.01em; opacity: 0; }
@@ -111,12 +121,16 @@
         <div class="n" style="left:100%" data-i="4"><i></i>EXPÉDITION</div>
       </div>
 
-      <div class="brand" id="outro" style="top: 1130px">
+      <div class="brand" id="outro" style="top: 1330px">
         <div class="eyebrow mono"><i></i><span>L’USINE QUI PENSE EN MOUVEMENT</span></div>
         <h1 id="outName"><span>N</span><span>E</span><span class="x">X</span><span>A</span><span>L</span><span>O</span><span>G</span></h1>
         <div class="tag">La logistique, en mouvement intelligent.</div>
         <div class="rail"><span class="chip">RÉCEPTION</span><span class="chip">STOCKAGE</span><span class="chip">TRI</span><span class="chip">PRÉPARATION</span><span class="chip">EXPÉDITION</span></div>
       </div>
+      <div id="pbar"><div id="pfill"></div></div>
+      <div id="hook"><div class="a">SUIVEZ<br />CE COLIS</div><div class="b">À TRAVERS TOUTE L’USINE</div></div>
+      <div id="cap"></div>
+      <div id="flash"></div>
       <div id="fade"></div>
       <audio id="aud-music" src="assets/music.wav" data-start="0" data-duration="56" data-track-index="1" data-volume="0.224"></audio>
       <audio id="aud-sfx" src="assets/sfx.wav" data-start="0" data-duration="56" data-track-index="2" data-volume="0.56"></audio>

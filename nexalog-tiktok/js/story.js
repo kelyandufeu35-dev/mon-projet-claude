@@ -6,7 +6,8 @@
 
   // jalons caméra : [t, tx, ty, tz, scale, yaw°, el°, ox, oy]
   const KEYS = [
-    [0.0, 700, 600, 0, 0.29, -60, 38, 430, 20],
+    [0.0, 760, 640, 0, 0.72, -78, 46, 430, 20],
+    [1.5, 720, 620, 0, 0.40, -62, 40, 430, 20],
     [3.0, 700, 600, 0, 0.32, -54, 36.5, 420, 10],
     [6.5, 720, 640, 0, 0.40, -47, 35.3, 260, 0],
     [9.0, 780, 700, 0, 0.64, -42, 34, 220, -20],
@@ -43,6 +44,11 @@
     const c = camAt(t);
     cam.tx = c[0]; cam.ty = c[1]; cam.tz = c[2]; cam.scale = c[3];
     cam.yaw = c[4] * DEG; cam.el = c[5] * DEG; cam.ox = 0; cam.oy = -250; cam.scale *= 0.62;
+    // impulsions calées sur le kick (112 bpm) + coups de zoom aux transitions
+    const BEAT = 60 / 112;
+    if (t >= 9.45 && t < 52.8) { const ph = (t - 9.45) % BEAT; const pu = Math.exp(-ph * 7); cam.scale *= 1 + 0.035 * pu; cam.oy += -10 * pu; }
+    for (const tt of [6.6, 19.5, 28.2, 36.0, 44.0, 52.3]) { const d = (t - tt) / 0.3; cam.scale *= 1 + 0.16 * Math.exp(-d * d); }
+    cam.yaw += Math.sin(t * 0.6) * 0.012;
     // petit souffle de caméra (déterministe)
     cam.ox += Math.sin(t * 0.9) * 3; cam.oy += Math.cos(t * 0.7) * 2;
     E.camUpdate();
