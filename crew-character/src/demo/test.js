@@ -1,0 +1,22 @@
+import * as THREE from "three";
+import { createStage } from "../stage/stage.js";
+import { buildCrew } from "../character/rig.js";
+import { neutralPose, applyPose } from "../character/pose.js";
+const cv = document.getElementById("gl");
+const st = createStage({ canvas: cv });
+const crew = buildCrew({ name: "Léo" });
+st.scene.add(crew.group);
+crew.group.traverse((o) => { if (o.isMesh) { o.castShadow = o.castShadow; o.receiveShadow = true; } });
+const q = new URLSearchParams(location.search);
+window.renderAt = (t) => {
+  const v0 = window.TEST_VIEW || {};
+  st.world.children.forEach((c, i) => { c.visible = !(v0.hide || []).includes(i); });
+  const pose = neutralPose(); Object.assign(pose.face, (window.TEST_VIEW || {}).face || {});
+  const v = (window.TEST_VIEW || {});
+  st.setCamera({ target: v.target || [0, 0.95, 0], half: v.half || 1.6, yaw: v.yaw ?? (45 + t * 0) });
+  crew.group.rotation.y = v.rot ?? 0.78;
+  applyPose(crew.J, pose, 0);
+  st.render();
+};
+window.addEventListener("hf-seek", (e) => window.renderAt(e.detail.time));
+window.renderAt(0);

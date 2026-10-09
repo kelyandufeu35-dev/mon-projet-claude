@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Équipier 3D</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #F3F0EA; --ink: #27251F; --mut: #6B6558; --panel: rgba(255,255,255,0.86); --line: rgba(60,45,20,0.14); --red: #DA291C; --red2: #B01E14; --yel: #FFC72C; --chip: #F3EFE7; --shadow: 0 14px 34px rgba(80,50,10,0.18); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #1B1A17; --ink: #F4F0E8; --mut: #B7AF9F; --panel: rgba(34,32,28,0.84); --line: rgba(255,255,255,0.12); --chip: rgba(255,255,255,0.08); --shadow: 0 14px 34px rgba(0,0,0,0.45); } }
+  :root[data-theme="dark"] { --bg: #1B1A17; --ink: #F4F0E8; --mut: #B7AF9F; --panel: rgba(34,32,28,0.84); --line: rgba(255,255,255,0.12); --chip: rgba(255,255,255,0.08); --shadow: 0 14px 34px rgba(0,0,0,0.45); }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg); color: var(--ink); font-family: Montserrat, system-ui, sans-serif; }
+  #gl { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+  .glass { background: var(--panel); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow); }
+  #head { position: fixed; left: 16px; top: 16px; padding: 14px 18px 14px; max-width: min(420px, calc(100vw - 32px)); }
+  #head .k { font-family: "JetBrains Mono", monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; color: var(--red); }
+  #head h1 { font-size: clamp(22px, 4.6vw, 30px); font-weight: 900; letter-spacing: -0.035em; line-height: 1.02; margin-top: 4px; text-transform: uppercase; }
+  #head h1 b { color: var(--red); }
+  #desc { font-size: 13px; font-weight: 600; color: var(--mut); margin-top: 8px; line-height: 1.4; min-height: 2.8em; }
+  #dock { position: fixed; left: 50%; transform: translateX(-50%); bottom: max(14px, env(safe-area-inset-bottom)); width: min(980px, calc(100vw - 24px)); padding: 12px; display: grid; gap: 10px; }
+  #anims { display: grid; grid-template-columns: repeat(6, 1fr) auto; gap: 8px; }
+  .ab, #story { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; min-height: 58px; border: 0; border-radius: 15px; background: var(--chip); color: var(--ink); font: 800 12px/1 Montserrat, sans-serif; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: transform .12s, background .15s, color .15s, box-shadow .15s; padding: 8px 6px; }
+  .ab svg { width: 22px; height: 22px; fill: currentColor; stroke: none; }
+  .ab[data-id="wave"] svg { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+  .ab:hover, #story:hover { transform: translateY(-2px); }
+  .ab.on, #story.on { background: var(--red); color: #fff; box-shadow: 0 8px 18px rgba(176,30,20,0.38); }
+  #story { flex-direction: row; background: var(--yel); color: #27251F; padding: 8px 16px; white-space: nowrap; gap: 8px; }
+  #story::before { content: ""; border-left: 12px solid currentColor; border-top: 7px solid transparent; border-bottom: 7px solid transparent; }
+  #story.on { background: var(--ink); color: var(--bg); box-shadow: none; }
+  #ctl { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px 14px; align-items: end; }
+  .f { display: flex; flex-direction: column; gap: 3px; font-size: 10.5px; font-weight: 800; letter-spacing: 0.12em; color: var(--mut); text-transform: uppercase; min-width: 0; }
+  .f div { display: flex; justify-content: space-between; font-family: "JetBrains Mono", monospace; letter-spacing: 0.04em; } .f output { color: var(--ink); font-weight: 700; }
+  input[type=range] { width: 100%; accent-color: var(--red); height: 20px; }
+  #row2 { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .btn, .tg { border: 0; border-radius: 12px; background: var(--chip); color: var(--ink); font: 800 12px Montserrat, sans-serif; padding: 9px 13px; cursor: pointer; letter-spacing: 0.04em; display: inline-flex; gap: 7px; align-items: center; }
+  .tg input { accent-color: var(--red); width: 16px; height: 16px; }
+  .btn:hover { background: var(--line); }
+  #foot { margin-left: auto; font-size: 10.5px; color: var(--mut); font-weight: 600; max-width: 340px; text-align: right; line-height: 1.35; }
+  #more { display: none; }
+  .ab:focus-visible, #story:focus-visible, .btn:focus-visible, .tg:focus-within, input[type=range]:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+  @media (max-width: 760px) { #anims { grid-template-columns: repeat(3, 1fr); } #story { grid-column: 1 / -1; } #ctl { grid-template-columns: repeat(2, 1fr); display: none; } #dock.open #ctl { display: grid; } #foot { display: none; } #more { display: inline-flex; margin-left: auto; } #head { max-width: calc(100vw - 32px); padding: 10px 14px; } #desc { font-size: 12px; min-height: 0; } .ab { min-height: 48px; } #row2 .tg { padding: 8px 10px; } }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  body:not(.ready) #dock, body:not(.ready) #head { opacity: 0; }
+  #dock, #head { transition: opacity .5s; }
+</style>
+</head>
+<body>
+<canvas id="gl"></canvas>
+<div id="head" class="glass"><div class="k">PERSONNAGE 3D · ISOMÉTRIQUE</div><h1>Équipier <b>3D</b></h1><div id="desc"></div></div>
+<div id="dock" class="glass">
+  <div id="anims"></div><button id="story" style="display:none"><span>Démo guidée</span></button>
+  <div id="ctl">
+    <label class="f"><div>Position X<output id="pxv"></output></div><input id="px" type="range" min="-3" max="3" step="0.05" value="0"></label>
+    <label class="f"><div>Position Z<output id="pzv"></output></div><input id="pz" type="range" min="-2.2" max="2.2" step="0.05" value="0.3"></label>
+    <label class="f"><div>Orientation<output id="ryv"></output></div><input id="ry" type="range" min="-180" max="180" step="1" value="45"></label>
+    <label class="f"><div>Échelle<output id="scv"></output></div><input id="sc" type="range" min="0.6" max="1.8" step="0.05" value="1"></label>
+    <label class="f"><div>Vitesse<output id="spv"></output></div><input id="sp" type="range" min="0.25" max="2" step="0.05" value="1"></label>
+    <label class="f"><div>Zoom<output id="zmv"></output></div><input id="zm" type="range" min="1.2" max="3.4" step="0.1" value="2.05"></label>
+  </div>
+  <div id="row2">
+    <button class="btn" id="rotL" title="Tourner la caméra de 45°">⟲ 45°</button><button class="btn" id="rotR" title="Tourner la caméra de 45°">⟳ 45°</button>
+    <label class="tg"><input type="checkbox" id="auto"> Rotation auto</label>
+    <label class="tg"><input type="checkbox" id="follow" checked> Caméra suiveuse</label>
+    <label class="tg"><input type="checkbox" id="moving" checked> En marche</label>
+    <button class="btn" id="reset">Réinitialiser</button><button class="btn" id="more" aria-expanded="false" aria-controls="ctl">Réglages</button>
+    <div id="foot">Personnage, décor et animations 100 % procéduraux (Three.js sous Hyperframes). Création indépendante, logo et uniforme stylisés non officiels.</div>
+  </div>
+</div>
+<script src="dist/interactive.js"></script>
+</body>
+</html>

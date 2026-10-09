@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Équipier 3D isométrique</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #F3F0EA; }
+      :root { --red: #DA291C; --red2: #B01E14; --yel: #FFC72C; --ink: #27251F; --mut: #6B6558; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; font-family: Montserrat, sans-serif; color: var(--ink); }
+      #gl { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; display: block; }
+      .mono { font-family: "JetBrains Mono", monospace; }
+      /* marque (haut gauche) */
+      #brand { position: absolute; left: 40px; top: 32px; opacity: 0; padding: 16px 26px 20px 24px; background: rgba(255,255,255,0.84); border-radius: 24px; box-shadow: 0 12px 30px rgba(80,50,10,0.16); }
+      #brand .k { font-family: "JetBrains Mono", monospace; font-size: 15px; font-weight: 700; letter-spacing: 0.2em; color: var(--red2); }
+      #brand .t { font-weight: 900; font-size: 54px; letter-spacing: -0.04em; line-height: 1; margin-top: 6px; text-transform: uppercase; }
+      #brand .t b { color: var(--red); }
+      #brand .s { font-weight: 600; font-size: 21px; color: #4a453a; margin-top: 10px; }
+      #brand .bar { width: 120px; height: 7px; border-radius: 4px; background: var(--red); box-shadow: 14px 0 0 var(--yel); margin-top: 16px; transform-origin: left; }
+      /* panneau de commandes (droite) */
+      #panel { position: absolute; right: 48px; top: 44px; width: 372px; opacity: 0; }
+      .card { background: rgba(255,255,255,0.93); border-radius: 22px; padding: 16px 16px 14px; box-shadow: 0 14px 34px rgba(80,50,10,0.18); }
+      .card h4 { font-family: "JetBrains Mono", monospace; font-size: 13px; letter-spacing: 0.2em; color: var(--mut); margin: 2px 6px 10px; font-weight: 700; }
+      .chip { position: relative; display: flex; align-items: center; gap: 12px; height: 46px; border-radius: 14px; padding: 0 14px; margin-bottom: 7px; font-weight: 800; font-size: 20px; letter-spacing: 0.04em; color: var(--ink); background: #F3EFE7; overflow: hidden; }
+      .chip .n { font-family: "JetBrains Mono", monospace; font-size: 13px; font-weight: 700; color: var(--mut); width: 18px; }
+      .chip .g { margin-left: auto; width: 0; height: 0; border-left: 12px solid #B9B2A3; border-top: 8px solid transparent; border-bottom: 8px solid transparent; }
+      .chip .p { position: absolute; left: 0; bottom: 0; height: 5px; width: 0; background: var(--yel); }
+      .chip.on { background: var(--red); color: #fff; box-shadow: 0 8px 18px rgba(176,30,20,0.35); }
+      .chip.on .n { color: #FFE9A6; } .chip.on .g { border-left-color: var(--yel); }
+      .tr { display: flex; justify-content: space-between; align-items: baseline; padding: 5px 8px; font-family: "JetBrains Mono", monospace; font-size: 15px; color: var(--ink); }
+      .tr span:first-child { color: var(--mut); font-weight: 700; letter-spacing: 0.12em; font-size: 12px; }
+      .tr b { font-weight: 700; }
+      /* légendes */
+      .cap { position: absolute; left: 40px; bottom: 104px; opacity: 0; max-width: 1180px; padding: 18px 30px 22px 26px; background: rgba(255,255,255,0.84); border-radius: 26px; box-shadow: 0 14px 34px rgba(80,50,10,0.16); }
+      .cap .a { font-weight: 900; font-size: 80px; letter-spacing: -0.045em; line-height: 0.95; text-transform: uppercase; }
+      .cap .a b { color: var(--red); }
+      .cap .b { font-weight: 700; font-size: 26px; color: #3b362c; margin-top: 10px; }
+      /* frise temporelle */
+      #tline { position: absolute; left: 56px; right: 56px; bottom: 44px; height: 38px; opacity: 0; }
+      #tline .seg { position: absolute; top: 0; height: 24px; border-radius: 12px; background: #E4DED1; overflow: hidden; font-family: "JetBrains Mono", monospace; font-size: 12px; font-weight: 700; letter-spacing: 0.12em; color: #6B6558; display: flex; align-items: center; justify-content: center; }
+      #tline .seg.on { background: var(--red); color: #fff; }
+      #tline .ph { position: absolute; top: -6px; width: 4px; height: 36px; border-radius: 2px; background: var(--ink); box-shadow: 0 0 0 3px rgba(255,255,255,0.8); }
+      #foot { position: absolute; left: 0; right: 0; bottom: 14px; text-align: center; font-family: "JetBrains Mono", monospace; font-size: 12px; letter-spacing: 0.06em; color: rgba(60,50,30,0.7); }
+      #outro { position: absolute; left: 0; right: 0; top: 440px; text-align: center; opacity: 0; }
+      #outro .m { display: inline-block; background: #fff; border-radius: 26px; padding: 26px 44px; box-shadow: 0 18px 44px rgba(80,50,10,0.22); border-bottom: 8px solid var(--yel); }
+      #outro .a { font-weight: 900; font-size: 46px; letter-spacing: -0.03em; } #outro .a b { color: var(--red); }
+      #outro .b { font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 16px; letter-spacing: 0.1em; color: var(--mut); margin-top: 10px; text-transform: uppercase; }
+      #fade { position: absolute; inset: 0; background: #F6F3EC; pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="36" data-width="1920" data-height="1080">
+      <canvas id="gl" width="1920" height="1080" data-layout-allow-overflow></canvas>
+      <div id="brand"><div class="k">PERSONNAGE 3D · ISOMÉTRIQUE</div><div class="t">Équipier <b>3D</b></div><div class="s">Construit uniquement avec Hyperframes</div><div class="bar"></div></div>
+      <div id="panel">
+        <div class="card"><h4>ANIMATIONS</h4><div id="chips"></div></div>
+        <div class="card" style="margin-top:12px"><h4>TRANSFORM</h4>
+          <div class="tr"><span>POSITION</span><b id="r-pos">0.00 · 0.00</b></div>
+          <div class="tr"><span>ORIENTATION</span><b id="r-rot">0°</b></div>
+          <div class="tr"><span>ÉCHELLE</span><b id="r-sc">1.00×</b></div>
+          <div class="tr"><span>CAMÉRA</span><b id="r-cam">ISO 45°</b></div></div>
+      </div>
+      <div id="caps"></div>
+      <div id="tline"><div id="tsegs"></div><div class="ph" id="ph"></div></div>
+      <div id="outro"><div class="m"><div class="a">Un rig <b>100 % procédural</b></div><div class="b">Formes · matériaux · animations générés par le code — Hyperframes + Three.js</div></div></div>
+      <div id="foot">Création indépendante, non affiliée à McDonald’s · logo et uniforme stylisés, non officiels</div>
+      <div id="fade"></div>
+      <audio id="aud-music" src="assets/music.wav" data-start="0" data-duration="36" data-track-index="1" data-volume="0.3"></audio>
+      <audio id="aud-sfx" src="assets/sfx.wav" data-start="0" data-duration="36" data-track-index="2" data-volume="1"></audio>
+    </div>
+    <script src="vendor/gsap.min.js"></script>
+    <script src="dist/video.js"></script>
+    <script>
+      (function () {
+        const S = window.STORY, D = 36, $ = (s) => document.querySelector(s);
+        const NAMES = { idle: "IDLE", walk: "WALK", wave: "WAVE", carry: "CARRY", work: "WORK", happy: "HAPPY", orbit: "360°" };
+        const ORDER = ["idle", "walk", "wave", "carry", "work", "happy", "orbit"];
+        const chips = {};
+        ORDER.forEach((id, i) => { const c = document.createElement("div"); c.className = "chip"; c.innerHTML = '<span class="n">' + (i + 1) + "</span>" + NAMES[id] + '<span class="g"></span><div class="p"></div>'; $("#chips").appendChild(c); chips[id] = c; });
+        // frise : un bloc par segment
+        S.hud.forEach((h, i) => { const d = document.createElement("div"); d.className = "seg"; d.style.left = (h.t0 / D) * 100 + "%"; d.style.width = ((h.t1 - h.t0) / D) * 100 - 0.25 + "%"; d.textContent = (h.t1 - h.t0) > 2.2 ? NAMES[h.id] : ""; $("#tsegs").appendChild(d); h.el = d; });
+        // légendes
+        const tl = gsap.timeline({ paused: true }), proxy = { t: 0 };
+        tl.to(proxy, { t: D, duration: D, ease: "none", onUpdate: () => window.renderAt(proxy.t) }, 0);
+        tl.fromTo("#fade", { opacity: 1 }, { opacity: 0, duration: 0.8, ease: "power2.out" }, 0);
+        tl.to("#fade", { opacity: 1, duration: 1.0, ease: "power2.in" }, D - 1.0);
+        tl.fromTo("#brand", { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.8, ease: "power3.out" }, 0.4);
+        tl.fromTo("#brand .bar", { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "power3.out" }, 0.9);
+        tl.fromTo("#panel", { opacity: 0, x: 60 }, { opacity: 1, x: 0, duration: 0.8, ease: "power3.out" }, 0.7);
+        tl.fromTo("#tline", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 1.0);
+        S.hud.forEach((h) => {
+          const c = document.createElement("div"); c.className = "cap"; c.innerHTML = '<div class="a">' + h.title + '</div><div class="b">' + h.sub + "</div>"; $("#caps").appendChild(c);
+          tl.fromTo(c, { opacity: 0, x: -50 }, { opacity: 1, x: 0, duration: 0.55, ease: "power3.out" }, h.t0 + 0.15);
+          tl.to(c, { opacity: 0, x: 30, duration: 0.4, ease: "power2.in" }, Math.max(h.t0 + 0.9, h.t1 - 0.3));
+        });
+        tl.fromTo("#outro", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, D - 4.3);
+        tl.to("#outro", { opacity: 0, duration: 0.5 }, D - 1.3);
+        tl.fromTo("#foot", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 1.6);
+        window.__timelines = window.__timelines || {}; window.__timelines["main"] = tl;
+        // lecture « live » du personnage (déterministe : fonction de t)
+        let last = null;
+        window.HUDUPDATE = (t) => {
+          const m = window.SHOW.crew.motion ? window.SHOW.crew.motion(t) : { x: 0, z: 0, yaw: 0 };
+          $("#r-pos").textContent = m.x.toFixed(2) + " · " + m.z.toFixed(2);
+          $("#r-rot").textContent = Math.round(((m.yaw * 180) / Math.PI + 540) % 360 - 180) + "°";
+          $("#r-sc").textContent = window.SHOW.crew.scale.toFixed(2) + "×";
+          const cam = window.SHOW.stage.view; $("#r-cam").textContent = "ISO " + Math.round(((cam.yaw % 360) + 360) % 360) + "°";
+          let cur = null; S.hud.forEach((h) => { if (t >= h.t0 && t < h.t1) cur = h; });
+          S.hud.forEach((h) => h.el.classList.toggle("on", h === cur));
+          Object.keys(chips).forEach((id) => { const on = cur && cur.id === id; chips[id].classList.toggle("on", !!on); chips[id].querySelector(".p").style.width = on ? Math.round(((t - cur.t0) / (cur.t1 - cur.t0)) * 100) + "%" : "0%"; });
+          $("#ph").style.left = "calc(" + Math.min(100, (t / D) * 100) + "% - 2px)";
+        };
+        window.renderAt(0);
+      })();
+    </script>
+  </body>
+</html>

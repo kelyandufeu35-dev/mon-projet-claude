@@ -1,0 +1,13 @@
+{
+  "name": "crew-character",
+  "private": true,
+  "type": "module",
+  "description": "Équipier 3D isométrique : personnage procédural (Three.js) animé et rendu avec Hyperframes",
+  "scripts": {
+    "build": "sh build.sh video && sh build.sh interactive",
+    "preview": "npx --yes hyperframes@0.8.142 preview",
+    "render": "npx --yes hyperframes@0.8.142 render -f 30 --crf 16 -w 2 -o renders/equipier-3d.mp4"
+  },
+  "dependencies": { "three": "0.170.0" },
+  "devDependencies": { "esbuild": "^0.25.0" }
+}
