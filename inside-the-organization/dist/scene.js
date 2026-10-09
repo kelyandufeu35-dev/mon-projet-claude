@@ -33517,7 +33517,7 @@ void main() {
         {
           id: "h1",
           t: 0.25,
-          text: "Comment McDo fonctionne vraiment ?"
+          text: "Comment McDo fonctionne ?"
         },
         {
           id: "h2",
@@ -33550,7 +33550,7 @@ void main() {
     n19: 4.736,
     n20: 3.328,
     n21: 5.269,
-    h1: 1.771,
+    h1: 1.429,
     h2: 2.987
   };
 
