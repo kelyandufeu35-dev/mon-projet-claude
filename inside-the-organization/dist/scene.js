@@ -32416,15 +32416,15 @@ void main() {
       v.copy(pos).add(CITY_POS);
       return v;
     }, dx, dy, t0, t1, align, num });
-    card("McDonald\u2019s Corporation", "Si\xE8ge mondial", C.red, up(hqP, 14), 0, -70, 80.2, T_END, "center", 1.15, "SOMMET");
-    card("Conseil d\u2019administration", "Gouvernance", 16777215, up(bP, 3.5), -120, -50, 80.6, T_END, "right", 1);
-    card("Direction g\xE9n\xE9rale", "PDG et \xE9quipe ex\xE9cutive", C.red, up(eP, 3.5), 120, -50, 80.9, T_END, "left", 1);
+    card("McDonald\u2019s Corporation", "Si\xE8ge mondial", C.red, up(hqP, 14), 0, -70, 80.2, 83, "center", 1.15, "SOMMET");
+    card("Conseil d\u2019administration", "Gouvernance", 16777215, up(bP, 3.5), -120, -50, 80.6, 83, "right", 1);
+    card("Direction g\xE9n\xE9rale", "PDG et \xE9quipe ex\xE9cutive", C.red, up(eP, 3.5), 120, -50, 80.9, 83, "left", 1);
     card("Fonctions centrales", "Sept fonctions qui collaborent", C.cyan, up(pFn, 9), -40, -78, 81.3, T_END, "center", 1.05);
     card("Organisations internationales", "March\xE9s, filiales, partenaires", C.yellow, up(pIn, 9.5), 140, -52, 81.5, T_END, "left", 1.05);
     card("Structures locales", "Responsabilit\xE9s variables selon les pays", C.grey1, up(pM2, 6.4), 150, -40, 81.9, T_END, "left", 1);
     card("Franchis\xE9s ind\xE9pendants", "Branche distincte \xB7 contrats de franchise", C.yellow, up(offSlots[1], 6.4), 40, -86, 83.4, T_END, "left", 1.05, "BRANCHE FRANCHISE");
     card("Restaurants exploit\xE9s par la soci\xE9t\xE9", null, C.red, up(restSlots[5], 5.2), -130, 30, 82.3, T_END, "right", 0.95);
-    card("Restaurants franchis\xE9s", "Exploit\xE9s par leurs franchis\xE9s", C.yellow, up(restSlots[2], 5.2), 40, 100, 84.2, T_END, "left", 1);
+    card("Restaurants franchis\xE9s", "Exploit\xE9s par leurs franchis\xE9s", C.yellow, up(restSlots[2], 5.2), 40, 100, 84.2, 84.8, "left", 1);
     card("Responsables et \xE9quipes", "Dans chaque restaurant", C.red, restSlots[1].clone().addScaledVector(uB, -9).add(new Vector3(0, 2.4, 0)), 90, 120, 84.8, T_END, "left", 1, "BASE");
     const F0 = 85.8, fs = 0.8;
     const tag = (title, color, pos, dx, dy, align) => labels2.add({ kind: "tag", title, color, scale: 1.22, anchor: (t, v) => {

@@ -11,7 +11,7 @@ const TOTAL = Number(/data-duration="([\d.]+)"/.exec(fs.readFileSync('index.html
 const out = [];
 out.push(`      <audio id="music" data-start="0" data-duration="${TOTAL}" data-track-index="20" data-volume="${sfx.music.volume}" src="${sfx.music.file}"></audio>`);
 for (const l of narr.lines) {
-  const d = Math.min(dur[l.id] + 0.05, TOTAL - l.t);
+  const d = Math.min(dur[l.id], TOTAL - l.t);
   out.push(`      <audio id="vo-${l.id}" data-start="${l.t}" data-duration="${d.toFixed(2)}" data-track-index="21" data-volume="1" src="assets/audio/vo/${l.id}.mp3"></audio>`);
 }
 sfx.cues.forEach((c, i) => { sfxLen[c.f] ??= Math.min(len(c.f), 2.6); out.push(`      <audio id="sfx-${i}" data-start="${c.t}" data-duration="${sfxLen[c.f].toFixed(2)}" data-track-index="${22 + (i % 6)}" data-volume="${c.v}" src="assets/audio/sfx/${c.f}.mp3"></audio>`); });

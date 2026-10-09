@@ -175,15 +175,15 @@ export function buildChart(ctx, cityCtx) {
   const T_END = 85.4;
   const card = (title, sub, color, pos, dx, dy, t0, t1, align = 'center', scale = 1.1, num = null) => labels.add({ kind: 'card', title, sub, color, scale, anchor: (t, v) => { v.copy(pos).add(CITY_POS); return v; }, dx, dy, t0, t1, align, num });
   // visite
-  card('McDonald’s Corporation', 'Siège mondial', C.red, up(hqP, 14), 0, -70, 80.2, T_END, 'center', 1.15, 'SOMMET');
-  card('Conseil d’administration', 'Gouvernance', 0xffffff, up(bP, 3.5), -120, -50, 80.6, T_END, 'right', 1.0);
-  card('Direction générale', 'PDG et équipe exécutive', C.red, up(eP, 3.5), 120, -50, 80.9, T_END, 'left', 1.0);
+  card('McDonald’s Corporation', 'Siège mondial', C.red, up(hqP, 14), 0, -70, 80.2, 83.0, 'center', 1.15, 'SOMMET');
+  card('Conseil d’administration', 'Gouvernance', 0xffffff, up(bP, 3.5), -120, -50, 80.6, 83.0, 'right', 1.0);
+  card('Direction générale', 'PDG et équipe exécutive', C.red, up(eP, 3.5), 120, -50, 80.9, 83.0, 'left', 1.0);
   card('Fonctions centrales', 'Sept fonctions qui collaborent', C.cyan, up(pFn, 9), -40, -78, 81.3, T_END, 'center', 1.05);
   card('Organisations internationales', 'Marchés, filiales, partenaires', C.yellow, up(pIn, 9.5), 140, -52, 81.5, T_END, 'left', 1.05);
   card('Structures locales', 'Responsabilités variables selon les pays', C.grey1, up(pM2, 6.4), 150, -40, 81.9, T_END, 'left', 1.0);
   card('Franchisés indépendants', 'Branche distincte · contrats de franchise', C.yellow, up(offSlots[1], 6.4), 40, -86, 83.4, T_END, 'left', 1.05, 'BRANCHE FRANCHISE');
   card('Restaurants exploités par la société', null, C.red, up(restSlots[5], 5.2), -130, 30, 82.3, T_END, 'right', 0.95);
-  card('Restaurants franchisés', 'Exploités par leurs franchisés', C.yellow, up(restSlots[2], 5.2), 40, 100, 84.2, T_END, 'left', 1.0);
+  card('Restaurants franchisés', 'Exploités par leurs franchisés', C.yellow, up(restSlots[2], 5.2), 40, 100, 84.2, 84.8, 'left', 1.0);
   card('Responsables et équipes', 'Dans chaque restaurant', C.red, restSlots[1].clone().addScaledVector(uB, -9).add(new THREE.Vector3(0, 2.4, 0)), 90, 120, 84.8, T_END, 'left', 1.0, 'BASE');
   // vue d'ensemble : étiquettes compactes
   const F0 = 85.8, fs = 0.8;
