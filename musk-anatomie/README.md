@@ -44,8 +44,8 @@ ffmpeg -i out/musk-anatomie.mp4 -c:v libx264 -preset slow -crf 26 -pix_fmt yuv42
 ```
 
 Contrôles réalisés sur les deux masters (version à la voix corrigée) : 30 fps, 3 105 images, 103,5 s ; aucune image
-figée ; seules images noires = fondus d'entrée et de sortie (0,2 s / 0,4 s en vertical) ; audio ≈ −15,8 LUFS intégrés,
-crête vraie ≈ −1,0 dBTP. Rendu logiciel : 34 min (16:9) et 31 min (9:16).
+figée ; seules images noires = fondus d'entrée et de sortie (0,2 s / 0,4 s en vertical) ; audio −16,0 LUFS intégrés,
+crête −1,5 dBFS. Rendu logiciel : 34 min (16:9) et 31 min (9:16).
 
 ### Version verticale (TikTok, 9:16)
 
@@ -130,9 +130,21 @@ phonèmes calculés sans synthèse, pour vérifier la liste. Ces corrections son
 l'oreille** : une écoute humaine reste nécessaire, et la prononciation se règle en éditant ce fichier puis en relançant
 `--only <segments>`.
 
-Les WAV de la narration sont versionnés : le projet se rend sans Kokoro. Mesures du mixage final : −15,6 LUFS
-intégrés, crête vraie −1,1 dBTP. Le mixage a été contrôlé par mesure (loudness, niveaux par tranche), **pas à l'oreille** :
-une écoute humaine reste recommandée avant diffusion.
+Les WAV de la narration sont versionnés : le projet se rend sans Kokoro.
+
+**Balance du mixage.** La voix est la référence ; pendant qu'elle parle, la musique est ≈ 15 dB plus bas et les
+bruitages ≈ 19 dB plus bas en médiane (les plus gros impacts ≈ 3 dB sous la voix, grâce à un compresseur léger).
+Une première version avait la musique au niveau de la voix et des impacts jusqu'à 13 dB *au‑dessus* d'elle : trop fort.
+Les niveaux se règlent sans rien recalculer d'autre, et `STEMS_DIR` écrit chaque couche pour la mesurer :
+
+```bash
+MUSIC_GAIN=0.162 SFX_GAIN=0.21 STEMS_DIR=/tmp/stems PYTHON=.venv/bin/python npm run audio   # valeurs actuelles
+```
+
+Mesures du mixage final : −16,0 LUFS intégrés, crête −1,5 dBFS, étendue de niveau 1,7 LU. Le mixage a été contrôlé par
+mesure (loudness, niveaux de chaque couche pendant la voix), **pas à l'oreille** : une écoute humaine reste recommandée
+avant diffusion. Changer la piste audio ne demande pas de refaire le rendu 3D : on remplace seulement l'audio du MP4,
+`ffmpeg -i out/musk-anatomie.mp4 -i assets/audio/mix.m4a -map 0:v -map 1:a -c copy -t 103.5 sortie.mp4`.
 
 ## Données, dates et sources — lire avant de citer un chiffre
 

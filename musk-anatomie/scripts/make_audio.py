@@ -446,7 +446,23 @@ env = signal.sosfilt(signal.butter(2, 3.0, fs=SR, output="sos"), env)
 duck = 1.0 - 0.52 * np.clip(env / 0.045, 0, 1)
 duck = signal.sosfilt(signal.butter(1, 6.0, fs=SR, output="sos"), duck)
 
-mix = (music + 0.9 * music_wet) * duck[:, None] * 0.9 + sfx * 0.85 + sfx_wet * 0.9 + narr * 1.0 + reverb(narr * 0.05, ir_short)
+# Niveaux relatifs (1.0 = niveau d'origine). Réglables sans toucher au reste : MUSIC_GAIN=0.5 SFX_GAIN=0.5 make-audio.sh
+MUSIC_GAIN = float(os.environ.get("MUSIC_GAIN", "0.162"))
+SFX_GAIN = float(os.environ.get("SFX_GAIN", "0.21"))
+music_bus = (music + 0.9 * music_wet) * duck[:, None] * MUSIC_GAIN
+sfx_bus = (sfx + sfx_wet * (0.9 / 0.85)) * SFX_GAIN
+# compresseur léger sur les bruitages : les gros impacts (décollage, bang) restent sous la voix, les petits détails passent
+SFX_THR, SFX_RATIO = 0.03, 4.0
+_env = np.abs(signal.sosfilt(signal.butter(2, 40.0, fs=SR, output="sos"), np.abs(sfx_bus).max(axis=1)))   # enveloppe lissée
+_gain = np.where(_env > SFX_THR, (np.maximum(_env, 1e-9) / SFX_THR) ** (1.0 / SFX_RATIO - 1.0), 1.0)
+_gain = signal.sosfilt(signal.butter(1, 12.0, fs=SR, output="sos"), _gain)            # relâchement progressif
+sfx_bus = sfx_bus * np.minimum(1.0, _gain)[:, None]
+voice_bus = narr * 1.0 + reverb(narr * 0.05, ir_short)
+mix = music_bus + sfx_bus + voice_bus
+if os.environ.get("STEMS_DIR"):                 # diagnostic : écrit chaque couche séparément
+    os.makedirs(os.environ["STEMS_DIR"], exist_ok=True)
+    for nm, b in (("music", music_bus), ("sfx", sfx_bus), ("voice", voice_bus)):
+        sf.write(os.path.join(os.environ["STEMS_DIR"], nm + ".wav"), b[: int((DUR + 0.2) * SR)].astype(np.float32), SR, subtype="PCM_16")
 # fondus d'entrée/sortie
 fi = np.minimum(1, tN / 0.5); fo = np.clip((DUR + 0.2 - tN) / 1.6, 0, 1)
 mix *= (fi * fo)[:, None]
