@@ -23411,22 +23411,26 @@ void main() {
         el.style.visibility = saved.v;
         el.style.opacity = saved.o;
         el.style.transform = saved.t;
-        const T0 = it.t0 - pad, T12 = it.t1 + pad;
         const order = it.zone === "bottom" ? [["bottom", bottom], ["top", top]] : [["top", top], ["bottom", bottom]];
-        let pos = null;
-        for (const [name, [zs, ze]] of order) {
-          const fits = (y0) => !placed.some((p) => p.t0 < T12 && p.t1 > T0 && p.y0 < y0 + h + gap && p.y1 + gap > y0);
-          if (name === "bottom") for (let y0 = ze - h; y0 >= zs; y0 -= 6) {
-            if (fits(y0)) {
-              pos = y0;
-              break;
+        let pos = null, T0 = it.t0 - pad, T12 = it.t1 + pad;
+        for (const m of [pad, 0]) {
+          T0 = it.t0 - m;
+          T12 = it.t1 + m;
+          for (const [name, [zs, ze]] of order) {
+            const fits = (y0) => !placed.some((p) => p.t0 < T12 && p.t1 > T0 && p.y0 < y0 + h + gap && p.y1 + gap > y0);
+            if (name === "bottom") for (let y0 = ze - h; y0 >= zs; y0 -= 6) {
+              if (fits(y0)) {
+                pos = y0;
+                break;
+              }
             }
-          }
-          else for (let y0 = zs; y0 + h <= ze; y0 += 6) {
-            if (fits(y0)) {
-              pos = y0;
-              break;
+            else for (let y0 = zs; y0 + h <= ze; y0 += 6) {
+              if (fits(y0)) {
+                pos = y0;
+                break;
+              }
             }
+            if (pos !== null) break;
           }
           if (pos !== null) break;
         }

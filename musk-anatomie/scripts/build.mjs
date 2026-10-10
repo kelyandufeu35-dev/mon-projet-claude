@@ -1,7 +1,7 @@
 // Build : bundle ES modules (Three.js inclus) -> dist/bundle.js, copie GSAP et polices en local.
 // Aucune ressource distante n'est utilisée au rendu (le rendu doit être 100 % déterministe et hors-ligne).
 import { build } from "esbuild";
-import { copyFileSync, mkdirSync, existsSync, readFileSync, writeFileSync } from "node:fs";
+import { copyFileSync, mkdirSync, existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -57,9 +57,10 @@ html = html.replace(/(data-composition-id="root"[^>]*data-duration=")[^"]*(")/, 
 writeFileSync(p("index.html"), html);
 console.log("durée de la composition :", d, "s");
 
-// 6) Version verticale 1080×1920 (TikTok / Reels / Shorts) : tiktok.html est GÉNÉRÉ à partir de index.html
+// 6) Version verticale 1080×1920 (TikTok / Reels / Shorts) : tiktok/ est un mini-projet Hyperframes GÉNÉRÉ à partir
+//    d'index.html (un projet = un seul index.html racine ; ainsi lint, check et render fonctionnent sur les deux formats).
 const css = readFileSync(p("src/portrait.css"), "utf8");
-const must = (src, from, to) => { if (!src.includes(from)) throw new Error("tiktok.html : motif introuvable : " + from); return src.replace(from, to); };
+const must = (src, from, to) => { if (!src.includes(from)) throw new Error("tiktok/index.html : motif introuvable : " + from); return src.replace(from, to); };
 let t = html;
 t = must(t, 'content="width=1920, height=1080"', 'content="width=1080, height=1920"');
 t = must(t, "<title>Elon Musk : anatomie d'une fortune</title>", "<title>Elon Musk : anatomie d'une fortune (format vertical)</title>");
@@ -69,6 +70,10 @@ t = must(t, '<canvas id="stage" width="1920" height="1080">', '<canvas id="stage
 t = must(t, '<div id="root" ', '<div id="root" class="portrait" ');
 t = must(t, '<script src="vendor/gsap.min.js"></script>', '<script>window.MUSK_FORMAT = "portrait";</script>\n    <script src="vendor/gsap.min.js"></script>');
 t = must(t, "    </style>", css + "    </style>");
-writeFileSync(p("tiktok.html"), t);
-console.log("tiktok.html généré (1080×1920)");
+const tk = (...a) => p("tiktok", ...a);
+for (const d of ["assets/fonts", "assets/audio", "vendor", "dist"]) mkdirSync(tk(d), { recursive: true });
+for (const [from, to] of [["vendor/gsap.min.js", "vendor/gsap.min.js"], ["dist/bundle.js", "dist/bundle.js"], ["assets/audio/mix.m4a", "assets/audio/mix.m4a"]]) copyFileSync(p(from), tk(to));
+for (const f of readdirSync(p("assets/fonts"))) copyFileSync(p("assets/fonts", f), tk("assets/fonts", f));
+writeFileSync(tk("index.html"), t);
+console.log("tiktok/index.html généré (1080×1920)");
 console.log("build ok ->", existsSync(p("dist/bundle.js")) ? "dist/bundle.js" : "?");

@@ -1,18 +1,19 @@
 /* Format vertical 1080×1920 (TikTok / Reels / Shorts) : texte agrandi et centré, empilé en bandes haute et basse,
-   la 3D occupe le centre. Injecté dans tiktok.html par scripts/build.mjs. */
+   la 3D occupe le centre. Injecté dans tiktok/index.html par scripts/build.mjs.
+   (les règles `zoom` sont écrites sans préfixe .portrait : le lint Hyperframes prendrait sinon un zoom de descendant pour un zoom du canevas) */
 #root.portrait #sub { bottom: 180px; width: max-content; max-width: 980px; font-size: 40px; line-height: 1.22; padding: 14px 30px; border-radius: 18px; background: rgba(4, 8, 18, 0.62); }
 .portrait .hc { max-width: 980px; white-space: normal; }
-.portrait .hz { zoom: 1.32; max-width: 735px; }
-.portrait .hc.chip .hz { zoom: 1.2; max-width: none; white-space: nowrap; }
+.hz { zoom: 1.32; max-width: 735px; }
+.hc.chip .hz { zoom: 1.2; max-width: none; white-space: nowrap; }
 .portrait .hc.disclaimer { white-space: nowrap; }
-.portrait .hc.disclaimer .hz { zoom: 1; max-width: none; }
+.hc.disclaimer .hz { zoom: 1; max-width: none; }
 .portrait .hc.srcline { max-width: 1000px; text-align: center; }
-.portrait .hc.srcline .hz { zoom: 1; max-width: 1000px; line-height: 1.3; }
+.hc.srcline .hz { zoom: 1; max-width: 1000px; line-height: 1.3; }
 .portrait .tag span { max-width: 640px; }
 .portrait .pill, .portrait .callout, .portrait .card-left { text-align: center; }
 .portrait .bigcount .eq { font-size: 26px; }
 .portrait .arrow { font-size: 40px; }
-.portrait .finale .hz { zoom: 1.1; }
+.finale .hz { zoom: 1.1; }
 .legp { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 22px; background: rgba(5, 10, 22, 0.86); padding: 12px 20px; border-radius: 12px; font: 700 21px "Inter", sans-serif; }
 .legp span { display: inline-flex; align-items: center; gap: 8px; }
 .legp i { display: inline-block; width: 14px; height: 14px; border-radius: 50%; }

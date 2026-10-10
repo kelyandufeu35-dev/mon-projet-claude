@@ -49,11 +49,19 @@ crête vraie ≈ −1,0 dBTP. Rendu logiciel : 34 min (16:9) et 31 min (9:16).
 
 ### Version verticale (TikTok, 9:16)
 
-`tiktok.html` est **générée** par `npm run build` à partir de `index.html` (ne pas l'éditer à la main). Elle charge la
+`tiktok/` est un **mini-projet Hyperframes généré** par `npm run build` à partir de `index.html` (non versionné, ne pas
+l'éditer à la main : un projet Hyperframes n'admet qu'un seul `index.html` racine, d'où le dossier séparé). Il charge la
 même scène 3D avec `window.MUSK_FORMAT = "portrait"` : la caméra garde la largeur visible du plan 16:9 (divisée par un
 facteur de recadrage animé), les cartes d'information sont empilées automatiquement dans les zones haute et basse du
 cadre (`hud.layoutPortrait()`), et les sous-titres sont agrandis (`src/portrait.css`). La voix, la musique et le
 minutage sont ceux de la version horizontale.
+
+```bash
+npm run lint:tiktok      # hyperframes lint sur tiktok/
+npm run check:tiktok     # contrôles officiels (mise en page, contraste, mouvement) sur tiktok/
+npm run dev:tiktok       # prévisualisation du format vertical
+npm run render:tiktok    # rendu MP4 9:16 -> out/musk-anatomie-tiktok.mp4
+```
 
 Découpage pour envoi : un fichier par scène, en CRF 16 (très haute qualité), chacun sous 30 Mio :
 
@@ -78,7 +86,7 @@ export PRODUCER_PLAYER_READY_TIMEOUT_MS=120000     # compilation des shaders en 
 
 ```
 index.html                  composition racine (1920×1080, durée calculée par le build) + HUD + <audio>
-tiktok.html                 composition verticale 1080×1920 (générée par le build)
+tiktok/                     mini-projet vertical 1080×1920 (généré par le build, non versionné)
 src/main.js                 orchestration : monde 3D, caméra globale, ambiance, voiles, écoute de « hf-seek »
 src/timing.js               table de timing unique, calée sur les durées réelles de la voix
 src/core/                   moteur : World (rendu), Builder (géométrie fusionnée), palette, HUD, format (16:9 / 9:16), utilitaires
