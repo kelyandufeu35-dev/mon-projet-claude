@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Elon Musk : anatomie d'une fortune</title>
+    <style>
+      @font-face { font-family: "Inter"; font-weight: 400; src: url("assets/fonts/Inter-400.woff2") format("woff2"); }
+      @font-face { font-family: "Inter"; font-weight: 600; src: url("assets/fonts/Inter-600.woff2") format("woff2"); }
+      @font-face { font-family: "Inter"; font-weight: 800; src: url("assets/fonts/Inter-800.woff2") format("woff2"); }
+      @font-face { font-family: "Space Grotesk"; font-weight: 500; src: url("assets/fonts/SpaceGrotesk-500.woff2") format("woff2"); }
+      @font-face { font-family: "Space Grotesk"; font-weight: 700; src: url("assets/fonts/SpaceGrotesk-700.woff2") format("woff2"); }
+      @font-face { font-family: "JetBrains Mono"; font-weight: 500; src: url("assets/fonts/JetBrainsMono-500.woff2") format("woff2"); }
+      @font-face { font-family: "JetBrains Mono"; font-weight: 700; src: url("assets/fonts/JetBrainsMono-700.woff2") format("woff2"); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #04060b; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: "Inter", system-ui, sans-serif; }
+      #stage { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+      #hud, #vignette, #veil, #fade { position: absolute; inset: 0; pointer-events: none; }
+      #vignette { background: radial-gradient(ellipse at 50% 46%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.55) 100%); }
+      #veil { background: radial-gradient(circle at 50% 48%, #ffffff 0%, #bfe0ff 38%, #2b7bff 100%); opacity: 0; }
+      #fade { background: #000; opacity: 1; }
+      #sub { position: absolute; left: 50%; bottom: 74px; transform: translateX(-50%); max-width: 1640px; text-align: center;
+        font: 600 33px/1.26 "Inter", sans-serif; color: #fff; padding: 8px 24px; border-radius: 14px; background: rgba(4, 8, 18, 0.55);
+        text-shadow: 0 2px 10px rgba(0,0,0,0.7); opacity: 0; }
+      .hc { position: absolute; left: 0; top: 0; color: #eaf1ff; font-family: "Inter", sans-serif; white-space: nowrap; will-change: transform, opacity; }
+      .chip { font: 700 22px "JetBrains Mono", monospace; letter-spacing: 0.12em; text-transform: uppercase; color: #8fc6ff;
+        background: rgba(5, 10, 22, 0.7); padding: 10px 18px; border-radius: 10px; border-left: 4px solid #2b7bff; }
+      .chip i { font-style: normal; color: #ffd978; margin-right: 10px; }
+      .srcline { font: 500 18px "JetBrains Mono", monospace; color: rgba(190, 208, 238, 0.78); }
+      .disclaimer { font: 700 17px "JetBrains Mono", monospace; letter-spacing: 0.1em; color: rgba(255, 217, 120, 0.85);
+        background: rgba(5, 10, 22, 0.55); padding: 8px 14px; border-radius: 8px; border: 1px solid rgba(255, 184, 28, 0.35); }
+      .pill { background: rgba(6, 12, 26, 0.82); border: 1.5px solid rgba(88, 180, 255, 0.55); border-radius: 16px; padding: 14px 24px;
+        font-size: 28px; line-height: 1.32; text-align: center; box-shadow: 0 0 36px rgba(43, 123, 255, 0.28); }
+      .pill b { color: #ffd978; font-weight: 800; }
+      .pill span { font-size: 20px; color: #9fb3d6; }
+      .tag { background: rgba(5, 10, 22, 0.86); border-left: 5px solid #2b7bff; padding: 10px 18px; border-radius: 8px; font-size: 25px; font-weight: 600; line-height: 1.25; text-align: left; box-shadow: 0 0 24px rgba(0,0,0,0.5); }
+      .tag span { font-size: 19px; font-weight: 400; color: #a9bbdc; white-space: normal; display: inline-block; max-width: 430px; }
+      .tag b { color: #ffffff; }
+      .tag.gold { border-left-color: #ffb81c; } .tag.gold b { color: #ffd978; }
+      .tag.amber { border-left-color: #ff8a3d; } .tag.amber b { color: #ffb480; }
+      .tag.cyan { border-left-color: #39e0ff; } .tag.cyan b { color: #8ff0ff; }
+      .tag.red { border-left-color: #ff4d5e; } .tag.red b { color: #ff9aa4; }
+      .tag.green { border-left-color: #2bd67b; } .tag.green b { color: #8af0b8; }
+      .formula { background: rgba(6, 12, 26, 0.9); border: 2px solid rgba(255, 184, 28, 0.7); border-radius: 18px; padding: 16px 34px; text-align: center; font-size: 28px; line-height: 1.35; box-shadow: 0 0 44px rgba(255, 184, 28, 0.22); }
+      .formula em { font-style: normal; color: #9fb3d6; font-size: 24px; letter-spacing: 0.02em; }
+      .formula strong { font: 700 44px "Space Grotesk", sans-serif; color: #ffffff; }
+      .formula i { font-style: normal; color: #ffd978; margin: 0 6px; }
+      .formula.small { text-align: left; font-size: 24px; padding: 12px 22px; border-color: rgba(88, 180, 255, 0.6); box-shadow: 0 0 30px rgba(43, 123, 255, 0.25); }
+      .arrow { background: rgba(6, 12, 26, 0.9); border-radius: 16px; padding: 12px 26px; font: 800 44px "Space Grotesk", sans-serif; text-align: center; line-height: 1.1; }
+      .arrow span { font: 600 24px "Inter", sans-serif; }
+      .arrow.up { color: #2bd67b; border: 2px solid #2bd67b; box-shadow: 0 0 36px rgba(43, 214, 123, 0.4); }
+      .arrow.down { color: #ff4d5e; border: 2px solid #ff4d5e; box-shadow: 0 0 36px rgba(255, 77, 94, 0.4); }
+      .bigcount { background: rgba(5, 10, 24, 0.9); border: 2px solid rgba(255, 184, 28, 0.7); border-radius: 20px; padding: 12px 40px 14px; text-align: center; box-shadow: 0 0 50px rgba(255, 184, 28, 0.25); }
+      .bigcount .lbl { font: 700 18px "JetBrains Mono", monospace; letter-spacing: 0.14em; color: #ffb81c; }
+      .bigcount .eq { font: 500 30px "JetBrains Mono", monospace; color: #cfe0ff; margin-top: 4px; }
+      .bigcount .eq .px { color: #ffffff; font-weight: 700; display: inline-block; min-width: 120px; }
+      .bigcount .val { font: 700 84px "Space Grotesk", sans-serif; color: #ffd978; line-height: 1.0; margin-top: 2px; }
+      .bigcount .val small { font-size: 40px; color: #ffffff; }
+      .bigcount .dlt { font: 700 36px "JetBrains Mono", monospace; margin-left: 24px; }
+      .margincall { background: rgba(40, 6, 12, 0.92); border: 2px solid #ff4d5e; border-radius: 18px; padding: 14px 36px; text-align: center; box-shadow: 0 0 60px rgba(255, 77, 94, 0.5); }
+      .margincall .mc-t { font: 800 44px "Space Grotesk", sans-serif; color: #ff6b79; letter-spacing: 0.04em; }
+      .margincall .mc-s { font: 500 24px "Inter", sans-serif; color: #ffd0d5; margin-top: 4px; line-height: 1.3; }
+      .tag i { font-style: normal; color: #ffd978; font-weight: 700; }
+      .tag.small { font-size: 21px; padding: 8px 14px; } .tag.small span { font-size: 17px; max-width: 360px; }
+      .tag.bigtag { font-size: 34px; padding: 12px 24px; } .tag.bigtag span { font-size: 21px; }
+      .legrow { background: rgba(5, 10, 22, 0.84); padding: 9px 18px; border-radius: 10px; display: flex; align-items: center; gap: 12px; font: 700 24px "Inter", sans-serif; }
+      .legrow i { display: inline-block; width: 16px; height: 16px; border-radius: 50%; box-shadow: 0 0 14px currentColor; }
+      .legrow span { font: 400 19px "Inter", sans-serif; color: #9fb3d6; }
+      .finale { font: 800 50px/1.15 "Space Grotesk", sans-serif; color: #ffffff; text-align: center; padding: 12px 38px; border-radius: 16px; background: rgba(3, 7, 16, 0.78); text-shadow: 0 0 30px rgba(43, 123, 255, 0.55); white-space: normal; max-width: 1560px; }
+      .finale.gold { color: #ffd978; text-shadow: 0 0 34px rgba(255, 184, 28, 0.6); border: 2px solid rgba(255, 184, 28, 0.55); }
+      .card-left { text-align: left; font-size: 25px; }
+      .callout { background: rgba(6, 12, 26, 0.86); border-left: 6px solid #ffb81c; padding: 14px 24px; border-radius: 10px; font-size: 30px; font-weight: 600; line-height: 1.25; }
+      .callout .big { font: 800 56px "Space Grotesk", sans-serif; color: #ffd978; margin-right: 10px; }
+      .callout .small { font-size: 21px; font-weight: 400; color: #a9bbdc; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="root" data-start="0" data-duration="105.39" data-width="1920" data-height="1080">
+      <canvas id="stage" width="1920" height="1080"></canvas>
+      <div id="vignette"></div>
+      <div id="hud"></div>
+      <div id="sub"></div>
+      <div id="veil"></div>
+      <div id="fade"></div>
+      <audio id="mix" src="assets/audio/mix.m4a" data-start="0" data-duration="105.39" data-track-index="1" data-volume="1"></audio>
+    </div>
+    <script src="vendor/gsap.min.js"></script>
+    <script src="dist/bundle.js"></script>
+    <script>
+      // Construction (polices, géométries, shaders) puis enregistrement de l'unique timeline paused.
+      window.__hf = window.__hf || {};
+      window.__hf.buildReady = window.__hf.buildReady || {};
+      window.__hf.buildReady["world"] = window.MuskDoc.boot().then(function (tl) {
+        window.__timelines["root"] = tl;
+        if (window.__hfForceTimelineRebind) window.__hfForceTimelineRebind();
+      });
+    </script>
+  </body>
+</html>

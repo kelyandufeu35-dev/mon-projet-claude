@@ -1,0 +1,86 @@
+{
+  "voice": "ff_siwis",
+  "lang": "fr-fr",
+  "segments": [
+    {
+      "id": "s1a",
+      "text": "Elon Musk possède une fortune estimée à près de mille milliards de dollars. Mais cet argent ne dort pas sur un compte bancaire."
+    },
+    {
+      "id": "s1b",
+      "text": "Où se trouve-t-il réellement ? Plongeons dans une action Tesla."
+    },
+    {
+      "id": "s2a",
+      "text": "Une action est une petite part d'une entreprise. Leur nombre multiplié par leur prix : c'est la capitalisation boursière."
+    },
+    {
+      "id": "s2b",
+      "text": "Elon Musk détient environ onze pour cent de Tesla. Sa participation vaut ses actions fois leur prix : le cours monte, elle monte ; il baisse, elle baisse."
+    },
+    {
+      "id": "s2c",
+      "text": "Certaines actions sont restreintes, d'autres ne sont que des options."
+    },
+    {
+      "id": "s3a",
+      "text": "Une action devient une fusée : voici SpaceX."
+    },
+    {
+      "id": "s3b",
+      "text": "En février deux mille vingt-six, SpaceX a absorbé xAI, l'intelligence artificielle de Musk, puis est entrée en Bourse en juin. Participation comptée une seule fois."
+    },
+    {
+      "id": "s3c",
+      "text": "Valeur d'entreprise, capitalisation, part personnelle de Musk : trois notions distinctes."
+    },
+    {
+      "id": "s4a",
+      "text": "Chaque jour, les cours bougent, et la fortune avec eux."
+    },
+    {
+      "id": "s4b",
+      "text": "Exemple hypothétique : cent millions d'actions à cent dollars valent dix milliards. Plus dix pour cent : un milliard de gagné ; moins dix pour cent : un milliard de perdu."
+    },
+    {
+      "id": "s4c",
+      "text": "Sans rien vendre, ni rien acheter."
+    },
+    {
+      "id": "s5a",
+      "text": "Mais milliardaire ne veut pas dire coffre plein de billets."
+    },
+    {
+      "id": "s5b",
+      "text": "Ouvrons-le : surtout des actions. Patrimoine net : ce que l'on possède moins ce que l'on doit. Plus-values non réalisées : des gains sur le papier."
+    },
+    {
+      "id": "s5c",
+      "text": "Tout vendre déclencherait des impôts, et ferait chuter le cours."
+    },
+    {
+      "id": "s6a",
+      "text": "Comment obtenir de l'argent sans vendre ? Avec un prêt garanti par des titres."
+    },
+    {
+      "id": "s6b",
+      "text": "On dépose des actions en garantie, la banque prête une somme, on paie des intérêts, puis on rembourse."
+    },
+    {
+      "id": "s6c",
+      "text": "Si les garanties perdent de la valeur : appel de marge. Mécanisme général, aucune opération précise."
+    },
+    {
+      "id": "s7a",
+      "text": "Au centre, Elon Musk. Autour : Tesla, SpaceX et son intelligence artificielle, d'autres participations, et des dettes documentées."
+    },
+    {
+      "id": "s7b",
+      "text": "Propriété, contrôle, valorisation, patrimoine net : tout dépend de la valeur de ce qu'il possède."
+    },
+    {
+      "id": "s7c",
+      "text": "La richesse d'Elon Musk n'est pas un coffre rempli de dollars. C'est principalement la valeur de ce qu'il possède."
+    }
+  ]
+}

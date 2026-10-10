@@ -1,0 +1,26 @@
+{
+  "name": "musk-anatomie",
+  "version": "1.0.0",
+  "description": "Elon Musk : anatomie d'une fortune — documentaire motion design 3D isométrique (Hyperframes + Three.js)",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "npm run build && hyperframes preview",
+    "lint": "hyperframes lint",
+    "check": "npm run build && hyperframes check",
+    "snapshot": "hyperframes snapshot",
+    "render": "npm run build && hyperframes render -o out/musk-anatomie.mp4",
+    "render:draft": "npm run build && hyperframes render -q draft -o out/musk-anatomie-draft.mp4",
+    "audio": "bash scripts/make-audio.sh"
+  },
+  "dependencies": {
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "@fontsource/space-grotesk": "^5.3.0",
+    "esbuild": "^0.28.2",
+    "gsap": "^3.15.0",
+    "hyperframes": "0.8.145",
+    "three": "0.170.0"
+  }
+}

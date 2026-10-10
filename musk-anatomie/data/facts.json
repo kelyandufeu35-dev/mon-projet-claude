@@ -1,0 +1,218 @@
+{
+  "_meta": {
+    "title": "Elon Musk : anatomie d'une fortune — jeu de données sourcé",
+    "prepared_on": "2026-10-10",
+    "language": "fr",
+    "how_to_read": "Chaque entrée porte une valeur, une date, une source et un statut de vérification. Aucune estimation n'est présentée comme un montant certain. Le compteur d'ouverture, la carte « source » de la scène 1 et la carte « patrimoine net » de la scène 7 lisent directement ce fichier (net_worth.headline et net_worth.bloomberg). Les autres textes sont écrits dans src/scenes/*.js : le README donne la table de correspondance pour les aligner à la main.",
+    "verification_levels": {
+      "search_summary": "Chiffre relevé dans le résumé d'une recherche web citant la source indiquée. La page primaire n'a PAS pu être ouverte depuis l'environnement (accès réseau refusé par la politique de l'environnement).",
+      "conflicting": "Plusieurs sources donnent des valeurs différentes ; la vidéo affiche une fourchette ou un ordre de grandeur.",
+      "not_found": "Aucune donnée fiable trouvée : la vidéo l'indique explicitement au lieu d'inventer un montant."
+    },
+    "blocked_primary_sources": [
+      "www.forbes.com",
+      "www.bloomberg.com",
+      "ir.tesla.com",
+      "www.sec.gov",
+      "www.spacex.com",
+      "x.ai"
+    ]
+  },
+
+  "net_worth": {
+    "headline": {
+      "label": "Patrimoine net estimé (Forbes, temps réel)",
+      "value_usd_billions": 1004,
+      "display_fr": "≈ 1 000 milliards de dollars",
+      "as_of": "2026-10-10",
+      "source_name": "Forbes — Real-Time Billionaires, profil Elon Musk",
+      "source_url": "https://www.forbes.com/profile/elon-musk/",
+      "verification": "search_summary",
+      "note": "Variation quotidienne indiquée : +13,3 Md$ (+1,34 %). Estimation, pas un solde de compte."
+    },
+    "forbes_intraday_oct9": {
+      "value_usd_billions": 1012,
+      "as_of": "2026-10-09T10:00-04:00",
+      "source_name": "Forbes (Fiona Riley), 9 oct. 2026",
+      "source_url": "https://www.forbes.com/sites/fionariley/2026/10/09/musk-becomes-a-trillionaire-again-as-spacex-tesla-shares-rally/",
+      "verification": "search_summary",
+      "note": "Repassé au-dessus de 1 000 Md$ le vendredi matin après être repassé sous ce seuil la veille."
+    },
+    "bloomberg": {
+      "value_usd_billions": 1040,
+      "as_of": "2026-10-05",
+      "source_name": "Bloomberg Billionaires Index, 5 oct. 2026",
+      "source_url": "https://www.bloomberg.com/news/articles/2026-10-05/musk-is-a-trillionaire-again-as-spacex-claws-back-post-ipo-slump",
+      "verification": "search_summary",
+      "note": "+65 Md$ sur la séance du lundi 5 octobre. Méthodologie différente de Forbes, d'où l'écart."
+    },
+    "single_day_move_forbes": {
+      "value_usd_billions": 61,
+      "as_of": "2026-10-02",
+      "source_name": "Forbes (Fiona Riley), 2 oct. 2026 — « Elon Musk Gains $61 Billion In A Day »",
+      "source_url": "https://www.forbes.com/sites/fionariley/2026/10/02/elon-musk-gains-61-billion-in-a-day-as-spacex-and-tesla-shares-rise-pushing-net-worth-back-towards-1-trillion/",
+      "verification": "search_summary"
+    },
+    "peak": {
+      "value_usd_billions": 1320,
+      "as_of": "2026-06-16",
+      "source_name": "Agrégateur (StatsPanda) — non primaire",
+      "verification": "conflicting",
+      "note": "Autres sources : ≈ 1 230 Md$ (Bloomberg, 18 juin). Ne sert que d'ordre de grandeur de la volatilité."
+    },
+    "why_estimates_differ": "Forbes et Bloomberg n'appliquent pas les mêmes règles pour les actions restreintes, les options, les décotes et les participations non cotées. Les deux chiffres bougent à chaque séance."
+  },
+
+  "tesla": {
+    "stake_pct": {
+      "value": 11,
+      "display_fr": "≈ 11 % des actions (hors actions restreintes non acquises)",
+      "as_of": "2026-10",
+      "source_name": "Profil Forbes relayé par recoupements de presse",
+      "verification": "conflicting",
+      "note": "Autres estimations : ≈ 13 % (CNBC, fév. 2026) ; 20,3 % incluant les options (Schedule 13G/A, sept. 2025, base 3 325 819 167 actions)."
+    },
+    "market_cap": {
+      "display_fr": "non affichée (sources contradictoires)",
+      "verification": "conflicting",
+      "note": "Relevés trouvés : ≈ 1 179 Md$ (29 juil. 2026) et ≈ 1 030 Md$ (1er août 2026) selon deux agrégateurs. L'action est donnée en baisse d'environ 13,6 % depuis janvier (Yahoo Finance, début oct. 2026). La vidéo utilise un exemple hypothétique plutôt qu'un cours précis."
+    },
+    "award_2018": {
+      "shares": 303960630,
+      "exercise_price_usd": 23.34,
+      "status": "12 tranches acquises ; options exercées en juin 2026 sans vente de marché",
+      "as_of": "2026-06-16",
+      "source_name": "Form 4 / Tesla 10-K/A (exercice 2018 CEO Performance Award)",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/0001318605/000110465926053166/tm2611837d1_10ka.htm",
+      "verification": "search_summary"
+    },
+    "award_2025": {
+      "restricted_shares": 423743904,
+      "status": "Actions restreintes, soumises à un accord de vote (procuration irrévocable) : Musk n'en a ni le contrôle du vote ni la libre disposition tant que les conditions ne sont pas remplies",
+      "source_name": "Tesla 10-K/A 2025",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/0001318605/000110465926053166/tm2611837d1_10ka.htm",
+      "verification": "search_summary"
+    },
+    "interim_award_2025": {
+      "status": "Interim Award 2025 abandonné (forfeited) le 21 avril 2026",
+      "source_name": "Tesla 10-K/A 2025",
+      "verification": "search_summary"
+    },
+    "form4_post_exercise": {
+      "direct_shares": 727704534,
+      "trust_shares": 413152109,
+      "note": "Chiffres Form 4 repérés après l'exercice. Les 727,7 M directes recoupent 303,96 M (options exercées) + 423,74 M (actions restreintes). Ne pas additionner à la légère : toutes ne sont pas librement cessibles.",
+      "source_name": "Form 4 Tesla (résumé StockTitan)",
+      "verification": "search_summary"
+    }
+  },
+
+  "spacex": {
+    "ipo": {
+      "price_usd": 135,
+      "priced_on": "2026-06-11",
+      "first_trade": "2026-06-12",
+      "exchange": "Nasdaq",
+      "ticker": "SPCX",
+      "raised_usd_billions": 75,
+      "first_close_usd": 160.95,
+      "source_name": "Wikipedia « Initial public offering of SpaceX » + presse (TechCrunch, CNBC)",
+      "source_url": "https://en.wikipedia.org/wiki/Initial_public_offering_of_SpaceX",
+      "verification": "search_summary",
+      "note": "Valorisation visée ≈ 1 750 Md$ ; ≈ 2 100 Md$ à la première clôture. Cours ≈ 167 $ en séance le 5 oct. 2026 (CNBC)."
+    },
+    "stake_pct": {
+      "value": 38,
+      "display_fr": "≈ 38 à 42 % du capital",
+      "as_of": "2026-10",
+      "source_name": "Profil Forbes (≈ 38 % options incluses) ; Wikipedia / CNBC (≈ 42-43 %)",
+      "verification": "conflicting",
+      "note": "48,4 % selon une analyse de la propriété « au sens SEC » (inclut titres en fiducie, actions de performance, options exerçables sous 60 jours) : définition différente de la propriété économique."
+    },
+    "voting_power_pct": {
+      "value": 82.4,
+      "as_of": "2026-06-03",
+      "source_name": "SpaceX S-1/A du 3 juin 2026 (85,1 % dans le S-1 initial du 20 mai 2026)",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1181412/000162828026036936/spaceexplorationtechnologi.htm",
+      "verification": "search_summary",
+      "note": "Actions de classe B = 10 voix ; classe A = 1 voix. Le contrôle (droits de vote) n'est pas la propriété (part du capital)."
+    },
+    "xai_merger": {
+      "closed_on": "2026-02-02",
+      "structure": "Acquisition de xAI par SpaceX, 100 % en actions ; xAI devient une filiale détenue à 100 %",
+      "exchange_ratio": "0,1433 action SpaceX par action xAI",
+      "valuation_usd_billions": { "spacex": 1000, "xai": 250, "combined": 1250 },
+      "tesla_xai_investment": "Les ≈ 2 Md$ investis par Tesla dans xAI ont été convertis en une petite participation indirecte dans SpaceX",
+      "rename": "xAI rebaptisée SpaceXAI (juillet 2026, source unique à confirmer)",
+      "source_name": "CNBC, 3 fév. 2026 ; SpaceX S-1/A",
+      "source_url": "https://www.cnbc.com/2026/02/03/musk-xai-spacex-biggest-merger-ever.html",
+      "verification": "search_summary",
+      "no_double_count_rule": "xAI (et X, absorbé par xAI en 2025) n'est plus une ligne séparée du patrimoine : sa valeur est comprise dans la participation SpaceX."
+    },
+    "lockup": {
+      "display_fr": "Titres encore soumis à des périodes de blocage",
+      "verification": "conflicting",
+      "note": "366 jours pour Musk et les initiés selon Wikipedia ; d'autres sources parlent de 90 à 180 jours échelonnés. À confirmer dans le prospectus."
+    }
+  },
+
+  "debts_and_liquidity": {
+    "pledged_tesla_shares": {
+      "shares": 235998721,
+      "of_total_beneficially_owned": 715000000,
+      "as_of": "2025-08-29",
+      "purpose": "Garantie de prêts personnels (« personal indebtedness »)",
+      "borrowing_cap": "Plafond fixé par le conseil de Tesla : le plus faible de 3,5 Md$ ou 25 % de la valeur des titres nantis (politique 2023)",
+      "actual_loan_balance": "Non publié : un nantissement n'indique pas le montant réellement emprunté",
+      "source_name": "Tesla, proxy statement 2025 (relayé par Forbes, E. Sherman, 5 juin 2025 ; IFRE)",
+      "source_url": "https://www.forbes.com/sites/eriksherman/2025/06/05/does-elon-musks-borrowing-show-a-super-low-tesla-stock-valuation/",
+      "verification": "search_summary",
+      "note": "Aucune divulgation 2026 trouvée. Donnée datée d'août 2025."
+    },
+    "historical_margin_loan": {
+      "amount_usd_billions": 12.5,
+      "year": 2022,
+      "context": "Prêt sur marge adossé à des actions Tesla, lié au financement de l'achat de Twitter",
+      "source_name": "Fortune, 2 mai 2022",
+      "source_url": "https://fortune.com/2022/05/02/elon-musk-margin-loan-morgan-stanley",
+      "verification": "search_summary",
+      "note": "Exemple historique documenté. Il ne dit rien de l'endettement actuel."
+    },
+    "cash": {
+      "display_fr": "Non documentées de façon fiable",
+      "verification": "not_found",
+      "note": "Aucun chiffre fiable de liquidités personnelles trouvé. La vidéo n'en affiche pas."
+    },
+    "other_holdings": {
+      "display_fr": "Neuralink, The Boring Company… non chiffrées dans les sources vérifiées",
+      "verification": "not_found",
+      "note": "Des estimations tierces circulent (≈ 5 Md$ chacune) mais ne proviennent ni de Forbes ni de Bloomberg : non reprises."
+    }
+  },
+
+  "education": {
+    "formulas": {
+      "participation": "Valeur théorique de la participation = Nombre d'actions × Prix de l'action",
+      "market_cap": "Capitalisation boursière = Nombre total d'actions × Prix de l'action",
+      "ownership_pct": "Part détenue (%) = Actions détenues ÷ Nombre total d'actions"
+    },
+    "hypothetical_example": {
+      "label": "EXEMPLE HYPOTHÉTIQUE — chiffres inventés pour comprendre",
+      "total_shares": 1000000000,
+      "owner_shares": 100000000,
+      "price_start": 100,
+      "price_up": 110,
+      "price_down": 90,
+      "participation_start": 10000000000,
+      "participation_up": 11000000000,
+      "participation_down": 9000000000
+    },
+    "margin_loan_example": {
+      "label": "EXEMPLE HYPOTHÉTIQUE — mécanisme général, pas une opération réelle",
+      "collateral_value": 100,
+      "loan_to_value": 0.25,
+      "loan": 25,
+      "margin_call_trigger": "si la valeur des titres nantis tombe sous le seuil fixé au contrat"
+    }
+  }
+}
