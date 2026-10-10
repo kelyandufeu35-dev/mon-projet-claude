@@ -12,7 +12,8 @@
     "snapshot": "hyperframes snapshot",
     "render": "npm run build && hyperframes render -o out/musk-anatomie.mp4",
     "render:draft": "npm run build && hyperframes render -q draft -o out/musk-anatomie-draft.mp4",
-    "audio": "bash scripts/make-audio.sh"
+    "audio": "bash scripts/make-audio.sh",
+    "render:tiktok": "npm run build && hyperframes render -c tiktok.html -o out/musk-anatomie-tiktok.mp4"
   },
   "dependencies": {
     "@fontsource/inter": "^5.3.0",

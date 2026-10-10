@@ -56,4 +56,19 @@ const d = String(mod.TIMELINE.duration);
 html = html.replace(/(data-composition-id="root"[^>]*data-duration=")[^"]*(")/, `$1${d}$2`).replace(/(<audio id="mix"[^>]*data-duration=")[^"]*(")/, `$1${d}$2`);
 writeFileSync(p("index.html"), html);
 console.log("durée de la composition :", d, "s");
+
+// 6) Version verticale 1080×1920 (TikTok / Reels / Shorts) : tiktok.html est GÉNÉRÉ à partir de index.html
+const css = readFileSync(p("src/portrait.css"), "utf8");
+const must = (src, from, to) => { if (!src.includes(from)) throw new Error("tiktok.html : motif introuvable : " + from); return src.replace(from, to); };
+let t = html;
+t = must(t, 'content="width=1920, height=1080"', 'content="width=1080, height=1920"');
+t = must(t, "<title>Elon Musk : anatomie d'une fortune</title>", "<title>Elon Musk : anatomie d'une fortune (format vertical)</title>");
+t = must(t, "width: 1920px; height: 1080px;", "width: 1080px; height: 1920px;");
+t = must(t, 'data-width="1920" data-height="1080"', 'data-width="1080" data-height="1920"');
+t = must(t, '<canvas id="stage" width="1920" height="1080">', '<canvas id="stage" width="1080" height="1920">');
+t = must(t, '<div id="root" ', '<div id="root" class="portrait" ');
+t = must(t, '<script src="vendor/gsap.min.js"></script>', '<script>window.MUSK_FORMAT = "portrait";</script>\n    <script src="vendor/gsap.min.js"></script>');
+t = must(t, "    </style>", css + "    </style>");
+writeFileSync(p("tiktok.html"), t);
+console.log("tiktok.html généré (1080×1920)");
 console.log("build ok ->", existsSync(p("dist/bundle.js")) ? "dist/bundle.js" : "?");

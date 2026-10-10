@@ -5,9 +5,11 @@ import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment
 import { C } from "./palette.js";
 import { DEG, rng, track, ease, wobble } from "./util.js";
 
-export const W = 1920;
-export const H = 1080;
-const BASE_HALF_H = 40; // demi-hauteur visible (unités monde) à zoom = 1
+import { W, H, PORTRAIT } from "./format.js";
+export { W, H };
+const BASE_HALF_H = 40; // demi-hauteur visible (unités monde) à zoom = 1 en 16:9
+// distance caméra : plus grande en portrait (champ vertical bien plus haut, il faut éviter le clipping proche)
+const D0 = PORTRAIT ? 900 : 420;
 
 export class World {
   constructor(canvas) {
@@ -32,7 +34,7 @@ export class World {
 
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(C.void);
-    this.scene.fog = new THREE.Fog(C.void, 330, 640);
+    this.scene.fog = new THREE.Fog(C.void, D0 - 90, D0 + 220);
 
     const pm = new THREE.PMREMGenerator(r);
     this.scene.environment = pm.fromScene(new RoomEnvironment(), 0.04).texture;
@@ -41,7 +43,9 @@ export class World {
 
     // Caméra orthographique (rig cinématographique)
     this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 1, 1200);
-    this.camState = { x: 0, y: 0, z: 0, az: 45, el: 35.264, zoom: 1, roll: 0, dist: 420 };
+    this.camState = { x: 0, y: 0, z: 0, az: 45, el: 35.264, zoom: 1, roll: 0, dist: D0 };
+    /** portrait : facteur de recadrage horizontal (1 = même largeur visible qu'en 16:9) ; piloté par main.js */
+    this.boost = 1;
 
     // Lumières
     this.hemi = new THREE.HemisphereLight(0x8fb4ff, 0x0a0f1a, 0.55);
@@ -121,10 +125,17 @@ export class World {
   _applyCamera() {
     const s = this.camState;
     const cam = this.camera;
-    const halfH = BASE_HALF_H / s.zoom;
-    const halfW = halfH * (W / H);
+    let halfW, halfH;
+    if (PORTRAIT) {
+      // on conserve la largeur visible du 16:9 (divisée par le facteur de recadrage) ; la hauteur en découle
+      halfW = (BASE_HALF_H * (16 / 9)) / (s.zoom * this.boost);
+      halfH = halfW * (H / W);
+    } else {
+      halfH = BASE_HALF_H / s.zoom;
+      halfW = halfH * (W / H);
+    }
     cam.left = -halfW; cam.right = halfW; cam.top = halfH; cam.bottom = -halfH;
-    cam.near = 1; cam.far = 1400;
+    cam.near = 1; cam.far = PORTRAIT ? D0 * 3.4 : 1400;
     cam.updateProjectionMatrix();
     const az = s.az * DEG, el = s.el * DEG;
     cam.position.set(
@@ -139,7 +150,7 @@ export class World {
     const k = this.key;
     k.target.position.set(s.x, 0, s.z);
     k.position.set(s.x - 90, 150, s.z + 70);
-    const ext = Math.max(40, halfH * 1.6);
+    const ext = PORTRAIT ? Math.max(40, halfW * 1.7) : Math.max(40, halfH * 1.6);
     const sc = k.shadow.camera;
     sc.left = -ext; sc.right = ext; sc.top = ext; sc.bottom = -ext; sc.near = 20; sc.far = 420;
     sc.updateProjectionMatrix();

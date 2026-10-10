@@ -8,6 +8,7 @@ import { ease, inv, clamp, lerp } from "../core/util.js";
 import { SC, when, DURATION } from "../timing.js";
 import { POS } from "../layout.js";
 import { fmt } from "../core/util.js";
+import { PORTRAIT } from "../core/format.js";
 
 export const T7 = {
   t0: SC.s7.t0,
@@ -86,20 +87,21 @@ export function buildFinale(ctx) {
   ];
 
   // --- HUD (organigramme animé) -----------------------------------------------------------------------------------------------
-  const tag = (id, cls, html, anchor, offset, t0, t1 = T7.zoom + 0.4, enter = "scale") => hud.card({ id, cls, html, anchor, offset, t0, t1, enter });
+  const TAG_END = PORTRAIT ? T7.line1 - 0.2 : T7.zoom + 0.4; // portrait : les étiquettes se retirent avant la phrase finale
+  const tag = (id, cls, html, anchor, offset, t0, t1 = TAG_END, enter = "scale", extra = {}) => hud.card({ id, cls, html, anchor, offset, t0, t1, enter, ...extra });
   const P = (v, y) => () => up(v, y);
-  tag("s7-hub", "tag gold bigtag", `<b>ELON MUSK</b><br><span>au centre : possède, contrôle, emprunte</span>`, P(H, 20), [0, -40], T7.rise - 0.3);
+  tag("s7-hub", "tag gold bigtag", `<b>ELON MUSK</b><br><span>au centre : possède, contrôle, emprunte</span>`, P(H, 20), [0, -40], T7.rise - 0.3, undefined, undefined, { skipP: true });
   const nw = facts.net_worth;
   const md = (v) => fmt.int(v).replace(/\u202f/g, " ");
   const dt = (iso) => new Date(iso + "T12:00:00Z").toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
   tag("s7-net", "tag gold netag", `<b>Patrimoine net ≈ ${md(nw.headline.value_usd_billions)} Md$</b><br><span>Forbes, ${dt(nw.headline.as_of)} · Bloomberg ≈ ${md(nw.bloomberg.value_usd_billions)} Md$ (${dt(nw.bloomberg.as_of)}) · estimations</span>`, P(H, 42), [0, -62], T7.net);
   tag("s7-tesla", "tag", `<b>TESLA</b><br><span>≈ 11 % des actions (hors restreintes)</span>`, P(TS, 30), [0, -40], T7.tesla);
   tag("s7-spacex", "tag cyan", `<b>SPACEX + IA (xAI)</b><br><span>≈ 38 à 42 % du capital · ≈ 82 % des voix</span>`, P(SP, 44), [0, -40], T7.spacex);
-  tag("s7-ai", "tag cyan small", `<b>xAI : intégrée à SpaceX</b><br><span>comptée une seule fois</span>`, P(SP, 22), [150, 44], T7.ai);
+  tag("s7-ai", "tag cyan small", `<b>xAI : intégrée à SpaceX</b><br><span>comptée une seule fois</span>`, P(SP, 22), [150, 44], T7.ai, undefined, undefined, { skipP: true });
   tag("s7-bourse", "tag", `<b>BOURSE</b><br><span>le prix du jour valorise les titres</span>`, P(BO, 32), [-300, 20], T7.value);
   tag("s7-bank", "tag red", `<b>BANQUE · dettes</b><br><span>actions Tesla nanties ≈ 236 M (29 août 2025) ;<br>montant des prêts non publié ; plafond 3,5 Md$</span>`, P(BA, 20), [-470, -150], T7.debts);
-  tag("s7-others", "tag cyan small", `<b>Autres participations</b><br><span>Neuralink, The Boring Co. : non chiffrées</span>`, () => up(H, 8).add(new THREE.Vector3(-13, 0, -4)), [-210, 30], T7.others);
-  tag("s7-cash", "tag green small", `<b>Liquidités</b><br><span>non documentées de façon fiable</span>`, () => up(H, 8).add(new THREE.Vector3(13, 0, 4)), [200, 40], T7.others + 0.5);
+  tag("s7-others", "tag cyan small", `<b>Autres participations</b><br><span>Neuralink, The Boring Co. : non chiffrées</span>`, () => up(H, 8).add(new THREE.Vector3(-13, 0, -4)), [-210, 30], T7.others, undefined, undefined, { htmlP: `<b>Autres participations et liquidités</b><br><span>Neuralink, The Boring Co. : non chiffrées · liquidités : non documentées de façon fiable</span>` });
+  tag("s7-cash", "tag green small", `<b>Liquidités</b><br><span>non documentées de façon fiable</span>`, () => up(H, 8).add(new THREE.Vector3(13, 0, 4)), [200, 40], T7.others + 0.5, undefined, undefined, { skipP: true });
 
   // légende des lignes
   const leg = [
@@ -111,12 +113,17 @@ export function buildFinale(ctx) {
   ];
   leg.forEach(([col, name, sub, t0], i) => hud.card({
     id: "s7-leg" + i, cls: "legrow", t0, t1: T7.line1 - 0.3, x: 56, y: 735 + i * 52, align: "left", enter: "right",
-    html: `<i style="background:${col}"></i><b>${name}</b> <span>${sub}</span>`,
+    html: `<i style="background:${col}"></i><b>${name}</b> <span>${sub}</span>`, skipP: true,
   }));
+  // portrait : la légende tient en une seule carte
+  hud.card({
+    id: "s7-legP", cls: "legp", onlyP: true, t0: T7.own, t1: T7.line1 - 0.3, enter: "up",
+    html: leg.map(([col, name]) => `<span><i style="background:${col}"></i>${name}</span>`).join(""),
+  });
 
   // phrase finale
   hud.card({ id: "s7-final1", cls: "finale", t0: T7.line1, t1: T7.end - 0.9, x: 960, y: 800, enter: "up", inD: 0.8, outD: 0.6, html: `La richesse d'Elon Musk n'est pas un coffre rempli de dollars.` });
-  hud.card({ id: "s7-final2", cls: "finale gold", t0: T7.line2, t1: T7.end - 0.9, x: 960, y: 880, enter: "up", inD: 0.8, outD: 0.6, html: `C'est principalement la valeur de ce qu'il possède.` });
+  hud.card({ id: "s7-final2", cls: "finale gold", t0: T7.line2, t1: T7.end - 0.9, x: 960, y: 880, enter: "up", inD: 0.8, outD: 0.6, zone: "bottom", html: `C'est principalement la valeur de ce qu'il possède.` });
 
   // --- mise à jour -----------------------------------------------------------------------------------------------------------------------
   const update = (t) => {

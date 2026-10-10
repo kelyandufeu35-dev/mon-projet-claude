@@ -1,6 +1,7 @@
 // HUD déterministe : cartes DOM dont l'état est une pure fonction de t.
 // Chaque carte a une fenêtre [t0, t1], une entrée/sortie animée et éventuellement un point d'ancrage 3D.
 import { clamp, ease, inv } from "./util.js";
+import { PORTRAIT } from "./format.js";
 
 export class Hud {
   constructor(layer, world) {
@@ -21,14 +22,50 @@ export class Hud {
    *  anchorAlign: 'center'|'left'|'right'
    */
   card(o) {
+    // portrait : skipP = carte non affichée ; htmlP = texte condensé ; p = placement fixe { x, y, align } (sinon empilement auto)
+    if (PORTRAIT && o.skipP) return null;
+    if (!PORTRAIT && o.onlyP) return null;
     const el = document.createElement("div");
     el.className = "hc " + (o.cls || "");
-    el.innerHTML = o.html || "";
+    const html = PORTRAIT && o.htmlP ? o.htmlP : o.html || "";
+    el.innerHTML = PORTRAIT ? `<div class="hz">${html}</div>` : html;
     el.style.opacity = "0";
     this.layer.appendChild(el);
     const it = { inD: 0.5, outD: 0.4, enter: "up", offset: [0, 0], ...o, el };
+    if (PORTRAIT) {
+      if (o.p) Object.assign(it, { anchor: null }, o.p);
+      else it.auto = true;
+    }
     this.items.push(it);
     return it;
+  }
+
+  /**
+   * Portrait : place chaque carte non fixée dans une bande haute ou basse, empilée sans chevauchement temporel
+   * ni vertical (algorithme glouton sur les intervalles [t0, t1]). La zone centrale reste libre pour la 3D.
+   */
+  layoutPortrait({ top = [250, 800], bottom = [1090, 1490], gap = 16, pad = 0.2 } = {}) {
+    const cards = this.items.filter((it) => it.auto).sort((a, b) => a.t0 - b.t0);
+    const placed = [];
+    for (const it of cards) {
+      const el = it.el;
+      const saved = { d: el.style.display, v: el.style.visibility, o: el.style.opacity, t: el.style.transform };
+      el.style.display = ""; el.style.visibility = "hidden"; el.style.opacity = "1"; el.style.transform = "none";
+      const h = el.offsetHeight;
+      el.style.display = saved.d || "none"; el.style.visibility = saved.v; el.style.opacity = saved.o; el.style.transform = saved.t;
+      const T0 = it.t0 - pad, T1 = it.t1 + pad;
+      const order = it.zone === "bottom" ? [["bottom", bottom], ["top", top]] : [["top", top], ["bottom", bottom]];
+      let pos = null;
+      for (const [name, [zs, ze]] of order) {
+        const fits = (y0) => !placed.some((p) => p.t0 < T1 && p.t1 > T0 && p.y0 < y0 + h + gap && p.y1 + gap > y0);
+        if (name === "bottom") for (let y0 = ze - h; y0 >= zs; y0 -= 6) { if (fits(y0)) { pos = y0; break; } }
+        else for (let y0 = zs; y0 + h <= ze; y0 += 6) { if (fits(y0)) { pos = y0; break; } }
+        if (pos !== null) break;
+      }
+      if (pos === null) { console.warn("[hud] aucune place pour", it.id); pos = top[0]; }
+      placed.push({ y0: pos, y1: pos + h, t0: T0, t1: T1 });
+      it.anchor = null; it.x = 540; it.y = pos + h / 2; it.align = "center";
+    }
   }
 
   update(t) {

@@ -2,6 +2,7 @@
 import { World, cameraPath } from "./core/world.js";
 import { Hud, Subtitles, veil } from "./core/hud.js";
 import { track, ease } from "./core/util.js";
+import { PORTRAIT } from "./core/format.js";
 import { SC, DURATION, seg, when } from "./timing.js";
 import facts from "../data/facts.json";
 import { buildGlobalHud, subtitleSegments } from "./hud-global.js";
@@ -29,6 +30,15 @@ async function boot() {
   buildGlobalHud(ctx);
   const modules = [buildHub(ctx), buildTesla(ctx), buildSpacex(ctx), buildBourse(ctx), buildBank(ctx), buildFinale(ctx)];
 
+  if (PORTRAIT) hud.layoutPortrait();
+
+  // portrait : recadrage horizontal par scène (1 = même largeur visible qu'en 16:9)
+  const boost = track([
+    [0, 1.25], [SC.s1.t1 - 0.3, 1.25], [SC.s1.t1 + 0.3, 1.35], [SC.s2.t1 - 0.4, 1.35], [SC.s3.t0 + 1.0, 1.3],
+    [SC.s3.t1 - 0.5, 1.3], [SC.s4.t0 + 1.4, 1.2], [SC.s4.t1 - 0.3, 1.2], [SC.s5.t0 + 1.4, 1.3], [SC.s5.t1 - 0.3, 1.3],
+    [SC.s6.t0 + 0.3, 1.1], [SC.s6.t1 - 0.3, 1.1], [SC.s7.t0 + 2.4, 1.05], [DURATION, 1.05],
+  ]);
+
   const camKeys = modules.flatMap((m) => m.cam || []).sort((a, b) => a.t - b.t);
   const camPath = cameraPath(camKeys);
   const subs = new Subtitles(document.getElementById("sub"), subtitleSegments());
@@ -50,6 +60,7 @@ async function boot() {
   const tl = gsap.timeline({ paused: true });
 
   function renderAt(t) {
+    if (PORTRAIT) world.boost = boost(t);
     Object.assign(world.camState, camPath(t));
     Object.assign(world.mood, { hemi: hemi(t), key: key(t), rim: rim(t), fillGold: gold(t), fillBlue: 0 });
     world.render(t);

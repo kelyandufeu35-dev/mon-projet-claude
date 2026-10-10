@@ -23140,10 +23140,15 @@ void main() {
     dec: (n, d = 1) => n.toFixed(d).replace(".", ",")
   };
 
+  // src/core/format.js
+  var FORMAT = typeof window !== "undefined" && window.MUSK_FORMAT || "landscape";
+  var PORTRAIT = FORMAT === "portrait";
+  var W = PORTRAIT ? 1080 : 1920;
+  var H = PORTRAIT ? 1920 : 1080;
+
   // src/core/world.js
-  var W = 1920;
-  var H = 1080;
   var BASE_HALF_H = 40;
+  var D0 = PORTRAIT ? 900 : 420;
   var World = class {
     constructor(canvas) {
       this.canvas = canvas;
@@ -23165,13 +23170,14 @@ void main() {
       this.renderer = r;
       this.scene = new Scene();
       this.scene.background = new Color(C.void);
-      this.scene.fog = new Fog(C.void, 330, 640);
+      this.scene.fog = new Fog(C.void, D0 - 90, D0 + 220);
       const pm = new PMREMGenerator(r);
       this.scene.environment = pm.fromScene(new RoomEnvironment(), 0.04).texture;
       this.scene.environmentIntensity = 0.32;
       pm.dispose();
       this.camera = new OrthographicCamera(-1, 1, 1, -1, 1, 1200);
-      this.camState = { x: 0, y: 0, z: 0, az: 45, el: 35.264, zoom: 1, roll: 0, dist: 420 };
+      this.camState = { x: 0, y: 0, z: 0, az: 45, el: 35.264, zoom: 1, roll: 0, dist: D0 };
+      this.boost = 1;
       this.hemi = new HemisphereLight(9417983, 659226, 0.55);
       this.key = new DirectionalLight(16773340, 2.6);
       this.key.castShadow = true;
@@ -23246,14 +23252,20 @@ void main() {
     _applyCamera() {
       const s = this.camState;
       const cam = this.camera;
-      const halfH = BASE_HALF_H / s.zoom;
-      const halfW = halfH * (W / H);
+      let halfW, halfH;
+      if (PORTRAIT) {
+        halfW = BASE_HALF_H * (16 / 9) / (s.zoom * this.boost);
+        halfH = halfW * (H / W);
+      } else {
+        halfH = BASE_HALF_H / s.zoom;
+        halfW = halfH * (W / H);
+      }
       cam.left = -halfW;
       cam.right = halfW;
       cam.top = halfH;
       cam.bottom = -halfH;
       cam.near = 1;
-      cam.far = 1400;
+      cam.far = PORTRAIT ? D0 * 3.4 : 1400;
       cam.updateProjectionMatrix();
       const az = s.az * DEG, el = s.el * DEG;
       cam.position.set(
@@ -23266,7 +23278,7 @@ void main() {
       const k = this.key;
       k.target.position.set(s.x, 0, s.z);
       k.position.set(s.x - 90, 150, s.z + 70);
-      const ext = Math.max(40, halfH * 1.6);
+      const ext = PORTRAIT ? Math.max(40, halfW * 1.7) : Math.max(40, halfH * 1.6);
       const sc = k.shadow.camera;
       sc.left = -ext;
       sc.right = ext;
@@ -23364,14 +23376,70 @@ void main() {
      *  anchorAlign: 'center'|'left'|'right'
      */
     card(o) {
+      if (PORTRAIT && o.skipP) return null;
+      if (!PORTRAIT && o.onlyP) return null;
       const el = document.createElement("div");
       el.className = "hc " + (o.cls || "");
-      el.innerHTML = o.html || "";
+      const html = PORTRAIT && o.htmlP ? o.htmlP : o.html || "";
+      el.innerHTML = PORTRAIT ? `<div class="hz">${html}</div>` : html;
       el.style.opacity = "0";
       this.layer.appendChild(el);
       const it = { inD: 0.5, outD: 0.4, enter: "up", offset: [0, 0], ...o, el };
+      if (PORTRAIT) {
+        if (o.p) Object.assign(it, { anchor: null }, o.p);
+        else it.auto = true;
+      }
       this.items.push(it);
       return it;
+    }
+    /**
+     * Portrait : place chaque carte non fixée dans une bande haute ou basse, empilée sans chevauchement temporel
+     * ni vertical (algorithme glouton sur les intervalles [t0, t1]). La zone centrale reste libre pour la 3D.
+     */
+    layoutPortrait({ top = [250, 800], bottom = [1090, 1490], gap = 16, pad = 0.2 } = {}) {
+      const cards = this.items.filter((it) => it.auto).sort((a, b) => a.t0 - b.t0);
+      const placed = [];
+      for (const it of cards) {
+        const el = it.el;
+        const saved = { d: el.style.display, v: el.style.visibility, o: el.style.opacity, t: el.style.transform };
+        el.style.display = "";
+        el.style.visibility = "hidden";
+        el.style.opacity = "1";
+        el.style.transform = "none";
+        const h = el.offsetHeight;
+        el.style.display = saved.d || "none";
+        el.style.visibility = saved.v;
+        el.style.opacity = saved.o;
+        el.style.transform = saved.t;
+        const T0 = it.t0 - pad, T12 = it.t1 + pad;
+        const order = it.zone === "bottom" ? [["bottom", bottom], ["top", top]] : [["top", top], ["bottom", bottom]];
+        let pos = null;
+        for (const [name, [zs, ze]] of order) {
+          const fits = (y0) => !placed.some((p) => p.t0 < T12 && p.t1 > T0 && p.y0 < y0 + h + gap && p.y1 + gap > y0);
+          if (name === "bottom") for (let y0 = ze - h; y0 >= zs; y0 -= 6) {
+            if (fits(y0)) {
+              pos = y0;
+              break;
+            }
+          }
+          else for (let y0 = zs; y0 + h <= ze; y0 += 6) {
+            if (fits(y0)) {
+              pos = y0;
+              break;
+            }
+          }
+          if (pos !== null) break;
+        }
+        if (pos === null) {
+          console.warn("[hud] aucune place pour", it.id);
+          pos = top[0];
+        }
+        placed.push({ y0: pos, y1: pos + h, t0: T0, t1: T12 });
+        it.anchor = null;
+        it.x = 540;
+        it.y = pos + h / 2;
+        it.align = "center";
+      }
     }
     update(t) {
       for (const it of this.items) {
@@ -23544,14 +23612,14 @@ void main() {
     speed: 1.18,
     sample_rate: 24e3,
     durations: {
-      s1a: 6.59,
+      s1a: 6.311,
       s1b: 2.86,
       s2a: 6.117,
-      s2b: 8.198,
+      s2b: 7.786,
       s2c: 3.172,
-      s3a: 2.443,
-      s3b: 9.437,
-      s3c: 5.044,
+      s3a: 2.436,
+      s3b: 9.007,
+      s3c: 4.793,
       s4a: 2.445,
       s4b: 7.771,
       s4c: 1.789,
@@ -23561,9 +23629,9 @@ void main() {
       s6a: 3.751,
       s6b: 4.97,
       s6c: 5.51,
-      s7a: 7.358,
+      s7a: 7.135,
       s7b: 5.362,
-      s7c: 5.892
+      s7c: 5.593
     }
   };
 
@@ -23863,7 +23931,8 @@ void main() {
         t1: s.t1 - 0.2,
         inD: 0.5,
         outD: 0.3,
-        enter: "right"
+        enter: "right",
+        p: { x: 44, y: 150, align: "left" }
       });
       hud.card({
         id: "src-" + k,
@@ -23876,7 +23945,8 @@ void main() {
         t1: s.t1 - 0.1,
         inD: 0.6,
         outD: 0.3,
-        enter: "fade"
+        enter: "fade",
+        p: { x: 540, y: 1836, align: "center" }
       });
     }
     hud.card({
@@ -23890,7 +23960,8 @@ void main() {
       t1: SC.s7.t1 - 0.6,
       inD: 0.8,
       outD: 0.6,
-      enter: "fade"
+      enter: "fade",
+      p: { x: 540, y: 206, align: "center" }
     });
   }
   var subtitleSegments = () => Object.values(seg).filter((s) => s.id !== "s7c");
@@ -27195,6 +27266,7 @@ void main(){
       t0: T5.tray + 0.8,
       t1: T5.sell - 0.2,
       enter: "up",
+      skipP: true,
       anchor: () => new Vector3(POS.bank.x - 6, 9, POS.bank.z + 2),
       offset: [-30, -170],
       html: `<b>Surtout des actions et des participations</b><br><span>des titres valoris\xE9s, pas des billets</span>`
@@ -27545,20 +27617,21 @@ void main(){
       { t: T7.zoom, x: 0, y: 16, z: 22, az: 60, el: 40, zoom: 0.43, e: "io2" },
       { t: T7.end, x: 0, y: 4, z: 0, az: 140, el: 58, zoom: 0.17, e: "io3" }
     ];
-    const tag = (id, cls, html, anchor, offset, t0, t1 = T7.zoom + 0.4, enter = "scale") => hud.card({ id, cls, html, anchor, offset, t0, t1, enter });
+    const TAG_END = PORTRAIT ? T7.line1 - 0.2 : T7.zoom + 0.4;
+    const tag = (id, cls, html, anchor, offset, t0, t1 = TAG_END, enter = "scale", extra = {}) => hud.card({ id, cls, html, anchor, offset, t0, t1, enter, ...extra });
     const P = (v, y) => () => up(v, y);
-    tag("s7-hub", "tag gold bigtag", `<b>ELON MUSK</b><br><span>au centre : poss\xE8de, contr\xF4le, emprunte</span>`, P(H2, 20), [0, -40], T7.rise - 0.3);
+    tag("s7-hub", "tag gold bigtag", `<b>ELON MUSK</b><br><span>au centre : poss\xE8de, contr\xF4le, emprunte</span>`, P(H2, 20), [0, -40], T7.rise - 0.3, void 0, void 0, { skipP: true });
     const nw = facts.net_worth;
     const md = (v) => fmt.int(v).replace(/\u202f/g, " ");
     const dt = (iso) => (/* @__PURE__ */ new Date(iso + "T12:00:00Z")).toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
     tag("s7-net", "tag gold netag", `<b>Patrimoine net \u2248 ${md(nw.headline.value_usd_billions)} Md$</b><br><span>Forbes, ${dt(nw.headline.as_of)} \xB7 Bloomberg \u2248 ${md(nw.bloomberg.value_usd_billions)} Md$ (${dt(nw.bloomberg.as_of)}) \xB7 estimations</span>`, P(H2, 42), [0, -62], T7.net);
     tag("s7-tesla", "tag", `<b>TESLA</b><br><span>\u2248 11 % des actions (hors restreintes)</span>`, P(TS, 30), [0, -40], T7.tesla);
     tag("s7-spacex", "tag cyan", `<b>SPACEX + IA (xAI)</b><br><span>\u2248 38 \xE0 42 % du capital \xB7 \u2248 82 % des voix</span>`, P(SP, 44), [0, -40], T7.spacex);
-    tag("s7-ai", "tag cyan small", `<b>xAI : int\xE9gr\xE9e \xE0 SpaceX</b><br><span>compt\xE9e une seule fois</span>`, P(SP, 22), [150, 44], T7.ai);
+    tag("s7-ai", "tag cyan small", `<b>xAI : int\xE9gr\xE9e \xE0 SpaceX</b><br><span>compt\xE9e une seule fois</span>`, P(SP, 22), [150, 44], T7.ai, void 0, void 0, { skipP: true });
     tag("s7-bourse", "tag", `<b>BOURSE</b><br><span>le prix du jour valorise les titres</span>`, P(BO, 32), [-300, 20], T7.value);
     tag("s7-bank", "tag red", `<b>BANQUE \xB7 dettes</b><br><span>actions Tesla nanties \u2248 236 M (29 ao\xFBt 2025) ;<br>montant des pr\xEAts non publi\xE9 ; plafond 3,5 Md$</span>`, P(BA, 20), [-470, -150], T7.debts);
-    tag("s7-others", "tag cyan small", `<b>Autres participations</b><br><span>Neuralink, The Boring Co. : non chiffr\xE9es</span>`, () => up(H2, 8).add(new Vector3(-13, 0, -4)), [-210, 30], T7.others);
-    tag("s7-cash", "tag green small", `<b>Liquidit\xE9s</b><br><span>non document\xE9es de fa\xE7on fiable</span>`, () => up(H2, 8).add(new Vector3(13, 0, 4)), [200, 40], T7.others + 0.5);
+    tag("s7-others", "tag cyan small", `<b>Autres participations</b><br><span>Neuralink, The Boring Co. : non chiffr\xE9es</span>`, () => up(H2, 8).add(new Vector3(-13, 0, -4)), [-210, 30], T7.others, void 0, void 0, { htmlP: `<b>Autres participations et liquidit\xE9s</b><br><span>Neuralink, The Boring Co. : non chiffr\xE9es \xB7 liquidit\xE9s : non document\xE9es de fa\xE7on fiable</span>` });
+    tag("s7-cash", "tag green small", `<b>Liquidit\xE9s</b><br><span>non document\xE9es de fa\xE7on fiable</span>`, () => up(H2, 8).add(new Vector3(13, 0, 4)), [200, 40], T7.others + 0.5, void 0, void 0, { skipP: true });
     const leg = [
       ["#2b7bff", "Propri\xE9t\xE9", "part du capital d\xE9tenue", T7.own],
       ["#ffb81c", "Contr\xF4le", "droits de vote", T7.control],
@@ -27575,10 +27648,20 @@ void main(){
       y: 735 + i * 52,
       align: "left",
       enter: "right",
-      html: `<i style="background:${col}"></i><b>${name}</b> <span>${sub}</span>`
+      html: `<i style="background:${col}"></i><b>${name}</b> <span>${sub}</span>`,
+      skipP: true
     }));
+    hud.card({
+      id: "s7-legP",
+      cls: "legp",
+      onlyP: true,
+      t0: T7.own,
+      t1: T7.line1 - 0.3,
+      enter: "up",
+      html: leg.map(([col, name]) => `<span><i style="background:${col}"></i>${name}</span>`).join("")
+    });
     hud.card({ id: "s7-final1", cls: "finale", t0: T7.line1, t1: T7.end - 0.9, x: 960, y: 800, enter: "up", inD: 0.8, outD: 0.6, html: `La richesse d'Elon Musk n'est pas un coffre rempli de dollars.` });
-    hud.card({ id: "s7-final2", cls: "finale gold", t0: T7.line2, t1: T7.end - 0.9, x: 960, y: 880, enter: "up", inD: 0.8, outD: 0.6, html: `C'est principalement la valeur de ce qu'il poss\xE8de.` });
+    hud.card({ id: "s7-final2", cls: "finale gold", t0: T7.line2, t1: T7.end - 0.9, x: 960, y: 880, enter: "up", inD: 0.8, outD: 0.6, zone: "bottom", html: `C'est principalement la valeur de ce qu'il poss\xE8de.` });
     const update = (t) => {
       const on = t >= T7.t0 - 0.2;
       const drawOf = (t0, d = 1.6) => ease.io2(inv(t0, t0 + d, t));
@@ -27624,6 +27707,23 @@ void main(){
     const ctx = { world, hud, facts: facts_default };
     buildGlobalHud(ctx);
     const modules = [buildHub(ctx), buildTesla(ctx), buildSpacex(ctx), buildBourse(ctx), buildBank(ctx), buildFinale(ctx)];
+    if (PORTRAIT) hud.layoutPortrait();
+    const boost = track([
+      [0, 1.25],
+      [SC.s1.t1 - 0.3, 1.25],
+      [SC.s1.t1 + 0.3, 1.35],
+      [SC.s2.t1 - 0.4, 1.35],
+      [SC.s3.t0 + 1, 1.3],
+      [SC.s3.t1 - 0.5, 1.3],
+      [SC.s4.t0 + 1.4, 1.2],
+      [SC.s4.t1 - 0.3, 1.2],
+      [SC.s5.t0 + 1.4, 1.3],
+      [SC.s5.t1 - 0.3, 1.3],
+      [SC.s6.t0 + 0.3, 1.1],
+      [SC.s6.t1 - 0.3, 1.1],
+      [SC.s7.t0 + 2.4, 1.05],
+      [DURATION, 1.05]
+    ]);
     const camKeys = modules.flatMap((m) => m.cam || []).sort((a, b) => a.t - b.t);
     const camPath = cameraPath(camKeys);
     const subs = new Subtitles(document.getElementById("sub"), subtitleSegments());
@@ -27640,6 +27740,7 @@ void main(){
     ];
     const tl = gsap.timeline({ paused: true });
     function renderAt(t) {
+      if (PORTRAIT) world.boost = boost(t);
       Object.assign(world.camState, camPath(t));
       Object.assign(world.mood, { hemi: hemi(t), key: key(t), rim: rim(t), fillGold: gold(t), fillBlue: 0 });
       world.render(t);

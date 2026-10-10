@@ -2,8 +2,8 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=1920, height=1080" />
-    <title>Elon Musk : anatomie d'une fortune</title>
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Elon Musk : anatomie d'une fortune (format vertical)</title>
     <style>
       @font-face { font-family: "Inter"; font-weight: 400; src: url("assets/fonts/Inter-400.woff2") format("woff2"); }
       @font-face { font-family: "Inter"; font-weight: 600; src: url("assets/fonts/Inter-600.woff2") format("woff2"); }
@@ -13,7 +13,7 @@
       @font-face { font-family: "JetBrains Mono"; font-weight: 500; src: url("assets/fonts/JetBrainsMono-500.woff2") format("woff2"); }
       @font-face { font-family: "JetBrains Mono"; font-weight: 700; src: url("assets/fonts/JetBrainsMono-700.woff2") format("woff2"); }
       * { margin: 0; padding: 0; box-sizing: border-box; }
-      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #04060b; }
+      html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #04060b; }
       #root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: "Inter", system-ui, sans-serif; }
       #stage { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 
@@ -74,11 +74,29 @@
       .callout { background: rgba(6, 12, 26, 0.86); border-left: 6px solid #ffb81c; padding: 14px 24px; border-radius: 10px; font-size: 30px; font-weight: 600; line-height: 1.25; }
       .callout .big { font: 800 56px "Space Grotesk", sans-serif; color: #ffd978; margin-right: 10px; }
       .callout .small { font-size: 21px; font-weight: 400; color: #a9bbdc; }
+/* Format vertical 1080×1920 (TikTok / Reels / Shorts) : texte agrandi et centré, empilé en bandes haute et basse,
+   la 3D occupe le centre. Injecté dans tiktok.html par scripts/build.mjs. */
+#root.portrait #sub { bottom: 180px; width: max-content; max-width: 980px; font-size: 40px; line-height: 1.22; padding: 14px 30px; border-radius: 18px; background: rgba(4, 8, 18, 0.62); }
+.portrait .hc { max-width: 980px; white-space: normal; }
+.portrait .hz { zoom: 1.32; max-width: 735px; }
+.portrait .hc.chip .hz { zoom: 1.2; max-width: none; white-space: nowrap; }
+.portrait .hc.disclaimer { white-space: nowrap; }
+.portrait .hc.disclaimer .hz { zoom: 1; max-width: none; }
+.portrait .hc.srcline { max-width: 1000px; text-align: center; }
+.portrait .hc.srcline .hz { zoom: 1; max-width: 1000px; line-height: 1.3; }
+.portrait .tag span { max-width: 640px; }
+.portrait .pill, .portrait .callout, .portrait .card-left { text-align: center; }
+.portrait .bigcount .eq { font-size: 26px; }
+.portrait .arrow { font-size: 40px; }
+.portrait .finale .hz { zoom: 1.1; }
+.legp { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 22px; background: rgba(5, 10, 22, 0.86); padding: 12px 20px; border-radius: 12px; font: 700 21px "Inter", sans-serif; }
+.legp span { display: inline-flex; align-items: center; gap: 8px; }
+.legp i { display: inline-block; width: 14px; height: 14px; border-radius: 50%; }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="root" data-start="0" data-duration="103.49" data-width="1920" data-height="1080">
-      <canvas id="stage" width="1920" height="1080"></canvas>
+    <div id="root" class="portrait" data-composition-id="root" data-start="0" data-duration="103.49" data-width="1080" data-height="1920">
+      <canvas id="stage" width="1080" height="1920"></canvas>
       <div id="vignette"></div>
       <div id="hud"></div>
       <div id="sub"></div>
@@ -86,6 +104,7 @@
       <div id="fade"></div>
       <audio id="mix" src="assets/audio/mix.m4a" data-start="0" data-duration="103.49" data-track-index="1" data-volume="1"></audio>
     </div>
+    <script>window.MUSK_FORMAT = "portrait";</script>
     <script src="vendor/gsap.min.js"></script>
     <script src="dist/bundle.js"></script>
     <script>

@@ -26,16 +26,16 @@ export function buildGlobalHud({ hud }) {
     const s = SC[k];
     hud.card({
       id: "chip-" + k, cls: "chip", html: `<i>${n}</i> ${title}`, x: 56, y: 56, align: "left",
-      t0: s.t0 + 0.5, t1: s.t1 - 0.2, inD: 0.5, outD: 0.3, enter: "right",
+      t0: s.t0 + 0.5, t1: s.t1 - 0.2, inD: 0.5, outD: 0.3, enter: "right", p: { x: 44, y: 150, align: "left" },
     });
     hud.card({
       id: "src-" + k, cls: "srcline", html: SOURCES[k], x: 56, y: 1052, align: "left",
-      t0: s.t0 + 0.6, t1: s.t1 - 0.1, inD: 0.6, outD: 0.3, enter: "fade",
+      t0: s.t0 + 0.6, t1: s.t1 - 0.1, inD: 0.6, outD: 0.3, enter: "fade", p: { x: 540, y: 1836, align: "center" },
     });
   }
   hud.card({
     id: "disclaimer", cls: "disclaimer", html: "ESTIMATIONS · MONTANTS DATÉS ET SOURCÉS · PAS DES SOLDES DE COMPTE", x: 1864, y: 56, align: "right",
-    t0: 1.2, t1: SC.s7.t1 - 0.6, inD: 0.8, outD: 0.6, enter: "fade",
+    t0: 1.2, t1: SC.s7.t1 - 0.6, inD: 0.8, outD: 0.6, enter: "fade", p: { x: 540, y: 206, align: "center" },
   });
 }
 

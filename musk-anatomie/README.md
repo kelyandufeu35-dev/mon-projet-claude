@@ -1,6 +1,7 @@
 # Elon Musk : anatomie d'une fortune
 
-Documentaire de motion design **3D isométrique** (≈ 105 s, 16:9, 1920 × 1080, 30 fps) qui explique comment fonctionne
+Documentaire de motion design **3D isométrique** (103,5 s, 30 fps ; **16:9** 1920 × 1080 et **9:16** 1080 × 1920 pour
+TikTok / Reels / Shorts) qui explique comment fonctionne
 réellement la richesse d'Elon Musk : une immense maquette financière où chaque entreprise, chaque action et chaque
 mécanisme (capitalisation, volatilité, liquidités, prêt garanti par des titres) devient visible.
 
@@ -14,7 +15,7 @@ Aucun générateur externe d'images, de vidéos ou de sons n'est utilisé.
 | 3D | Three.js 0.170 — vraie 3D, caméra orthographique isométrique, ombres portées |
 | Voix | Kokoro‑82M en local (`kokoro-onnx`), voix française `ff_siwis` |
 | Musique & effets | synthétisés en Python (numpy / scipy), mixés avec la voix |
-| Sortie | `exports/musk-anatomie-1080p.mp4` (copie de diffusion, H.264 + AAC) ; master CRF 16 : `out/musk-anatomie.mp4` (non versionné, 183 Mo) |
+| Sortie | `out/musk-anatomie.mp4` (16:9) et `out/musk-anatomie-tiktok.mp4` (9:16), masters CRF 16 non versionnés ; copies légères dans `exports/` (H.264 + AAC) |
 
 ## Les 7 scènes
 
@@ -37,15 +38,29 @@ npm run build                # bundle + timeline + durée reportée dans index.h
 npx hyperframes preview      # prévisualisation (Studio), ou : npm run dev
 npx hyperframes check        # lint + runtime + mise en page + mouvement + contraste
 npx hyperframes snapshot --at 20.5,52.5,95     # images clés PNG pour vérification
-npm run render               # rendu MP4 -> out/musk-anatomie.mp4 (master)
-ffmpeg -i out/musk-anatomie.mp4 -c:v libx264 -preset slow -crf 22 -pix_fmt yuv420p -movflags +faststart -c:a copy exports/musk-anatomie-1080p.mp4
+npm run render               # rendu MP4 16:9 -> out/musk-anatomie.mp4 (master)
+npm run render:tiktok        # rendu MP4 9:16 -> out/musk-anatomie-tiktok.mp4 (master vertical)
+ffmpeg -i out/musk-anatomie.mp4 -c:v libx264 -preset slow -crf 26 -pix_fmt yuv420p -movflags +faststart -c:a copy exports/musk-anatomie-1080p.mp4
 ```
 
-Rendu 3D en logiciel (sans GPU, 4 cœurs) : ≈ 0,5 s par image côté 3D, **34 min** pour les 3 162 images. Sur une machine
-avec GPU, `hyperframes render` utilise l'accélération matérielle automatiquement.
+### Version verticale (TikTok, 9:16)
 
-Contrôles réalisés sur le MP4 final : 1920×1080, 30 fps, 3 162 images, 105,4 s ; aucune image figée ; seule image noire = le
-fondu de sortie ; audio −15,7 LUFS intégrés, crête vraie −1,3 dBFS.
+`tiktok.html` est **générée** par `npm run build` à partir de `index.html` (ne pas l'éditer à la main). Elle charge la
+même scène 3D avec `window.MUSK_FORMAT = "portrait"` : la caméra garde la largeur visible du plan 16:9 (divisée par un
+facteur de recadrage animé), les cartes d'information sont empilées automatiquement dans les zones haute et basse du
+cadre (`hud.layoutPortrait()`), et les sous-titres sont agrandis (`src/portrait.css`). La voix, la musique et le
+minutage sont ceux de la version horizontale.
+
+Découpage pour envoi : un fichier par scène, en CRF 16 (très haute qualité), chacun sous 30 Mio :
+
+```bash
+ffmpeg -nostdin -ss <début> -to <fin> -i out/musk-anatomie.mp4 -c:v libx264 -preset slow -crf 16 -pix_fmt yuv420p \
+       -c:a aac -b:a 256k -movflags +faststart partie-N.mp4
+```
+
+Rendu 3D en logiciel (sans GPU, 4 cœurs) : ≈ 0,5 s par image côté 3D, **≈ 35 à 45 min** pour les 3 105 images
+(un seul rendu à la fois : deux rendus en parallèle se partagent les mêmes cœurs). Sur une machine avec GPU,
+`hyperframes render` utilise l'accélération matérielle automatiquement.
 
 Dans un conteneur sans Chrome géré par Hyperframes, pointer vers un Chromium *headless shell* existant :
 
@@ -59,14 +74,17 @@ export PRODUCER_PLAYER_READY_TIMEOUT_MS=120000     # compilation des shaders en 
 
 ```
 index.html                  composition racine (1920×1080, durée calculée par le build) + HUD + <audio>
+tiktok.html                 composition verticale 1080×1920 (générée par le build)
 src/main.js                 orchestration : monde 3D, caméra globale, ambiance, voiles, écoute de « hf-seek »
 src/timing.js               table de timing unique, calée sur les durées réelles de la voix
-src/core/                   moteur : World (rendu), Builder (géométrie fusionnée), palette, HUD, utilitaires
+src/core/                   moteur : World (rendu), Builder (géométrie fusionnée), palette, HUD, format (16:9 / 9:16), utilitaires
+src/portrait.css            styles propres au format vertical
 src/components/             bibliothèque réutilisable (voir ci‑dessous)
 src/scenes/                 hub (scène 1 + centre du finale), tesla, spacex, bourse, bank (5 et 6), finale
 src/cues.js                 signaux sonores calés sur les mêmes ancres que l'image
 data/facts.json             chiffres, dates, sources, statut de vérification
 narration/script.json       texte de la voix off
+narration/pronunciations.json  prononciations imposées (IPA) : Elon Musk, SpaceX, xAI
 scripts/                    build, tts, mixage audio, captures de développement, benchmark
 ```
 
@@ -92,6 +110,13 @@ python3 -m venv .venv && .venv/bin/pip install kokoro-onnx soundfile numpy scipy
 # 2) musique + effets + mixage + AAC normalisé (-16 LUFS)
 PYTHON=.venv/bin/python npm run audio
 ```
+
+**Prononciation des noms propres.** Le moteur français lisait « Elon Musk » comme `elˈɔ̃ …` suivi d'une prononciation
+anglaise de « Musk » : `narration/pronunciations.json` impose désormais les phonèmes (`ilˈɔn mˈœsk`, « SpaceX » =
+`spˈɛs ˈiks`, « xAI » = `ˈiks a ˈi`). `scripts/tts.py` les injecte (`is_phonemes=True`) ; `--phonemes-only` affiche les
+phonèmes calculés sans synthèse, pour vérifier la liste. Ces corrections sont contrôlées au niveau des phonèmes, **pas à
+l'oreille** : une écoute humaine reste nécessaire, et la prononciation se règle en éditant ce fichier puis en relançant
+`--only <segments>`.
 
 Les WAV de la narration sont versionnés : le projet se rend sans Kokoro. Mesures du mixage final : −15,6 LUFS
 intégrés, crête vraie −1,1 dBTP. Le mixage a été contrôlé par mesure (loudness, niveaux par tranche), **pas à l'oreille** :

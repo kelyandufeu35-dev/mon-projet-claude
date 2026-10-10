@@ -1,0 +1,8 @@
+{
+  "_note": "Prononciations imposées (IPA, alphabet de Kokoro) pour les noms que le moteur français lit mal. Clés = texte exact de script.json (la plus longue d'abord).",
+  "d'Elon Musk": "dilˈɔn mˈœsk",
+  "Elon Musk": "ilˈɔn mˈœsk",
+  "SpaceX": "spˈɛs ˈiks",
+  "xAI": "ˈiks a ˈi",
+  "Musk": "mˈœsk"
+}

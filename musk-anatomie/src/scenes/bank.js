@@ -253,7 +253,7 @@ export function buildBank(ctx) {
     html: `Qu'y a-t-il dans le coffre ?<br><span>des montagnes de billets…</span>`,
   });
   hud.card({
-    id: "s5-actions", cls: "tag", t0: T5.tray + 0.8, t1: T5.sell - 0.2, enter: "up",
+    id: "s5-actions", cls: "tag", t0: T5.tray + 0.8, t1: T5.sell - 0.2, enter: "up", skipP: true,
     anchor: () => new THREE.Vector3(POS.bank.x - 6, 9, POS.bank.z + 2), offset: [-30, -170],
     html: `<b>Surtout des actions et des participations</b><br><span>des titres valorisés, pas des billets</span>`,
   });
