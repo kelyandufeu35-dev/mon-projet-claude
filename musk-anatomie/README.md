@@ -15,7 +15,7 @@ Aucun générateur externe d'images, de vidéos ou de sons n'est utilisé.
 | 3D | Three.js 0.170 — vraie 3D, caméra orthographique isométrique, ombres portées |
 | Voix | Kokoro‑82M en local (`kokoro-onnx`), voix française `ff_siwis` |
 | Musique & effets | synthétisés en Python (numpy / scipy), mixés avec la voix |
-| Sortie | `out/musk-anatomie.mp4` (16:9) et `out/musk-anatomie-tiktok.mp4` (9:16), masters CRF 16 non versionnés ; copies légères dans `exports/` (H.264 + AAC) |
+| Sortie | `exports/musk-anatomie-1080p.mp4` (16:9, 33 Mo) et `exports/musk-anatomie-tiktok.mp4` (9:16, 30 Mo), H.264 CRF 26 + AAC ; masters CRF 16 (≈ 180 Mo chacun) non versionnés : `out/musk-anatomie.mp4`, `out/musk-anatomie-tiktok.mp4` |
 
 ## Les 7 scènes
 
@@ -43,6 +43,10 @@ npm run render:tiktok        # rendu MP4 9:16 -> out/musk-anatomie-tiktok.mp4 (m
 ffmpeg -i out/musk-anatomie.mp4 -c:v libx264 -preset slow -crf 26 -pix_fmt yuv420p -movflags +faststart -c:a copy exports/musk-anatomie-1080p.mp4
 ```
 
+Contrôles réalisés sur les deux masters (version à la voix corrigée) : 30 fps, 3 105 images, 103,5 s ; aucune image
+figée ; seules images noires = fondus d'entrée et de sortie (0,2 s / 0,4 s en vertical) ; audio ≈ −15,8 LUFS intégrés,
+crête vraie ≈ −1,0 dBTP. Rendu logiciel : 34 min (16:9) et 31 min (9:16).
+
 ### Version verticale (TikTok, 9:16)
 
 `tiktok.html` est **générée** par `npm run build` à partir de `index.html` (ne pas l'éditer à la main). Elle charge la
@@ -58,9 +62,9 @@ ffmpeg -nostdin -ss <début> -to <fin> -i out/musk-anatomie.mp4 -c:v libx264 -pr
        -c:a aac -b:a 256k -movflags +faststart partie-N.mp4
 ```
 
-Rendu 3D en logiciel (sans GPU, 4 cœurs) : ≈ 0,5 s par image côté 3D, **≈ 35 à 45 min** pour les 3 105 images
-(un seul rendu à la fois : deux rendus en parallèle se partagent les mêmes cœurs). Sur une machine avec GPU,
-`hyperframes render` utilise l'accélération matérielle automatiquement.
+Rendu 3D en logiciel (sans GPU, 4 cœurs) : ≈ 0,6 s par image, **≈ 31 à 34 min** pour les 3 105 images (un seul rendu à
+la fois : deux rendus en parallèle se partagent les mêmes cœurs). Sur une machine avec GPU, `hyperframes render` utilise
+l'accélération matérielle automatiquement.
 
 Dans un conteneur sans Chrome géré par Hyperframes, pointer vers un Chromium *headless shell* existant :
 
