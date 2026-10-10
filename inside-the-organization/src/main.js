@@ -56,6 +56,6 @@ window.__overlayTimeline = overlayTl;
 window.__HOOK = HOOK; window.__VIDEO_TOTAL = VIDEO_TOTAL;
 window.__seek = (t) => { overlayTl.time(t, false); renderAt(t); };
 window.__renderAt = renderAt;
-window.__stage = stage;
+window.__stage = stage; window.__labels = labels;
 window.addEventListener('hf-seek', (e) => renderAt(e.detail.time));
 renderAt(window.__hfThreeTime || 0);

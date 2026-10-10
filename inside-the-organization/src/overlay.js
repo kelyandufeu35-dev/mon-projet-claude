@@ -1,5 +1,5 @@
-import NARR from '../data/narration.json';
-import VOD from '../data/vo_durations.json';
+import { NARR, VOD } from './narration.js';
+import { tr } from './i18n.js';
 import { HOOK, CUTS } from './timeline.js';
 import { PORTRAIT } from './format.js';
 
@@ -22,7 +22,7 @@ export function buildOverlay(root) {
   const scrimEl = el('div', 'scrim'); layer.prepend(scrimEl);
 
   // ---------- Titre d'ouverture ----------
-  const intro = el('div', 'intro', `<div class="k"><i></i>INSIDE THE ORGANIZATION</div><h1>McDonald’s</h1><p>Qui dirige, comment l’entreprise s’organise, comment franchisés et équipes locales s’y intègrent.</p>`);
+  const intro = el('div', 'intro', `<div class="k"><i></i>INSIDE THE ORGANIZATION</div><h1>McDonald’s</h1><p>${tr('Qui dirige, comment l’entreprise s’organise, comment franchisés et équipes locales s’y intègrent.')}</p>`);
   layer.appendChild(intro);
   tl.set(intro, { opacity: 0 }, 0)
     .fromTo(intro, { opacity: 0 }, { opacity: 1, duration: 0.01 }, 0.25)
@@ -54,12 +54,12 @@ export function buildOverlay(root) {
 
   // ---------- Légendes ----------
   const legend = (cfg) => {
-    const box = el('div', 'legend ' + (cfg.cls || ''), cfg.title ? `<h4>${cfg.title}</h4>` : '');
+    const box = el('div', 'legend ' + (cfg.cls || ''), cfg.title ? `<h4>${tr(cfg.title)}</h4>` : '');
     cfg.rows.forEach((r) => {
-      const row = el('div', 'row', `<span class="sw ${r.style || ''}" style="--c:${r.color}"></span><b>${r.label}</b>${r.sub ? `<small>${r.sub}</small>` : ''}`);
+      const row = el('div', 'row', `<span class="sw ${r.style || ''}" style="--c:${r.color}"></span><b>${tr(r.label)}</b>${r.sub ? `<small>${tr(r.sub)}</small>` : ''}`);
       box.appendChild(row);
     });
-    if (cfg.foot) box.appendChild(el('div', 'foot', cfg.foot));
+    if (cfg.foot) box.appendChild(el('div', 'foot', tr(cfg.foot)));
     layer.appendChild(box);
     tl.set(box, { opacity: 0 }, 0);
     tl.fromTo(box, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.6, ease: 'power3.out' }, cfg.t0);
@@ -89,7 +89,7 @@ export function buildOverlay(root) {
 
   // ---------- Notes de prudence ----------
   const note = (text, t0, t1, cls = '') => {
-    const n = el('div', 'note ' + cls, `<i>i</i><span>${text}</span>`);
+    const n = el('div', 'note ' + cls, `<i>i</i><span>${tr(text)}</span>`);
     layer.appendChild(n);
     tl.set(n, { opacity: 0 }, 0).fromTo(n, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, t0);
     if (t1 < TOTAL) tl.to(n, { opacity: 0, y: 10, duration: 0.5 }, t1);
@@ -125,7 +125,7 @@ export function buildOverlay(root) {
   });
 
   // ---------- Message final ----------
-  const fin = el('div', 'final', `<div class="mark"></div><p>McDonald’s&nbsp;: une <em>organisation mondiale</em>,<br>des <em>milliers d’entrepreneurs</em> et d’<em>équipes locales</em>.</p>`);
+  const fin = el('div', 'final', `<div class="mark"></div><p>${tr('McDonald’s&nbsp;: une <em>organisation mondiale</em>,<br>des <em>milliers d’entrepreneurs</em> et d’<em>équipes locales</em>.')}</p>`);
   layer.appendChild(fin);
   const scrim = scrimEl;
   tl.set(fin, { opacity: 0 }, 0).set(scrim, { opacity: 0 }, 0)
@@ -141,9 +141,9 @@ export function buildOverlay(root) {
   // ---------- HOOK d'ouverture : « Comment McDo fonctionne ? » ----------
   const hook = el('div', 'hook', `
     <div class="hk-scrim"></div>
-    <div class="hk-top"><i></i>DANS LES COULISSES</div>
-    <div class="hk-q"><span class="w1">COMMENT</span><span class="w2">McDo</span><span class="w3">FONCTIONNE&nbsp;?</span></div>
-    <div class="hk-sub"><span class="s1">Qui dirige ?</span><span class="s2">Qui décide ?</span><span class="s3">Et qui est derrière<i class="br"></i> <b>le comptoir</b> ?</span></div>`);
+    <div class="hk-top"><i></i>${tr('DANS LES COULISSES')}</div>
+    <div class="hk-q"><span class="w1">${tr('COMMENT')}</span><span class="w2">${tr('McDo')}</span><span class="w3">${tr('FONCTIONNE&nbsp;?')}</span></div>
+    <div class="hk-sub"><span class="s1">${tr('Qui dirige ?')}</span><span class="s2">${tr('Qui décide ?')}</span><span class="s3">${tr('Et qui est derrière')}<i class="br"></i> <b>${tr('le comptoir')}</b>${tr(' ?')}</span></div>`);
   layer.appendChild(hook);
   const q = (sel) => hook.querySelector(sel);
   master.set(hook, { opacity: 1 }, 0);

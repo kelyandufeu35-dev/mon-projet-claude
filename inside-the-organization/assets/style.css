@@ -183,3 +183,8 @@ html.portrait, html.portrait body { width: 1080px; height: 1920px; }
 .portrait #overlay::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 600px; pointer-events: none;
   background: linear-gradient(180deg, rgba(10,11,14,.72) 0%, rgba(10,11,14,.5) 55%, rgba(10,11,14,0) 100%); }
 .portrait .lbl.chip .box { background: rgba(38,32,12,.9); }
+
+/* hook en anglais (portrait) : « HOW DOES / McDonald’s / WORK? » — le mot-vedette est plus long que « McDo » */
+.portrait.lang-en .hook .hk-q .w1 { font-size: 164px; }
+.portrait.lang-en .hook .hk-q .w2 { font-size: 152px; letter-spacing: -.045em; margin: 14px 0 14px; }
+.portrait.lang-en .hook .hk-q .w3 { font-size: 164px; }

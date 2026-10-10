@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Synthèse de la voix off française (Kokoro-82M, hors ligne) à partir de data/narration.json.
 Applique data/pronunciation.json (corrections de phonèmes : « McDonald's », « McDo », « marketing »...).
-Usage : python3 scripts/tts.py [--model-dir /tmp/kokoro] [id ...]
+Usage : python3 scripts/tts.py [--lang en] [--model-dir /tmp/kokoro] [id ...]
+  --lang en : lit data/narration.en.json + pronunciation.en.json, écrit assets/audio/vo-en/ et data/vo_durations.en.json
 Écrit assets/audio/vo/<id>.mp3 et data/vo_durations.json (durées mesurées)."""
 import json, sys, os, time, subprocess, tempfile
 import numpy as np, soundfile as sf
@@ -11,14 +12,18 @@ args = sys.argv[1:]
 model_dir = '/tmp/kokoro'
 if '--model-dir' in args:
     i = args.index('--model-dir'); model_dir = args[i + 1]; del args[i:i + 2]
+lang = 'fr'
+if '--lang' in args:
+    i = args.index('--lang'); lang = args[i + 1]; del args[i:i + 2]
+sfx = '' if lang == 'fr' else '.' + lang
 only = set(args)
 root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-narr = json.load(open(os.path.join(root, 'data/narration.json')))
-pron = json.load(open(os.path.join(root, 'data/pronunciation.json')))
+narr = json.load(open(os.path.join(root, f'data/narration{sfx}.json')))
+pron = json.load(open(os.path.join(root, f'data/pronunciation{sfx}.json')))
 v = narr['voice']
 k = Kokoro(os.path.join(model_dir, 'kokoro-v1.0.onnx'), os.path.join(model_dir, 'voices-v1.0.bin'))
-out = os.path.join(root, 'assets/audio/vo'); os.makedirs(out, exist_ok=True)
-dpath = os.path.join(root, 'data/vo_durations.json')
+out = os.path.join(root, 'assets/audio/vo' if lang == 'fr' else f'assets/audio/vo-{lang}'); os.makedirs(out, exist_ok=True)
+dpath = os.path.join(root, f'data/vo_durations{sfx}.json')
 durs = json.load(open(dpath)) if os.path.exists(dpath) else {}
 
 def phonemes(text):

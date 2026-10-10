@@ -1,0 +1,171 @@
+{
+  "_readme": "English voice-over (TikTok). Same structure, ids and start times as narration.json (french). 't' = start (s) on the scene timeline. 'text' = sentence spoken AND captioned. No executive names: roles only.",
+  "voice": {
+    "engine": "kokoro-onnx",
+    "voice": "af_heart",
+    "lang": "en-us",
+    "speed": 1.0
+  },
+  "hook": {
+    "duration": 5.0,
+    "lines": [
+      {
+        "id": "h1",
+        "t": 0.25,
+        "text": "How does McDonald’s work?"
+      },
+      {
+        "id": "h2",
+        "t": 2.15,
+        "text": "Who runs it? Who decides? And who’s behind the counter?"
+      }
+    ]
+  },
+  "lines": [
+    {
+      "id": "n01",
+      "t": 0.5,
+      "text": "Behind the brand you know, there’s a global organization."
+    },
+    {
+      "id": "n02",
+      "t": 6.7,
+      "text": "At the top, a board of directors oversees governance."
+    },
+    {
+      "id": "n03",
+      "t": 10.95,
+      "text": "The CEO and the executive team run the company day to day."
+    },
+    {
+      "id": "n04",
+      "t": 15.7,
+      "text": "Around headquarters, major specialized functions: finance, marketing, operations,"
+    },
+    {
+      "id": "n05",
+      "t": 21.4,
+      "text": "human resources, technology, franchise development, legal."
+    },
+    {
+      "id": "n06",
+      "t": 25.6,
+      "text": "Each has its own role, and they all coordinate their efforts."
+    },
+    {
+      "id": "n08",
+      "t": 31.6,
+      "text": "Internationally, McDonald’s is organized through different structures:"
+    },
+    {
+      "id": "n09",
+      "t": 36.9,
+      "text": "operated markets, subsidiaries, licensed partners, affiliates."
+    },
+    {
+      "id": "n10",
+      "t": 41.3,
+      "text": "Responsibilities vary by country."
+    },
+    {
+      "id": "n11",
+      "t": 46.6,
+      "text": "In restaurants, the model relies on franchising."
+    },
+    {
+      "id": "n12",
+      "t": 50.2,
+      "text": "The franchisee is an independent operator, bound by a contract and brand standards."
+    },
+    {
+      "id": "n13",
+      "t": 56.3,
+      "text": "They run their own restaurant and their own teams."
+    },
+    {
+      "id": "n14",
+      "t": 62.3,
+      "text": "Every restaurant starts with its operator."
+    },
+    {
+      "id": "n15",
+      "t": 65.3,
+      "text": "The manager runs daily operations, supported by assistants,"
+    },
+    {
+      "id": "n16",
+      "t": 69.2,
+      "text": "shift managers, and versatile crew members."
+    },
+    {
+      "id": "n17",
+      "t": 72.3,
+      "text": "The exact organization varies by country and restaurant."
+    },
+    {
+      "id": "n18",
+      "t": 76.2,
+      "text": "Here’s the overall org chart."
+    },
+    {
+      "id": "n19",
+      "t": 78.4,
+      "text": "At the top, governance and leadership; in the middle, functions and international."
+    },
+    {
+      "id": "n20",
+      "t": 83.7,
+      "text": "On a separate branch, the franchisees; at the bottom, the teams."
+    },
+    {
+      "id": "n21",
+      "t": 87.9,
+      "text": "McDonald’s: a global organization, thousands of entrepreneurs, local teams.",
+      "caption": false
+    }
+  ],
+  "chapters": [
+    {
+      "n": "01",
+      "t0": 4.6,
+      "t1": 14.7,
+      "kicker": "GOVERNANCE AND LEADERSHIP",
+      "title": "At the top: the board and executive leadership"
+    },
+    {
+      "n": "02",
+      "t0": 15.5,
+      "t1": 29.3,
+      "kicker": "THE MAIN FUNCTIONS",
+      "title": "Seven functions that work together"
+    },
+    {
+      "n": "03",
+      "t0": 30.7,
+      "t1": 44.2,
+      "kicker": "THE INTERNATIONAL ORGANIZATION",
+      "title": "Structures that vary by market"
+    },
+    {
+      "n": "04",
+      "t0": 45.9,
+      "t1": 59.4,
+      "kicker": "THE FRANCHISE SYSTEM",
+      "title": "Independent operators, one brand"
+    },
+    {
+      "n": "05",
+      "t0": 60.5,
+      "t1": 74.4,
+      "kicker": "INSIDE THE RESTAURANT",
+      "title": "Five levels, from operator to crew"
+    },
+    {
+      "n": "06",
+      "t0": 75.6,
+      "t1": 85.3,
+      "kicker": "THE FULL ORG CHART",
+      "title": "Four types of relationships"
+    }
+  ]
+}

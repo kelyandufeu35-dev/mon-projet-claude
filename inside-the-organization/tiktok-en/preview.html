@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en" class="portrait lang-en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Prévisualisation TikTok 9:16 — McDonald's · Inside the Organization</title>
+    <link rel="stylesheet" href="assets/style.css" />
+    <style>
+      html, body { background: #0b0b0d; }
+      #stage { position: relative; width: 1080px; height: 1920px; transform-origin: 0 0; }
+      #bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 99; display: flex; align-items: center; gap: 12px; padding: 10px 16px;
+        background: rgba(10,10,12,.92); color: #fff; font: 500 14px 'Inter', sans-serif; border-top: 1px solid #333; }
+      #bar button { background: #ffc72c; color: #15161a; border: 0; border-radius: 8px; padding: 8px 14px; font: 700 14px 'Poppins', sans-serif; cursor: pointer; }
+      #bar button.ch { background: #26282e; color: #fff; padding: 6px 10px; font-weight: 600; }
+      #bar input[type=range] { flex: 1; accent-color: #da291c; }
+      #time { min-width: 110px; text-align: right; font-variant-numeric: tabular-nums; }
+    </style>
+  </head>
+  <body>
+    <div id="stage">
+      <div id="root">
+        <div id="bg"></div>
+        <canvas id="gl" width="1080" height="1920"></canvas>
+        <div id="labels"></div>
+      </div>
+    </div>
+    <div id="bar">
+      <button id="play">▶ Lecture</button>
+      <input id="scrub" type="range" min="0" max="98.5" step="0.01" value="0" />
+      <span id="time">0:00.0 / 1:38.5</span>
+      <span id="chapters"></span>
+    </div>
+    <div id="audio"></div>
+    <script src="assets/gsap.min.js"></script>
+    <script src="dist/scene.js"></script>
+    <script>
+      // Contrôleur de prévisualisation : horloge de lecture -> window.__seek(t) (même fonction pure du temps que le rendu).
+      const TOTAL = window.__VIDEO_TOTAL || 98.5, HOOK = window.__HOOK || 5, $ = (id) => document.getElementById(id);
+      const fit = () => { const k = Math.min(innerWidth / 1080, (innerHeight - 52) / 1920); $('stage').style.transform = `scale(${k})`; };
+      addEventListener('resize', fit); fit();
+      // Pistes audio : lues depuis index.html (même source que le rendu)
+      fetch('index.html').then((r) => r.text()).then((html) => {
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        doc.querySelectorAll('audio[data-start]').forEach((a) => {
+          const el = new Audio(a.getAttribute('src')); el.preload = 'auto';
+          el.volume = Math.min(1, parseFloat(a.dataset.volume || '1'));
+          el._s = parseFloat(a.dataset.start); el._d = parseFloat(a.dataset.duration); tracks.push(el);
+        });
+      });
+      const tracks = [];
+      let t = 0, playing = false, last = 0;
+      const fmt = (x) => `${Math.floor(x / 60)}:${(x % 60).toFixed(1).padStart(4, '0')}`;
+      function setT(v, userSeek) {
+        t = Math.max(0, Math.min(TOTAL, v)); window.__seek(t);
+        $('scrub').value = t; $('time').textContent = `${fmt(t)} / ${fmt(TOTAL)}`;
+        if (userSeek) tracks.forEach((a) => a.pause());
+        for (const a of tracks) {
+          const rel = t - a._s, inside = rel >= 0 && rel < a._d;
+          if (playing && inside) { if (a.paused || Math.abs(a.currentTime - rel) > 0.3) a.currentTime = rel; if (a.paused) a.play().catch(() => {}); }
+          else if (!a.paused) a.pause();
+        }
+      }
+      function tick(now) { if (playing) { setT(t + (now - last) / 1000); last = now; if (t >= TOTAL) toggle(false); requestAnimationFrame(tick); } }
+      function toggle(on) { playing = on ?? !playing; $('play').textContent = playing ? '⏸ Pause' : '▶ Lecture'; if (playing) { if (t >= TOTAL - 0.05) t = 0; last = performance.now(); requestAnimationFrame(tick); } else tracks.forEach((a) => a.pause()); }
+      $('play').onclick = () => toggle();
+      $('scrub').oninput = (e) => setT(parseFloat(e.target.value), true);
+      [['Hook', 0], ['01', 0], ['02', 15.5], ['03', 30.7], ['04', 45.9], ['05', 60.5], ['06', 75.6]].forEach(([n, s0], i) => {
+        const s = i === 0 ? 0 : s0 + HOOK;
+        const b = document.createElement('button'); b.className = 'ch'; b.textContent = n; b.title = i === 0 ? 'Hook' : 'Scène ' + n; b.onclick = () => { setT(s, true); }; $('chapters').appendChild(b);
+      });
+      addEventListener('keydown', (e) => { if (e.code === 'Space') { e.preventDefault(); toggle(); } if (e.code === 'ArrowRight') setT(t + 2, true); if (e.code === 'ArrowLeft') setT(t - 2, true); });
+      setT(0);
+    </script>
+  </body>
+</html>

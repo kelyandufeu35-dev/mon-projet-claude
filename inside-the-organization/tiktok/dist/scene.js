@@ -29714,6 +29714,140 @@ void main() {
     }
   };
 
+  // src/locales/en.js
+  var EN = {
+    "Conseil d\u2019administration": "Board of Directors",
+    "Supervise la gouvernance": "Oversees governance",
+    "Directeur g\xE9n\xE9ral (PDG)": "Chief Executive Officer (CEO)",
+    "Pilote l\u2019entreprise": "Runs the company",
+    "\xC9quipe de direction g\xE9n\xE9rale": "Executive leadership team",
+    "Dirigeants ex\xE9cutifs \xB7 pilotent l\u2019activit\xE9": "Senior executives \xB7 steer the business",
+    "Finance": "Finance",
+    "Pilotage financier": "Financial management",
+    "Marketing": "Marketing",
+    "Marque et communication": "Brand and communications",
+    "Op\xE9rations": "Operations",
+    "Standards et performance": "Standards and performance",
+    "Ressources humaines": "Human Resources",
+    "Talents et culture": "Talent and culture",
+    "Technologie et num\xE9rique": "Technology and digital",
+    "Plateformes et donn\xE9es": "Platforms and data",
+    "D\xE9veloppement et franchises": "Development and franchising",
+    "Croissance du r\xE9seau": "Network growth",
+    "Juridique et conformit\xE9": "Legal and compliance",
+    "Droit, \xE9thique, conformit\xE9": "Law, ethics, compliance",
+    "\xC9tats-Unis": "United States",
+    "March\xE9 exploit\xE9": "Operated market",
+    "Am\xE9rique latine": "Latin America",
+    "Licenci\xE9 de d\xE9veloppement": "Development licensee",
+    "France": "France",
+    "Allemagne": "Germany",
+    "Moyen-Orient": "Middle East",
+    "Chine": "China",
+    "Soci\xE9t\xE9 affili\xE9e": "Affiliate",
+    "Japon": "Japan",
+    "Australie": "Australia",
+    "McDonald\u2019s Corporation": "McDonald\u2019s Corporation",
+    "Marque, standards, contrats de franchise": "Brand, standards, franchise agreements",
+    "ENTREPRISE": "COMPANY",
+    "Structure de march\xE9": "Market structure",
+    "Filiale, march\xE9 exploit\xE9 ou partenaire": "Subsidiary, operated market or partner",
+    "MARCH\xC9": "MARKET",
+    "Franchis\xE9 ind\xE9pendant": "Independent franchisee",
+    "Exploitant \u2014 pas un employ\xE9 du si\xE8ge": "Operator \u2014 not a headquarters employee",
+    "EXPLOITANT": "OPERATOR",
+    "Contrat de franchise": "Franchise agreement",
+    "droits et obligations des deux parties": "rights and obligations of both parties",
+    "Standards de marque": "Brand standards",
+    "identit\xE9, qualit\xE9, service": "identity, quality, service",
+    "Restaurant": "Restaurant",
+    "Exploit\xE9 et staff\xE9 par le franchis\xE9": "Run and staffed by the franchisee",
+    "RESTAURANT": "RESTAURANT",
+    "Ses propres \xE9quipes": "Their own teams",
+    "Il emploie, planifie et encadre": "They hire, schedule and supervise",
+    "Des milliers d\u2019exploitants": "Thousands of operators",
+    "chacun avec ses restaurants, tous sous la m\xEAme marque": "each with their own restaurants, all under one brand",
+    "Exploitant ou franchis\xE9": "Operator or franchisee",
+    "Propri\xE9taire ind\xE9pendant": "Independent owner",
+    "NIVEAU 1": "LEVEL 1",
+    "Responsable de restaurant": "Restaurant manager",
+    "Dirige le restaurant au quotidien": "Runs the restaurant day to day",
+    "NIVEAU 2": "LEVEL 2",
+    "Responsables adjoints": "Assistant managers",
+    "Selon l\u2019organisation locale": "Depends on the local setup",
+    "NIVEAU 3": "LEVEL 3",
+    "Managers de quart": "Shift managers",
+    "Encadrent l\u2019\xE9quipe en service": "Supervise the team on duty",
+    "NIVEAU 4": "LEVEL 4",
+    "\xC9quipiers polyvalents": "Versatile crew members",
+    "Accueil, cuisine, salle": "Counter, kitchen, dining room",
+    "NIVEAU 5": "LEVEL 5",
+    "Si\xE8ge mondial": "Global headquarters",
+    "SOMMET": "TOP",
+    "Gouvernance": "Governance",
+    "Direction g\xE9n\xE9rale": "Executive team",
+    "PDG et \xE9quipe ex\xE9cutive": "CEO and executive team",
+    "Fonctions centrales": "Central functions",
+    "Sept fonctions qui collaborent": "Seven functions that collaborate",
+    "Organisations internationales": "International organizations",
+    "March\xE9s, filiales, partenaires": "Markets, subsidiaries, partners",
+    "Structures locales": "Local structures",
+    "Responsabilit\xE9s variables selon les pays": "Responsibilities vary by country",
+    "Franchis\xE9s ind\xE9pendants": "Independent franchisees",
+    "Branche distincte \xB7 contrats de franchise": "Separate branch \xB7 franchise agreements",
+    "BRANCHE FRANCHISE": "FRANCHISE BRANCH",
+    "Restaurants exploit\xE9s par la soci\xE9t\xE9": "Company-operated restaurants",
+    "Restaurants franchis\xE9s": "Franchised restaurants",
+    "Exploit\xE9s par leurs franchis\xE9s": "Run by their franchisees",
+    "Responsables et \xE9quipes": "Managers and teams",
+    "Dans chaque restaurant": "In every restaurant",
+    "BASE": "BASE",
+    "Restaurants de la soci\xE9t\xE9": "Company restaurants",
+    "Qui dirige, comment l\u2019entreprise s\u2019organise, comment franchis\xE9s et \xE9quipes locales s\u2019y int\xE8grent.": "Who runs it, how the company is organized, and how franchisees and local teams fit in.",
+    "DANS LES COULISSES": "BEHIND THE SCENES",
+    "COMMENT": "HOW DOES",
+    "McDo": "McDonald\u2019s",
+    "FONCTIONNE&nbsp;?": "WORK?",
+    "Qui dirige ?": "Who runs it?",
+    "Qui d\xE9cide ?": "Who decides?",
+    "Et qui est derri\xE8re": "And who\u2019s behind",
+    "le comptoir": "the counter",
+    " ?": "?",
+    "STRUCTURES (EXEMPLES)": "STRUCTURES (EXAMPLES)",
+    "March\xE9 exploit\xE9 par McDonald\u2019s": "Market operated by McDonald\u2019s",
+    "partenaire": "partner",
+    "participation": "equity stake",
+    "RELATIONS": "RELATIONSHIPS",
+    "Hi\xE9rarchie du franchis\xE9": "Franchisee hierarchy",
+    "LES QUATRE RELATIONS": "THE FOUR RELATIONSHIPS",
+    "Hi\xE9rarchie interne": "Internal hierarchy",
+    "Contrats": "Contracts",
+    "franchis\xE9s": "franchisees",
+    "Coordination": "Coordination",
+    "fonctions": "functions",
+    "Organisation simplifi\xE9e \xE0 des fins p\xE9dagogiques \u2014 non officielle.": "Simplified organization for educational purposes \u2014 unofficial.",
+    "Illustration p\xE9dagogique : ce n\u2019est pas l\u2019organigramme officiel de McDonald\u2019s.": "Educational illustration: this is not McDonald\u2019s official org chart.",
+    "Exemples illustratifs : les structures r\xE9elles diff\xE8rent selon les march\xE9s.": "Illustrative examples: actual structures differ by market.",
+    "Selon le pays, le restaurant et son mode d\u2019exploitation, l\u2019organisation pr\xE9cise varie.": "Depending on the country, the restaurant and how it is run, the exact organization varies.",
+    "McDonald\u2019s&nbsp;: une <em>organisation mondiale</em>,<br>des <em>milliers d\u2019entrepreneurs</em> et d\u2019<em>\xE9quipes locales</em>.": "McDonald\u2019s: a <em>global organization</em>,<br><em>thousands of entrepreneurs</em> and <em>local teams</em>."
+  };
+
+  // src/i18n.js
+  var LANG = true ? "fr" : "fr";
+  var missing = /* @__PURE__ */ new Set();
+  function tr(s) {
+    if (LANG === "fr" || s == null || s === "") return s;
+    const v = EN[s];
+    if (v === void 0) {
+      if (!missing.has(s)) {
+        missing.add(s);
+        (window.__missingTr = window.__missingTr || []).push(s);
+      }
+      return s;
+    }
+    return v;
+  }
+
   // src/engine/labels.js
   var Labels = class {
     constructor(root, rig) {
@@ -29723,7 +29857,8 @@ void main() {
       this._v = new Vector3();
       this._c = new Vector3();
     }
-    add({ kind = "tag", title, sub = "", color = 16762668, anchor, dx = 0, dy = -60, t0, t1 = Infinity, inDur = 0.5, outDur = 0.4, align = "center", num = null, scale = 1, stem = true, className = "", radial = null }) {
+    add({ kind = "tag", title: titleFr, sub: subFr = "", color = 16762668, anchor, dx = 0, dy = -60, t0, t1 = Infinity, inDur = 0.5, outDur = 0.4, align = "center", num: numFr = null, scale = 1, stem = true, className = "", radial = null }) {
+      const title = tr(titleFr), sub = tr(subFr), num = tr(numFr);
       const el2 = document.createElement("div");
       el2.className = `lbl ${kind} ${className}`.trim();
       el2.style.setProperty("--accent", css(color));
@@ -29732,7 +29867,7 @@ void main() {
       el2.innerHTML = (hasStem ? '<i class="stem"></i>' : "") + `<i class="dot"></i><div class="box a-${align}">${num ? `<em>${num}</em>` : ""}<b>${title}</b>${sub ? `<span>${sub}</span>` : ""}</div>`;
       el2.style.display = "none";
       this.root.appendChild(el2);
-      const it = { kind, align, el: el2, anchor, dx, dy, radial, t0, t1, inDur, outDur, hasStem, box: el2.querySelector(".box"), stemEl: el2.querySelector(".stem"), dist: Math.hypot(dx, dy), ang: Math.atan2(dy, dx) };
+      const it = { title, sub, num, kind, align, el: el2, anchor, dx, dy, radial, t0, t1, inDur, outDur, hasStem, box: el2.querySelector(".box"), stemEl: el2.querySelector(".stem"), dist: Math.hypot(dx, dy), ang: Math.atan2(dy, dx) };
       this.items.push(it);
       return it;
     }
@@ -33528,6 +33663,179 @@ void main() {
     }
   };
 
+  // data/narration.en.json
+  var narration_en_default = {
+    _readme: "English voice-over (TikTok). Same structure, ids and start times as narration.json (french). 't' = start (s) on the scene timeline. 'text' = sentence spoken AND captioned. No executive names: roles only.",
+    voice: {
+      engine: "kokoro-onnx",
+      voice: "af_heart",
+      lang: "en-us",
+      speed: 1
+    },
+    hook: {
+      duration: 5,
+      lines: [
+        {
+          id: "h1",
+          t: 0.25,
+          text: "How does McDonald\u2019s work?"
+        },
+        {
+          id: "h2",
+          t: 2.15,
+          text: "Who runs it? Who decides? And who\u2019s behind the counter?"
+        }
+      ]
+    },
+    lines: [
+      {
+        id: "n01",
+        t: 0.5,
+        text: "Behind the brand you know, there\u2019s a global organization."
+      },
+      {
+        id: "n02",
+        t: 6.7,
+        text: "At the top, a board of directors oversees governance."
+      },
+      {
+        id: "n03",
+        t: 10.95,
+        text: "The CEO and the executive team run the company day to day."
+      },
+      {
+        id: "n04",
+        t: 15.7,
+        text: "Around headquarters, major specialized functions: finance, marketing, operations,"
+      },
+      {
+        id: "n05",
+        t: 21.4,
+        text: "human resources, technology, franchise development, legal."
+      },
+      {
+        id: "n06",
+        t: 25.6,
+        text: "Each has its own role, and they all coordinate their efforts."
+      },
+      {
+        id: "n08",
+        t: 31.6,
+        text: "Internationally, McDonald\u2019s is organized through different structures:"
+      },
+      {
+        id: "n09",
+        t: 36.9,
+        text: "operated markets, subsidiaries, licensed partners, affiliates."
+      },
+      {
+        id: "n10",
+        t: 41.3,
+        text: "Responsibilities vary by country."
+      },
+      {
+        id: "n11",
+        t: 46.6,
+        text: "In restaurants, the model relies on franchising."
+      },
+      {
+        id: "n12",
+        t: 50.2,
+        text: "The franchisee is an independent operator, bound by a contract and brand standards."
+      },
+      {
+        id: "n13",
+        t: 56.3,
+        text: "They run their own restaurant and their own teams."
+      },
+      {
+        id: "n14",
+        t: 62.3,
+        text: "Every restaurant starts with its operator."
+      },
+      {
+        id: "n15",
+        t: 65.3,
+        text: "The manager runs daily operations, supported by assistants,"
+      },
+      {
+        id: "n16",
+        t: 69.2,
+        text: "shift managers, and versatile crew members."
+      },
+      {
+        id: "n17",
+        t: 72.3,
+        text: "The exact organization varies by country and restaurant."
+      },
+      {
+        id: "n18",
+        t: 76.2,
+        text: "Here\u2019s the overall org chart."
+      },
+      {
+        id: "n19",
+        t: 78.4,
+        text: "At the top, governance and leadership; in the middle, functions and international."
+      },
+      {
+        id: "n20",
+        t: 83.7,
+        text: "On a separate branch, the franchisees; at the bottom, the teams."
+      },
+      {
+        id: "n21",
+        t: 87.9,
+        text: "McDonald\u2019s: a global organization, thousands of entrepreneurs, local teams.",
+        caption: false
+      }
+    ],
+    chapters: [
+      {
+        n: "01",
+        t0: 4.6,
+        t1: 14.7,
+        kicker: "GOVERNANCE AND LEADERSHIP",
+        title: "At the top: the board and executive leadership"
+      },
+      {
+        n: "02",
+        t0: 15.5,
+        t1: 29.3,
+        kicker: "THE MAIN FUNCTIONS",
+        title: "Seven functions that work together"
+      },
+      {
+        n: "03",
+        t0: 30.7,
+        t1: 44.2,
+        kicker: "THE INTERNATIONAL ORGANIZATION",
+        title: "Structures that vary by market"
+      },
+      {
+        n: "04",
+        t0: 45.9,
+        t1: 59.4,
+        kicker: "THE FRANCHISE SYSTEM",
+        title: "Independent operators, one brand"
+      },
+      {
+        n: "05",
+        t0: 60.5,
+        t1: 74.4,
+        kicker: "INSIDE THE RESTAURANT",
+        title: "Five levels, from operator to crew"
+      },
+      {
+        n: "06",
+        t0: 75.6,
+        t1: 85.3,
+        kicker: "THE FULL ORG CHART",
+        title: "Four types of relationships"
+      }
+    ]
+  };
+
   // data/vo_durations.json
   var vo_durations_default = {
     n01: 3.648,
@@ -33554,6 +33862,36 @@ void main() {
     h2: 2.987
   };
 
+  // data/vo_durations.en.json
+  var vo_durations_en_default = {
+    h1: 1.515,
+    h2: 3.2,
+    n01: 3.221,
+    n02: 2.944,
+    n03: 3.84,
+    n04: 5.184,
+    n05: 3.691,
+    n06: 3.243,
+    n08: 3.797,
+    n09: 3.904,
+    n10: 2.069,
+    n11: 2.795,
+    n12: 4.992,
+    n13: 2.645,
+    n14: 2.197,
+    n15: 3.648,
+    n16: 2.496,
+    n17: 3.584,
+    n18: 1.749,
+    n19: 4.437,
+    n20: 3.435,
+    n21: 5.099
+  };
+
+  // src/narration.js
+  var NARR = LANG === "en" ? narration_en_default : narration_default;
+  var VOD = LANG === "en" ? vo_durations_en_default : vo_durations_default;
+
   // src/timeline.js
   var TL = {
     total: 93.5,
@@ -33564,7 +33902,7 @@ void main() {
     s5: [60, 75],
     s6: [75, 93.5]
   };
-  var HOOK = narration_default.hook.duration;
+  var HOOK = NARR.hook.duration;
   var VIDEO_TOTAL = HOOK + TL.total;
   var CUTS = [
     { a: 0, b: 1.25, s0: 86, s1: 86.9 },
@@ -33604,18 +33942,18 @@ void main() {
     fx.innerHTML = '<div class="vignette"></div><div class="pulse"></div><div class="flash"></div>';
     const scrimEl = el("div", "scrim");
     layer.prepend(scrimEl);
-    const intro = el("div", "intro", `<div class="k"><i></i>INSIDE THE ORGANIZATION</div><h1>McDonald\u2019s</h1><p>Qui dirige, comment l\u2019entreprise s\u2019organise, comment franchis\xE9s et \xE9quipes locales s\u2019y int\xE8grent.</p>`);
+    const intro = el("div", "intro", `<div class="k"><i></i>INSIDE THE ORGANIZATION</div><h1>McDonald\u2019s</h1><p>${tr("Qui dirige, comment l\u2019entreprise s\u2019organise, comment franchis\xE9s et \xE9quipes locales s\u2019y int\xE8grent.")}</p>`);
     layer.appendChild(intro);
     tl.set(intro, { opacity: 0 }, 0).fromTo(intro, { opacity: 0 }, { opacity: 1, duration: 0.01 }, 0.25).fromTo(intro.querySelector(".k"), { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.7, ease: "power3.out" }, 0.3).fromTo(intro.querySelector(".k i"), { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "power3.out" }, 0.35).fromTo(intro.querySelector("h1"), { y: 70, opacity: 0, clipPath: "inset(0 0 100% 0)" }, { y: 0, opacity: 1, clipPath: "inset(0 0 0% 0)", duration: 0.9, ease: "power4.out" }, 0.45).fromTo(intro.querySelector("p"), { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" }, 0.95).to(intro, { opacity: 0, x: -50, duration: 0.7, ease: "power2.in" }, 3.8).set(intro, { visibility: "hidden" }, 4.6);
     const prog = el("div", "progress");
     layer.appendChild(prog);
-    const dots = narration_default.chapters.map((c) => {
+    const dots = NARR.chapters.map((c) => {
       const d = el("div", "pd", `<b>${c.n}</b>`);
       prog.appendChild(d);
       return d;
     });
     tl.fromTo(prog, { opacity: 0, y: -16 }, { opacity: 1, y: 0, duration: 0.6 }, 4.4);
-    narration_default.chapters.forEach((c, i) => {
+    NARR.chapters.forEach((c, i) => {
       const ch = el("div", "chapter", `<div class="kk"><span>${c.n}</span><i></i><em>${c.kicker}</em></div><h2>${c.title}</h2>`);
       layer.appendChild(ch);
       tl.set(ch, { opacity: 0 }, 0).fromTo(ch, { opacity: 0 }, { opacity: 1, duration: 0.01 }, c.t0).fromTo(ch.querySelector(".kk span"), { scale: 0.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(2.4)" }, c.t0).fromTo(ch.querySelector(".kk i"), { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "power3.out" }, c.t0 + 0.1).fromTo(ch.querySelector(".kk em"), { x: -28, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, c.t0 + 0.2).fromTo(ch.querySelector("h2"), { y: 36, opacity: 0, clipPath: "inset(0 0 100% 0)" }, { y: 0, opacity: 1, clipPath: "inset(0 0 0% 0)", duration: 0.8, ease: "power4.out" }, c.t0 + 0.3).to(ch, { opacity: 0, y: -14, duration: 0.5, ease: "power2.in" }, c.t1).set(ch, { visibility: "hidden" }, c.t1 + 0.6);
@@ -33623,12 +33961,12 @@ void main() {
       tl.set(dots[i], { opacity: 0.55 }, 0);
     });
     const legend = (cfg) => {
-      const box2 = el("div", "legend " + (cfg.cls || ""), cfg.title ? `<h4>${cfg.title}</h4>` : "");
+      const box2 = el("div", "legend " + (cfg.cls || ""), cfg.title ? `<h4>${tr(cfg.title)}</h4>` : "");
       cfg.rows.forEach((r) => {
-        const row = el("div", "row", `<span class="sw ${r.style || ""}" style="--c:${r.color}"></span><b>${r.label}</b>${r.sub ? `<small>${r.sub}</small>` : ""}`);
+        const row = el("div", "row", `<span class="sw ${r.style || ""}" style="--c:${r.color}"></span><b>${tr(r.label)}</b>${r.sub ? `<small>${tr(r.sub)}</small>` : ""}`);
         box2.appendChild(row);
       });
-      if (cfg.foot) box2.appendChild(el("div", "foot", cfg.foot));
+      if (cfg.foot) box2.appendChild(el("div", "foot", tr(cfg.foot)));
       layer.appendChild(box2);
       tl.set(box2, { opacity: 0 }, 0);
       tl.fromTo(box2, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, cfg.t0);
@@ -33656,7 +33994,7 @@ void main() {
       { color: "#74d7ff", label: "Coordination", sub: "fonctions", style: "dash" }
     ] });
     const note = (text, t0, t1, cls = "") => {
-      const n = el("div", "note " + cls, `<i>i</i><span>${text}</span>`);
+      const n = el("div", "note " + cls, `<i>i</i><span>${tr(text)}</span>`);
       layer.appendChild(n);
       tl.set(n, { opacity: 0 }, 0).fromTo(n, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, t0);
       if (t1 < TOTAL) tl.to(n, { opacity: 0, y: 10, duration: 0.5 }, t1);
@@ -33665,10 +34003,10 @@ void main() {
     note("Illustration p\xE9dagogique : ce n\u2019est pas l\u2019organigramme officiel de McDonald\u2019s.", 85.9, 88.3, "bl");
     note("Exemples illustratifs : les structures r\xE9elles diff\xE8rent selon les march\xE9s.", 37.8, 44.2, "tr");
     note("Selon le pays, le restaurant et son mode d\u2019exploitation, l\u2019organisation pr\xE9cise varie.", 72.4, 74.4, "mid");
-    narration_default.lines.forEach((l, i) => {
+    NARR.lines.forEach((l, i) => {
       if (l.caption === false) return;
       const words = l.text.split(/\s+/).length;
-      let dur = (vo_durations_default[l.id] ?? words * 0.42) + 0.25;
+      let dur = (VOD[l.id] ?? words * 0.42) + 0.25;
       if (PORTRAIT && l.id === "n20") dur = Math.min(dur, 85.4 - l.t);
       const c = el("div", "cap", `<span>${l.text}</span>`);
       layer.appendChild(c);
@@ -33681,7 +34019,7 @@ void main() {
     [[15, 0.34], [30.4, 0.4], [60.2, 0.3], [75.2, 0.38]].forEach(([t, a]) => {
       tl.to(pulse, { opacity: a, duration: 0.25, ease: "power2.out" }, t).to(pulse, { opacity: 0, duration: 0.7, ease: "power2.in" }, t + 0.25);
     });
-    const fin = el("div", "final", `<div class="mark"></div><p>McDonald\u2019s&nbsp;: une <em>organisation mondiale</em>,<br>des <em>milliers d\u2019entrepreneurs</em> et d\u2019<em>\xE9quipes locales</em>.</p>`);
+    const fin = el("div", "final", `<div class="mark"></div><p>${tr("McDonald\u2019s&nbsp;: une <em>organisation mondiale</em>,<br>des <em>milliers d\u2019entrepreneurs</em> et d\u2019<em>\xE9quipes locales</em>.")}</p>`);
     layer.appendChild(fin);
     const scrim = scrimEl;
     tl.set(fin, { opacity: 0 }, 0).set(scrim, { opacity: 0 }, 0).to(scrim, { opacity: 1, duration: 1.1, ease: "power2.inOut" }, 88).fromTo(fin, { opacity: 0 }, { opacity: 1, duration: 0.01 }, 88.5).fromTo(fin.querySelector(".mark"), { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.8, ease: "power3.out" }, 88.6).fromTo(fin.querySelector("p"), { y: 40, opacity: 0, clipPath: "inset(0 0 100% 0)" }, { y: 0, opacity: 1, clipPath: "inset(0 0 0% 0)", duration: 1.1, ease: "power4.out" }, 88.8);
@@ -33690,9 +34028,9 @@ void main() {
     tl.to({}, { duration: 1e-3 }, TOTAL - 1e-3);
     const hook = el("div", "hook", `
     <div class="hk-scrim"></div>
-    <div class="hk-top"><i></i>DANS LES COULISSES</div>
-    <div class="hk-q"><span class="w1">COMMENT</span><span class="w2">McDo</span><span class="w3">FONCTIONNE&nbsp;?</span></div>
-    <div class="hk-sub"><span class="s1">Qui dirige ?</span><span class="s2">Qui d\xE9cide ?</span><span class="s3">Et qui est derri\xE8re<i class="br"></i> <b>le comptoir</b> ?</span></div>`);
+    <div class="hk-top"><i></i>${tr("DANS LES COULISSES")}</div>
+    <div class="hk-q"><span class="w1">${tr("COMMENT")}</span><span class="w2">${tr("McDo")}</span><span class="w3">${tr("FONCTIONNE&nbsp;?")}</span></div>
+    <div class="hk-sub"><span class="s1">${tr("Qui dirige ?")}</span><span class="s2">${tr("Qui d\xE9cide ?")}</span><span class="s3">${tr("Et qui est derri\xE8re")}<i class="br"></i> <b>${tr("le comptoir")}</b>${tr(" ?")}</span></div>`);
     layer.appendChild(hook);
     const q = (sel) => hook.querySelector(sel);
     master.set(hook, { opacity: 1 }, 0);
@@ -33755,6 +34093,7 @@ void main() {
   };
   window.__renderAt = renderAt;
   window.__stage = stage;
+  window.__labels = labels;
   window.addEventListener("hf-seek", (e) => renderAt(e.detail.time));
   renderAt(window.__hfThreeTime || 0);
 })();

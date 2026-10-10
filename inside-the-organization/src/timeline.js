@@ -1,4 +1,4 @@
-import NARR from '../data/narration.json';
+import { NARR } from './narration.js';
 
 // Découpage du film (secondes de la SCÈNE, c'est-à-dire hors hook). Une seule source de vérité.
 export const TL = {

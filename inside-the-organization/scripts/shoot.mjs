@@ -18,7 +18,7 @@ const page = await browser.newPage({ viewport: portrait ? { width: 1080, height:
 const errors = [];
 page.on('console', (m) => { if (['error', 'warning'].includes(m.type())) errors.push(m.type() + ': ' + m.text()); });
 page.on('pageerror', (e) => errors.push('pageerror: ' + e.message));
-await page.goto(pathToFileURL(path.resolve(portrait ? 'tiktok/index.html' : 'index.html')).href);
+await page.goto(pathToFileURL(path.resolve(process.env.PROJECT_INDEX || (portrait ? 'tiktok/index.html' : 'index.html'))).href);
 await page.waitForFunction(() => typeof window.__renderAt === 'function', null, { timeout: 120000 });
 await page.evaluate(() => document.fonts.ready);
 for (const t of times) {

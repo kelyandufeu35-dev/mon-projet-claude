@@ -3,6 +3,7 @@ import { seg, smooth, easeOutCubic, clamp } from '../util/math.js';
 import { css } from './palette.js';
 import { W, H } from './stage.js';
 import { SAFE, LBL, LBLD, PORTRAIT } from '../format.js';
+import { tr } from '../i18n.js';
 
 /* =========================================================================
  * Étiquettes HTML ancrées dans la 3D (texte net, polices locales).
@@ -11,7 +12,8 @@ import { SAFE, LBL, LBLD, PORTRAIT } from '../format.js';
 export class Labels {
   constructor(root, rig) { this.root = root; this.rig = rig; this.items = []; this._v = new THREE.Vector3(); this._c = new THREE.Vector3(); }
 
-  add({ kind = 'tag', title, sub = '', color = 0xffc72c, anchor, dx = 0, dy = -60, t0, t1 = Infinity, inDur = 0.5, outDur = 0.4, align = 'center', num = null, scale = 1, stem = true, className = '', radial = null }) {
+  add({ kind = 'tag', title: titleFr, sub: subFr = '', color = 0xffc72c, anchor, dx = 0, dy = -60, t0, t1 = Infinity, inDur = 0.5, outDur = 0.4, align = 'center', num: numFr = null, scale = 1, stem = true, className = '', radial = null }) {
+    const title = tr(titleFr), sub = tr(subFr), num = tr(numFr);
     const el = document.createElement('div');
     el.className = `lbl ${kind} ${className}`.trim();
     el.style.setProperty('--accent', css(color));
@@ -22,7 +24,7 @@ export class Labels {
       `<div class="box a-${align}">${num ? `<em>${num}</em>` : ''}<b>${title}</b>${sub ? `<span>${sub}</span>` : ''}</div>`;
     el.style.display = 'none';
     this.root.appendChild(el);
-    const it = { kind, align, el, anchor, dx, dy, radial, t0, t1, inDur, outDur, hasStem, box: el.querySelector('.box'), stemEl: el.querySelector('.stem'), dist: Math.hypot(dx, dy), ang: Math.atan2(dy, dx) };
+    const it = { title, sub, num, kind, align, el, anchor, dx, dy, radial, t0, t1, inDur, outDur, hasStem, box: el.querySelector('.box'), stemEl: el.querySelector('.stem'), dist: Math.hypot(dx, dy), ang: Math.atan2(dy, dx) };
     this.items.push(it);
     return it;
   }
