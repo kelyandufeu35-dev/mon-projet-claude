@@ -1,7 +1,7 @@
 # Elon Musk : anatomie d'une fortune
 
-Documentaire de motion design **3D isométrique** (103,5 s, 30 fps ; **16:9** 1920 × 1080 et **9:16** 1080 × 1920 pour
-TikTok / Reels / Shorts) qui explique comment fonctionne
+Documentaire de motion design **3D isométrique** (30 fps ; **16:9** 1920 × 1080 et **9:16** 1080 × 1920 pour
+TikTok / Reels / Shorts ; **français** 103,5 s et **anglais** 112,4 s) qui explique comment fonctionne
 réellement la richesse d'Elon Musk : une immense maquette financière où chaque entreprise, chaque action et chaque
 mécanisme (capitalisation, volatilité, liquidités, prêt garanti par des titres) devient visible.
 
@@ -63,6 +63,37 @@ npm run dev:tiktok       # prévisualisation du format vertical
 npm run render:tiktok    # rendu MP4 9:16 -> out/musk-anatomie-tiktok.mp4
 ```
 
+### Version anglaise (EN)
+
+Même film, mêmes figures, **texte à l'écran, sous-titres, voix off et sons recalés en anglais**. La langue est choisie par
+la page (`window.MUSK_LANG = "en"`, posé par le build) : dans le code, chaque texte est écrit en deux versions côte à côte,
+`ln("français", "english")` (`src/core/lang.js`), y compris les ancres de synchronisation sur la voix
+(`when("s2b", ln("onze pour cent", "eleven percent"))`) ; les nombres et dates suivent la langue (`1 004 Md$` → `$1,004B`,
+`10 oct. 2026` → `Oct 10, 2026`). Les quatre variantes sont générées par `npm run build` :
+
+| dossier | format | langue | voix / mixage |
+|---|---|---|---|
+| *(racine)* | 16:9 | français | `assets/audio/mix.m4a` |
+| `tiktok/` | 9:16 | français | idem |
+| `en/` | 16:9 | anglais | `assets/audio/mix.en.m4a` |
+| `tiktok-en/` | 9:16 | anglais | idem |
+
+```bash
+# voix anglaise : Kokoro, voix américaine af_heart, vitesse 1,12 (≈ même rythme que le français)
+.venv/bin/python scripts/tts.py --models /chemin/vers/models --script narration/script.en.json --out assets/audio/narration-en --speed 1.12
+AUDIO_LANG=en PYTHON=.venv/bin/python npm run audio:en      # timeline.en.json + mix.en.m4a (même balance voix/musique/bruitages)
+npm run render:tiktok-en                                      # -> out/musk-anatomie-tiktok-en.mp4  (npm run render:en pour le 16:9)
+npm run check:tiktok-en                                       # contrôles officiels sur la version anglaise
+```
+
+Prononciations anglaises imposées dans `narration/pronunciations.en.json` (le moteur plaçait l'accent de « Elon » sur la
+mauvaise syllabe). La traduction a été relue pour le sens et la cohérence des chiffres, **pas par un anglophone natif**, et
+la voix **n'a pas été écoutée** : à vérifier avant diffusion. Le français est inchangé pixel pour pixel par cette
+refonte (captures comparées avant / après).
+
+Contrôle de mise en page de toutes les variantes, toutes les 0,5 s (cartes qui se chevauchent ou sortent du cadre) :
+`node scripts/overlaps.mjs --file tiktok-en/index.html --vp 1080x1920`.
+
 Découpage pour envoi : un fichier par scène, en CRF 16 (très haute qualité), chacun sous 30 Mio :
 
 ```bash
@@ -86,18 +117,18 @@ export PRODUCER_PLAYER_READY_TIMEOUT_MS=120000     # compilation des shaders en 
 
 ```
 index.html                  composition racine (1920×1080, durée calculée par le build) + HUD + <audio>
-tiktok/                     mini-projet vertical 1080×1920 (généré par le build, non versionné)
+tiktok/ en/ tiktok-en/      variantes générées par le build (non versionnées) : 9:16 FR, 16:9 EN, 9:16 EN
 src/main.js                 orchestration : monde 3D, caméra globale, ambiance, voiles, écoute de « hf-seek »
 src/timing.js               table de timing unique, calée sur les durées réelles de la voix
-src/core/                   moteur : World (rendu), Builder (géométrie fusionnée), palette, HUD, format (16:9 / 9:16), utilitaires
-src/portrait.css            styles propres au format vertical
+src/core/                   moteur : World (rendu), Builder (géométrie fusionnée), palette, HUD, format (16:9 / 9:16), langue (fr / en), utilitaires
+src/portrait.css            styles propres au format vertical ; src/lang-en.css : réglages de la version anglaise
 src/components/             bibliothèque réutilisable (voir ci‑dessous)
 src/scenes/                 hub (scène 1 + centre du finale), tesla, spacex, bourse, bank (5 et 6), finale
 src/cues.js                 signaux sonores calés sur les mêmes ancres que l'image
 data/facts.json             chiffres, dates, sources, statut de vérification
-narration/script.json       texte de la voix off
-narration/pronunciations.json  prononciations imposées (IPA) : Elon Musk, SpaceX, xAI
-scripts/                    build, tts, mixage audio, captures de développement, benchmark
+narration/script.json       texte de la voix off (français) ; script.en.json : version anglaise
+narration/pronunciations*.json  prononciations imposées (IPA) : Elon Musk, SpaceX, xAI (fr et en)
+scripts/                    build, tts, mixage audio, captures de développement, contrôle des chevauchements, benchmark
 ```
 
 **Déterminisme.** Hyperframes envoie à chaque image un évènement `hf-seek` portant le temps exact. Toute la scène

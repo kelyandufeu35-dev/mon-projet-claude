@@ -12,6 +12,7 @@ import { ease, inv, clamp, lerp, TAU } from "../core/util.js";
 import { SC, when } from "../timing.js";
 import { POS } from "../layout.js";
 import { T2 } from "./tesla.js";
+import { ln } from "../core/lang.js";
 
 export const T3 = {
   t0: SC.s3.t0,
@@ -20,13 +21,13 @@ export const T3 = {
   ignite: SC.s3.t0 + 0.95,
   fly0: SC.s3.t0 + 1.25,
   fly1: SC.s3.t0 + 3.05,
-  merge: when("s3b", "absorbé") - 0.6,
-  ipo: when("s3b", "entrée en Bourse") - 0.2,
-  liftoff: when("s3b", "entrée en Bourse") + 0.2,
-  once: when("s3b", "Participation") - 0.1,
-  ev: when("s3c", "Valeur d'entreprise") - 0.1,
-  cap: when("s3c", "capitalisation") - 0.1,
-  share: when("s3c", "part personnelle") - 0.2,
+  merge: when("s3b", ln("absorbé", "absorbed")) - 0.6,
+  ipo: when("s3b", ln("entrée en Bourse", "went public")) - 0.2,
+  liftoff: when("s3b", ln("entrée en Bourse", "went public")) + 0.2,
+  once: when("s3b", ln("Participation", "The stake")) - 0.1,
+  ev: when("s3c", ln("Valeur d'entreprise", "Enterprise value")) - 0.1,
+  cap: when("s3c", ln("capitalisation", "market capitalization")) - 0.1,
+  share: when("s3c", ln("part personnelle", "personal stake")) - 0.2,
   end: SC.s3.t1,
 };
 
@@ -176,30 +177,30 @@ export function buildSpacex(ctx) {
   // --- HUD ---------------------------------------------------------------------------------------------------------------------
   hud.card({
     id: "s3-merge", cls: "pill card-left merge", t0: T3.merge, t1: T3.once + 2.4, x: 56, y: 262, align: "left", enter: "right",
-    html: `<b>2 fév. 2026</b> · SpaceX absorbe <b>xAI</b><br><span>échange 100 % en actions (0,1433 action SpaceX par action xAI) ;<br>xAI devient une filiale détenue à 100 % — puis « SpaceXAI » (juil. 2026, source unique)</span>`,
+    html: ln(`<b>2 fév. 2026</b> · SpaceX absorbe <b>xAI</b><br><span>échange 100 % en actions (0,1433 action SpaceX par action xAI) ;<br>xAI devient une filiale détenue à 100 % — puis « SpaceXAI » (juil. 2026, source unique)</span>`, `<b>Feb 2, 2026</b> · SpaceX absorbs <b>xAI</b><br><span>100% stock swap (0.1433 SpaceX share per xAI share);<br>xAI becomes a wholly owned subsidiary — then “SpaceXAI” (July 2026, single source)</span>`),
   });
   hud.card({
     id: "s3-ipo", cls: "pill card-left ipo", t0: T3.ipo, t1: T3.once + 2.4, x: 56, y: 430, align: "left", enter: "right",
-    html: `<b>12 juin 2026</b> · cotation <b>Nasdaq : SPCX</b><br><span>introduction à 135 $ l'action ≈ 75 Md$ levés (presse, S-1/A)</span>`,
+    html: ln(`<b>12 juin 2026</b> · cotation <b>Nasdaq : SPCX</b><br><span>introduction à 135 $ l'action ≈ 75 Md$ levés (presse, S-1/A)</span>`, `<b>June 12, 2026</b> · listing <b>Nasdaq: SPCX</b><br><span>IPO at $135 a share ≈ $75B raised (press, S-1/A)</span>`),
   });
   hud.card({
     id: "s3-once", cls: "pill once", t0: T3.once, t1: T3.ev - 0.1, x: 960, y: 200, enter: "down",
-    html: `<b>xAI ⊂ SpaceX</b> → une seule ligne dans le patrimoine<br><span>pas de double comptage de la même participation économique</span>`,
+    html: ln(`<b>xAI ⊂ SpaceX</b> → une seule ligne dans le patrimoine<br><span>pas de double comptage de la même participation économique</span>`, `<b>xAI ⊂ SpaceX</b> → a single line in net worth<br><span>no double counting of the same economic stake</span>`),
   });
   hud.card({
     id: "s3-ev", cls: "tag", t0: T3.ev, t1: T3.end - 0.3, enter: "left",
     anchor: () => new THREE.Vector3(sx + 2 + 12, 58 + 6, sz + 12), offset: [160, -70],
-    html: `<b>Valeur d'entreprise</b><br><span>= capitalisation + dettes − trésorerie</span>`,
+    html: ln(`<b>Valeur d'entreprise</b><br><span>= capitalisation + dettes − trésorerie</span>`, `<b>Enterprise value</b><br><span>= market cap + debt − cash</span>`),
   });
   hud.card({
     id: "s3-cap", cls: "tag cyan", t0: T3.cap, t1: T3.end - 0.3, enter: "left",
     anchor: () => new THREE.Vector3(sx + 2 + 8.75, 58 - 2, sz + 8.75), offset: [200, 20],
-    html: `<b>Capitalisation boursière</b><br><span>= nombre d'actions × prix</span>`,
+    html: ln(`<b>Capitalisation boursière</b><br><span>= nombre d'actions × prix</span>`, `<b>Market capitalization</b><br><span>= number of shares × price</span>`),
   });
   hud.card({
     id: "s3-share", cls: "tag gold", t0: T3.share, t1: T3.end - 0.3, enter: "right",
     anchor: () => new THREE.Vector3(sx + 2 - 4.5, 58 + 3, sz - 4.5 + 4.25), offset: [-220, 80],
-    html: `<b>Part de Musk ≈ 38 à 42 %</b><br><span>de la capitalisation (estimations) ·<br>≈ 82 % des voix : contrôle ≠ propriété</span>`,
+    html: ln(`<b>Part de Musk ≈ 38 à 42 %</b><br><span>de la capitalisation (estimations) ·<br>≈ 82 % des voix : contrôle ≠ propriété</span>`, `<b>Musk's stake ≈ 38 to 42%</b><br><span>of market cap (estimates) ·<br>≈ 82% of the votes: control ≠ ownership</span>`),
   });
 
   // --- mise à jour ---------------------------------------------------------------------------------------------------------------

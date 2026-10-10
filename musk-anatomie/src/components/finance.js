@@ -5,11 +5,12 @@ import { Builder } from "../core/builder.js";
 import { mat, colored, C } from "../core/palette.js";
 import { labelTexture } from "../core/world.js";
 import { clamp, lerp, ease, TAU, rng } from "../core/util.js";
+import { ln } from "../core/lang.js";
 
 // ---------------------------------------------------------------------------
 // Certificat d'action : texture + dalle arrondie
 // ---------------------------------------------------------------------------
-export function shareTexture(label, { accent = "#58b4ff", sub = "ACTION · CERTIFICAT", w = 1280, h = 800 } = {}) {
+export function shareTexture(label, { accent = "#58b4ff", sub = ln("ACTION · CERTIFICAT", "SHARE · CERTIFICATE"), w = 1280, h = 800 } = {}) {
   const cv = document.createElement("canvas");
   cv.width = w; cv.height = h;
   const g = cv.getContext("2d");
@@ -39,7 +40,7 @@ export function shareTexture(label, { accent = "#58b4ff", sub = "ACTION · CERTI
   g.fillText(label, w / 2, h / 2 + 12);
   g.shadowBlur = 0;
   g.fillStyle = "rgba(255,255,255,0.55)"; g.font = '500 44px "JetBrains Mono"';
-  g.fillText("N° 000 001  ·  1 ACTION", w / 2, h - 132);
+  g.fillText(ln("N° 000 001  ·  1 ACTION", "No. 000 001  ·  1 SHARE"), w / 2, h - 132);
   const tex = new THREE.CanvasTexture(cv);
   tex.colorSpace = THREE.SRGBColorSpace;
   tex.anisotropy = 8;

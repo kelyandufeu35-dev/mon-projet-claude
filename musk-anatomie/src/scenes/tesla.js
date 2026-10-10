@@ -9,19 +9,20 @@ import { Mosaic, makeShareBlock, makePadlock } from "../components/finance.js";
 import { ease, inv, clamp, lerp, track, TAU, rng } from "../core/util.js";
 import { seg, SC, when, whenEnd } from "../timing.js";
 import { POS } from "../layout.js";
+import { ln } from "../core/lang.js";
 
 export const T2 = {
   t0: SC.s2.t0,
   t1: SC.s2.t1,
   build0: SC.s2.t0 + 0.1,
   build1: SC.s2.t0 + 2.3,
-  grid: when("s2a", "petite part") - 0.1,
-  cap: when("s2a", "capitalisation") - 0.15,
-  eleven: when("s2b", "onze pour cent") - 0.3,
-  formula: when("s2b", "Sa participation") - 0.2,
-  up: when("s2b", "le cours monte") - 0.1,
-  down: when("s2b", "il baisse") - 0.15,
-  restr: when("s2c", "restreintes") - 0.35,
+  grid: when("s2a", ln("petite part", "small piece")) - 0.1,
+  cap: when("s2a", ln("capitalisation", "market capitalization")) - 0.15,
+  eleven: when("s2b", ln("onze pour cent", "eleven percent")) - 0.3,
+  formula: when("s2b", ln("Sa participation", "His stake")) - 0.2,
+  up: when("s2b", ln("le cours monte", "when the price goes up")) - 0.1,
+  down: when("s2b", ln("il baisse", "when it falls")) - 0.15,
+  restr: when("s2c", ln("restreintes", "restricted")) - 0.35,
   opts: when("s2c", "options") - 0.4,
   hero: when("s2c", "options") + 0.4,
   end: SC.s2.t1,
@@ -162,43 +163,43 @@ export function buildTesla(ctx) {
   hud.card({
     id: "s2-grid", cls: "tag", t0: T2.grid + 0.6, t1: T2.formula + 0.4, enter: "up",
     anchor: () => new THREE.Vector3(POS.tesla.x + 4.5 * CELL, GRID_Y + 1.5, POS.tesla.z - 6 - 4.5 * CELL), offset: [190, -10],
-    html: `<b>100 blocs</b> = 100 % des actions<br><span>(illustration)</span>`,
+    html: ln(`<b>100 blocs</b> = 100 % des actions<br><span>(illustration)</span>`, `<b>100 blocks</b> = 100% of shares<br><span>(illustration)</span>`),
   });
   hud.card({
     id: "s2-cap", cls: "formula small", t0: T2.cap, t1: T2.formula + 0.2, x: 56, y: 270, align: "left", enter: "right",
-    html: `<em>Capitalisation boursière</em><br>= Nombre total d'actions × Prix de l'action`,
+    html: ln(`<em>Capitalisation boursière</em><br>= Nombre total d'actions × Prix de l'action`, `<em>Market capitalization</em><br>= Total number of shares × Share price`),
   });
   hud.card({
     id: "s2-eleven", cls: "tag gold", t0: T2.eleven, t1: T2.opts - 0.3, enter: "scale",
     anchor: () => new THREE.Vector3(POS.tesla.x - 3 * CELL, GRID_Y + 3.4, POS.tesla.z - 6 + 3.5 * CELL), offset: [-240, -40],
-    html: `<b>Elon Musk ≈ 11 %</b><br><span>11 blocs sur 100 · estimation Forbes (oct. 2026)</span>`,
+    html: ln(`<b>Elon Musk ≈ 11 %</b><br><span>11 blocs sur 100 · estimation Forbes (oct. 2026)</span>`, `<b>Elon Musk ≈ 11%</b><br><span>11 blocks out of 100 · Forbes estimate (Oct 2026)</span>`),
   });
   hud.card({
     id: "s2-formula", cls: "formula", t0: T2.formula, t1: T2.restr + 0.6, x: 960, y: 178, enter: "down",
-    html: `<em>Valeur théorique de la participation</em><br><strong>= Nombre d'actions <i>×</i> Prix de l'action</strong>`,
+    html: ln(`<em>Valeur théorique de la participation</em><br><strong>= Nombre d'actions <i>×</i> Prix de l'action</strong>`, `<em>Theoretical value of the stake</em><br><strong>= Number of shares <i>×</i> Share price</strong>`),
   });
   hud.card({
     id: "s2-up", cls: "arrow up", t0: T2.up + 0.2, t1: T2.down - 0.2, x: 1560, y: 400, enter: "scale",
-    html: `▲ cours<br><span>participation ▲</span>`,
+    html: ln(`▲ cours<br><span>participation ▲</span>`, `▲ price<br><span>stake ▲</span>`),
   });
   hud.card({
     id: "s2-down", cls: "arrow down", t0: T2.down + 0.1, t1: T2.down + 2.2, x: 1560, y: 400, enter: "scale",
-    html: `▼ cours<br><span>participation ▼</span>`,
+    html: ln(`▼ cours<br><span>participation ▼</span>`, `▼ price<br><span>stake ▼</span>`),
   });
   hud.card({
     id: "s2-held", cls: "tag gold", t0: T2.restr - 0.6, t1: T2.end - 0.6, enter: "right",
     anchor: () => new THREE.Vector3(POS.tesla.x - 3 * CELL, GRID_Y + 1.0, POS.tesla.z - 6 + 3.5 * CELL), offset: [-240, 62],
-    html: `<b>Détenues</b><br><span>actions que Musk possède</span>`,
+    html: ln(`<b>Détenues</b><br><span>actions que Musk possède</span>`, `<b>Owned</b><br><span>shares Musk holds</span>`),
   });
   hud.card({
     id: "s2-restr", cls: "tag amber", t0: T2.restr, t1: T2.end - 0.5, enter: "left",
     anchor: () => new THREE.Vector3(POS.tesla.x + 20, GRID_Y + 3, POS.tesla.z - 11), offset: [210, -40],
-    html: `<b>🔒 Restreintes</b><br><span>423,7 M d'actions du plan 2025, sous accord de vote : ni libre cession, ni vote</span>`,
+    html: ln(`<b>🔒 Restreintes</b><br><span>423,7 M d'actions du plan 2025, sous accord de vote : ni libre cession, ni vote</span>`, `<b>🔒 Restricted</b><br><span>423.7M shares from the 2025 plan, under a voting agreement: not freely transferable, no vote</span>`),
   });
   hud.card({
     id: "s2-opts", cls: "tag cyan", t0: T2.opts, t1: T2.end - 0.5, enter: "left",
     anchor: () => new THREE.Vector3(POS.tesla.x + 20, GRID_Y + 1, POS.tesla.z - 1), offset: [200, 70],
-    html: `<b>Options</b><br><span>plan 2018 : 303,96 M, exercées à 23,34 $ en juin 2026</span>`,
+    html: ln(`<b>Options</b><br><span>plan 2018 : 303,96 M, exercées à 23,34 $ en juin 2026</span>`, `<b>Options</b><br><span>2018 plan: 303.96M, exercised at $23.34 in June 2026</span>`),
   });
 
   // --- mise à jour ------------------------------------------------------------------------------------------

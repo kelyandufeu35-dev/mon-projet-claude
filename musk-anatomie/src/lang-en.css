@@ -1,0 +1,3 @@
+/* Version anglaise : injecté par scripts/build.mjs dans en/ et tiktok-en/. */
+/* le « $ » précède le nombre : on aligne le nombre à gauche dans son gabarit fixe (sans saut quand il change) */
+.bigcount .eq .px { text-align: left; }

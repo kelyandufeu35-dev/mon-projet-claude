@@ -11,17 +11,18 @@ import { Burst } from "../components/fx.js";
 import { ease, inv, clamp, lerp, track, fmt, TAU, rng } from "../core/util.js";
 import { SC, when } from "../timing.js";
 import { POS } from "../layout.js";
+import { ln } from "../core/lang.js";
 
 export const T4 = {
   t0: SC.s4.t0,
   t1: SC.s4.t1,
   build0: SC.s4.t0 + 1.0,
   build1: SC.s4.t0 + 3.2,
-  example: when("s4b", "Exemple") - 0.1,
-  settle: when("s4b", "cent millions") - 0.5,
-  up: when("s4b", "Plus dix") - 0.25,
-  down: when("s4b", "moins dix") - 0.25,
-  none: when("s4c", "Sans rien") - 0.1,
+  example: when("s4b", ln("Exemple", "Hypothetical example")) - 0.1,
+  settle: when("s4b", ln("cent millions", "one hundred million")) - 0.5,
+  up: when("s4b", ln("Plus dix", "Plus ten percent")) - 0.25,
+  down: when("s4b", ln("moins dix", "minus ten percent")) - 0.25,
+  none: when("s4c", ln("Sans rien", "Without selling")) - 0.1,
   end: SC.s4.t1,
 };
 
@@ -40,7 +41,7 @@ export function buildBourse(ctx) {
   const platform = new Platform(66, 66, { accent: C.gold });
   root.add(platform.group);
 
-  const exch = makeExchange({ label: "BOURSE" });
+  const exch = makeExchange({ label: ln("BOURSE", "EXCHANGE") });
   exch.position.set(0, 0.3, -17);
   root.add(exch);
 
@@ -149,11 +150,11 @@ export function buildBourse(ctx) {
   // --- HUD ---------------------------------------------------------------------------------------------------------------------------------------
   hud.card({
     id: "s4-real", cls: "tag green", t0: T4.t0 + 0.9, t1: T4.example, x: 56, y: 300, align: "left", enter: "right",
-    html: `<b>Mesure réelle</b> · Forbes, 2 oct. 2026<br><span>+61 Md$ de fortune estimée en une seule séance —<br>sans qu'il ait vendu quoi que ce soit</span>`,
+    html: ln(`<b>Mesure réelle</b> · Forbes, 2 oct. 2026<br><span>+61 Md$ de fortune estimée en une seule séance —<br>sans qu'il ait vendu quoi que ce soit</span>`, `<b>Real measure</b> · Forbes, Oct 2, 2026<br><span>+$61B of estimated fortune in a single session —<br>without him selling anything</span>`),
   });
   hud.card({
     id: "s4-counter", cls: "bigcount", t0: T4.example, t1: T4.end - 0.1, x: 960, y: 176, enter: "down",
-    html: `<div class="lbl">EXEMPLE HYPOTHÉTIQUE · chiffres inventés</div><div class="eq"><span class="n1">100 000 000</span> actions × <span class="px">100,00</span> $</div><div class="val"><span class="v">10,0</span> <small>Md$</small><span class="dlt"></span></div>`,
+    html: ln(`<div class="lbl">EXEMPLE HYPOTHÉTIQUE · chiffres inventés</div><div class="eq"><span class="n1">100 000 000</span> actions × <span class="px">100,00</span> $</div><div class="val"><span class="v">10,0</span> <small>Md$</small><span class="dlt"></span></div>`, `<div class="lbl">HYPOTHETICAL EXAMPLE · made-up numbers</div><div class="eq"><span class="n1">100,000,000</span> shares × $<span class="px">100.00</span></div><div class="val">$<span class="v">10.0</span><small>B</small><span class="dlt"></span></div>`),
     dyn: (t, el) => {
       const p = price(t);
       const settled = t >= T4.settle;
@@ -162,23 +163,23 @@ export function buildBourse(ctx) {
       el.querySelector(".v").textContent = fmt.dec(value, 1);
       const d = value - 10;
       const dl = el.querySelector(".dlt");
-      dl.textContent = settled && Math.abs(d) > 0.05 ? (d > 0 ? "▲ +" : "▼ −") + fmt.dec(Math.abs(d), 1) + " Md$" : "";
+      dl.textContent = settled && Math.abs(d) > 0.05 ? (d > 0 ? "▲ +" : "▼ −") + ln(fmt.dec(Math.abs(d), 1) + " Md$", "$" + fmt.dec(Math.abs(d), 1) + "B") : "";
       dl.style.color = d > 0 ? "#2bd67b" : "#ff4d5e";
       el.querySelector(".v").style.color = settled ? (d > 0.04 ? "#2bd67b" : d < -0.04 ? "#ff4d5e" : "#ffd978") : "#ffd978";
     },
   });
   hud.card({
     id: "s4-up", cls: "arrow up", t0: T4.up + 0.3, t1: T4.down - 0.15, x: 1620, y: 330, enter: "scale",
-    html: `+10 %<br><span>le cours monte</span>`,
+    html: ln(`+10 %<br><span>le cours monte</span>`, `+10%<br><span>the price goes up</span>`),
   });
   hud.card({
     id: "s4-down", cls: "arrow down", t0: T4.down + 0.3, t1: T4.down + 2.8, x: 1620, y: 330, enter: "scale",
-    html: `−10 %<br><span>le cours baisse</span>`,
+    html: ln(`−10 %<br><span>le cours baisse</span>`, `−10%<br><span>the price goes down</span>`),
   });
   hud.card({
     id: "s4-none", cls: "tag gold", t0: T4.none, t1: T4.end - 0.2, enter: "up",
     anchor: () => new THREE.Vector3(bx, 9, bz + 30), offset: [0, -50],
-    html: `<b>Aucune vente, aucun achat</b><br><span>seul le prix change → la valeur estimée change</span>`,
+    html: ln(`<b>Aucune vente, aucun achat</b><br><span>seul le prix change → la valeur estimée change</span>`, `<b>No sale, no purchase</b><br><span>only the price changes → the estimated value changes</span>`),
   });
 
   // --- mise à jour ---------------------------------------------------------------------------------------------------------------------------------

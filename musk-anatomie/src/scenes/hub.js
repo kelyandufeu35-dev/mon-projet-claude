@@ -11,17 +11,18 @@ import { makeShareBlock } from "../components/finance.js";
 import { track, ease, inv, clamp, lerp, fmt } from "../core/util.js";
 import { seg, SC, when, whenEnd } from "../timing.js";
 import { POS } from "../layout.js";
+import { ln, fmtDate } from "../core/lang.js";
 
 export const T1 = {
   lightsOn: 0.55,
   counterA: 0.95,
   counterB: 5.0,
-  coins: when("s1a", "mille milliards") - 0.2,
-  toShares: when("s1a", "Mais cet argent") + 0.0,
-  toTowers: when("s1a", "ne dort pas") + 0.55,
+  coins: when("s1a", ln("mille milliards", "one trillion")) - 0.2,
+  toShares: when("s1a", ln("Mais cet argent", "But that money")) + 0.0,
+  toTowers: when("s1a", ln("ne dort pas", "isn't sitting")) + 0.55,
   toFactory: seg.s1b.start + 0.05,
-  toBigShare: when("s1b", "Plongeons") - 0.35,
-  plunge: when("s1b", "Plongeons") + 0.1,
+  toBigShare: when("s1b", ln("Plongeons", "dive")) - 0.35,
+  plunge: when("s1b", ln("Plongeons", "dive")) + 0.1,
   end: SC.s1.t1,
   finale: SC.s7.t0,
 };
@@ -58,7 +59,7 @@ export function buildHub(ctx) {
   root.add(frame);
   let lastTxt = "";
   const drawCounter = (val, glow) => {
-    const txt = fmt.int(val).replace(/ /g, " ");
+    const txt = ln("", "$") + fmt.int(val).replace(/ /g, " ");
     const key = txt + ":" + glow.toFixed(2);
     if (key === lastTxt) return;
     lastTxt = key;
@@ -68,7 +69,7 @@ export function buildHub(ctx) {
     g.fillStyle = grad; g.fillRect(0, 0, 2048, 470);
     g.textBaseline = "alphabetic";
     g.fillStyle = "#58b4ff"; g.font = '500 44px "JetBrains Mono"'; g.textAlign = "left";
-    g.fillText("PATRIMOINE NET ESTIMÉ  ·  FORBES", 70, 82);
+    g.fillText(ln("PATRIMOINE NET ESTIMÉ  ·  FORBES", "ESTIMATED NET WORTH  ·  FORBES"), 70, 82);
     g.textAlign = "right";
     g.fillStyle = "#ffd978"; g.shadowColor = "#ffb81c"; g.shadowBlur = 40 * glow + 8;
     g.font = '700 300px "Space Grotesk"';
@@ -76,9 +77,9 @@ export function buildHub(ctx) {
     g.shadowBlur = 0;
     g.textAlign = "left";
     g.fillStyle = "#ffffff"; g.font = '700 120px "Space Grotesk"';
-    g.fillText("Md$", 1540, 380);
+    g.fillText(ln("Md$", "B"), 1540, 380);
     g.fillStyle = "rgba(255,255,255,0.55)"; g.font = '500 40px "JetBrains Mono"';
-    g.fillText("milliards de dollars · estimation", 1540, 440);
+    g.fillText(ln("milliards de dollars · estimation", "billion dollars · estimate"), 1540, 440);
     ctex.needsUpdate = true;
   };
   const target = facts.net_worth.headline.value_usd_billions;
@@ -125,7 +126,7 @@ export function buildHub(ctx) {
   column.add(colHalo);
   column.position.set(0, 1.2, 0);
   root.add(column);
-  const colH = track([[SC.s7.t0, 0], [when("s7b", "patrimoine net") - 0.5, 0, ease.io3], [when("s7b", "patrimoine net") + 1.4, 34]]);
+  const colH = track([[SC.s7.t0, 0], [when("s7b", ln("patrimoine net", "net worth")) - 0.5, 0, ease.io3], [when("s7b", ln("patrimoine net", "net worth")) + 1.4, 34]]);
 
   // --- caméra (clés propres à la scène) ------------------------------------------
   const cx = POS.hub.x, cz = POS.hub.z;
@@ -141,14 +142,14 @@ export function buildHub(ctx) {
   // --- HUD -------------------------------------------------------------------------
   const nw = facts.net_worth;
   const mdFr = (v) => fmt.int(v).replace(/\u202f/g, " ");
-  const dateFr = (iso) => new Date(iso + "T12:00:00Z").toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+  const dateFr = fmtDate;
   hud.card({
     id: "s1-source", cls: "pill card-left", t0: T1.counterB + 0.2, t1: T1.toFactory + 1.0, x: 56, y: 168, align: "left", enter: "right",
-    html: `<b>≈ ${mdFr(nw.headline.value_usd_billions)} Md$</b> · <b>Forbes</b>, ${dateFr(nw.headline.as_of)}<br><span>estimation en temps réel, pas un solde</span><br><span>Bloomberg : ≈ ${mdFr(nw.bloomberg.value_usd_billions)} Md$ (${dateFr(nw.bloomberg.as_of)}) —<br>méthodes différentes, écart normal</span>`,
+    html: ln(`<b>≈ ${mdFr(nw.headline.value_usd_billions)} Md$</b> · <b>Forbes</b>, ${dateFr(nw.headline.as_of)}<br><span>estimation en temps réel, pas un solde</span><br><span>Bloomberg : ≈ ${mdFr(nw.bloomberg.value_usd_billions)} Md$ (${dateFr(nw.bloomberg.as_of)}) —<br>méthodes différentes, écart normal</span>`, `<b>≈ $${mdFr(nw.headline.value_usd_billions)}B</b> · <b>Forbes</b>, ${dateFr(nw.headline.as_of)}<br><span>real-time estimate, not an account balance</span><br><span>Bloomberg: ≈ $${mdFr(nw.bloomberg.value_usd_billions)}B (${dateFr(nw.bloomberg.as_of)}) —<br>different methods, a gap is normal</span>`),
   });
   hud.card({
-    id: "s1-not-cash", cls: "callout gold", t0: when("s1a", "ne dort pas") - 0.1, t1: T1.toFactory + 0.4, x: 56, y: 372, align: "left", enter: "right",
-    html: `<span class="big">≠</span> un solde de compte<br><span class="small">une estimation de valeur, pas de l'argent disponible</span>`,
+    id: "s1-not-cash", cls: "callout gold", t0: when("s1a", ln("ne dort pas", "isn't sitting")) - 0.1, t1: T1.toFactory + 0.4, x: 56, y: 372, align: "left", enter: "right",
+    html: ln(`<span class="big">≠</span> un solde de compte<br><span class="small">une estimation de valeur, pas de l'argent disponible</span>`, `<span class="big">≠</span> an account balance<br><span class="small">a value estimate, not available cash</span>`),
   });
 
   // --- mise à jour ---------------------------------------------------------------------
@@ -194,7 +195,7 @@ export function buildHub(ctx) {
       Object.assign(pose, { bob: (idle(t).bob) });
       musk.root.rotation.y = lerp(0.55, 0.35, point);
     } else {
-      const cheer = ease.io3(inv(when("s7c", "La richesse") + 0.6, when("s7c", "La richesse") + 1.6, t));
+      const cheer = ease.io3(inv(when("s7c", ln("La richesse", "Elon Musk's wealth")) + 0.6, when("s7c", ln("La richesse", "Elon Musk's wealth")) + 1.6, t));
       pose = blend(POSES.presenting, POSES.cheer, cheer);
       musk.root.rotation.y = 0.55;
       pose.bob = idle(t).bob;

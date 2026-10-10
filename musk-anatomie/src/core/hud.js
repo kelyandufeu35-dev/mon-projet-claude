@@ -54,16 +54,15 @@ export class Hud {
       const h = el.offsetHeight;
       el.style.display = saved.d || "none"; el.style.visibility = saved.v; el.style.opacity = saved.o; el.style.transform = saved.t;
       const order = it.zone === "bottom" ? [["bottom", bottom], ["top", top]] : [["top", top], ["bottom", bottom]];
-      // d'abord avec une marge temporelle autour de la carte, puis sans (une carte qui apparaît à l'instant où une autre s'efface)
+      // essais (zone, marge temporelle autour de la carte) : par défaut la marge d'abord, puis sans marge (une carte qui
+      // apparaît à l'instant où une autre s'efface) ; `exact` : la zone préférée d'abord, même sans marge
+      const tries = it.exact ? order.flatMap(([n, z]) => [pad, 0].map((m) => [n, z, m])) : [pad, 0].flatMap((m) => order.map(([n, z]) => [n, z, m]));
       let pos = null, T0 = it.t0 - pad, T1 = it.t1 + pad;
-      for (const m of [pad, 0]) {
+      for (const [name, [zs, ze], m] of tries) {
         T0 = it.t0 - m; T1 = it.t1 + m;
-        for (const [name, [zs, ze]] of order) {
-          const fits = (y0) => !placed.some((p) => p.t0 < T1 && p.t1 > T0 && p.y0 < y0 + h + gap && p.y1 + gap > y0);
-          if (name === "bottom") for (let y0 = ze - h; y0 >= zs; y0 -= 6) { if (fits(y0)) { pos = y0; break; } }
-          else for (let y0 = zs; y0 + h <= ze; y0 += 6) { if (fits(y0)) { pos = y0; break; } }
-          if (pos !== null) break;
-        }
+        const fits = (y0) => !placed.some((p) => p.t0 < T1 && p.t1 > T0 && p.y0 < y0 + h + gap && p.y1 + gap > y0);
+        if (name === "bottom") for (let y0 = ze - h; y0 >= zs; y0 -= 6) { if (fits(y0)) { pos = y0; break; } }
+        else for (let y0 = zs; y0 + h <= ze; y0 += 6) { if (fits(y0)) { pos = y0; break; } }
         if (pos !== null) break;
       }
       if (pos === null) { console.warn("[hud] aucune place pour", it.id); pos = top[0]; }

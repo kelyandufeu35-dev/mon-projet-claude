@@ -9,6 +9,7 @@ import { SC, when, DURATION } from "../timing.js";
 import { POS } from "../layout.js";
 import { fmt } from "../core/util.js";
 import { PORTRAIT } from "../core/format.js";
+import { ln, fmtDate } from "../core/lang.js";
 
 export const T7 = {
   t0: SC.s7.t0,
@@ -16,16 +17,16 @@ export const T7 = {
   rise: SC.s7.t0 + 2.4,
   tesla: when("s7a", "Tesla") - 0.1,
   spacex: when("s7a", "SpaceX") - 0.15,
-  ai: when("s7a", "intelligence artificielle") - 0.2,
-  others: when("s7a", "d'autres participations") - 0.2,
-  debts: when("s7a", "dettes documentées") - 0.4,
-  own: when("s7b", "Propriété") - 0.1,
-  control: when("s7b", "contrôle") - 0.1,
-  value: when("s7b", "valorisation") - 0.1,
-  net: when("s7b", "patrimoine net") - 0.2,
-  line1: when("s7c", "La richesse") - 0.1,
-  line2: when("s7c", "C'est principalement") - 0.2,
-  zoom: when("s7c", "C'est principalement") + 0.2,
+  ai: when("s7a", ln("intelligence artificielle", "artificial intelligence")) - 0.2,
+  others: when("s7a", ln("d'autres participations", "other holdings")) - 0.2,
+  debts: when("s7a", ln("dettes documentées", "documented debts")) - 0.4,
+  own: when("s7b", ln("Propriété", "Ownership")) - 0.1,
+  control: when("s7b", ln("contrôle", "control")) - 0.1,
+  value: when("s7b", ln("valorisation", "valuation")) - 0.1,
+  net: when("s7b", ln("patrimoine net", "net worth")) - 0.2,
+  line1: when("s7c", ln("La richesse", "Elon Musk's wealth")) - 0.1,
+  line2: when("s7c", ln("C'est principalement", "It is mainly")) - 0.2,
+  zoom: when("s7c", ln("C'est principalement", "It is mainly")) + 0.2,
   end: SC.s7.t1,
 };
 
@@ -90,26 +91,26 @@ export function buildFinale(ctx) {
   const TAG_END = PORTRAIT ? T7.line1 - 0.2 : T7.zoom + 0.4; // portrait : les étiquettes se retirent avant la phrase finale
   const tag = (id, cls, html, anchor, offset, t0, t1 = TAG_END, enter = "scale", extra = {}) => hud.card({ id, cls, html, anchor, offset, t0, t1, enter, ...extra });
   const P = (v, y) => () => up(v, y);
-  tag("s7-hub", "tag gold bigtag", `<b>ELON MUSK</b><br><span>au centre : possède, contrôle, emprunte</span>`, P(H, 20), [0, -40], T7.rise - 0.3, undefined, undefined, { skipP: true });
+  tag("s7-hub", "tag gold bigtag", ln(`<b>ELON MUSK</b><br><span>au centre : possède, contrôle, emprunte</span>`, `<b>ELON MUSK</b><br><span>at the center: owns, controls, borrows</span>`), P(H, 20), [0, -40], T7.rise - 0.3, undefined, undefined, { skipP: true });
   const nw = facts.net_worth;
   const md = (v) => fmt.int(v).replace(/\u202f/g, " ");
-  const dt = (iso) => new Date(iso + "T12:00:00Z").toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
-  tag("s7-net", "tag gold netag", `<b>Patrimoine net ≈ ${md(nw.headline.value_usd_billions)} Md$</b><br><span>Forbes, ${dt(nw.headline.as_of)} · Bloomberg ≈ ${md(nw.bloomberg.value_usd_billions)} Md$ (${dt(nw.bloomberg.as_of)}) · estimations</span>`, P(H, 42), [0, -62], T7.net);
-  tag("s7-tesla", "tag", `<b>TESLA</b><br><span>≈ 11 % des actions (hors restreintes)</span>`, P(TS, 30), [0, -40], T7.tesla);
-  tag("s7-spacex", "tag cyan", `<b>SPACEX + IA (xAI)</b><br><span>≈ 38 à 42 % du capital · ≈ 82 % des voix</span>`, P(SP, 44), [0, -40], T7.spacex);
-  tag("s7-ai", "tag cyan small", `<b>xAI : intégrée à SpaceX</b><br><span>comptée une seule fois</span>`, P(SP, 22), [150, 44], T7.ai, undefined, undefined, { skipP: true });
-  tag("s7-bourse", "tag", `<b>BOURSE</b><br><span>le prix du jour valorise les titres</span>`, P(BO, 32), [-300, 20], T7.value);
-  tag("s7-bank", "tag red", `<b>BANQUE · dettes</b><br><span>actions Tesla nanties ≈ 236 M (29 août 2025) ;<br>montant des prêts non publié ; plafond 3,5 Md$</span>`, P(BA, 20), [-470, -150], T7.debts);
-  tag("s7-others", "tag cyan small", `<b>Autres participations</b><br><span>Neuralink, The Boring Co. : non chiffrées</span>`, () => up(H, 8).add(new THREE.Vector3(-13, 0, -4)), [-210, 30], T7.others, undefined, undefined, { htmlP: `<b>Autres participations et liquidités</b><br><span>Neuralink, The Boring Co. : non chiffrées · liquidités : non documentées de façon fiable</span>` });
-  tag("s7-cash", "tag green small", `<b>Liquidités</b><br><span>non documentées de façon fiable</span>`, () => up(H, 8).add(new THREE.Vector3(13, 0, 4)), [200, 40], T7.others + 0.5, undefined, undefined, { skipP: true });
+  const dt = fmtDate;
+  tag("s7-net", "tag gold netag", ln(`<b>Patrimoine net ≈ ${md(nw.headline.value_usd_billions)} Md$</b><br><span>Forbes, ${dt(nw.headline.as_of)} · Bloomberg ≈ ${md(nw.bloomberg.value_usd_billions)} Md$ (${dt(nw.bloomberg.as_of)}) · estimations</span>`, `<b>Net worth ≈ $${md(nw.headline.value_usd_billions)}B</b><br><span>Forbes, ${dt(nw.headline.as_of)} · Bloomberg ≈ $${md(nw.bloomberg.value_usd_billions)}B (${dt(nw.bloomberg.as_of)}) · estimates</span>`), P(H, 42), [0, -62], T7.net);
+  tag("s7-tesla", "tag", ln(`<b>TESLA</b><br><span>≈ 11 % des actions (hors restreintes)</span>`, `<b>TESLA</b><br><span>≈ 11% of shares (excluding restricted)</span>`), P(TS, 30), [0, -40], T7.tesla);
+  tag("s7-spacex", "tag cyan", ln(`<b>SPACEX + IA (xAI)</b><br><span>≈ 38 à 42 % du capital · ≈ 82 % des voix</span>`, `<b>SPACEX + AI (xAI)</b><br><span>≈ 38 to 42% of equity · ≈ 82% of votes</span>`), P(SP, 44), [0, -40], T7.spacex);
+  tag("s7-ai", "tag cyan small", ln(`<b>xAI : intégrée à SpaceX</b><br><span>comptée une seule fois</span>`, `<b>xAI: part of SpaceX</b><br><span>counted only once</span>`), P(SP, 22), [150, 44], T7.ai, undefined, undefined, { skipP: true });
+  tag("s7-bourse", "tag", ln(`<b>BOURSE</b><br><span>le prix du jour valorise les titres</span>`, `<b>EXCHANGE</b><br><span>the day's price values the securities</span>`), P(BO, 32), [-300, 20], T7.value);
+  tag("s7-bank", "tag red", ln(`<b>BANQUE · dettes</b><br><span>actions Tesla nanties ≈ 236 M (29 août 2025) ;<br>montant des prêts non publié ; plafond 3,5 Md$</span>`, `<b>BANK · debts</b><br><span>Tesla shares pledged ≈ 236M (Aug 29, 2025);<br>loan amount not published; cap $3.5B</span>`), P(BA, 20), [-470, -150], T7.debts);
+  tag("s7-others", "tag cyan small", ln(`<b>Autres participations</b><br><span>Neuralink, The Boring Co. : non chiffrées</span>`, `<b>Other holdings</b><br><span>Neuralink, The Boring Co.: not quantified</span>`), () => up(H, 8).add(new THREE.Vector3(-13, 0, -4)), [-210, 30], T7.others, undefined, undefined, { htmlP: ln(`<b>Autres participations et liquidités</b><br><span>Neuralink, The Boring Co. : non chiffrées · liquidités : non documentées de façon fiable</span>`, `<b>Other holdings and cash</b><br><span>Neuralink, The Boring Co.: not quantified · cash: not reliably documented</span>`) });
+  tag("s7-cash", "tag green small", ln(`<b>Liquidités</b><br><span>non documentées de façon fiable</span>`, `<b>Cash</b><br><span>not reliably documented</span>`), () => up(H, 8).add(new THREE.Vector3(13, 0, 4)), [200, 40], T7.others + 0.5, undefined, undefined, { skipP: true });
 
   // légende des lignes
   const leg = [
-    ["#2b7bff", "Propriété", "part du capital détenue", T7.own],
-    ["#ffb81c", "Contrôle", "droits de vote", T7.control],
-    ["#ffffff", "Valorisation", "prix de marché", T7.value],
-    ["#ff4d5e", "Dettes", "titres nantis, prêts", T7.debts],
-    ["#ffd978", "Patrimoine net", "possédé − dû", T7.net],
+    ["#2b7bff", ln("Propriété", "Ownership"), ln("part du capital détenue", "share of equity held"), T7.own],
+    ["#ffb81c", ln("Contrôle", "Control"), ln("droits de vote", "voting rights"), T7.control],
+    ["#ffffff", ln("Valorisation", "Valuation"), ln("prix de marché", "market price"), T7.value],
+    ["#ff4d5e", ln("Dettes", "Debts"), ln("titres nantis, prêts", "pledged shares, loans"), T7.debts],
+    ["#ffd978", ln("Patrimoine net", "Net worth"), ln("possédé − dû", "owned − owed"), T7.net],
   ];
   leg.forEach(([col, name, sub, t0], i) => hud.card({
     id: "s7-leg" + i, cls: "legrow", t0, t1: T7.line1 - 0.3, x: 56, y: 735 + i * 52, align: "left", enter: "right",
@@ -122,8 +123,8 @@ export function buildFinale(ctx) {
   });
 
   // phrase finale
-  hud.card({ id: "s7-final1", cls: "finale", t0: T7.line1, t1: T7.end - 0.9, x: 960, y: 800, enter: "up", inD: 0.8, outD: 0.6, html: `La richesse d'Elon Musk n'est pas un coffre rempli de dollars.` });
-  hud.card({ id: "s7-final2", cls: "finale gold", t0: T7.line2, t1: T7.end - 0.9, x: 960, y: 880, enter: "up", inD: 0.8, outD: 0.6, zone: "bottom", html: `C'est principalement la valeur de ce qu'il possède.` });
+  hud.card({ id: "s7-final1", cls: "finale", exact: true, t0: T7.line1, t1: T7.end - 0.9, x: 960, y: 800, enter: "up", inD: 0.8, outD: 0.6, html: ln(`La richesse d'Elon Musk n'est pas un coffre rempli de dollars.`, `Elon Musk's wealth is not a vault filled with dollars.`) });
+  hud.card({ id: "s7-final2", cls: "finale gold", exact: true, t0: T7.line2, t1: T7.end - 0.9, x: 960, y: 880, enter: "up", inD: 0.8, outD: 0.6, zone: "bottom", html: ln(`C'est principalement la valeur de ce qu'il possède.`, `It is mainly the value of what he owns.`) });
 
   // --- mise à jour -----------------------------------------------------------------------------------------------------------------------
   const update = (t) => {

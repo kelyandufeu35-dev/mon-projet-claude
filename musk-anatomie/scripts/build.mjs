@@ -56,24 +56,49 @@ const d = String(mod.TIMELINE.duration);
 html = html.replace(/(data-composition-id="root"[^>]*data-duration=")[^"]*(")/, `$1${d}$2`).replace(/(<audio id="mix"[^>]*data-duration=")[^"]*(")/, `$1${d}$2`);
 writeFileSync(p("index.html"), html);
 console.log("durée de la composition :", d, "s");
+process.env.MUSK_LANG = "en";
+const modEn = await import("data:text/javascript;base64," + Buffer.from(tl.outputFiles[0].text + "\n//en").toString("base64"));
+delete process.env.MUSK_LANG;
+writeFileSync(p("assets/audio/timeline.en.json"), JSON.stringify(modEn.TIMELINE, null, 1));
+const dEn = String(modEn.TIMELINE.duration);
+console.log("durée de la version anglaise :", dEn, "s");
 
-// 6) Version verticale 1080×1920 (TikTok / Reels / Shorts) : tiktok/ est un mini-projet Hyperframes GÉNÉRÉ à partir
-//    d'index.html (un projet = un seul index.html racine ; ainsi lint, check et render fonctionnent sur les deux formats).
+// 6) Variantes générées à partir d'index.html. Un projet Hyperframes n'admet qu'UN index.html racine : chaque variante est donc
+//    un mini-projet dans son dossier (lint, check, preview et render fonctionnent dans chacun) :
+//      (racine)    16:9  français      tiktok/     9:16 français
+//      en/         16:9  anglais       tiktok-en/  9:16 anglais
 const css = readFileSync(p("src/portrait.css"), "utf8");
-const must = (src, from, to) => { if (!src.includes(from)) throw new Error("tiktok/index.html : motif introuvable : " + from); return src.replace(from, to); };
-let t = html;
-t = must(t, 'content="width=1920, height=1080"', 'content="width=1080, height=1920"');
-t = must(t, "<title>Elon Musk : anatomie d'une fortune</title>", "<title>Elon Musk : anatomie d'une fortune (format vertical)</title>");
-t = must(t, "width: 1920px; height: 1080px;", "width: 1080px; height: 1920px;");
-t = must(t, 'data-width="1920" data-height="1080"', 'data-width="1080" data-height="1920"');
-t = must(t, '<canvas id="stage" width="1920" height="1080">', '<canvas id="stage" width="1080" height="1920">');
-t = must(t, '<div id="root" ', '<div id="root" class="portrait" ');
-t = must(t, '<script src="vendor/gsap.min.js"></script>', '<script>window.MUSK_FORMAT = "portrait";</script>\n    <script src="vendor/gsap.min.js"></script>');
-t = must(t, "    </style>", css + "    </style>");
-const tk = (...a) => p("tiktok", ...a);
-for (const d of ["assets/fonts", "assets/audio", "vendor", "dist"]) mkdirSync(tk(d), { recursive: true });
-for (const [from, to] of [["vendor/gsap.min.js", "vendor/gsap.min.js"], ["dist/bundle.js", "dist/bundle.js"], ["assets/audio/mix.m4a", "assets/audio/mix.m4a"]]) copyFileSync(p(from), tk(to));
-for (const f of readdirSync(p("assets/fonts"))) copyFileSync(p("assets/fonts", f), tk("assets/fonts", f));
-writeFileSync(tk("index.html"), t);
-console.log("tiktok/index.html généré (1080×1920)");
+const cssEn = readFileSync(p("src/lang-en.css"), "utf8");
+const must = (src, from, to) => { if (!src.includes(from)) throw new Error("variante : motif introuvable : " + from); return src.replace(from, to); };
+function variant(dir, { en, portrait }) {
+  let t = html;
+  const flags = [en && 'window.MUSK_LANG = "en";', portrait && 'window.MUSK_FORMAT = "portrait";'].filter(Boolean).join(" ");
+  if (en) {
+    t = must(t, '<html lang="fr">', '<html lang="en">');
+    t = must(t, "<title>Elon Musk : anatomie d'une fortune</title>", "<title>Elon Musk: anatomy of a fortune</title>");
+    t = must(t, 'src="assets/audio/mix.m4a"', 'src="assets/audio/mix.en.m4a"');
+    t = t.split(`data-duration="${d}"`).join(`data-duration="${dEn}"`);
+    t = must(t, "    </style>", cssEn + "    </style>");
+  }
+  if (portrait) {
+    t = must(t, 'content="width=1920, height=1080"', 'content="width=1080, height=1920"');
+    t = t.replace("</title>", (en ? " (vertical format)" : " (format vertical)") + "</title>");
+    t = must(t, "width: 1920px; height: 1080px;", "width: 1080px; height: 1920px;");
+    t = must(t, 'data-width="1920" data-height="1080"', 'data-width="1080" data-height="1920"');
+    t = must(t, '<canvas id="stage" width="1920" height="1080">', '<canvas id="stage" width="1080" height="1920">');
+    t = must(t, '<div id="root" ', '<div id="root" class="portrait" ');
+    t = must(t, "    </style>", css + "    </style>");
+  }
+  if (flags) t = must(t, '<script src="vendor/gsap.min.js"></script>', `<script>${flags}</script>\n    <script src="vendor/gsap.min.js"></script>`);
+  const v = (...a) => p(dir, ...a);
+  const audio = en ? "mix.en.m4a" : "mix.m4a";
+  for (const sub of ["assets/fonts", "assets/audio", "vendor", "dist"]) mkdirSync(v(sub), { recursive: true });
+  for (const f of ["vendor/gsap.min.js", "dist/bundle.js", "assets/audio/" + audio]) copyFileSync(p(f), v(f));
+  for (const f of readdirSync(p("assets/fonts"))) copyFileSync(p("assets/fonts", f), v("assets/fonts", f));
+  writeFileSync(v("index.html"), t);
+  console.log(dir + "/index.html généré (" + (portrait ? "1080×1920" : "1920×1080") + ", " + (en ? "en" : "fr") + ")");
+}
+variant("tiktok", { en: false, portrait: true });
+variant("en", { en: true, portrait: false });
+variant("tiktok-en", { en: true, portrait: true });
 console.log("build ok ->", existsSync(p("dist/bundle.js")) ? "dist/bundle.js" : "?");

@@ -11,32 +11,33 @@ import { FlowLine, FlowCoins, Burst } from "../components/fx.js";
 import { ease, inv, clamp, lerp, track, TAU } from "../core/util.js";
 import { SC, when } from "../timing.js";
 import { POS, at as atLayout } from "../layout.js";
+import { ln } from "../core/lang.js";
 
 export const T5 = {
   t0: SC.s5.t0,
   t1: SC.s5.t1,
   arrive: SC.s5.t0 + 1.4,
-  open: when("s5b", "Ouvrons") - 0.2,
-  doorOpen: when("s5b", "Ouvrons") + 0.5,
-  tray: when("s5b", "Ouvrons") + 2.0,
-  net: when("s5b", "Patrimoine net") - 0.2,
-  gains: when("s5b", "Plus-values") - 0.15,
-  sell: when("s5c", "Tout vendre") - 0.1,
-  tax: when("s5c", "impôts") - 0.15,
-  drop: when("s5c", "chuter") - 0.2,
+  open: when("s5b", ln("Ouvrons", "Let's open")) - 0.2,
+  doorOpen: when("s5b", ln("Ouvrons", "Let's open")) + 0.5,
+  tray: when("s5b", ln("Ouvrons", "Let's open")) + 2.0,
+  net: when("s5b", ln("Patrimoine net", "Net worth")) - 0.2,
+  gains: when("s5b", ln("Plus-values", "Unrealized gains")) - 0.15,
+  sell: when("s5c", ln("Tout vendre", "Selling everything")) - 0.1,
+  tax: when("s5c", ln("impôts", "taxes")) - 0.15,
+  drop: when("s5c", ln("chuter", "crash")) - 0.2,
   end: SC.s5.t1,
 };
 export const T6 = {
   t0: SC.s6.t0,
   t1: SC.s6.t1,
   portfolio: SC.s6.t0 + 1.2,
-  pledge: when("s6b", "On dépose") - 0.1,
-  lend: when("s6b", "la banque prête") - 0.15,
-  interest: when("s6b", "intérêts") - 0.2,
-  repay: when("s6b", "puis on rembourse") - 0.2,
-  fall: when("s6c", "garanties perdent") - 0.2,
-  call: when("s6c", "appel de marge") - 0.3,
-  general: when("s6c", "Mécanisme général") - 0.1,
+  pledge: when("s6b", ln("On dépose", "You deposit")) - 0.1,
+  lend: when("s6b", ln("la banque prête", "the bank lends")) - 0.15,
+  interest: when("s6b", ln("intérêts", "interest")) - 0.2,
+  repay: when("s6b", ln("puis on rembourse", "then you repay")) - 0.2,
+  fall: when("s6c", ln("garanties perdent", "collateral loses")) - 0.2,
+  call: when("s6c", ln("appel de marge", "margin call")) - 0.3,
+  general: when("s6c", ln("Mécanisme général", "A general mechanism")) - 0.1,
   end: SC.s6.t1,
 };
 
@@ -50,7 +51,7 @@ export function buildBank(ctx) {
   root.add(platform.group);
 
   // --- banque : coque démontable + intérieur --------------------------------------------------------------
-  const shell = makeBankShell({ label: "BANQUE" });
+  const shell = makeBankShell({ label: ln("BANQUE", "BANK") });
   shell.position.set(0, 0.3, 0);
   root.add(shell);
   const interior = makeBankInterior();
@@ -78,7 +79,7 @@ export function buildBank(ctx) {
   blkT.position.set(-3.6, 2.2, -1.6);
   const blkS = makeShareBlock("SPACEX", { scale: 0.62, accent: "#39e0ff" });
   blkS.position.set(3.2, 2.2, -1.6);
-  const blkO = makeShareBlock("AUTRES", { scale: 0.46, accent: "#ffd978" });
+  const blkO = makeShareBlock(ln("AUTRES", "OTHERS"), { scale: 0.46, accent: "#ffd978" });
   blkO.position.set(-0.2, 1.6, 2.2);
   blkT.rotation.y = blkS.rotation.y = blkO.rotation.y = -0.15;
   tray.add(blkT, blkS, blkO);
@@ -117,7 +118,7 @@ export function buildBank(ctx) {
   root.add(bal);
 
   // --- vente massive : bloc, taxe, mini-écran -----------------------------------------------------------------------------
-  const sellBlock = makeShareBlock("TITRES", { scale: 0.7, accent: "#58b4ff" });
+  const sellBlock = makeShareBlock(ln("TITRES", "SECURITIES"), { scale: 0.7, accent: "#58b4ff" });
   root.add(sellBlock);
   const taxChunk = new THREE.Mesh(new THREE.BoxGeometry(2.6, 2.6, 0.9), new THREE.MeshBasicMaterial({ color: new THREE.Color(C.red).multiplyScalar(1.5) }));
   root.add(taxChunk);
@@ -147,7 +148,7 @@ export function buildBank(ctx) {
   const pBlocks = [];
   const accents = ["#58b4ff", "#39e0ff", "#ffd978", "#2bd67b", "#ff8a3d", "#c08bff"];
   for (let i = 0; i < 6; i++) {
-    const b = makeShareBlock("ACTION " + "ABCDEF"[i], { scale: 0.62, accent: accents[i] });
+    const b = makeShareBlock(ln("ACTION ", "SHARE ") + "ABCDEF"[i], { scale: 0.62, accent: accents[i] });
     b.position.set(-7.6 + (i % 3) * 7.6, 4.2 + Math.floor(i / 3) * 4.0, 0.2);
     portfolio.add(b);
     pBlocks.push(b);
@@ -173,7 +174,7 @@ export function buildBank(ctx) {
   }
   const collateral = [];
   for (let i = 0; i < 4; i++) {
-    const b = makeShareBlock("ACTION " + "ABCD"[i], { scale: 0.62, accent: accents[i] });
+    const b = makeShareBlock(ln("ACTION ", "SHARE ") + "ABCD"[i], { scale: 0.62, accent: accents[i] });
     b.visible = false;
     root.add(b);
     collateral.push(b);
@@ -250,83 +251,83 @@ export function buildBank(ctx) {
   const balAnchor = (dx, y) => () => new THREE.Vector3(POS.bank.x + 10 + dx, 1.6 + y, POS.bank.z + 5);
   hud.card({
     id: "s5-q", cls: "pill", t0: T5.arrive + 0.2, t1: T5.open + 0.4, x: 960, y: 200, enter: "down",
-    html: `Qu'y a-t-il dans le coffre ?<br><span>des montagnes de billets…</span>`,
+    html: ln(`Qu'y a-t-il dans le coffre ?<br><span>des montagnes de billets…</span>`, `What's inside the vault?<br><span>mountains of banknotes…</span>`),
   });
   hud.card({
     id: "s5-actions", cls: "tag", t0: T5.tray + 0.8, t1: T5.sell - 0.2, enter: "up", skipP: true,
     anchor: () => new THREE.Vector3(POS.bank.x - 6, 9, POS.bank.z + 2), offset: [-30, -170],
-    html: `<b>Surtout des actions et des participations</b><br><span>des titres valorisés, pas des billets</span>`,
+    html: ln(`<b>Surtout des actions et des participations</b><br><span>des titres valorisés, pas des billets</span>`, `<b>Mostly shares and stakes</b><br><span>valued securities, not banknotes</span>`),
   });
   hud.card({
     id: "s5-cash", cls: "tag green", t0: T5.tray + 1.4, t1: T5.sell - 0.2, enter: "right",
     anchor: () => cashLabel.getWorldPosition(new THREE.Vector3()), offset: [190, -20],
-    html: `<b>Liquidités</b><br><span>aucun chiffre fiable trouvé pour Elon Musk :<br>rien d'affiché</span>`,
+    html: ln(`<b>Liquidités</b><br><span>aucun chiffre fiable trouvé pour Elon Musk :<br>rien d'affiché</span>`, `<b>Cash</b><br><span>no reliable figure found for Elon Musk:<br>nothing shown</span>`),
   });
   hud.card({
     id: "s5-defA", cls: "tag", t0: T5.net - 0.6, t1: T5.sell - 0.2, enter: "left",
     anchor: balAnchor(-6, 9), offset: [-200, -30],
-    html: `<b>Actions et participations</b><br><span>valeur estimée au cours du jour</span>`,
+    html: ln(`<b>Actions et participations</b><br><span>valeur estimée au cours du jour</span>`, `<b>Shares and stakes</b><br><span>value estimated at today's price</span>`),
   });
   hud.card({
     id: "s5-defD", cls: "tag red", t0: T5.net, t1: T5.sell - 0.2, enter: "up",
     anchor: balAnchor(0, 7), offset: [40, -90],
-    html: `<b>Dettes</b><br><span>ce que l'on doit</span>`,
+    html: ln(`<b>Dettes</b><br><span>ce que l'on doit</span>`, `<b>Debts</b><br><span>what you owe</span>`),
   });
   hud.card({
     id: "s5-defN", cls: "tag gold", t0: T5.net + 0.5, t1: T5.sell - 0.2, enter: "right",
     anchor: balAnchor(6, 7), offset: [180, -40],
-    html: `<b>Patrimoine net</b><br><span>= ce que l'on possède − ce que l'on doit</span>`,
+    html: ln(`<b>Patrimoine net</b><br><span>= ce que l'on possède − ce que l'on doit</span>`, `<b>Net worth</b><br><span>= what you own − what you owe</span>`),
   });
   hud.card({
     id: "s5-gain", cls: "tag cyan", t0: T5.gains, t1: T5.sell - 0.2, enter: "left",
     anchor: balAnchor(-6, 15), offset: [-220, -20],
-    html: `<b>Plus-values non réalisées</b><br><span>gains « sur le papier » tant que les titres ne sont pas vendus</span>`,
+    html: ln(`<b>Plus-values non réalisées</b><br><span>gains « sur le papier » tant que les titres ne sont pas vendus</span>`, `<b>Unrealized gains</b><br><span>“paper” profits as long as the securities aren't sold</span>`),
   });
   hud.card({
     id: "s5-tax", cls: "tag red", t0: T5.tax, t1: T5.end - 0.1, enter: "up",
     anchor: () => new THREE.Vector3(POS.bank.x - 6, 11, POS.bank.z + 8), offset: [240, -30],
-    html: `<b>Impôts</b> sur les plus-values<br><span>une vente massive a un coût fiscal</span>`,
+    html: ln(`<b>Impôts</b> sur les plus-values<br><span>une vente massive a un coût fiscal</span>`, `<b>Taxes</b> on capital gains<br><span>a massive sale carries a tax cost</span>`),
   });
   hud.card({
     id: "s5-drop", cls: "tag red", t0: T5.drop, t1: T5.end - 0.1, enter: "left",
     anchor: () => new THREE.Vector3(POS.bank.x - 14, 12, POS.bank.z - 11), offset: [-260, 60],
-    html: `<b>Le cours chute</b><br><span>vendre en masse pèse sur le marché</span>`,
+    html: ln(`<b>Le cours chute</b><br><span>vendre en masse pèse sur le marché</span>`, `<b>The price drops</b><br><span>selling in bulk weighs on the market</span>`),
   });
 
   // --- HUD scène 6 -----------------------------------------------------------------------------------------------------------------------------
   hud.card({
     id: "s6-gen", cls: "pill card-left", t0: T6.t0 + 0.6, t1: T6.end - 0.2, x: 56, y: 168, align: "left", enter: "right",
-    html: `<b>Mécanisme général</b> · exemple hypothétique<br><span>aucune opération particulière d'Elon Musk<br>n'est présentée ici comme un fait</span>`,
+    html: ln(`<b>Mécanisme général</b> · exemple hypothétique<br><span>aucune opération particulière d'Elon Musk<br>n'est présentée ici comme un fait</span>`, `<b>General mechanism</b> · hypothetical example<br><span>no specific Elon Musk transaction<br>is presented here as fact</span>`),
   });
   hud.card({
     id: "s6-port", cls: "tag", t0: T6.portfolio + 0.6, t1: T6.pledge + 1.2, enter: "right",
     anchor: () => portPos.clone().add(POS.bank).add(new THREE.Vector3(0, 12, 0)), offset: [-20, -60],
-    html: `<b>Portefeuille d'actions</b><br><span>valeur des titres : <i>100</i> (hypothétique)</span>`,
+    html: ln(`<b>Portefeuille d'actions</b><br><span>valeur des titres : <i>100</i> (hypothétique)</span>`, `<b>Share portfolio</b><br><span>value of the securities: <i>100</i> (hypothetical)</span>`),
   });
   hud.card({
     id: "s6-collat", cls: "tag", t0: T6.pledge + 0.9, t1: T6.end - 0.2, enter: "up",
     anchor: () => safePos.clone().add(POS.bank).add(new THREE.Vector3(0, 11, 0)), offset: [-40, 90],
-    html: `<b>1 · Actions en garantie</b><br><span>déposées chez la banque</span>`,
-    dyn: (t, el) => { const v = collat(t); el.querySelector("span").innerHTML = `valeur des garanties : <i>${v.toFixed(0)}</i>`; },
+    html: ln(`<b>1 · Actions en garantie</b><br><span>déposées chez la banque</span>`, `<b>1 · Shares as collateral</b><br><span>deposited with the bank</span>`),
+    dyn: (t, el) => { const v = collat(t); el.querySelector("span").innerHTML = ln(`valeur des garanties : <i>${v.toFixed(0)}</i>`, `collateral value: <i>${v.toFixed(0)}</i>`); },
   });
   hud.card({
     id: "s6-loan", cls: "tag green", t0: T6.lend, t1: T6.end - 0.2, enter: "left",
     anchor: () => borrowerPos.clone().add(POS.bank).add(new THREE.Vector3(0, 10, 0)), offset: [-10, -60],
-    html: `<b>2 · L'argent emprunté</b><br><span>prêt : <i>25</i> = 25 % de la valeur des titres</span>`,
+    html: ln(`<b>2 · L'argent emprunté</b><br><span>prêt : <i>25</i> = 25 % de la valeur des titres</span>`, `<b>2 · The borrowed money</b><br><span>loan: <i>25</i> = 25% of the securities' value</span>`),
   });
   hud.card({
     id: "s6-int", cls: "tag gold", t0: T6.interest, t1: T6.end - 0.2, enter: "left",
     anchor: () => P(20, 12, 6).clone().add(POS.bank), offset: [90, 40],
-    html: `<b>3 · Les intérêts</b><br><span>versés régulièrement à la banque</span>`,
+    html: ln(`<b>3 · Les intérêts</b><br><span>versés régulièrement à la banque</span>`, `<b>3 · Interest</b><br><span>paid regularly to the bank</span>`),
   });
   hud.card({
     id: "s6-repay", cls: "tag cyan", t0: T6.repay, t1: T6.fall - 0.3, enter: "up",
     anchor: () => P(10, 18, 7).clone().add(POS.bank), offset: [-60, 40],
-    html: `<b>4 · Le remboursement</b><br><span>les actions sont libérées</span>`,
+    html: ln(`<b>4 · Le remboursement</b><br><span>les actions sont libérées</span>`, `<b>4 · Repayment</b><br><span>the shares are released</span>`),
   });
   hud.card({
     id: "s6-call", cls: "margincall", t0: T6.call, t1: T6.end - 0.2, x: 960, y: 190, enter: "scale",
-    html: `<div class="mc-t">⚠ APPEL DE MARGE</div><div class="mc-s">si la valeur des garanties tombe trop bas, la banque exige<br>des titres supplémentaires ou un remboursement</div>`,
+    html: ln(`<div class="mc-t">⚠ APPEL DE MARGE</div><div class="mc-s">si la valeur des garanties tombe trop bas, la banque exige<br>des titres supplémentaires ou un remboursement</div>`, `<div class="mc-t">⚠ MARGIN CALL</div><div class="mc-s">if the value of the collateral falls too low, the bank demands<br>additional securities or repayment</div>`),
   });
 
   // --- mise à jour ---------------------------------------------------------------------------------------------------------------------------------

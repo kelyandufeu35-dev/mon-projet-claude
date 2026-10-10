@@ -3,7 +3,7 @@
   - narration : fichiers WAV Kokoro (assets/audio/narration/*.wav) placés aux instants de timeline.json
   - musique   : nappes + basse + arpèges + pulsation, intensité pilotée par scène, atténuée sous la voix
   - effets    : signaux calés sur les ancres d'animation (timeline.json -> cues)
-Sortie : assets/audio/mix.wav (48 kHz stéréo) ; l'encodage AAC/loudnorm est fait par scripts/make-audio.sh.
+Sortie : assets/audio/mix.wav, ou mix.en.wav avec AUDIO_LANG=en (48 kHz stéréo) ; l'encodage AAC/loudnorm est fait par scripts/make-audio.sh.
 """
 import json, math, os, sys
 import numpy as np
@@ -12,7 +12,10 @@ from scipy import signal
 
 SR = 48000
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-TL = json.load(open(os.path.join(ROOT, "assets/audio/timeline.json")))
+AUDIO_LANG = os.environ.get("AUDIO_LANG", "fr")                     # "fr" (défaut) ou "en"
+SUF = "" if AUDIO_LANG == "fr" else "." + AUDIO_LANG                 # timeline.en.json, mix.en.wav
+NARR_DIR = "narration" if AUDIO_LANG == "fr" else "narration-" + AUDIO_LANG
+TL = json.load(open(os.path.join(ROOT, f"assets/audio/timeline{SUF}.json")))
 DUR = TL["duration"]
 N = int(math.ceil((DUR + 3.0) * SR))
 rng = np.random.default_rng(20261010)
@@ -427,9 +430,9 @@ music_wet = reverb(music, ir_short)
 sfx_wet = reverb(wet, ir_long)
 
 # ---------------------------------------------------------------- narration
-dur_json = json.load(open(os.path.join(ROOT, "assets/audio/narration/durations.json")))
+dur_json = json.load(open(os.path.join(ROOT, "assets/audio", NARR_DIR, "durations.json")))
 for sid, info in TL["segments"].items():
-    p = os.path.join(ROOT, "assets/audio/narration", sid + ".wav")
+    p = os.path.join(ROOT, "assets/audio", NARR_DIR, sid + ".wav")
     x, sr0 = sf.read(p, dtype="float32")
     if x.ndim > 1: x = x.mean(axis=1)
     x = signal.resample_poly(x, SR // sr0, 1) if SR % sr0 == 0 else signal.resample(x, int(len(x) * SR / sr0))
@@ -471,6 +474,6 @@ mix = mix[:n_out]
 peak = np.max(np.abs(mix))
 print("crête avant normalisation : %.2f" % peak)
 mix = mix / max(1.0, peak / 0.92)
-out = os.path.join(ROOT, "assets/audio/mix.wav")
+out = os.path.join(ROOT, f"assets/audio/mix{SUF}.wav")
 sf.write(out, mix.astype(np.float32), SR, subtype="PCM_16")
 print("écrit", out, "%.1f s" % (len(mix) / SR))

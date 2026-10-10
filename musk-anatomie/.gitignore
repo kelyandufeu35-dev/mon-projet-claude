@@ -5,8 +5,11 @@ snapshots/
 shots/
 renders/
 assets/audio/mix.wav
+assets/audio/mix.en.wav
 *.tmp
 out/work-*/
 out/.*.hf-transaction-*/
 out/musk-anatomie.mp4
 tiktok/
+en/
+tiktok-en/

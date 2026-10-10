@@ -1,7 +1,13 @@
 // Table de timing unique : toute la chorégraphie (3D, HUD, audio) se cale sur la narration.
 // Les durées viennent des fichiers WAV synthétisés (assets/audio/narration/durations.json).
-import script from "../narration/script.json";
-import durations from "../assets/audio/narration/durations.json";
+import scriptFr from "../narration/script.json";
+import scriptEn from "../narration/script.en.json";
+import durationsFr from "../assets/audio/narration/durations.json";
+import durationsEn from "../assets/audio/narration-en/durations.json";
+import { EN } from "./core/lang.js";
+
+const script = EN ? scriptEn : scriptFr;
+const durations = EN ? durationsEn : durationsFr;
 
 const D = durations.durations;
 const text = Object.fromEntries(script.segments.map((s) => [s.id, s.text]));

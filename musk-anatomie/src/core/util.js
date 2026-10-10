@@ -1,3 +1,4 @@
+import { EN } from "./lang.js";
 // Utilitaires purs et déterministes : tout est fonction du temps t (secondes), jamais d'une horloge.
 export const TAU = Math.PI * 2;
 export const DEG = Math.PI / 180;
@@ -82,7 +83,7 @@ export const wobble = (t, seed = 0) =>
   (Math.sin(t * 1.31 + seed * 7.1) * 0.5 + Math.sin(t * 2.17 + seed * 3.3) * 0.3 + Math.sin(t * 0.53 + seed) * 0.2);
 
 export const fmt = {
-  /** 1 004 000 000 000 -> « 1 004 » en milliards, séparateur espace insécable fin (fr) */
-  int: (n) => Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " "),
-  dec: (n, d = 1) => n.toFixed(d).replace(".", ","),
+  /** 1004 -> « 1 004 » (fr, espace insécable fin) / « 1,004 » (en) */
+  int: (n) => (EN ? Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")),
+  dec: (n, d = 1) => (EN ? n.toFixed(d) : n.toFixed(d).replace(".", ",")),
 };

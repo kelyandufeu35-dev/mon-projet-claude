@@ -16,7 +16,14 @@
     "lint:tiktok": "npm run build && cd tiktok && hyperframes lint",
     "check:tiktok": "npm run build && cd tiktok && hyperframes check",
     "dev:tiktok": "npm run build && cd tiktok && hyperframes preview",
-    "render:tiktok": "npm run build && cd tiktok && hyperframes render -o ../out/musk-anatomie-tiktok.mp4"
+    "render:tiktok": "npm run build && cd tiktok && hyperframes render -o ../out/musk-anatomie-tiktok.mp4",
+    "audio:en": "AUDIO_LANG=en bash scripts/make-audio.sh",
+    "lint:variants": "npm run build && for d in . tiktok en tiktok-en; do (cd $d && hyperframes lint); done",
+    "check:tiktok-en": "npm run build && cd tiktok-en && hyperframes check",
+    "dev:tiktok-en": "npm run build && cd tiktok-en && hyperframes preview",
+    "render:en": "npm run build && cd en && hyperframes render -o ../out/musk-anatomie-en.mp4",
+    "render:tiktok-en": "npm run build && cd tiktok-en && hyperframes render -o ../out/musk-anatomie-tiktok-en.mp4",
+    "overlaps": "node scripts/overlaps.mjs"
   },
   "dependencies": {
     "@fontsource/inter": "^5.3.0",

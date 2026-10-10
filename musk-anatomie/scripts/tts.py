@@ -20,14 +20,14 @@ ap.add_argument("--phonemes-only", action="store_true", help="affiche les phonè
 args = ap.parse_args()
 
 cfg = json.load(open(args.script, encoding="utf-8"))
-pron_path = os.path.join(os.path.dirname(args.script), "pronunciations.json")
+pron_path = os.path.join(os.path.dirname(args.script), os.path.basename(args.script).replace("script", "pronunciations"))  # script.en.json -> pronunciations.en.json
 PRON = {k: v for k, v in json.load(open(pron_path, encoding="utf-8")).items() if not k.startswith("_")} if os.path.exists(pron_path) else {}
 PAT = re.compile("(" + "|".join(re.escape(x) for x in sorted(PRON, key=len, reverse=True)) + ")") if PRON else None
 k = Kokoro(os.path.join(args.models, "kokoro-v1.0.onnx"), os.path.join(args.models, "voices-v1.0.bin"))
 os.makedirs(args.out, exist_ok=True)
 only = set(args.only.split(",")) if args.only else None
 def to_phonemes(text):
-    """phonétise le texte avec espeak (fr) en injectant les prononciations imposées de pronunciations.json"""
+    """phonétise le texte avec espeak (langue du script) en injectant les prononciations imposées de pronunciations.json"""
     if not PAT:
         return None
     parts = PAT.split(text)

@@ -23073,6 +23073,15 @@ void main() {
     return lambert(hex, { transparent, opacity });
   }
 
+  // src/core/lang.js
+  var fromPage = typeof window !== "undefined" ? window.MUSK_LANG : void 0;
+  var fromEnv = typeof process !== "undefined" && process.env ? process.env.MUSK_LANG : void 0;
+  var LANG = fromPage || fromEnv || "fr";
+  var EN = LANG === "en";
+  var ln = (fr, en) => EN ? en : fr;
+  var LOCALE = EN ? "en-US" : "fr-FR";
+  var fmtDate = (iso) => (/* @__PURE__ */ new Date(iso + "T12:00:00Z")).toLocaleDateString(LOCALE, { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+
   // src/core/util.js
   var TAU = Math.PI * 2;
   var DEG = Math.PI / 180;
@@ -23135,9 +23144,9 @@ void main() {
   }
   var wobble = (t, seed = 0) => Math.sin(t * 1.31 + seed * 7.1) * 0.5 + Math.sin(t * 2.17 + seed * 3.3) * 0.3 + Math.sin(t * 0.53 + seed) * 0.2;
   var fmt = {
-    /** 1 004 000 000 000 -> « 1 004 » en milliards, séparateur espace insécable fin (fr) */
-    int: (n) => Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "\u202F"),
-    dec: (n, d = 1) => n.toFixed(d).replace(".", ",")
+    /** 1004 -> « 1 004 » (fr, espace insécable fin) / « 1,004 » (en) */
+    int: (n) => EN ? Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "\u202F"),
+    dec: (n, d = 1) => EN ? n.toFixed(d) : n.toFixed(d).replace(".", ",")
   };
 
   // src/core/format.js
@@ -23412,25 +23421,23 @@ void main() {
         el.style.opacity = saved.o;
         el.style.transform = saved.t;
         const order = it.zone === "bottom" ? [["bottom", bottom], ["top", top]] : [["top", top], ["bottom", bottom]];
+        const tries = it.exact ? order.flatMap(([n, z]) => [pad, 0].map((m) => [n, z, m])) : [pad, 0].flatMap((m) => order.map(([n, z]) => [n, z, m]));
         let pos = null, T0 = it.t0 - pad, T12 = it.t1 + pad;
-        for (const m of [pad, 0]) {
+        for (const [name, [zs, ze], m] of tries) {
           T0 = it.t0 - m;
           T12 = it.t1 + m;
-          for (const [name, [zs, ze]] of order) {
-            const fits = (y0) => !placed.some((p) => p.t0 < T12 && p.t1 > T0 && p.y0 < y0 + h + gap && p.y1 + gap > y0);
-            if (name === "bottom") for (let y0 = ze - h; y0 >= zs; y0 -= 6) {
-              if (fits(y0)) {
-                pos = y0;
-                break;
-              }
+          const fits = (y0) => !placed.some((p) => p.t0 < T12 && p.t1 > T0 && p.y0 < y0 + h + gap && p.y1 + gap > y0);
+          if (name === "bottom") for (let y0 = ze - h; y0 >= zs; y0 -= 6) {
+            if (fits(y0)) {
+              pos = y0;
+              break;
             }
-            else for (let y0 = zs; y0 + h <= ze; y0 += 6) {
-              if (fits(y0)) {
-                pos = y0;
-                break;
-              }
+          }
+          else for (let y0 = zs; y0 + h <= ze; y0 += 6) {
+            if (fits(y0)) {
+              pos = y0;
+              break;
             }
-            if (pos !== null) break;
           }
           if (pos !== null) break;
         }
@@ -23611,6 +23618,34 @@ void main() {
     ]
   };
 
+  // narration/script.en.json
+  var script_en_default = {
+    voice: "af_heart",
+    lang: "en-us",
+    segments: [
+      { id: "s1a", text: "Elon Musk has a fortune estimated at nearly one trillion dollars. But that money isn't sitting in a bank account." },
+      { id: "s1b", text: "So where is it, really? Let's dive into a single Tesla share." },
+      { id: "s2a", text: "A share is a small piece of a company. Multiply the number of shares by their price, and you get the market capitalization." },
+      { id: "s2b", text: "Elon Musk owns about eleven percent of Tesla. His stake is worth his shares times their price: when the price goes up, it goes up; when it falls, it falls." },
+      { id: "s2c", text: "Some shares are restricted, others are only options." },
+      { id: "s3a", text: "A share becomes a rocket: meet SpaceX." },
+      { id: "s3b", text: "In February twenty twenty-six, SpaceX absorbed xAI, Musk's artificial intelligence company, then went public in June. The stake is counted only once." },
+      { id: "s3c", text: "Enterprise value, market capitalization, Musk's personal stake: three distinct notions." },
+      { id: "s4a", text: "Every day, prices move, and so does his fortune." },
+      { id: "s4b", text: "Hypothetical example: one hundred million shares at one hundred dollars are worth ten billion. Plus ten percent: one billion gained; minus ten percent: one billion lost." },
+      { id: "s4c", text: "Without selling anything, or buying anything." },
+      { id: "s5a", text: "But being a billionaire doesn't mean a vault full of cash." },
+      { id: "s5b", text: "Let's open it: mostly shares. Net worth: what you own minus what you owe. Unrealized gains: profits on paper." },
+      { id: "s5c", text: "Selling everything would trigger taxes, and make the price crash." },
+      { id: "s6a", text: "How do you get cash without selling? With a loan backed by securities." },
+      { id: "s6b", text: "You deposit shares as collateral, the bank lends a sum, you pay interest, then you repay." },
+      { id: "s6c", text: "If the collateral loses value: margin call. A general mechanism, no specific transaction." },
+      { id: "s7a", text: "At the center, Elon Musk. Around him: Tesla, SpaceX and its artificial intelligence, other holdings, and documented debts." },
+      { id: "s7b", text: "Ownership, control, valuation, net worth: it all depends on the value of what he owns." },
+      { id: "s7c", text: "Elon Musk's wealth is not a vault filled with dollars. It is mainly the value of what he owns." }
+    ]
+  };
+
   // assets/audio/narration/durations.json
   var durations_default = {
     speed: 1.18,
@@ -23639,9 +23674,39 @@ void main() {
     }
   };
 
+  // assets/audio/narration-en/durations.json
+  var durations_default2 = {
+    speed: 1.12,
+    sample_rate: 24e3,
+    durations: {
+      s1a: 6.563,
+      s1b: 3.47,
+      s2a: 6.776,
+      s2b: 9.157,
+      s2c: 2.877,
+      s3a: 2.439,
+      s3b: 10.158,
+      s3c: 5.176,
+      s4a: 2.892,
+      s4b: 10.68,
+      s4c: 2.395,
+      s5a: 2.769,
+      s5b: 6.791,
+      s5c: 3.453,
+      s6a: 3.738,
+      s6b: 4.802,
+      s6c: 5.888,
+      s7a: 7.729,
+      s7b: 5.046,
+      s7c: 5.087
+    }
+  };
+
   // src/timing.js
-  var D = durations_default.durations;
-  var text = Object.fromEntries(script_default.segments.map((s) => [s.id, s.text]));
+  var script = EN ? script_en_default : script_default;
+  var durations = EN ? durations_default2 : durations_default;
+  var D = durations.durations;
+  var text = Object.fromEntries(script.segments.map((s) => [s.id, s.text]));
   var seg = {};
   var cursor = 0;
   function place(id, gapBefore) {
@@ -23904,22 +23969,22 @@ void main() {
 
   // src/hud-global.js
   var TITLES = [
-    ["s1", "01", "Le myst\xE8re de sa fortune"],
-    ["s2", "02", "Tesla : poss\xE9der une part d'entreprise"],
-    ["s3", "03", "SpaceX et l'intelligence artificielle"],
-    ["s4", "04", "Pourquoi sa fortune varie"],
-    ["s5", "05", "Milliardaire \u2260 argent liquide"],
-    ["s6", "06", "Emprunter gr\xE2ce \xE0 ses actions"],
-    ["s7", "07", "La structure compl\xE8te de sa richesse"]
+    ["s1", "01", ln("Le myst\xE8re de sa fortune", "The mystery of his fortune")],
+    ["s2", "02", ln("Tesla : poss\xE9der une part d'entreprise", "Tesla: owning a share of a company")],
+    ["s3", "03", ln("SpaceX et l'intelligence artificielle", "SpaceX and artificial intelligence")],
+    ["s4", "04", ln("Pourquoi sa fortune varie", "Why his fortune moves")],
+    ["s5", "05", ln("Milliardaire \u2260 argent liquide", "Billionaire \u2260 cash")],
+    ["s6", "06", ln("Emprunter gr\xE2ce \xE0 ses actions", "Borrowing against his shares")],
+    ["s7", "07", ln("La structure compl\xE8te de sa richesse", "The full structure of his wealth")]
   ];
   var SOURCES = {
-    s1: "Sources : Forbes, profil Elon Musk (10 oct. 2026) \xB7 Bloomberg Billionaires Index (5 oct. 2026) \u2014 estimations, pas des certitudes",
-    s2: "Sources : Tesla 10-K/A et Form 4 (juin 2026) \xB7 profil Forbes \u2014 \u2248 11 % estim\xE9, hors actions restreintes non acquises",
-    s3: "Sources : CNBC (3 f\xE9v. 2026) \xB7 SpaceX S-1/A (3 juin 2026) \xB7 Forbes \u2014 fusion close le 2 f\xE9v. 2026 ; pourcentages estim\xE9s",
-    s4: "Exemple hypoth\xE9tique, chiffres invent\xE9s \xB7 mesure r\xE9elle : Forbes, 2 oct. 2026 (+61 Md$ en une s\xE9ance)",
-    s5: "D\xE9finitions g\xE9n\xE9rales \xB7 liquidit\xE9s personnelles : aucun chiffre fiable trouv\xE9, donc aucun chiffre affich\xE9",
-    s6: "M\xE9canisme g\xE9n\xE9ral, exemple hypoth\xE9tique \xB7 aucune op\xE9ration particuli\xE8re d'Elon Musk n'est pr\xE9sent\xE9e comme un fait",
-    s7: "Sources : Forbes (10 oct. 2026) \xB7 Bloomberg (5 oct. 2026) \xB7 Tesla, proxy 2025 (actions nanties au 29 ao\xFBt 2025) \xB7 SpaceX S-1/A (3 juin 2026)"
+    s1: ln("Sources : Forbes, profil Elon Musk (10 oct. 2026) \xB7 Bloomberg Billionaires Index (5 oct. 2026) \u2014 estimations, pas des certitudes", "Sources: Forbes, Elon Musk profile (Oct 10, 2026) \xB7 Bloomberg Billionaires Index (Oct 5, 2026) \u2014 estimates, not certainties"),
+    s2: ln("Sources : Tesla 10-K/A et Form 4 (juin 2026) \xB7 profil Forbes \u2014 \u2248 11 % estim\xE9, hors actions restreintes non acquises", "Sources: Tesla 10-K/A and Form 4 (June 2026) \xB7 Forbes profile \u2014 \u2248 11% estimated, excluding unvested restricted shares"),
+    s3: ln("Sources : CNBC (3 f\xE9v. 2026) \xB7 SpaceX S-1/A (3 juin 2026) \xB7 Forbes \u2014 fusion close le 2 f\xE9v. 2026 ; pourcentages estim\xE9s", "Sources: CNBC (Feb 3, 2026) \xB7 SpaceX S-1/A (June 3, 2026) \xB7 Forbes \u2014 merger closed Feb 2, 2026; percentages estimated"),
+    s4: ln("Exemple hypoth\xE9tique, chiffres invent\xE9s \xB7 mesure r\xE9elle : Forbes, 2 oct. 2026 (+61 Md$ en une s\xE9ance)", "Hypothetical example, made-up numbers \xB7 real measure: Forbes, Oct 2, 2026 (+$61B in one session)"),
+    s5: ln("D\xE9finitions g\xE9n\xE9rales \xB7 liquidit\xE9s personnelles : aucun chiffre fiable trouv\xE9, donc aucun chiffre affich\xE9", "General definitions \xB7 personal cash: no reliable figure found, so none is shown"),
+    s6: ln("M\xE9canisme g\xE9n\xE9ral, exemple hypoth\xE9tique \xB7 aucune op\xE9ration particuli\xE8re d'Elon Musk n'est pr\xE9sent\xE9e comme un fait", "General mechanism, hypothetical example \xB7 no specific Elon Musk transaction is presented as fact"),
+    s7: ln("Sources : Forbes (10 oct. 2026) \xB7 Bloomberg (5 oct. 2026) \xB7 Tesla, proxy 2025 (actions nanties au 29 ao\xFBt 2025) \xB7 SpaceX S-1/A (3 juin 2026)", "Sources: Forbes (Oct 10, 2026) \xB7 Bloomberg (Oct 5, 2026) \xB7 Tesla 2025 proxy (shares pledged as of Aug 29, 2025) \xB7 SpaceX S-1/A (June 3, 2026)")
   };
   function buildGlobalHud({ hud }) {
     for (const [k, n, title] of TITLES) {
@@ -23956,7 +24021,7 @@ void main() {
     hud.card({
       id: "disclaimer",
       cls: "disclaimer",
-      html: "ESTIMATIONS \xB7 MONTANTS DAT\xC9S ET SOURC\xC9S \xB7 PAS DES SOLDES DE COMPTE",
+      html: ln("ESTIMATIONS \xB7 MONTANTS DAT\xC9S ET SOURC\xC9S \xB7 PAS DES SOLDES DE COMPTE", "ESTIMATES \xB7 DATED AND SOURCED AMOUNTS \xB7 NOT ACCOUNT BALANCES"),
       x: 1864,
       y: 56,
       align: "right",
@@ -25384,7 +25449,7 @@ void main(){
   }
 
   // src/components/finance.js
-  function shareTexture(label, { accent = "#58b4ff", sub = "ACTION \xB7 CERTIFICAT", w = 1280, h = 800 } = {}) {
+  function shareTexture(label, { accent = "#58b4ff", sub = ln("ACTION \xB7 CERTIFICAT", "SHARE \xB7 CERTIFICATE"), w = 1280, h = 800 } = {}) {
     const cv = document.createElement("canvas");
     cv.width = w;
     cv.height = h;
@@ -25428,7 +25493,7 @@ void main(){
     g.shadowBlur = 0;
     g.fillStyle = "rgba(255,255,255,0.55)";
     g.font = '500 44px "JetBrains Mono"';
-    g.fillText("N\xB0 000 001  \xB7  1 ACTION", w / 2, h - 132);
+    g.fillText(ln("N\xB0 000 001  \xB7  1 ACTION", "No. 000 001  \xB7  1 SHARE"), w / 2, h - 132);
     const tex = new CanvasTexture(cv);
     tex.colorSpace = SRGBColorSpace;
     tex.anisotropy = 8;
@@ -25704,12 +25769,12 @@ void main(){
     lightsOn: 0.55,
     counterA: 0.95,
     counterB: 5,
-    coins: when("s1a", "mille milliards") - 0.2,
-    toShares: when("s1a", "Mais cet argent") + 0,
-    toTowers: when("s1a", "ne dort pas") + 0.55,
+    coins: when("s1a", ln("mille milliards", "one trillion")) - 0.2,
+    toShares: when("s1a", ln("Mais cet argent", "But that money")) + 0,
+    toTowers: when("s1a", ln("ne dort pas", "isn't sitting")) + 0.55,
     toFactory: seg.s1b.start + 0.05,
-    toBigShare: when("s1b", "Plongeons") - 0.35,
-    plunge: when("s1b", "Plongeons") + 0.1,
+    toBigShare: when("s1b", ln("Plongeons", "dive")) - 0.35,
+    plunge: when("s1b", ln("Plongeons", "dive")) + 0.1,
     end: SC.s1.t1,
     finale: SC.s7.t0
   };
@@ -25740,7 +25805,7 @@ void main(){
     root.add(frame);
     let lastTxt = "";
     const drawCounter = (val, glow2) => {
-      const txt = fmt.int(val).replace(/ /g, " ");
+      const txt = ln("", "$") + fmt.int(val).replace(/ /g, " ");
       const key = txt + ":" + glow2.toFixed(2);
       if (key === lastTxt) return;
       lastTxt = key;
@@ -25755,7 +25820,7 @@ void main(){
       g.fillStyle = "#58b4ff";
       g.font = '500 44px "JetBrains Mono"';
       g.textAlign = "left";
-      g.fillText("PATRIMOINE NET ESTIM\xC9  \xB7  FORBES", 70, 82);
+      g.fillText(ln("PATRIMOINE NET ESTIM\xC9  \xB7  FORBES", "ESTIMATED NET WORTH  \xB7  FORBES"), 70, 82);
       g.textAlign = "right";
       g.fillStyle = "#ffd978";
       g.shadowColor = "#ffb81c";
@@ -25766,10 +25831,10 @@ void main(){
       g.textAlign = "left";
       g.fillStyle = "#ffffff";
       g.font = '700 120px "Space Grotesk"';
-      g.fillText("Md$", 1540, 380);
+      g.fillText(ln("Md$", "B"), 1540, 380);
       g.fillStyle = "rgba(255,255,255,0.55)";
       g.font = '500 40px "JetBrains Mono"';
-      g.fillText("milliards de dollars \xB7 estimation", 1540, 440);
+      g.fillText(ln("milliards de dollars \xB7 estimation", "billion dollars \xB7 estimate"), 1540, 440);
       ctex.needsUpdate = true;
     };
     const target = facts.net_worth.headline.value_usd_billions;
@@ -25808,7 +25873,7 @@ void main(){
     column.add(colHalo);
     column.position.set(0, 1.2, 0);
     root.add(column);
-    const colH = track([[SC.s7.t0, 0], [when("s7b", "patrimoine net") - 0.5, 0, ease.io3], [when("s7b", "patrimoine net") + 1.4, 34]]);
+    const colH = track([[SC.s7.t0, 0], [when("s7b", ln("patrimoine net", "net worth")) - 0.5, 0, ease.io3], [when("s7b", ln("patrimoine net", "net worth")) + 1.4, 34]]);
     const cx = POS.hub.x, cz = POS.hub.z;
     const cam = [
       { t: 0, x: cx, y: 11, z: cz, az: 20, el: 22, zoom: 1.62, e: "io2" },
@@ -25820,7 +25885,7 @@ void main(){
     ];
     const nw = facts.net_worth;
     const mdFr = (v) => fmt.int(v).replace(/\u202f/g, " ");
-    const dateFr = (iso) => (/* @__PURE__ */ new Date(iso + "T12:00:00Z")).toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+    const dateFr = fmtDate;
     hud.card({
       id: "s1-source",
       cls: "pill card-left",
@@ -25830,18 +25895,18 @@ void main(){
       y: 168,
       align: "left",
       enter: "right",
-      html: `<b>\u2248 ${mdFr(nw.headline.value_usd_billions)} Md$</b> \xB7 <b>Forbes</b>, ${dateFr(nw.headline.as_of)}<br><span>estimation en temps r\xE9el, pas un solde</span><br><span>Bloomberg : \u2248 ${mdFr(nw.bloomberg.value_usd_billions)} Md$ (${dateFr(nw.bloomberg.as_of)}) \u2014<br>m\xE9thodes diff\xE9rentes, \xE9cart normal</span>`
+      html: ln(`<b>\u2248 ${mdFr(nw.headline.value_usd_billions)} Md$</b> \xB7 <b>Forbes</b>, ${dateFr(nw.headline.as_of)}<br><span>estimation en temps r\xE9el, pas un solde</span><br><span>Bloomberg : \u2248 ${mdFr(nw.bloomberg.value_usd_billions)} Md$ (${dateFr(nw.bloomberg.as_of)}) \u2014<br>m\xE9thodes diff\xE9rentes, \xE9cart normal</span>`, `<b>\u2248 $${mdFr(nw.headline.value_usd_billions)}B</b> \xB7 <b>Forbes</b>, ${dateFr(nw.headline.as_of)}<br><span>real-time estimate, not an account balance</span><br><span>Bloomberg: \u2248 $${mdFr(nw.bloomberg.value_usd_billions)}B (${dateFr(nw.bloomberg.as_of)}) \u2014<br>different methods, a gap is normal</span>`)
     });
     hud.card({
       id: "s1-not-cash",
       cls: "callout gold",
-      t0: when("s1a", "ne dort pas") - 0.1,
+      t0: when("s1a", ln("ne dort pas", "isn't sitting")) - 0.1,
       t1: T1.toFactory + 0.4,
       x: 56,
       y: 372,
       align: "left",
       enter: "right",
-      html: `<span class="big">\u2260</span> un solde de compte<br><span class="small">une estimation de valeur, pas de l'argent disponible</span>`
+      html: ln(`<span class="big">\u2260</span> un solde de compte<br><span class="small">une estimation de valeur, pas de l'argent disponible</span>`, `<span class="big">\u2260</span> an account balance<br><span class="small">a value estimate, not available cash</span>`)
     });
     const poseAwe = { ...POSES.awe };
     const update = (t) => {
@@ -25880,7 +25945,7 @@ void main(){
         Object.assign(pose, { bob: idle(t).bob });
         musk.root.rotation.y = lerp2(0.55, 0.35, point);
       } else {
-        const cheer = ease.io3(inv(when("s7c", "La richesse") + 0.6, when("s7c", "La richesse") + 1.6, t));
+        const cheer = ease.io3(inv(when("s7c", ln("La richesse", "Elon Musk's wealth")) + 0.6, when("s7c", ln("La richesse", "Elon Musk's wealth")) + 1.6, t));
         pose = blend(POSES.presenting, POSES.cheer, cheer);
         musk.root.rotation.y = 0.55;
         pose.bob = idle(t).bob;
@@ -26202,13 +26267,13 @@ void main(){
     t1: SC.s2.t1,
     build0: SC.s2.t0 + 0.1,
     build1: SC.s2.t0 + 2.3,
-    grid: when("s2a", "petite part") - 0.1,
-    cap: when("s2a", "capitalisation") - 0.15,
-    eleven: when("s2b", "onze pour cent") - 0.3,
-    formula: when("s2b", "Sa participation") - 0.2,
-    up: when("s2b", "le cours monte") - 0.1,
-    down: when("s2b", "il baisse") - 0.15,
-    restr: when("s2c", "restreintes") - 0.35,
+    grid: when("s2a", ln("petite part", "small piece")) - 0.1,
+    cap: when("s2a", ln("capitalisation", "market capitalization")) - 0.15,
+    eleven: when("s2b", ln("onze pour cent", "eleven percent")) - 0.3,
+    formula: when("s2b", ln("Sa participation", "His stake")) - 0.2,
+    up: when("s2b", ln("le cours monte", "when the price goes up")) - 0.1,
+    down: when("s2b", ln("il baisse", "when it falls")) - 0.15,
+    restr: when("s2c", ln("restreintes", "restricted")) - 0.35,
     opts: when("s2c", "options") - 0.4,
     hero: when("s2c", "options") + 0.4,
     end: SC.s2.t1
@@ -26332,7 +26397,7 @@ void main(){
       enter: "up",
       anchor: () => new Vector3(POS.tesla.x + 4.5 * CELL, GRID_Y + 1.5, POS.tesla.z - 6 - 4.5 * CELL),
       offset: [190, -10],
-      html: `<b>100 blocs</b> = 100 % des actions<br><span>(illustration)</span>`
+      html: ln(`<b>100 blocs</b> = 100 % des actions<br><span>(illustration)</span>`, `<b>100 blocks</b> = 100% of shares<br><span>(illustration)</span>`)
     });
     hud.card({
       id: "s2-cap",
@@ -26343,7 +26408,7 @@ void main(){
       y: 270,
       align: "left",
       enter: "right",
-      html: `<em>Capitalisation boursi\xE8re</em><br>= Nombre total d'actions \xD7 Prix de l'action`
+      html: ln(`<em>Capitalisation boursi\xE8re</em><br>= Nombre total d'actions \xD7 Prix de l'action`, `<em>Market capitalization</em><br>= Total number of shares \xD7 Share price`)
     });
     hud.card({
       id: "s2-eleven",
@@ -26353,7 +26418,7 @@ void main(){
       enter: "scale",
       anchor: () => new Vector3(POS.tesla.x - 3 * CELL, GRID_Y + 3.4, POS.tesla.z - 6 + 3.5 * CELL),
       offset: [-240, -40],
-      html: `<b>Elon Musk \u2248 11 %</b><br><span>11 blocs sur 100 \xB7 estimation Forbes (oct. 2026)</span>`
+      html: ln(`<b>Elon Musk \u2248 11 %</b><br><span>11 blocs sur 100 \xB7 estimation Forbes (oct. 2026)</span>`, `<b>Elon Musk \u2248 11%</b><br><span>11 blocks out of 100 \xB7 Forbes estimate (Oct 2026)</span>`)
     });
     hud.card({
       id: "s2-formula",
@@ -26363,7 +26428,7 @@ void main(){
       x: 960,
       y: 178,
       enter: "down",
-      html: `<em>Valeur th\xE9orique de la participation</em><br><strong>= Nombre d'actions <i>\xD7</i> Prix de l'action</strong>`
+      html: ln(`<em>Valeur th\xE9orique de la participation</em><br><strong>= Nombre d'actions <i>\xD7</i> Prix de l'action</strong>`, `<em>Theoretical value of the stake</em><br><strong>= Number of shares <i>\xD7</i> Share price</strong>`)
     });
     hud.card({
       id: "s2-up",
@@ -26373,7 +26438,7 @@ void main(){
       x: 1560,
       y: 400,
       enter: "scale",
-      html: `\u25B2 cours<br><span>participation \u25B2</span>`
+      html: ln(`\u25B2 cours<br><span>participation \u25B2</span>`, `\u25B2 price<br><span>stake \u25B2</span>`)
     });
     hud.card({
       id: "s2-down",
@@ -26383,7 +26448,7 @@ void main(){
       x: 1560,
       y: 400,
       enter: "scale",
-      html: `\u25BC cours<br><span>participation \u25BC</span>`
+      html: ln(`\u25BC cours<br><span>participation \u25BC</span>`, `\u25BC price<br><span>stake \u25BC</span>`)
     });
     hud.card({
       id: "s2-held",
@@ -26393,7 +26458,7 @@ void main(){
       enter: "right",
       anchor: () => new Vector3(POS.tesla.x - 3 * CELL, GRID_Y + 1, POS.tesla.z - 6 + 3.5 * CELL),
       offset: [-240, 62],
-      html: `<b>D\xE9tenues</b><br><span>actions que Musk poss\xE8de</span>`
+      html: ln(`<b>D\xE9tenues</b><br><span>actions que Musk poss\xE8de</span>`, `<b>Owned</b><br><span>shares Musk holds</span>`)
     });
     hud.card({
       id: "s2-restr",
@@ -26403,7 +26468,7 @@ void main(){
       enter: "left",
       anchor: () => new Vector3(POS.tesla.x + 20, GRID_Y + 3, POS.tesla.z - 11),
       offset: [210, -40],
-      html: `<b>\u{1F512} Restreintes</b><br><span>423,7 M d'actions du plan 2025, sous accord de vote : ni libre cession, ni vote</span>`
+      html: ln(`<b>\u{1F512} Restreintes</b><br><span>423,7 M d'actions du plan 2025, sous accord de vote : ni libre cession, ni vote</span>`, `<b>\u{1F512} Restricted</b><br><span>423.7M shares from the 2025 plan, under a voting agreement: not freely transferable, no vote</span>`)
     });
     hud.card({
       id: "s2-opts",
@@ -26413,7 +26478,7 @@ void main(){
       enter: "left",
       anchor: () => new Vector3(POS.tesla.x + 20, GRID_Y + 1, POS.tesla.z - 1),
       offset: [200, 70],
-      html: `<b>Options</b><br><span>plan 2018 : 303,96 M, exerc\xE9es \xE0 23,34 $ en juin 2026</span>`
+      html: ln(`<b>Options</b><br><span>plan 2018 : 303,96 M, exerc\xE9es \xE0 23,34 $ en juin 2026</span>`, `<b>Options</b><br><span>2018 plan: 303.96M, exercised at $23.34 in June 2026</span>`)
     });
     const update = (t) => {
       const inRange = t < T2.end + 1;
@@ -26505,13 +26570,13 @@ void main(){
     ignite: SC.s3.t0 + 0.95,
     fly0: SC.s3.t0 + 1.25,
     fly1: SC.s3.t0 + 3.05,
-    merge: when("s3b", "absorb\xE9") - 0.6,
-    ipo: when("s3b", "entr\xE9e en Bourse") - 0.2,
-    liftoff: when("s3b", "entr\xE9e en Bourse") + 0.2,
-    once: when("s3b", "Participation") - 0.1,
-    ev: when("s3c", "Valeur d'entreprise") - 0.1,
-    cap: when("s3c", "capitalisation") - 0.1,
-    share: when("s3c", "part personnelle") - 0.2,
+    merge: when("s3b", ln("absorb\xE9", "absorbed")) - 0.6,
+    ipo: when("s3b", ln("entr\xE9e en Bourse", "went public")) - 0.2,
+    liftoff: when("s3b", ln("entr\xE9e en Bourse", "went public")) + 0.2,
+    once: when("s3b", ln("Participation", "The stake")) - 0.1,
+    ev: when("s3c", ln("Valeur d'entreprise", "Enterprise value")) - 0.1,
+    cap: when("s3c", ln("capitalisation", "market capitalization")) - 0.1,
+    share: when("s3c", ln("part personnelle", "personal stake")) - 0.2,
     end: SC.s3.t1
   };
   function buildSpacex(ctx) {
@@ -26650,7 +26715,7 @@ void main(){
       y: 262,
       align: "left",
       enter: "right",
-      html: `<b>2 f\xE9v. 2026</b> \xB7 SpaceX absorbe <b>xAI</b><br><span>\xE9change 100 % en actions (0,1433 action SpaceX par action xAI) ;<br>xAI devient une filiale d\xE9tenue \xE0 100 % \u2014 puis \xAB SpaceXAI \xBB (juil. 2026, source unique)</span>`
+      html: ln(`<b>2 f\xE9v. 2026</b> \xB7 SpaceX absorbe <b>xAI</b><br><span>\xE9change 100 % en actions (0,1433 action SpaceX par action xAI) ;<br>xAI devient une filiale d\xE9tenue \xE0 100 % \u2014 puis \xAB SpaceXAI \xBB (juil. 2026, source unique)</span>`, `<b>Feb 2, 2026</b> \xB7 SpaceX absorbs <b>xAI</b><br><span>100% stock swap (0.1433 SpaceX share per xAI share);<br>xAI becomes a wholly owned subsidiary \u2014 then \u201CSpaceXAI\u201D (July 2026, single source)</span>`)
     });
     hud.card({
       id: "s3-ipo",
@@ -26661,7 +26726,7 @@ void main(){
       y: 430,
       align: "left",
       enter: "right",
-      html: `<b>12 juin 2026</b> \xB7 cotation <b>Nasdaq : SPCX</b><br><span>introduction \xE0 135 $ l'action \u2248 75 Md$ lev\xE9s (presse, S-1/A)</span>`
+      html: ln(`<b>12 juin 2026</b> \xB7 cotation <b>Nasdaq : SPCX</b><br><span>introduction \xE0 135 $ l'action \u2248 75 Md$ lev\xE9s (presse, S-1/A)</span>`, `<b>June 12, 2026</b> \xB7 listing <b>Nasdaq: SPCX</b><br><span>IPO at $135 a share \u2248 $75B raised (press, S-1/A)</span>`)
     });
     hud.card({
       id: "s3-once",
@@ -26671,7 +26736,7 @@ void main(){
       x: 960,
       y: 200,
       enter: "down",
-      html: `<b>xAI \u2282 SpaceX</b> \u2192 une seule ligne dans le patrimoine<br><span>pas de double comptage de la m\xEAme participation \xE9conomique</span>`
+      html: ln(`<b>xAI \u2282 SpaceX</b> \u2192 une seule ligne dans le patrimoine<br><span>pas de double comptage de la m\xEAme participation \xE9conomique</span>`, `<b>xAI \u2282 SpaceX</b> \u2192 a single line in net worth<br><span>no double counting of the same economic stake</span>`)
     });
     hud.card({
       id: "s3-ev",
@@ -26681,7 +26746,7 @@ void main(){
       enter: "left",
       anchor: () => new Vector3(sx + 2 + 12, 58 + 6, sz + 12),
       offset: [160, -70],
-      html: `<b>Valeur d'entreprise</b><br><span>= capitalisation + dettes \u2212 tr\xE9sorerie</span>`
+      html: ln(`<b>Valeur d'entreprise</b><br><span>= capitalisation + dettes \u2212 tr\xE9sorerie</span>`, `<b>Enterprise value</b><br><span>= market cap + debt \u2212 cash</span>`)
     });
     hud.card({
       id: "s3-cap",
@@ -26691,7 +26756,7 @@ void main(){
       enter: "left",
       anchor: () => new Vector3(sx + 2 + 8.75, 58 - 2, sz + 8.75),
       offset: [200, 20],
-      html: `<b>Capitalisation boursi\xE8re</b><br><span>= nombre d'actions \xD7 prix</span>`
+      html: ln(`<b>Capitalisation boursi\xE8re</b><br><span>= nombre d'actions \xD7 prix</span>`, `<b>Market capitalization</b><br><span>= number of shares \xD7 price</span>`)
     });
     hud.card({
       id: "s3-share",
@@ -26701,7 +26766,7 @@ void main(){
       enter: "right",
       anchor: () => new Vector3(sx + 2 - 4.5, 58 + 3, sz - 4.5 + 4.25),
       offset: [-220, 80],
-      html: `<b>Part de Musk \u2248 38 \xE0 42 %</b><br><span>de la capitalisation (estimations) \xB7<br>\u2248 82 % des voix : contr\xF4le \u2260 propri\xE9t\xE9</span>`
+      html: ln(`<b>Part de Musk \u2248 38 \xE0 42 %</b><br><span>de la capitalisation (estimations) \xB7<br>\u2248 82 % des voix : contr\xF4le \u2260 propri\xE9t\xE9</span>`, `<b>Musk's stake \u2248 38 to 42%</b><br><span>of market cap (estimates) \xB7<br>\u2248 82% of the votes: control \u2260 ownership</span>`)
     });
     const update = (t) => {
       const inRange = t < T3.end + 1.2;
@@ -26782,11 +26847,11 @@ void main(){
     t1: SC.s4.t1,
     build0: SC.s4.t0 + 1,
     build1: SC.s4.t0 + 3.2,
-    example: when("s4b", "Exemple") - 0.1,
-    settle: when("s4b", "cent millions") - 0.5,
-    up: when("s4b", "Plus dix") - 0.25,
-    down: when("s4b", "moins dix") - 0.25,
-    none: when("s4c", "Sans rien") - 0.1,
+    example: when("s4b", ln("Exemple", "Hypothetical example")) - 0.1,
+    settle: when("s4b", ln("cent millions", "one hundred million")) - 0.5,
+    up: when("s4b", ln("Plus dix", "Plus ten percent")) - 0.25,
+    down: when("s4b", ln("moins dix", "minus ten percent")) - 0.25,
+    none: when("s4c", ln("Sans rien", "Without selling")) - 0.1,
     end: SC.s4.t1
   };
   var noise = (t) => Math.sin(t * 2.3) * 3.4 + Math.sin(t * 5.1 + 1) * 2 + Math.sin(t * 9.7 + 2) * 0.9;
@@ -26800,7 +26865,7 @@ void main(){
     world.add(root);
     const platform = new Platform(66, 66, { accent: C.gold });
     root.add(platform.group);
-    const exch = makeExchange({ label: "BOURSE" });
+    const exch = makeExchange({ label: ln("BOURSE", "EXCHANGE") });
     exch.position.set(0, 0.3, -17);
     root.add(exch);
     const ticker = new TickerBoard(38, 2.4, { px: 1792, py: 112 });
@@ -26901,7 +26966,7 @@ void main(){
       y: 300,
       align: "left",
       enter: "right",
-      html: `<b>Mesure r\xE9elle</b> \xB7 Forbes, 2 oct. 2026<br><span>+61 Md$ de fortune estim\xE9e en une seule s\xE9ance \u2014<br>sans qu'il ait vendu quoi que ce soit</span>`
+      html: ln(`<b>Mesure r\xE9elle</b> \xB7 Forbes, 2 oct. 2026<br><span>+61 Md$ de fortune estim\xE9e en une seule s\xE9ance \u2014<br>sans qu'il ait vendu quoi que ce soit</span>`, `<b>Real measure</b> \xB7 Forbes, Oct 2, 2026<br><span>+$61B of estimated fortune in a single session \u2014<br>without him selling anything</span>`)
     });
     hud.card({
       id: "s4-counter",
@@ -26911,7 +26976,7 @@ void main(){
       x: 960,
       y: 176,
       enter: "down",
-      html: `<div class="lbl">EXEMPLE HYPOTH\xC9TIQUE \xB7 chiffres invent\xE9s</div><div class="eq"><span class="n1">100 000 000</span> actions \xD7 <span class="px">100,00</span> $</div><div class="val"><span class="v">10,0</span> <small>Md$</small><span class="dlt"></span></div>`,
+      html: ln(`<div class="lbl">EXEMPLE HYPOTH\xC9TIQUE \xB7 chiffres invent\xE9s</div><div class="eq"><span class="n1">100 000 000</span> actions \xD7 <span class="px">100,00</span> $</div><div class="val"><span class="v">10,0</span> <small>Md$</small><span class="dlt"></span></div>`, `<div class="lbl">HYPOTHETICAL EXAMPLE \xB7 made-up numbers</div><div class="eq"><span class="n1">100,000,000</span> shares \xD7 $<span class="px">100.00</span></div><div class="val">$<span class="v">10.0</span><small>B</small><span class="dlt"></span></div>`),
       dyn: (t, el) => {
         const p = price(t);
         const settled = t >= T4.settle;
@@ -26920,7 +26985,7 @@ void main(){
         el.querySelector(".v").textContent = fmt.dec(value, 1);
         const d = value - 10;
         const dl = el.querySelector(".dlt");
-        dl.textContent = settled && Math.abs(d) > 0.05 ? (d > 0 ? "\u25B2 +" : "\u25BC \u2212") + fmt.dec(Math.abs(d), 1) + " Md$" : "";
+        dl.textContent = settled && Math.abs(d) > 0.05 ? (d > 0 ? "\u25B2 +" : "\u25BC \u2212") + ln(fmt.dec(Math.abs(d), 1) + " Md$", "$" + fmt.dec(Math.abs(d), 1) + "B") : "";
         dl.style.color = d > 0 ? "#2bd67b" : "#ff4d5e";
         el.querySelector(".v").style.color = settled ? d > 0.04 ? "#2bd67b" : d < -0.04 ? "#ff4d5e" : "#ffd978" : "#ffd978";
       }
@@ -26933,7 +26998,7 @@ void main(){
       x: 1620,
       y: 330,
       enter: "scale",
-      html: `+10 %<br><span>le cours monte</span>`
+      html: ln(`+10 %<br><span>le cours monte</span>`, `+10%<br><span>the price goes up</span>`)
     });
     hud.card({
       id: "s4-down",
@@ -26943,7 +27008,7 @@ void main(){
       x: 1620,
       y: 330,
       enter: "scale",
-      html: `\u221210 %<br><span>le cours baisse</span>`
+      html: ln(`\u221210 %<br><span>le cours baisse</span>`, `\u221210%<br><span>the price goes down</span>`)
     });
     hud.card({
       id: "s4-none",
@@ -26953,7 +27018,7 @@ void main(){
       enter: "up",
       anchor: () => new Vector3(bx, 9, bz + 30),
       offset: [0, -50],
-      html: `<b>Aucune vente, aucun achat</b><br><span>seul le prix change \u2192 la valeur estim\xE9e change</span>`
+      html: ln(`<b>Aucune vente, aucun achat</b><br><span>seul le prix change \u2192 la valeur estim\xE9e change</span>`, `<b>No sale, no purchase</b><br><span>only the price changes \u2192 the estimated value changes</span>`)
     });
     const prevCol = new Color();
     const update = (t) => {
@@ -27038,27 +27103,27 @@ void main(){
     t0: SC.s5.t0,
     t1: SC.s5.t1,
     arrive: SC.s5.t0 + 1.4,
-    open: when("s5b", "Ouvrons") - 0.2,
-    doorOpen: when("s5b", "Ouvrons") + 0.5,
-    tray: when("s5b", "Ouvrons") + 2,
-    net: when("s5b", "Patrimoine net") - 0.2,
-    gains: when("s5b", "Plus-values") - 0.15,
-    sell: when("s5c", "Tout vendre") - 0.1,
-    tax: when("s5c", "imp\xF4ts") - 0.15,
-    drop: when("s5c", "chuter") - 0.2,
+    open: when("s5b", ln("Ouvrons", "Let's open")) - 0.2,
+    doorOpen: when("s5b", ln("Ouvrons", "Let's open")) + 0.5,
+    tray: when("s5b", ln("Ouvrons", "Let's open")) + 2,
+    net: when("s5b", ln("Patrimoine net", "Net worth")) - 0.2,
+    gains: when("s5b", ln("Plus-values", "Unrealized gains")) - 0.15,
+    sell: when("s5c", ln("Tout vendre", "Selling everything")) - 0.1,
+    tax: when("s5c", ln("imp\xF4ts", "taxes")) - 0.15,
+    drop: when("s5c", ln("chuter", "crash")) - 0.2,
     end: SC.s5.t1
   };
   var T6 = {
     t0: SC.s6.t0,
     t1: SC.s6.t1,
     portfolio: SC.s6.t0 + 1.2,
-    pledge: when("s6b", "On d\xE9pose") - 0.1,
-    lend: when("s6b", "la banque pr\xEAte") - 0.15,
-    interest: when("s6b", "int\xE9r\xEAts") - 0.2,
-    repay: when("s6b", "puis on rembourse") - 0.2,
-    fall: when("s6c", "garanties perdent") - 0.2,
-    call: when("s6c", "appel de marge") - 0.3,
-    general: when("s6c", "M\xE9canisme g\xE9n\xE9ral") - 0.1,
+    pledge: when("s6b", ln("On d\xE9pose", "You deposit")) - 0.1,
+    lend: when("s6b", ln("la banque pr\xEAte", "the bank lends")) - 0.15,
+    interest: when("s6b", ln("int\xE9r\xEAts", "interest")) - 0.2,
+    repay: when("s6b", ln("puis on rembourse", "then you repay")) - 0.2,
+    fall: when("s6c", ln("garanties perdent", "collateral loses")) - 0.2,
+    call: when("s6c", ln("appel de marge", "margin call")) - 0.3,
+    general: when("s6c", ln("M\xE9canisme g\xE9n\xE9ral", "A general mechanism")) - 0.1,
     end: SC.s6.t1
   };
   function buildBank(ctx) {
@@ -27068,7 +27133,7 @@ void main(){
     world.add(root);
     const platform = new Platform(66, 66, { accent: C.gold });
     root.add(platform.group);
-    const shell = makeBankShell({ label: "BANQUE" });
+    const shell = makeBankShell({ label: ln("BANQUE", "BANK") });
     shell.position.set(0, 0.3, 0);
     root.add(shell);
     const interior = makeBankInterior();
@@ -27094,7 +27159,7 @@ void main(){
     blkT.position.set(-3.6, 2.2, -1.6);
     const blkS = makeShareBlock("SPACEX", { scale: 0.62, accent: "#39e0ff" });
     blkS.position.set(3.2, 2.2, -1.6);
-    const blkO = makeShareBlock("AUTRES", { scale: 0.46, accent: "#ffd978" });
+    const blkO = makeShareBlock(ln("AUTRES", "OTHERS"), { scale: 0.46, accent: "#ffd978" });
     blkO.position.set(-0.2, 1.6, 2.2);
     blkT.rotation.y = blkS.rotation.y = blkO.rotation.y = -0.15;
     tray.add(blkT, blkS, blkO);
@@ -27132,7 +27197,7 @@ void main(){
     bal.position.set(10, 1.6, 5);
     bal.rotation.y = 0;
     root.add(bal);
-    const sellBlock = makeShareBlock("TITRES", { scale: 0.7, accent: "#58b4ff" });
+    const sellBlock = makeShareBlock(ln("TITRES", "SECURITIES"), { scale: 0.7, accent: "#58b4ff" });
     root.add(sellBlock);
     const taxChunk = new Mesh(new BoxGeometry(2.6, 2.6, 0.9), new MeshBasicMaterial({ color: new Color(C.red).multiplyScalar(1.5) }));
     root.add(taxChunk);
@@ -27160,7 +27225,7 @@ void main(){
     const pBlocks = [];
     const accents = ["#58b4ff", "#39e0ff", "#ffd978", "#2bd67b", "#ff8a3d", "#c08bff"];
     for (let i = 0; i < 6; i++) {
-      const b = makeShareBlock("ACTION " + "ABCDEF"[i], { scale: 0.62, accent: accents[i] });
+      const b = makeShareBlock(ln("ACTION ", "SHARE ") + "ABCDEF"[i], { scale: 0.62, accent: accents[i] });
       b.position.set(-7.6 + i % 3 * 7.6, 4.2 + Math.floor(i / 3) * 4, 0.2);
       portfolio.add(b);
       pBlocks.push(b);
@@ -27186,7 +27251,7 @@ void main(){
     }
     const collateral = [];
     for (let i = 0; i < 4; i++) {
-      const b = makeShareBlock("ACTION " + "ABCD"[i], { scale: 0.62, accent: accents[i] });
+      const b = makeShareBlock(ln("ACTION ", "SHARE ") + "ABCD"[i], { scale: 0.62, accent: accents[i] });
       b.visible = false;
       root.add(b);
       collateral.push(b);
@@ -27262,7 +27327,7 @@ void main(){
       x: 960,
       y: 200,
       enter: "down",
-      html: `Qu'y a-t-il dans le coffre ?<br><span>des montagnes de billets\u2026</span>`
+      html: ln(`Qu'y a-t-il dans le coffre ?<br><span>des montagnes de billets\u2026</span>`, `What's inside the vault?<br><span>mountains of banknotes\u2026</span>`)
     });
     hud.card({
       id: "s5-actions",
@@ -27273,7 +27338,7 @@ void main(){
       skipP: true,
       anchor: () => new Vector3(POS.bank.x - 6, 9, POS.bank.z + 2),
       offset: [-30, -170],
-      html: `<b>Surtout des actions et des participations</b><br><span>des titres valoris\xE9s, pas des billets</span>`
+      html: ln(`<b>Surtout des actions et des participations</b><br><span>des titres valoris\xE9s, pas des billets</span>`, `<b>Mostly shares and stakes</b><br><span>valued securities, not banknotes</span>`)
     });
     hud.card({
       id: "s5-cash",
@@ -27283,7 +27348,7 @@ void main(){
       enter: "right",
       anchor: () => cashLabel.getWorldPosition(new Vector3()),
       offset: [190, -20],
-      html: `<b>Liquidit\xE9s</b><br><span>aucun chiffre fiable trouv\xE9 pour Elon Musk :<br>rien d'affich\xE9</span>`
+      html: ln(`<b>Liquidit\xE9s</b><br><span>aucun chiffre fiable trouv\xE9 pour Elon Musk :<br>rien d'affich\xE9</span>`, `<b>Cash</b><br><span>no reliable figure found for Elon Musk:<br>nothing shown</span>`)
     });
     hud.card({
       id: "s5-defA",
@@ -27293,7 +27358,7 @@ void main(){
       enter: "left",
       anchor: balAnchor(-6, 9),
       offset: [-200, -30],
-      html: `<b>Actions et participations</b><br><span>valeur estim\xE9e au cours du jour</span>`
+      html: ln(`<b>Actions et participations</b><br><span>valeur estim\xE9e au cours du jour</span>`, `<b>Shares and stakes</b><br><span>value estimated at today's price</span>`)
     });
     hud.card({
       id: "s5-defD",
@@ -27303,7 +27368,7 @@ void main(){
       enter: "up",
       anchor: balAnchor(0, 7),
       offset: [40, -90],
-      html: `<b>Dettes</b><br><span>ce que l'on doit</span>`
+      html: ln(`<b>Dettes</b><br><span>ce que l'on doit</span>`, `<b>Debts</b><br><span>what you owe</span>`)
     });
     hud.card({
       id: "s5-defN",
@@ -27313,7 +27378,7 @@ void main(){
       enter: "right",
       anchor: balAnchor(6, 7),
       offset: [180, -40],
-      html: `<b>Patrimoine net</b><br><span>= ce que l'on poss\xE8de \u2212 ce que l'on doit</span>`
+      html: ln(`<b>Patrimoine net</b><br><span>= ce que l'on poss\xE8de \u2212 ce que l'on doit</span>`, `<b>Net worth</b><br><span>= what you own \u2212 what you owe</span>`)
     });
     hud.card({
       id: "s5-gain",
@@ -27323,7 +27388,7 @@ void main(){
       enter: "left",
       anchor: balAnchor(-6, 15),
       offset: [-220, -20],
-      html: `<b>Plus-values non r\xE9alis\xE9es</b><br><span>gains \xAB sur le papier \xBB tant que les titres ne sont pas vendus</span>`
+      html: ln(`<b>Plus-values non r\xE9alis\xE9es</b><br><span>gains \xAB sur le papier \xBB tant que les titres ne sont pas vendus</span>`, `<b>Unrealized gains</b><br><span>\u201Cpaper\u201D profits as long as the securities aren't sold</span>`)
     });
     hud.card({
       id: "s5-tax",
@@ -27333,7 +27398,7 @@ void main(){
       enter: "up",
       anchor: () => new Vector3(POS.bank.x - 6, 11, POS.bank.z + 8),
       offset: [240, -30],
-      html: `<b>Imp\xF4ts</b> sur les plus-values<br><span>une vente massive a un co\xFBt fiscal</span>`
+      html: ln(`<b>Imp\xF4ts</b> sur les plus-values<br><span>une vente massive a un co\xFBt fiscal</span>`, `<b>Taxes</b> on capital gains<br><span>a massive sale carries a tax cost</span>`)
     });
     hud.card({
       id: "s5-drop",
@@ -27343,7 +27408,7 @@ void main(){
       enter: "left",
       anchor: () => new Vector3(POS.bank.x - 14, 12, POS.bank.z - 11),
       offset: [-260, 60],
-      html: `<b>Le cours chute</b><br><span>vendre en masse p\xE8se sur le march\xE9</span>`
+      html: ln(`<b>Le cours chute</b><br><span>vendre en masse p\xE8se sur le march\xE9</span>`, `<b>The price drops</b><br><span>selling in bulk weighs on the market</span>`)
     });
     hud.card({
       id: "s6-gen",
@@ -27354,7 +27419,7 @@ void main(){
       y: 168,
       align: "left",
       enter: "right",
-      html: `<b>M\xE9canisme g\xE9n\xE9ral</b> \xB7 exemple hypoth\xE9tique<br><span>aucune op\xE9ration particuli\xE8re d'Elon Musk<br>n'est pr\xE9sent\xE9e ici comme un fait</span>`
+      html: ln(`<b>M\xE9canisme g\xE9n\xE9ral</b> \xB7 exemple hypoth\xE9tique<br><span>aucune op\xE9ration particuli\xE8re d'Elon Musk<br>n'est pr\xE9sent\xE9e ici comme un fait</span>`, `<b>General mechanism</b> \xB7 hypothetical example<br><span>no specific Elon Musk transaction<br>is presented here as fact</span>`)
     });
     hud.card({
       id: "s6-port",
@@ -27364,7 +27429,7 @@ void main(){
       enter: "right",
       anchor: () => portPos.clone().add(POS.bank).add(new Vector3(0, 12, 0)),
       offset: [-20, -60],
-      html: `<b>Portefeuille d'actions</b><br><span>valeur des titres : <i>100</i> (hypoth\xE9tique)</span>`
+      html: ln(`<b>Portefeuille d'actions</b><br><span>valeur des titres : <i>100</i> (hypoth\xE9tique)</span>`, `<b>Share portfolio</b><br><span>value of the securities: <i>100</i> (hypothetical)</span>`)
     });
     hud.card({
       id: "s6-collat",
@@ -27374,10 +27439,10 @@ void main(){
       enter: "up",
       anchor: () => safePos.clone().add(POS.bank).add(new Vector3(0, 11, 0)),
       offset: [-40, 90],
-      html: `<b>1 \xB7 Actions en garantie</b><br><span>d\xE9pos\xE9es chez la banque</span>`,
+      html: ln(`<b>1 \xB7 Actions en garantie</b><br><span>d\xE9pos\xE9es chez la banque</span>`, `<b>1 \xB7 Shares as collateral</b><br><span>deposited with the bank</span>`),
       dyn: (t, el) => {
         const v = collat(t);
-        el.querySelector("span").innerHTML = `valeur des garanties : <i>${v.toFixed(0)}</i>`;
+        el.querySelector("span").innerHTML = ln(`valeur des garanties : <i>${v.toFixed(0)}</i>`, `collateral value: <i>${v.toFixed(0)}</i>`);
       }
     });
     hud.card({
@@ -27388,7 +27453,7 @@ void main(){
       enter: "left",
       anchor: () => borrowerPos.clone().add(POS.bank).add(new Vector3(0, 10, 0)),
       offset: [-10, -60],
-      html: `<b>2 \xB7 L'argent emprunt\xE9</b><br><span>pr\xEAt : <i>25</i> = 25 % de la valeur des titres</span>`
+      html: ln(`<b>2 \xB7 L'argent emprunt\xE9</b><br><span>pr\xEAt : <i>25</i> = 25 % de la valeur des titres</span>`, `<b>2 \xB7 The borrowed money</b><br><span>loan: <i>25</i> = 25% of the securities' value</span>`)
     });
     hud.card({
       id: "s6-int",
@@ -27398,7 +27463,7 @@ void main(){
       enter: "left",
       anchor: () => P(20, 12, 6).clone().add(POS.bank),
       offset: [90, 40],
-      html: `<b>3 \xB7 Les int\xE9r\xEAts</b><br><span>vers\xE9s r\xE9guli\xE8rement \xE0 la banque</span>`
+      html: ln(`<b>3 \xB7 Les int\xE9r\xEAts</b><br><span>vers\xE9s r\xE9guli\xE8rement \xE0 la banque</span>`, `<b>3 \xB7 Interest</b><br><span>paid regularly to the bank</span>`)
     });
     hud.card({
       id: "s6-repay",
@@ -27408,7 +27473,7 @@ void main(){
       enter: "up",
       anchor: () => P(10, 18, 7).clone().add(POS.bank),
       offset: [-60, 40],
-      html: `<b>4 \xB7 Le remboursement</b><br><span>les actions sont lib\xE9r\xE9es</span>`
+      html: ln(`<b>4 \xB7 Le remboursement</b><br><span>les actions sont lib\xE9r\xE9es</span>`, `<b>4 \xB7 Repayment</b><br><span>the shares are released</span>`)
     });
     hud.card({
       id: "s6-call",
@@ -27418,7 +27483,7 @@ void main(){
       x: 960,
       y: 190,
       enter: "scale",
-      html: `<div class="mc-t">\u26A0 APPEL DE MARGE</div><div class="mc-s">si la valeur des garanties tombe trop bas, la banque exige<br>des titres suppl\xE9mentaires ou un remboursement</div>`
+      html: ln(`<div class="mc-t">\u26A0 APPEL DE MARGE</div><div class="mc-s">si la valeur des garanties tombe trop bas, la banque exige<br>des titres suppl\xE9mentaires ou un remboursement</div>`, `<div class="mc-t">\u26A0 MARGIN CALL</div><div class="mc-s">if the value of the collateral falls too low, the bank demands<br>additional securities or repayment</div>`)
     });
     const update = (t) => {
       const in5 = t < T5.end + 0.2;
@@ -27559,16 +27624,16 @@ void main(){
     rise: SC.s7.t0 + 2.4,
     tesla: when("s7a", "Tesla") - 0.1,
     spacex: when("s7a", "SpaceX") - 0.15,
-    ai: when("s7a", "intelligence artificielle") - 0.2,
-    others: when("s7a", "d'autres participations") - 0.2,
-    debts: when("s7a", "dettes document\xE9es") - 0.4,
-    own: when("s7b", "Propri\xE9t\xE9") - 0.1,
-    control: when("s7b", "contr\xF4le") - 0.1,
-    value: when("s7b", "valorisation") - 0.1,
-    net: when("s7b", "patrimoine net") - 0.2,
-    line1: when("s7c", "La richesse") - 0.1,
-    line2: when("s7c", "C'est principalement") - 0.2,
-    zoom: when("s7c", "C'est principalement") + 0.2,
+    ai: when("s7a", ln("intelligence artificielle", "artificial intelligence")) - 0.2,
+    others: when("s7a", ln("d'autres participations", "other holdings")) - 0.2,
+    debts: when("s7a", ln("dettes document\xE9es", "documented debts")) - 0.4,
+    own: when("s7b", ln("Propri\xE9t\xE9", "Ownership")) - 0.1,
+    control: when("s7b", ln("contr\xF4le", "control")) - 0.1,
+    value: when("s7b", ln("valorisation", "valuation")) - 0.1,
+    net: when("s7b", ln("patrimoine net", "net worth")) - 0.2,
+    line1: when("s7c", ln("La richesse", "Elon Musk's wealth")) - 0.1,
+    line2: when("s7c", ln("C'est principalement", "It is mainly")) - 0.2,
+    zoom: when("s7c", ln("C'est principalement", "It is mainly")) + 0.2,
     end: SC.s7.t1
   };
   function buildFinale(ctx) {
@@ -27624,24 +27689,24 @@ void main(){
     const TAG_END = PORTRAIT ? T7.line1 - 0.2 : T7.zoom + 0.4;
     const tag = (id, cls, html, anchor, offset, t0, t1 = TAG_END, enter = "scale", extra = {}) => hud.card({ id, cls, html, anchor, offset, t0, t1, enter, ...extra });
     const P = (v, y) => () => up(v, y);
-    tag("s7-hub", "tag gold bigtag", `<b>ELON MUSK</b><br><span>au centre : poss\xE8de, contr\xF4le, emprunte</span>`, P(H2, 20), [0, -40], T7.rise - 0.3, void 0, void 0, { skipP: true });
+    tag("s7-hub", "tag gold bigtag", ln(`<b>ELON MUSK</b><br><span>au centre : poss\xE8de, contr\xF4le, emprunte</span>`, `<b>ELON MUSK</b><br><span>at the center: owns, controls, borrows</span>`), P(H2, 20), [0, -40], T7.rise - 0.3, void 0, void 0, { skipP: true });
     const nw = facts.net_worth;
     const md = (v) => fmt.int(v).replace(/\u202f/g, " ");
-    const dt = (iso) => (/* @__PURE__ */ new Date(iso + "T12:00:00Z")).toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
-    tag("s7-net", "tag gold netag", `<b>Patrimoine net \u2248 ${md(nw.headline.value_usd_billions)} Md$</b><br><span>Forbes, ${dt(nw.headline.as_of)} \xB7 Bloomberg \u2248 ${md(nw.bloomberg.value_usd_billions)} Md$ (${dt(nw.bloomberg.as_of)}) \xB7 estimations</span>`, P(H2, 42), [0, -62], T7.net);
-    tag("s7-tesla", "tag", `<b>TESLA</b><br><span>\u2248 11 % des actions (hors restreintes)</span>`, P(TS, 30), [0, -40], T7.tesla);
-    tag("s7-spacex", "tag cyan", `<b>SPACEX + IA (xAI)</b><br><span>\u2248 38 \xE0 42 % du capital \xB7 \u2248 82 % des voix</span>`, P(SP, 44), [0, -40], T7.spacex);
-    tag("s7-ai", "tag cyan small", `<b>xAI : int\xE9gr\xE9e \xE0 SpaceX</b><br><span>compt\xE9e une seule fois</span>`, P(SP, 22), [150, 44], T7.ai, void 0, void 0, { skipP: true });
-    tag("s7-bourse", "tag", `<b>BOURSE</b><br><span>le prix du jour valorise les titres</span>`, P(BO, 32), [-300, 20], T7.value);
-    tag("s7-bank", "tag red", `<b>BANQUE \xB7 dettes</b><br><span>actions Tesla nanties \u2248 236 M (29 ao\xFBt 2025) ;<br>montant des pr\xEAts non publi\xE9 ; plafond 3,5 Md$</span>`, P(BA, 20), [-470, -150], T7.debts);
-    tag("s7-others", "tag cyan small", `<b>Autres participations</b><br><span>Neuralink, The Boring Co. : non chiffr\xE9es</span>`, () => up(H2, 8).add(new Vector3(-13, 0, -4)), [-210, 30], T7.others, void 0, void 0, { htmlP: `<b>Autres participations et liquidit\xE9s</b><br><span>Neuralink, The Boring Co. : non chiffr\xE9es \xB7 liquidit\xE9s : non document\xE9es de fa\xE7on fiable</span>` });
-    tag("s7-cash", "tag green small", `<b>Liquidit\xE9s</b><br><span>non document\xE9es de fa\xE7on fiable</span>`, () => up(H2, 8).add(new Vector3(13, 0, 4)), [200, 40], T7.others + 0.5, void 0, void 0, { skipP: true });
+    const dt = fmtDate;
+    tag("s7-net", "tag gold netag", ln(`<b>Patrimoine net \u2248 ${md(nw.headline.value_usd_billions)} Md$</b><br><span>Forbes, ${dt(nw.headline.as_of)} \xB7 Bloomberg \u2248 ${md(nw.bloomberg.value_usd_billions)} Md$ (${dt(nw.bloomberg.as_of)}) \xB7 estimations</span>`, `<b>Net worth \u2248 $${md(nw.headline.value_usd_billions)}B</b><br><span>Forbes, ${dt(nw.headline.as_of)} \xB7 Bloomberg \u2248 $${md(nw.bloomberg.value_usd_billions)}B (${dt(nw.bloomberg.as_of)}) \xB7 estimates</span>`), P(H2, 42), [0, -62], T7.net);
+    tag("s7-tesla", "tag", ln(`<b>TESLA</b><br><span>\u2248 11 % des actions (hors restreintes)</span>`, `<b>TESLA</b><br><span>\u2248 11% of shares (excluding restricted)</span>`), P(TS, 30), [0, -40], T7.tesla);
+    tag("s7-spacex", "tag cyan", ln(`<b>SPACEX + IA (xAI)</b><br><span>\u2248 38 \xE0 42 % du capital \xB7 \u2248 82 % des voix</span>`, `<b>SPACEX + AI (xAI)</b><br><span>\u2248 38 to 42% of equity \xB7 \u2248 82% of votes</span>`), P(SP, 44), [0, -40], T7.spacex);
+    tag("s7-ai", "tag cyan small", ln(`<b>xAI : int\xE9gr\xE9e \xE0 SpaceX</b><br><span>compt\xE9e une seule fois</span>`, `<b>xAI: part of SpaceX</b><br><span>counted only once</span>`), P(SP, 22), [150, 44], T7.ai, void 0, void 0, { skipP: true });
+    tag("s7-bourse", "tag", ln(`<b>BOURSE</b><br><span>le prix du jour valorise les titres</span>`, `<b>EXCHANGE</b><br><span>the day's price values the securities</span>`), P(BO, 32), [-300, 20], T7.value);
+    tag("s7-bank", "tag red", ln(`<b>BANQUE \xB7 dettes</b><br><span>actions Tesla nanties \u2248 236 M (29 ao\xFBt 2025) ;<br>montant des pr\xEAts non publi\xE9 ; plafond 3,5 Md$</span>`, `<b>BANK \xB7 debts</b><br><span>Tesla shares pledged \u2248 236M (Aug 29, 2025);<br>loan amount not published; cap $3.5B</span>`), P(BA, 20), [-470, -150], T7.debts);
+    tag("s7-others", "tag cyan small", ln(`<b>Autres participations</b><br><span>Neuralink, The Boring Co. : non chiffr\xE9es</span>`, `<b>Other holdings</b><br><span>Neuralink, The Boring Co.: not quantified</span>`), () => up(H2, 8).add(new Vector3(-13, 0, -4)), [-210, 30], T7.others, void 0, void 0, { htmlP: ln(`<b>Autres participations et liquidit\xE9s</b><br><span>Neuralink, The Boring Co. : non chiffr\xE9es \xB7 liquidit\xE9s : non document\xE9es de fa\xE7on fiable</span>`, `<b>Other holdings and cash</b><br><span>Neuralink, The Boring Co.: not quantified \xB7 cash: not reliably documented</span>`) });
+    tag("s7-cash", "tag green small", ln(`<b>Liquidit\xE9s</b><br><span>non document\xE9es de fa\xE7on fiable</span>`, `<b>Cash</b><br><span>not reliably documented</span>`), () => up(H2, 8).add(new Vector3(13, 0, 4)), [200, 40], T7.others + 0.5, void 0, void 0, { skipP: true });
     const leg = [
-      ["#2b7bff", "Propri\xE9t\xE9", "part du capital d\xE9tenue", T7.own],
-      ["#ffb81c", "Contr\xF4le", "droits de vote", T7.control],
-      ["#ffffff", "Valorisation", "prix de march\xE9", T7.value],
-      ["#ff4d5e", "Dettes", "titres nantis, pr\xEAts", T7.debts],
-      ["#ffd978", "Patrimoine net", "poss\xE9d\xE9 \u2212 d\xFB", T7.net]
+      ["#2b7bff", ln("Propri\xE9t\xE9", "Ownership"), ln("part du capital d\xE9tenue", "share of equity held"), T7.own],
+      ["#ffb81c", ln("Contr\xF4le", "Control"), ln("droits de vote", "voting rights"), T7.control],
+      ["#ffffff", ln("Valorisation", "Valuation"), ln("prix de march\xE9", "market price"), T7.value],
+      ["#ff4d5e", ln("Dettes", "Debts"), ln("titres nantis, pr\xEAts", "pledged shares, loans"), T7.debts],
+      ["#ffd978", ln("Patrimoine net", "Net worth"), ln("poss\xE9d\xE9 \u2212 d\xFB", "owned \u2212 owed"), T7.net]
     ];
     leg.forEach(([col, name, sub, t0], i) => hud.card({
       id: "s7-leg" + i,
@@ -27664,8 +27729,8 @@ void main(){
       enter: "up",
       html: leg.map(([col, name]) => `<span><i style="background:${col}"></i>${name}</span>`).join("")
     });
-    hud.card({ id: "s7-final1", cls: "finale", t0: T7.line1, t1: T7.end - 0.9, x: 960, y: 800, enter: "up", inD: 0.8, outD: 0.6, html: `La richesse d'Elon Musk n'est pas un coffre rempli de dollars.` });
-    hud.card({ id: "s7-final2", cls: "finale gold", t0: T7.line2, t1: T7.end - 0.9, x: 960, y: 880, enter: "up", inD: 0.8, outD: 0.6, zone: "bottom", html: `C'est principalement la valeur de ce qu'il poss\xE8de.` });
+    hud.card({ id: "s7-final1", cls: "finale", exact: true, t0: T7.line1, t1: T7.end - 0.9, x: 960, y: 800, enter: "up", inD: 0.8, outD: 0.6, html: ln(`La richesse d'Elon Musk n'est pas un coffre rempli de dollars.`, `Elon Musk's wealth is not a vault filled with dollars.`) });
+    hud.card({ id: "s7-final2", cls: "finale gold", exact: true, t0: T7.line2, t1: T7.end - 0.9, x: 960, y: 880, enter: "up", inD: 0.8, outD: 0.6, zone: "bottom", html: ln(`C'est principalement la valeur de ce qu'il poss\xE8de.`, `It is mainly the value of what he owns.`) });
     const update = (t) => {
       const on = t >= T7.t0 - 0.2;
       const drawOf = (t0, d = 1.6) => ease.io2(inv(t0, t0 + d, t));

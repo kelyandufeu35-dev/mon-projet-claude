@@ -1,0 +1,26 @@
+{
+  "voice": "af_heart",
+  "lang": "en-us",
+  "segments": [
+    { "id": "s1a", "text": "Elon Musk has a fortune estimated at nearly one trillion dollars. But that money isn't sitting in a bank account." },
+    { "id": "s1b", "text": "So where is it, really? Let's dive into a single Tesla share." },
+    { "id": "s2a", "text": "A share is a small piece of a company. Multiply the number of shares by their price, and you get the market capitalization." },
+    { "id": "s2b", "text": "Elon Musk owns about eleven percent of Tesla. His stake is worth his shares times their price: when the price goes up, it goes up; when it falls, it falls." },
+    { "id": "s2c", "text": "Some shares are restricted, others are only options." },
+    { "id": "s3a", "text": "A share becomes a rocket: meet SpaceX." },
+    { "id": "s3b", "text": "In February twenty twenty-six, SpaceX absorbed xAI, Musk's artificial intelligence company, then went public in June. The stake is counted only once." },
+    { "id": "s3c", "text": "Enterprise value, market capitalization, Musk's personal stake: three distinct notions." },
+    { "id": "s4a", "text": "Every day, prices move, and so does his fortune." },
+    { "id": "s4b", "text": "Hypothetical example: one hundred million shares at one hundred dollars are worth ten billion. Plus ten percent: one billion gained; minus ten percent: one billion lost." },
+    { "id": "s4c", "text": "Without selling anything, or buying anything." },
+    { "id": "s5a", "text": "But being a billionaire doesn't mean a vault full of cash." },
+    { "id": "s5b", "text": "Let's open it: mostly shares. Net worth: what you own minus what you owe. Unrealized gains: profits on paper." },
+    { "id": "s5c", "text": "Selling everything would trigger taxes, and make the price crash." },
+    { "id": "s6a", "text": "How do you get cash without selling? With a loan backed by securities." },
+    { "id": "s6b", "text": "You deposit shares as collateral, the bank lends a sum, you pay interest, then you repay." },
+    { "id": "s6c", "text": "If the collateral loses value: margin call. A general mechanism, no specific transaction." },
+    { "id": "s7a", "text": "At the center, Elon Musk. Around him: Tesla, SpaceX and its artificial intelligence, other holdings, and documented debts." },
+    { "id": "s7b", "text": "Ownership, control, valuation, net worth: it all depends on the value of what he owns." },
+    { "id": "s7c", "text": "Elon Musk's wealth is not a vault filled with dollars. It is mainly the value of what he owns." }
+  ]
+}
