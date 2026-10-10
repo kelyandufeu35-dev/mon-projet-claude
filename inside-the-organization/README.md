@@ -1,7 +1,7 @@
 # McDonald's — Inside the Organization
 
 Vidéo explicative d'environ **98 secondes** (un **hook** de 5 s « Comment McDo fonctionne ? » + 93,5 s de film) en **motion design 3D isométrique miniature**,
-en deux formats générés depuis le même code : **16:9 (1920 × 1080)** et **9:16 TikTok / Reels / Shorts (1080 × 1920)**, 30 i/s.
+en deux formats générés depuis le même code : **16:9 (1920 × 1080)** et **9:16 TikTok / Reels / Shorts (1080 × 1920)**, 30 i/s ; le 9:16 existe aussi en **anglais** (voix off, textes et étiquettes traduits).
 Elle montre **qui dirige McDonald's, comment l'organisation est structurée, comment fonctionne la franchise
 et comment la hiérarchie descend jusqu'aux équipes d'un restaurant**. Rien sur les burgers, les fournisseurs ou la logistique.
 
@@ -13,6 +13,7 @@ et comment la hiérarchie descend jusqu'aux équipes d'un restaurant**. Rien sur
 | Fichier | Contenu |
 |---|---|
 | `video/mcdonalds-inside-the-organization-tiktok.mp4` | **Version TikTok** (1080×1920, 9:16, 30 i/s, 98,5 s, voix + musique, −16 LUFS). |
+| `video/mcdonalds-inside-the-organization-tiktok-en.mp4` | **TikTok en anglais** (1080×1920, 9:16, 98,5 s, voix américaine, −16 LUFS). |
 | `video/mcdonalds-inside-the-organization-web.mp4` | **Version 16:9** (1920×1080, 30 i/s, 98,5 s, voix + musique, −16 LUFS). |
 | `renders/*.mp4` | Masters (CRF 15–16) — non versionnés (trop lourds pour git), régénérables avec `npm run render` / `npm run render:tiktok`. |
 | `docs/storyboard.jpg`, `docs/poster-*.jpg` | Planche de 9 images et affiches extraites de la vidéo finale. |
@@ -58,6 +59,7 @@ npm run lint                      # contrat Hyperframes (les deux projets)
 npm run check                     # lint + exécution + mise en page + contraste (long en WebGL logiciel) ; check:tiktok pour le 9:16
 PRODUCER_HEADLESS_SHELL_PATH=/chemin/vers/chrome-headless-shell npm run render         # -> renders/mcdonalds-inside-the-organization.mp4
 PRODUCER_HEADLESS_SHELL_PATH=/chemin/vers/chrome-headless-shell npm run render:tiktok  # -> renders/mcdonalds-inside-the-organization-tiktok.mp4
+PRODUCER_HEADLESS_SHELL_PATH=/chemin/vers/chrome-headless-shell npm run render:tiktok-en  # -> version anglaise (voix : npm run voice:en)
 ```
 
 Durée de rendu observée : **≈ 50 min par format** pour les ≈ 2 950 images (4 cœurs, WebGL logiciel SwiftShader, sans GPU).
@@ -76,8 +78,10 @@ en portrait : `scripts/pshots.sh planche.png 8 20 40 80` (temps de scène, planc
 index.html            composition Hyperframes 16:9 (1920×1080, 98,5 s) : canvas WebGL + étiquettes + texte + <audio>
 preview.html          lecteur autonome (lecture, scrub, chapitres, son)
 tiktok/               projet Hyperframes 9:16 (1080×1920) : même code (bundle compilé avec __PORTRAIT__=true), mêmes assets (copiés par le build)
+tiktok-en/            même projet 9:16 en anglais (bundle __LANG__='en', voix off de assets/audio/vo-en copiée dans tiktok-en/assets/audio/vo)
 src/
   main.js             assemble le monde ; renderAt(t) = fonction pure du temps (écoute l'événement hf-seek)
+  i18n.js, locales/en.js  langue de sortie (fixée à la compilation) : les textes du code, en français, servent de clés traduites par tr() ; narration.js choisit narration(.en).json
   format.js           format de sortie (paysage / portrait) fixé à la compilation : dimensions, zone de sécurité des étiquettes
   timeline.js         découpage du film, hook d'ouverture et correspondance temps vidéo → temps de scène
   cameraPlan.js       plan de caméra isométrique (zooms exponentiels, plongeon, ascension) ; surcharges `p:` pour le portrait
@@ -87,7 +91,7 @@ src/
                       restaurant (coupe), furniture, icons (icônes de toit des 7 fonctions)
   sets/               hq, plaza, globe, city, interior, chart  (une « scène » = un set)
   data/landmask.js    contours de continents simplifiés pour le globe en points
-data/                 narration.json (voix off, hook, chapitres), pronunciation.json (prononciation), facts.json (faits et statut de vérification), sfx.json
+data/                 narration.json / narration.en.json (voix off, hook, chapitres), pronunciation(.en).json (prononciation), facts.json (faits et statut de vérification), sfx.json
 scripts/              build, tts (Kokoro), music (synthèse), audio-tags, shoot/look/sheet (contrôle visuel)
 assets/               polices (Poppins/Inter), audio (voix off, musique, effets), GSAP
 ```
