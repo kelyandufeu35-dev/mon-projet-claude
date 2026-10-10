@@ -14,7 +14,7 @@ Aucun générateur externe d'images, de vidéos ou de sons n'est utilisé.
 | 3D | Three.js 0.170 — vraie 3D, caméra orthographique isométrique, ombres portées |
 | Voix | Kokoro‑82M en local (`kokoro-onnx`), voix française `ff_siwis` |
 | Musique & effets | synthétisés en Python (numpy / scipy), mixés avec la voix |
-| Sortie | `out/musk-anatomie.mp4` (H.264 + AAC) |
+| Sortie | `exports/musk-anatomie-1080p.mp4` (copie de diffusion, H.264 + AAC) ; master CRF 16 : `out/musk-anatomie.mp4` (non versionné, 183 Mo) |
 
 ## Les 7 scènes
 
@@ -37,11 +37,15 @@ npm run build                # bundle + timeline + durée reportée dans index.h
 npx hyperframes preview      # prévisualisation (Studio), ou : npm run dev
 npx hyperframes check        # lint + runtime + mise en page + mouvement + contraste
 npx hyperframes snapshot --at 20.5,52.5,95     # images clés PNG pour vérification
-npm run render               # rendu MP4 -> out/musk-anatomie.mp4
+npm run render               # rendu MP4 -> out/musk-anatomie.mp4 (master)
+ffmpeg -i out/musk-anatomie.mp4 -c:v libx264 -preset slow -crf 22 -pix_fmt yuv420p -movflags +faststart -c:a copy exports/musk-anatomie-1080p.mp4
 ```
 
-Rendu 3D en logiciel (sans GPU) : ≈ 0,5 s par image côté 3D, **environ 1 h** pour les 3 162 images. Sur une machine avec
-GPU, `hyperframes render` utilise l'accélération matérielle automatiquement.
+Rendu 3D en logiciel (sans GPU, 4 cœurs) : ≈ 0,5 s par image côté 3D, **34 min** pour les 3 162 images. Sur une machine
+avec GPU, `hyperframes render` utilise l'accélération matérielle automatiquement.
+
+Contrôles réalisés sur le MP4 final : 1920×1080, 30 fps, 3 162 images, 105,4 s ; aucune image figée ; seule image noire = le
+fondu de sortie ; audio −15,7 LUFS intégrés, crête vraie −1,3 dBFS.
 
 Dans un conteneur sans Chrome géré par Hyperframes, pointer vers un Chromium *headless shell* existant :
 
