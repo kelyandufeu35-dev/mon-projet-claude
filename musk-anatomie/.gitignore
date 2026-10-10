@@ -6,3 +6,5 @@ shots/
 renders/
 assets/audio/mix.wav
 *.tmp
+out/work-*/
+out/.*.hf-transaction-*/
