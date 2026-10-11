@@ -15,8 +15,8 @@ import { smoothNoise, clamp } from '../../engine/rng.js';
 export const DURATION = 32;
 const mm = 0.001;
 
-export function createWorld({ canvas, width, height, samples = 6 }) {
-  const pipe = new CinePipeline({ canvas, width, height, samples });
+export function createWorld({ canvas, width, height, samples = 6, shadowType = 'basic' }) {
+  const pipe = new CinePipeline({ canvas, width, height, samples, shadowType });
   const renderer = pipe.renderer;
 
   const scene = new THREE.Scene();
@@ -122,17 +122,17 @@ export function createWorld({ canvas, width, height, samples = 6 }) {
   ], { shake: null });
 
   // --- Pistes ---------------------------------------------------------------------------------------
-  const exposure = track([[0, 1.1], [6, 0.95], [8, 0.9], [10.5, 1.25], [13, 1.0], [15.5, 1.0], [18.5, 1.0], [22, 1.5], [26.5, 1.6], [30, 1.5], [32, 1.5]]);
+  const exposure = track([[0, 1.3], [2.5, 1.15], [6, 0.95], [8, 0.9], [10.5, 1.25], [13, 1.0], [15.5, 1.0], [18.5, 1.0], [22, 1.5], [26.5, 1.6], [30, 1.5], [32, 1.5]]);
   const bloom = track([[0, 0.06], [10, 0.08], [13, 0.12], [16, 0.08], [24, 0.06], [32, 0.06]]);
   // Deux éclats : la pénétration de la surface de la puce (12,5 s) et la sortie à l'air libre (15,4 s),
   // qui masquent les changements de visibilité du décor.
   const flashIn = track([[12.28, 0, 'in'], [12.5, 1.2, 'out'], [12.85, 0]]);
-  const flashOut = track([[15.0, 0, 'in'], [15.4, 2.6, 'out'], [15.95, 0]]);
+  const flashOut = track([[15.0, 0, 'in'], [15.4, 2.6, 'out'], [16.3, 0]]);
   const flash = (t) => flashIn(t) + flashOut(t);
   const streak = track([[0, 0], [24, 0], [28, 0.05], [32, 0.06]]);
   const fade = track([[0, 0], [1.6, 1], [31.2, 1], [32, 1]]);
   // Décalage (degrés) du softbox par rapport à la direction de réflexion exacte : balayage de lumière.
-  const sweepAz = track([[0, -40], [2.6, -20], [5.2, -2], [6.4, 18], [8.2, 34], [12, 34], [15.2, 8], [17.4, 12], [19.6, 28], [23, 0], [32, 0]]);
+  const sweepAz = track([[0, -30], [2.6, -18], [5.2, -2], [6.4, 18], [8.2, 34], [12, 34], [15.2, 8], [17.4, 12], [19.6, 28], [23, 0], [32, 0]]);
   const sweepEl = track([[0, 4], [8.2, 0], [32, 0]]);
   const macroOn = track([[0, 1], [16.5, 1], [19.5, 0]]);
   const trayOn = track([[0, 0], [17.5, 0], [21, 1], [25, 0.9], [29, 0.45], [32, 0.4]]);
@@ -211,7 +211,7 @@ export function createWorld({ canvas, width, height, samples = 6 }) {
 
   // Nombre de sous-échantillons par image : la profondeur de champ et le flou de mouvement n'ont pas
   // besoin de la même qualité partout (la plongée est quasi sténopé ; l'allée est peu défocalisée).
-  const sampleFactor = track([[0, 1.0], [8.4, 1.0], [9.0, 0.5], [15.0, 0.5], [15.6, 0.75], [19.5, 0.75], [20.5, 0.6], [26, 0.6], [27, 0.5], [32, 0.5]], 'linear');
+  const sampleFactor = track([[0, 1.0], [8.4, 1.0], [9.0, 0.4], [15.0, 0.4], [15.6, 0.6], [32, 0.6]], 'linear');
   function samplesFor(t, base) {
     return Math.max(2, Math.round(base * sampleFactor(t)));
   }

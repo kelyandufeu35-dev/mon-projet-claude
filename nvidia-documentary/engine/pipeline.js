@@ -252,7 +252,7 @@ void main() {
 }`;
 
 export class CinePipeline {
-  constructor({ canvas, width, height, samples = 8, bloomLevels = 6, msaa = 0, prepass = false }) {
+  constructor({ canvas, width, height, samples = 8, bloomLevels = 6, msaa = 0, prepass = false, shadowType = 'pcfsoft' }) {
     applyShaderPatches();
     this.msaa = msaa;
     this.prepass = prepass;
@@ -274,7 +274,7 @@ export class CinePipeline {
     renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
     renderer.toneMapping = THREE.NoToneMapping;
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.shadowMap.type = { basic: THREE.BasicShadowMap, pcf: THREE.PCFShadowMap, pcfsoft: THREE.PCFSoftShadowMap }[shadowType] ?? THREE.PCFSoftShadowMap;
     renderer.shadowMap.autoUpdate = false;
     // Les effacements sont explicites : un `render()` ne doit jamais effacer la profondeur du
     // pré-passage ni le tampon d'accumulation.

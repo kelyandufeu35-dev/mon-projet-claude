@@ -415,9 +415,9 @@ export function makeInterposer({ wMM = 58, dMM = 50, px = 2048, seed = 31, footp
   for (let i = 0; i < 90; i++) {
     const x = rnd() * W, y = rnd() * H, r = 120 + rnd() * 380;
     const g = a.createRadialGradient(x, y, 0, x, y, r);
-    const hue = [210, 255, 285, 170, 35][(rnd() * 5) | 0];
-    g.addColorStop(0, `hsla(${hue},45%,58%,0.10)`);
-    g.addColorStop(1, `hsla(${hue},45%,58%,0)`);
+    const hue = [210, 195, 170, 35][(rnd() * 4) | 0];
+    g.addColorStop(0, `hsla(${hue},40%,58%,0.06)`);
+    g.addColorStop(1, `hsla(${hue},40%,58%,0)`);
     a.fillStyle = g;
     a.fillRect(x - r, y - r, 2 * r, 2 * r);
   }
@@ -429,8 +429,8 @@ export function makeInterposer({ wMM = 58, dMM = 50, px = 2048, seed = 31, footp
   h.fillStyle = 'rgb(128,128,128)';
   h.fillRect(0, 0, W, H);
 
-  // Trame fine de lignes de métallisation (très faible contraste).
-  h.globalAlpha = 0.09;
+  // Trame fine de lignes de métallisation (contraste très faible : au-delà elle produit du moiré).
+  h.globalAlpha = 0.03;
   for (let x = 0; x < W; x += 5) {
     h.fillStyle = (x / 5) % 2 ? '#fff' : '#000';
     h.fillRect(x, 0, 1, H);

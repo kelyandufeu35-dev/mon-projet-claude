@@ -7,3 +7,4 @@ pilot/scene.js
 pilot/test-*.html
 pilot/.hyperframes/
 pilot/assets/bed.wav
+pilot/chunk-*.html

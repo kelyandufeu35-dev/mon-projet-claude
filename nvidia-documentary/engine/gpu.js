@@ -63,7 +63,7 @@ export function buildGPUPackage({ seed = 21 } = {}) {
   for (const sx of [-1, 1]) for (const z of HBM_Z) footprints.push({ x: sx * HBM_X, z, w: HBM.w, d: HBM.d });
   const ip = makeInterposer({ wMM: 58, dMM: 50, px: 2048, seed: 31, footprints });
   const interposerMat = pbr({
-    color: 0xffffff, map: ip.map, orm: ip.orm, normal: ip.normal, normalScale: 0.45, metalness: 1, roughness: 1,
+    color: 0xffffff, map: ip.map, orm: ip.orm, normal: ip.normal, normalScale: 0.3, metalness: 1, roughness: 1,
   });
   const interposer = new THREE.Mesh(rbox(58 * mm, 0.8 * mm, 50 * mm, 0.12 * mm, 2), interposerMat);
   interposer.position.y = 0.4 * mm + 0.05 * mm;

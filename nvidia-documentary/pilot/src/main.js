@@ -39,7 +39,7 @@ canvas.height = H;
 canvas.style.width = `${BASE_W}px`;
 canvas.style.height = `${BASE_H}px`;
 
-const world = createWorld({ canvas, width: W, height: H, samples });
+const world = createWorld({ canvas, width: W, height: H, samples, shadowType: 'basic' });
 const hud = createHud({ root: document.getElementById('hud'), world, width: BASE_W, height: BASE_H });
 
 const shutter = 0.5 / fps; // obturateur à 180°

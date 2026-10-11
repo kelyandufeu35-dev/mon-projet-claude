@@ -8,7 +8,7 @@ const H = window.__H || 720;
 const canvas = document.getElementById('gl');
 canvas.width = W;
 canvas.height = H;
-const world = createWorld({ canvas, width: W, height: H, samples: 4 });
+const world = createWorld({ canvas, width: W, height: H, samples: 4, shadowType: (window.__extra && window.__extra.shadowType) || 'pcfsoft' });
 if (window.__extra && window.__extra.noPrepass) world.pipe.prepass = false;
 if (window.__extra && window.__extra.prepass) world.pipe.prepass = true;
 // Crochet de débogage : code JS arbitraire exécuté une fois la scène créée (développement uniquement).
