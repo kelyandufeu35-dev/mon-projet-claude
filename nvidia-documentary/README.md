@@ -129,7 +129,7 @@ procédurales à graine fixe, LED et impulsions pilotées par `t`. Même entrée
 Mêmes moteur, optique, éclairage et étalonnage que la pilote. Cadrage de la production confirmé par le
 commanditaire : **voix off masculine, diffusion TikTok, durée courte (≈ 45–60 s, un peu plus si utile), logo autorisé**.
 
-0. **Version TikTok** (script rédigé dans `tiktok/script.md`, narration dans `tiktok/narration.json`, voix Kokoro via `npm run voice`) : composition verticale 9:16 (1080×1920, même coût en pixels que 1080p), accroche dans les
+0. **Version TikTok** (script rédigé dans `tiktok/script.md`, narration dans `tiktok/narration.fr.json`, voix Kokoro via `npm run voice`) : composition verticale 9:16 (1080×1920, même coût en pixels que 1080p), accroche dans les
    2 premières secondes, plans courts, sous-titres incrustés synchronisés avec la voix off, logo fourni par le
    commanditaire (fichier officiel).
    La pilote 16:9 reste la référence de qualité.

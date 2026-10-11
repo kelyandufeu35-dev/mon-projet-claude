@@ -1,0 +1,51 @@
+{
+  "title": "Comment NVIDIA fonctionne vraiment",
+  "language": "fr",
+  "voice": "bm_george",
+  "speed": 1.05,
+  "leadIn": 0.4,
+  "beats": [
+    {
+      "id": "hook",
+      "pauseAfter": 0.3,
+      "text": "NVIDIA ne fabrique pas ses propres puces. Alors, que vend-elle vraiment ?",
+      "tts": "Envidia ne fabrique pas ses propres puces. Alors, que vend-elle vraiment ?"
+    },
+    {
+      "id": "design",
+      "pauseAfter": 0.35,
+      "text": "Elle les conçoit : des milliers de petits cœurs qui font d'énormes quantités de calculs en même temps. Pensées pour les jeux vidéo, idéales pour l'IA.",
+      "tts": "Elle les conçoit : des milliers de petits cœurs qui font d'énormes quantités de calculs en même temps. Pensées pour les jeux vidéo, idéales pour l'i a."
+    },
+    {
+      "id": "foundry",
+      "pauseAfter": 0.35,
+      "text": "Des fonderies, comme TSMC, transforment des plaques de silicium en puces, couche microscopique après couche. NVIDIA ne possède aucune usine de puces. Elle possède la conception.",
+      "tts": "Des fonderies, comme té ès èm cé, transforment des plaques de silicium en puces, couche microscopique après couche. Envidia ne possède aucune usine de puces. Elle possède la conception."
+    },
+    {
+      "id": "systems",
+      "pauseAfter": 0.35,
+      "text": "Mais la puce n'est que le début. NVIDIA vend des systèmes entiers : réseau, baies, centres de données complets qui fonctionnent comme un seul ordinateur.",
+      "tts": "Mais la puce n'est que le début. Envidia vend des systèmes entiers : réseau, baies, centres de données complets qui fonctionnent comme un seul ordinateur."
+    },
+    {
+      "id": "software",
+      "pauseAfter": 0.35,
+      "text": "Et une couche logicielle, CUDA, permet aux développeurs de tout programmer. C'est pourquoi tant de développeurs d'IA construisent sur NVIDIA.",
+      "tts": "Et une couche logicielle, Couda, permet aux développeurs de tout programmer. C'est pourquoi tant de développeurs d'i a construisent sur Envidia."
+    },
+    {
+      "id": "economy",
+      "pauseAfter": 0.35,
+      "text": "Qui paie ? D'abord les grands acteurs du cloud, puis les laboratoires d'IA et les entreprises, tous en course pour la puissance de calcul. Aujourd'hui, les centres de données rapportent l'essentiel du chiffre d'affaires de NVIDIA.",
+      "tts": "Qui paie ? D'abord les grands acteurs du cloud, puis les laboratoires d'i a et les entreprises, tous en course pour la puissance de calcul. Aujourd'hui, les centres de données rapportent l'essentiel du chiffre d'affaires d'Envidia."
+    },
+    {
+      "id": "close",
+      "pauseAfter": 0.5,
+      "text": "Alors NVIDIA n'est pas vraiment une usine à puces. Elle conçoit le moteur de l'ère de l'IA, et vend tout ce qui l'entoure.",
+      "tts": "Alors Envidia n'est pas vraiment une usine à puces. Elle conçoit le moteur de l'ère de l'i a, et vend tout ce qui l'entoure."
+    }
+  ]
+}
