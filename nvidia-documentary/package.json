@@ -1,0 +1,21 @@
+{
+  "name": "nvidia-documentary",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "description": "Documentaire NVIDIA - compositions Hyperframes (HTML -> MP4)",
+  "devDependencies": {
+    "esbuild": "^0.25.12",
+    "gsap": "^3.12.5",
+    "hyperframes": "^0.8.145",
+    "three": "^0.170.0"
+  },
+  "scripts": {
+    "build": "esbuild pilot/src/main.js --bundle --format=iife --outfile=pilot/scene.js --minify --log-level=warning",
+    "build:dev": "esbuild pilot/src/main.js --bundle --format=iife --outfile=pilot/scene.js --sourcemap --log-level=warning",
+    "check": "npm run build && cd pilot && npx hyperframes check",
+    "audio": "bash pilot/audio/make-bed.sh pilot/assets/bed.wav",
+    "render:draft": "npm run build && [ -f pilot/assets/bed.wav ] || npm run audio && cd pilot && npx hyperframes render --quality draft --fps 24 --variables '{\"samples\":3,\"scale\":0.5}' -o renders/pilot-draft.mp4",
+    "render:final": "npm run build && [ -f pilot/assets/bed.wav ] || npm run audio && cd pilot && npx hyperframes render --quality delivery --fps 24 --variables '{\"samples\":12,\"scale\":1}' --player-ready-timeout 180000 --protocol-timeout 3600000 -o renders/pilot-1080p24.mp4"
+  }
+}

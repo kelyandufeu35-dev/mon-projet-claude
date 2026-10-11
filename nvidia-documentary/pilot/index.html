@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="fr"
+  data-composition-variables='[
+    {"id":"samples","type":"number","label":"Sous-échantillons par image","default":8},
+    {"id":"scale","type":"number","label":"Échelle de la résolution interne","default":1},
+    {"id":"fps","type":"number","label":"Cadence (obturateur à 180°)","default":24},
+    {"id":"timeOffset","type":"number","label":"Décalage de lecture (s)","default":0}
+  ]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>NVIDIA — scène pilote</title>
+    <script src="vendor/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #020304; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #020304; }
+      #gl { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; display: block; }
+      #hud { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="32" data-width="1920" data-height="1080">
+      <canvas id="gl" class="clip" data-start="0" data-duration="32" data-track-index="0" width="1920" height="1080"></canvas>
+      <div id="hud" class="clip" data-start="0" data-duration="32" data-track-index="1"></div>
+      <audio id="bed" src="assets/bed.wav" data-start="0" data-duration="32" data-track-index="2" data-volume="1"></audio>
+    </div>
+    <script src="scene.js"></script>
+    <script>
+      // Le rendu est entièrement piloté par l'évènement hf-seek (voir src/main.js) ; la timeline GSAP
+      // ne sert ici qu'à déclarer la durée de la composition au runtime.
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      tl.to({}, { duration: 32 });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

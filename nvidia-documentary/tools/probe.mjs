@@ -1,0 +1,21 @@
+// Sonde : charge l'entrée et affiche le JSON complet renvoyé par la fonction de rendu (pas d'image).
+import puppeteer from 'puppeteer-core';
+import { build } from 'esbuild';
+import fs from 'node:fs';
+import path from 'node:path';
+import { pathToFileURL } from 'node:url';
+import { execSync } from 'node:child_process';
+const [, , entry, t = '0'] = process.argv;
+fs.mkdirSync('tools/.cache', { recursive: true });
+const name = path.basename(entry, '.js') + '_probe';
+await build({ entryPoints: [entry], bundle: true, format: 'iife', outfile: `tools/.cache/${name}.js`, logLevel: 'warning' });
+fs.writeFileSync(`tools/.cache/${name}.html`, `<!doctype html><body><canvas id="gl"></canvas><script src="./${name}.js"></script></body>`);
+const chrome = execSync('npx hyperframes browser path', { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim().split('\n').pop();
+const browser = await puppeteer.launch({ executablePath: chrome, headless: true, args: ['--no-sandbox', '--enable-webgl', '--ignore-gpu-blocklist', '--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'], protocolTimeout: 3_600_000 });
+const p = await browser.newPage();
+p.on('console', (m) => { const s = m.text(); if (!s.includes('GL Driver') && !s.includes('GPU stall')) console.log('[page]', s.slice(0, 1500)); });
+p.on('pageerror', (e) => console.log('[pageerror]', e.message));
+await p.evaluateOnNewDocument(() => { window.__W = 320; window.__H = 180; });
+await p.goto(pathToFileURL(path.resolve(`tools/.cache/${name}.html`)).href);
+console.log(JSON.stringify(await p.evaluate(async (tt) => window.__shot(tt, 1), +t)));
+await browser.close();
