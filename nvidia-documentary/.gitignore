@@ -11,3 +11,4 @@ pilot/chunk-*.html
 tools/.venv-tts/
 tiktok/voice/
 tiktok/samples/
+tiktok/out/
