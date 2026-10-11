@@ -1,0 +1,44 @@
+{
+  "title": "How NVIDIA actually works",
+  "language": "en",
+  "voice": "bm_george",
+  "speed": 1.05,
+  "leadIn": 0.4,
+  "beats": [
+    {
+      "id": "hook",
+      "pauseAfter": 0.3,
+      "text": "NVIDIA doesn't build its own chips. So what does it actually sell?"
+    },
+    {
+      "id": "design",
+      "pauseAfter": 0.35,
+      "text": "It designs them: thousands of tiny cores doing enormous amounts of math at once. Made for games, ideal for AI."
+    },
+    {
+      "id": "foundry",
+      "pauseAfter": 0.35,
+      "text": "Foundries like TSMC turn silicon wafers into chips, layer by microscopic layer. NVIDIA owns no chip factory. It owns the design."
+    },
+    {
+      "id": "systems",
+      "pauseAfter": 0.35,
+      "text": "But the chip is only the start. NVIDIA sells whole systems: networking, racks, entire data centers working as one computer."
+    },
+    {
+      "id": "software",
+      "pauseAfter": 0.35,
+      "text": "And a software layer called CUDA lets developers program all of it. That's why so many AI developers build on NVIDIA."
+    },
+    {
+      "id": "economy",
+      "pauseAfter": 0.35,
+      "text": "Who pays? Above all, the big cloud companies, then AI labs and enterprises, all racing for compute. Today, data centers bring in most of NVIDIA's revenue."
+    },
+    {
+      "id": "close",
+      "pauseAfter": 0.5,
+      "text": "So NVIDIA isn't really a chip factory. It designs the engine of the AI era, and sells everything around it."
+    }
+  ]
+}

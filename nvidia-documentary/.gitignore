@@ -8,3 +8,6 @@ pilot/test-*.html
 pilot/.hyperframes/
 pilot/assets/bed.wav
 pilot/chunk-*.html
+tools/.venv-tts/
+tiktok/voice/
+tiktok/samples/
