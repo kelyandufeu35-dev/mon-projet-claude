@@ -40,8 +40,8 @@ export function createHud({ root, world, width = 1920, height = 1080 }) {
 
   // Légendes ancrées : [début, fin] en secondes, ancre 3D, décalage (px) de l'étiquette.
   const anchored = [
-    { t0: 1.6, t1: 4.6, anchor: dieWorld, off: [-300, -250], title: 'PUCE DE CALCUL', sub: 'Le cœur du calcul parallèle', align: 'right' },
-    { t0: 3.0, t1: 6.0, anchor: hbmWorld, off: [250, -230], title: 'MÉMOIRE À HAUTE BANDE PASSANTE', sub: 'Des couches de DRAM empilées, au plus près de la puce', align: 'left' },
+    { t0: 1.4, t1: 3.9, anchor: dieWorld, off: [-300, -250], title: 'PUCE DE CALCUL', sub: 'Le cœur du calcul parallèle', align: 'right' },
+    { t0: 4.2, t1: 7.0, anchor: hbmWorld, off: [250, -230], title: 'MÉMOIRE À HAUTE BANDE PASSANTE', sub: 'Des couches de DRAM empilées, au plus près de la puce', align: 'left' },
     { t0: 20.4, t1: 24.2, anchor: trayWorld, off: [220, -150], title: 'PLATEAU SERVEUR GPU', sub: 'Plusieurs accélérateurs réunis dans un seul châssis', align: 'left' },
   ];
   // Légendes fixes (bas gauche).

@@ -211,10 +211,16 @@ export function createWorld({ canvas, width, height, samples = 6, shadowType = '
 
   // Nombre de sous-échantillons par image : la profondeur de champ et le flou de mouvement n'ont pas
   // besoin de la même qualité partout (la plongée est quasi sténopé ; l'allée est peu défocalisée).
-  const sampleFactor = track([[0, 1.0], [8.4, 1.0], [9.0, 0.4], [15.0, 0.4], [15.6, 0.6], [32, 0.6]], 'linear');
+  const sampleFactor = track([[0, 1.2], [8.4, 1.2], [9.0, 0.4], [15.0, 0.4], [15.6, 0.6], [32, 0.6]], 'linear');
+  // Obturateur (fraction de la période d'image) : court en macro, où la caméra, très proche du sujet, balaie
+  // vite en pixels (un obturateur à 180° y produit un effet d'escalier avec peu d'échantillons) ; 180° ensuite.
+  const shutterFrac = track([[0, 0.22], [8.4, 0.22], [9.2, 0.5], [32, 0.5]], 'linear');
+  function shutterFor(t, fps) {
+    return shutterFrac(t) / fps;
+  }
   function samplesFor(t, base) {
     return Math.max(2, Math.round(base * sampleFactor(t)));
   }
 
-  return { pipe, scene, camera, evaluate, state, P, L, hall, tray, gpu, reveal, DURATION, samplesFor };
+  return { pipe, scene, camera, evaluate, state, P, L, hall, tray, gpu, reveal, DURATION, samplesFor, shutterFor };
 }

@@ -28,7 +28,7 @@ const hud = createHud({ root: hudEl, world, width: 1920, height: 1080 });
 window.__shot = async (t, samples) => {
   const ex = window.__extra || {};
   const t0 = performance.now();
-  world.pipe.renderFrame({ time: t, frameIndex: Math.round(t * 24), shutter: ex.shutter ?? 0, samples: samples || world.samplesFor(t, (window.__extra && window.__extra.base) || 5), evaluate: world.evaluate });
+  world.pipe.renderFrame({ time: t, frameIndex: Math.round(t * 24), shutter: ex.shutter ?? world.shutterFor(t, 24), samples: samples || world.samplesFor(t, (window.__extra && window.__extra.base) || 5), evaluate: world.evaluate });
   world.evaluate(t);
   hud.update(t);
   const gl = world.pipe.renderer.getContext();

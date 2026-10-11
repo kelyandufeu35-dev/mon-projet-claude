@@ -42,14 +42,13 @@ canvas.style.height = `${BASE_H}px`;
 const world = createWorld({ canvas, width: W, height: H, samples, shadowType: 'basic' });
 const hud = createHud({ root: document.getElementById('hud'), world, width: BASE_W, height: BASE_H });
 
-const shutter = 0.5 / fps; // obturateur à 180°
 
 function renderAt(tRaw) {
   const t = Math.min(Math.max(tRaw + timeOffset, 0), DURATION);
   world.pipe.renderFrame({
     time: t,
     frameIndex: Math.round(t * fps),
-    shutter,
+    shutter: world.shutterFor(t, fps),
     samples: world.samplesFor(t, samples),
     evaluate: world.evaluate,
   });
