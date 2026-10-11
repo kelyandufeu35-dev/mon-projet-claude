@@ -174,8 +174,8 @@ export function createGlobe({ pipe, width, height }) {
   // --- Caméra : on frôle la surface, puis on s'éloigne et on contourne ----------------------------------------------------
   const k = (t, pos, target, o = {}) => ({ t, pos: pos.toArray(), target: target.toArray(), focal: 30, fstop: 11, near: 0.02, far: 100, ease: 'inOut', ...o });
   const rig = new CameraRig([
-    k(T0, P(-42, 36, 1.17), P(-14, 53, 1.0)),
-    k(T0 + 2.2, P(-34, 36, 1.9), P(-6, 36, 0.95)),
+    k(T0, P(-36, 30, 1.42), P(-8, 40, 0.95)),
+    k(T0 + 2.2, P(-32, 33, 2.05), P(-4, 32, 0.9)),
     k(T_ENGINE, P(-22, 28, 2.9), new THREE.Vector3(0, 0, 0)),
     k(T_SELLS, P(-4, 26, 3.1), new THREE.Vector3(0, 0, 0)),
     k(TEND, P(18, 24, 3.4), new THREE.Vector3(0, 0, 0)),

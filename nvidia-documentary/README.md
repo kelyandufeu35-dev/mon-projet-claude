@@ -129,13 +129,13 @@ procédurales à graine fixe, LED et impulsions pilotées par `t`. Même entrée
 Mêmes moteur, optique, éclairage et étalonnage que la pilote. Cadrage de la production confirmé par le
 commanditaire : **voix off masculine, diffusion TikTok, durée courte (≈ 45–60 s, un peu plus si utile), logo autorisé**.
 
-0. **Version TikTok** (script rédigé dans `tiktok/script.md`, narration dans `tiktok/narration.fr.json`, voix Kokoro via `npm run voice`) : composition verticale 9:16 (1080×1920, même coût en pixels que 1080p), accroche dans les
-   2 premières secondes, plans courts, sous-titres incrustés synchronisés avec la voix off, logo fourni par le
-   commanditaire (fichier officiel).
-   La pilote 16:9 reste la référence de qualité.
-
-1. **Fabrication** : wafers de silicium, bras robotisés, salle blanche (géométrie procédurale à produire).
-2. **Économie** : bâtiments instanciés, flux lumineux (`addWirePulse` sur des courbes), panneaux
-   holographiques en DOM alimentés par des données **sourcées** à fournir.
-3. **Finale** : sortie de la salle, mégastructure, réseau mondial d'infrastructures.
+0. **Version TikTok — réalisée** : « Comment NVIDIA fonctionne vraiment », 9:16, 63 s, voix off masculine française
+   (Kokoro), sans sous-titres, deux mots à l'écran (« CUDA », « NVIDIA »). Script, plan par plan, faits vérifiés,
+   limites et commandes : `tiktok/script.md`. Code : `tiktok/src/` (plans dans `shots/`), composition Hyperframes dans
+   `tiktok/video/`, son : `tools/voice.mjs`, `tools/cues.mjs`, `tools/mix-tiktok.mjs`.
+   Les plans 1-2 et 4 réemploient la pilote recadrée ; les plans fonderie, logiciel, économie et globe sont nouveaux.
+1. **Fabrication** : première version produite pour la vidéo TikTok (salle blanche, bras, wafer, couches) ; à approfondir.
+2. **Économie** : première version produite (campus, flux, anneau de proportion sans chiffre) ; chiffres à n'afficher
+   que s'ils sont **sourcés**.
+3. **Finale** : globe et réseau mondial produits pour la vidéo TikTok.
 4. **Humains** : silhouettes de dos, mains et équipements, plutôt que des visages animés.

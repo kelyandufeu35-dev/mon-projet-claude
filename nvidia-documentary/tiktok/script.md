@@ -1,4 +1,4 @@
-# « Comment NVIDIA fonctionne vraiment » — script TikTok (v2, français)
+# « Comment NVIDIA fonctionne vraiment » — script et production TikTok (français)
 
 Vidéo explicative verticale sur le fonctionnement de l'entreprise NVIDIA : ce qu'elle conçoit, ce qu'elle ne
 fabrique pas, ce qu'elle vend vraiment, pourquoi les développeurs restent, et qui paie.
@@ -97,23 +97,44 @@ Réserves à connaître :
 - **Niveau final** : −14 LUFS intégré, crête vraie ≤ −1 dBTP (norme de diffusion habituelle des plateformes).
   Je ne peux pas écouter le résultat ici : le contrôle est mesuré, pas auditif.
 
-## Plan de production
+## Production (réalisée)
 
-1. **Verticalisation du moteur** : cadrage 9:16. Le moteur lit le rapport d'image mais les focales et les trajectoires
-   de la pilote sont réglées pour le 16:9 et doivent être recalées (champ horizontal, profondeur de champ).
-2. **Plans 1, 2, 4** : réemploi de la pilote recadrée en vertical + impulsions réseau.
-3. **Plans 3, 5, 6, 7** : à construire (salle blanche et wafers, pile logicielle et mot CUDA, bâtiments et flux,
-   globe et réseau). C'est l'essentiel du travail.
-4. **Assemblage et son** : montage sur `timing.json` (les temps ci-dessus en sont tirés), nappe, effets, mixage.
-5. **Rendu** : 1080×1920, même procédure par tranches que la pilote. Environ 63 s ≈ 2 fois la durée de la pilote : de
-   l'ordre de 8 à 10 h de calcul sur ce conteneur sans GPU ; de l'ordre de la dizaine de minutes à une heure sur une
-   machine à GPU NVIDIA (`--browser-gpu`).
-6. **Contrôle** : images à pleine résolution à chaque jonction et à chaque mouvement rapide, comme pour la pilote.
+État : **vidéo rendue** — 1080×1920, 24 i/s, 63 s, son stéréo 48 kHz (−14,0 LUFS, crête −1,5 dBTP).
+
+| Plan | Temps | Réalisation |
+|---|---|---|
+| 1-2. Puce et plongée | 0 – 13,4 | Pilote réemployée, caméra recadrée pour le vertical (fin de plongée rabaissée vers le plan de calcul), ouverture accélérée |
+| 3. Fonderie | 13,4 – 24,7 | **Nouveau** : salle blanche graphite réfléchissante, bras SCARA qui prend un wafer dans une boîte de transport, wafer irisé balayé par un faisceau, pile de couches en verre (cuivre, aluminium, couche verte), plan de masse lumineux |
+| 4. Systèmes | 24,7 – 33,4 | Pilote réemployée (plateau, baie, allée), temps recalé |
+| 5. Logiciel | 33,4 – 41,8 | **Nouveau** : cinq plans de verre superposés, liaisons verticales, onde de choc quand la voix dit « CUDA », mot « CUDA » en surimpression, points qui s'allument sur la dernière couche |
+| 6. Économie | 41,8 – 55,0 | **Nouveau** : vue aérienne nocturne, campus du cloud / laboratoires / entreprises, flux vers un cœur central, anneau de proportion sans chiffre |
+| 7. Final | 55,0 – 63 | **Nouveau** : globe en points (contours et villes Natural Earth, domaine public), réseau d'arcs, mot « NVIDIA », éclat de bouclage |
+
+Rendu : 16 tranches de 4 s sur CPU (SwiftShader), ≈ 2 h 25 au total (tranches de macro ≈ 21–26 min, fonderie et plans
+nouveaux 2–13 min). Les plans nouveaux sont légers ; le flou de mouvement adaptatif (`engine/motion.js`) s'applique
+à toute la vidéo.
+
+Fichiers (non versionnés, trop lourds) : `tiktok/video/renders/tiktok/tiktok.mp4` (188 Mo, qualité de diffusion) ;
+`tiktok/out/tiktok-9x16-partage.mp4` (27 Mo, copie de partage, `ffmpeg -b:v 3400k`).
+
+## Limites connues de cette version
+
+- **Réalisme** : le macro de la puce est le plan le plus abouti. La salle blanche reste visiblement « CGI » (matériaux
+  simples, éclairage de plafond très franc) ; les plans économie et globe sont volontairement schématiques.
+- **Voix** : `bm_george` lue avec la phonétique française ; l'accent et la prononciation de « Envidia », « TSMC »,
+  « CUDA » et « IA » n'ont pas pu être écoutés ici. Le calage des plans suit la durée mesurée de la synthèse.
+- **Son** : nappe, impacts et montées synthétisés (ffmpeg), mesurés mais pas écoutés.
+- **Globe** : les nœuds du réseau sont les plus grandes agglomérations (Natural Earth), pas des sites réels de centres
+  de données.
+- **Aucun humain.** Aucun logo officiel : le mot « NVIDIA » est composé en texte.
+- **4K / 60 i/s** : non rendu ; demande une machine à GPU (`--browser-gpu`).
 
 ## À décider
 
-1. **Voix** : après écoute des trois essais, laquelle garde-t-on ? Elle fixe la durée finale (58 à 63 s) et le calage.
-2. Si la prononciation d'un mot sonne mal (« Envidia », « TSMC », « CUDA », « IA »), on ajuste le champ `tts` correspondant.
+1. **Voix** : `bm_george` en français a été retenue. Changer de voix change la durée (58 à 63 s) : relancer
+   `npm run voice`, `node tools/cues.mjs`, `node tools/mix-tiktok.mjs`, puis le rendu.
+2. Si la prononciation d'un mot sonne mal (« Envidia », « TSMC », « CUDA », « IA »), ajuster le champ `tts` de la phrase
+   dans `narration.fr.json`, puis refaire le son (le rendu image n'est pas concerné tant que la durée ne change pas).
 
 ## Commandes
 
@@ -124,5 +145,8 @@ python3 -m venv tools/.venv-tts && tools/.venv-tts/bin/pip install kokoro-onnx s
 npm run voice -- --voice bm_george                      # français (défaut) : synthèse + durées + piste assemblée
 npm run voice -- --voice ff_siwis --pitch -4            # voix française native abaissée de 4 demi-tons
 npm run voice -- --script tiktok/narration.en.json      # version anglaise
+node tools/cues.mjs                                      # instants-clés + tiktok/timeline.fr.json (chronologie des plans)
+node tools/mix-tiktok.mjs                                # mixage : tiktok/audio/mix.wav (−14 LUFS)
+npm run build:tiktok && npm run render:tiktok -- --audio tiktok/audio/mix.wav   # rendu par tranches + assemblage
 # sorties : tiktok/voice/<langue>/<voix>/{<phrase>.wav, timing.json, narration.wav}
 ```
