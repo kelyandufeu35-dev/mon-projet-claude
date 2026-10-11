@@ -48,8 +48,8 @@ function renderAt(tRaw) {
   world.pipe.renderFrame({
     time: t,
     frameIndex: Math.round(t * fps),
-    shutter: world.shutterFor(t, fps),
-    samples: world.samplesFor(t, samples),
+    shutter: world.shutterFor(t, fps, samples),
+    samples: world.samplesFor(t, samples, fps),
     evaluate: world.evaluate,
   });
   world.evaluate(t); // remet la caméra à la pose exacte (sans décalage de pupille) pour l'interface

@@ -146,6 +146,18 @@ export function createWorld({ canvas, width, height, samples = 6, shadowType = '
   const _main = dirOf(STUDIO_MAIN.az, STUDIO_MAIN.el);
   const _q = new THREE.Quaternion(), _e = new THREE.Euler();
 
+  // Caméra à l'instant t, avec un léger mouvement d'épaule proportionnel à l'échelle (distance à la cible).
+  function placeCamera(cam, t) {
+    const c = rig.sample(t);
+    const dist = Math.hypot(c.pos[0] - c.target[0], c.pos[1] - c.target[1], c.pos[2] - c.target[2]);
+    const sh = 0.0035 * dist;
+    const pos = c.pos.map((v, i) => v + smoothNoise(t * 0.62 + i * 11.7, 1) * sh);
+    const target = c.target.map((v, i) => v + smoothNoise(t * 0.83 + i * 5.3, 2) * sh * 0.4);
+    const roll = c.roll + smoothNoise(t * 0.55, 3) * 0.0025;
+    const lens = configureCamera(cam, { pos, target, focal: c.focal, fstop: c.fstop, focus: c.focus, aspect: width / height, near: c.near, far: c.far, roll, up: c.up });
+    return { lens, pos };
+  }
+
   function evaluate(t) {
     sharedTime.value = t;
     tray.update(t, 650);
@@ -183,14 +195,7 @@ export function createWorld({ canvas, width, height, samples = 6, shadowType = '
     reveal.radius.value = rr;
     dieMesh.castShadow = rr < 1e-4;
 
-    // Caméra, avec un léger mouvement d'épaule proportionnel à l'échelle (distance à la cible).
-    const c = rig.sample(t);
-    const dist = Math.hypot(c.pos[0] - c.target[0], c.pos[1] - c.target[1], c.pos[2] - c.target[2]);
-    const sh = 0.0035 * dist;
-    const pos = c.pos.map((v, i) => v + smoothNoise(t * 0.62 + i * 11.7, 1) * sh);
-    const target = c.target.map((v, i) => v + smoothNoise(t * 0.83 + i * 5.3, 2) * sh * 0.4);
-    const roll = c.roll + smoothNoise(t * 0.55, 3) * 0.0025;
-    const lens = configureCamera(camera, { pos, target, focal: c.focal, fstop: c.fstop, focus: c.focus, aspect: width / height, near: c.near, far: c.far, roll, up: c.up });
+    const { lens, pos } = placeCamera(camera, t);
 
     // Lampe sonde : intensité proportionnelle au carré de la distance à la surface (éclairement constant).
     const h = Math.max(0.0002, pos[1] - (dieTopWorldY - 0.0006));
@@ -211,16 +216,63 @@ export function createWorld({ canvas, width, height, samples = 6, shadowType = '
 
   // Nombre de sous-échantillons par image : la profondeur de champ et le flou de mouvement n'ont pas
   // besoin de la même qualité partout (la plongée est quasi sténopé ; l'allée est peu défocalisée).
-  const sampleFactor = track([[0, 1.2], [8.4, 1.2], [9.0, 0.4], [15.0, 0.4], [15.6, 0.6], [32, 0.6]], 'linear');
-  // Obturateur (fraction de la période d'image) : court en macro, où la caméra, très proche du sujet, balaie
-  // vite en pixels (un obturateur à 180° y produit un effet d'escalier avec peu d'échantillons) ; 180° ensuite.
-  const shutterFrac = track([[0, 0.22], [8.4, 0.22], [9.2, 0.5], [32, 0.5]], 'linear');
-  function shutterFor(t, fps) {
-    return shutterFrac(t) / fps;
+  const sampleFactor = track([[0, 1.2], [8.4, 1.2], [9.0, 0.6], [15.0, 0.6], [15.4, 0.8], [17.6, 0.8], [18.8, 0.6], [32, 0.6]], 'linear');
+  // Obturateur (fraction de la période d'image). Avec peu de sous-échantillons temporels, un obturateur
+  // large sur un mouvement rapide en pixels donne des copies translucides distinctes (« fantômes ») au lieu
+  // d'un flou continu : l'écart entre copies = déplacement pendant l'obturateur / (N − 1). On le garde donc
+  // court quand la caméra balaie vite (macro, plongée, sortie), et on revient à 180° pour l'allée, plus lente.
+  const shutterFrac = track([
+    [0, 0.22], [8.4, 0.22],          // macro
+    [9.2, 0.12], [12.6, 0.12],       // plongée
+    [13.6, 0.25], [14.8, 0.25],      // à l'intérieur de l'architecture
+    [15.2, 0.10], [15.7, 0.06],      // sortie rapide : obturateur très court
+    [17.0, 0.06], [17.6, 0.10],
+    [18.8, 0.5], [32, 0.5],          // plateau et allée : 180°
+  ], 'linear');
+  // Vitesse apparente maximale (px sur une image de 1920 de large) des points de l'espace devant la caméra
+  // pendant l'ouverture de l'obturateur. Sert à dimensionner le nombre de sous-échantillons : l'écart
+  // entre deux copies successives d'un même contour doit rester de l'ordre du pixel, sinon le flou de
+  // mouvement se lit comme des copies translucides distinctes.
+  const _c0 = new THREE.PerspectiveCamera(), _c1 = new THREE.PerspectiveCamera(), _cm = new THREE.PerspectiveCamera();
+  const _p = new THREE.Vector3(), _a = new THREE.Vector3(), _b = new THREE.Vector3();
+  const GRID = [-0.85, -0.4, 0, 0.4, 0.85];
+  function motionPx(t, shutterSec) {
+    if (shutterSec <= 0) return 0;
+    const ta = Math.max(0, t - shutterSec / 2), tb = Math.min(DURATION, t + shutterSec / 2);
+    placeCamera(_c0, ta);
+    placeCamera(_c1, tb);
+    const lens = placeCamera(_cm, t).lens;
+    const F = lens.focusDistance;
+    let worst = 0;
+    for (const dk of [0.5, 1, 2]) {
+      for (const x of GRID) {
+        for (const y of GRID) {
+          _p.set(x, y, 0.5).unproject(_cm).sub(_cm.position).normalize().multiplyScalar(F * dk).add(_cm.position);
+          _a.copy(_p).project(_c0);
+          _b.copy(_p).project(_c1);
+          if (_a.z > 1 || _b.z > 1 || Math.abs(_a.x) > 1.1 || Math.abs(_a.y) > 1.1) continue;
+          const d = Math.hypot((_b.x - _a.x) * 960, (_b.y - _a.y) * 540);
+          if (d > worst) worst = d;
+        }
+      }
+    }
+    return worst;
   }
-  function samplesFor(t, base) {
-    return Math.max(2, Math.round(base * sampleFactor(t)));
+  const GHOST_PX = 6.0; // écart toléré entre deux sous-échantillons consécutifs
+  const BUDGET = 2;     // sous-échantillons maximum = BUDGET × base
+  // Obturateur effectif : celui de la piste, raccourci quand le mouvement est si rapide que le budget
+  // d'échantillons ne suffirait pas à le remplir sans copies visibles.
+  function shutterFor(t, fps, base = 5) {
+    const s0 = shutterFrac(t) / fps;
+    const disp = motionPx(t, s0);
+    const maxDisp = (BUDGET * base - 1) * GHOST_PX;
+    return disp > maxDisp ? Math.max(s0 * maxDisp / disp, 0.03 / fps) : s0;
+  }
+  function samplesFor(t, base, fps = 24) {
+    const manual = Math.max(2, Math.round(base * sampleFactor(t)));
+    const need = Math.ceil(motionPx(t, shutterFor(t, fps, base)) / GHOST_PX) + 1;
+    return Math.max(manual, Math.min(need, BUDGET * base));
   }
 
-  return { pipe, scene, camera, evaluate, state, P, L, hall, tray, gpu, reveal, DURATION, samplesFor, shutterFor };
+  return { pipe, scene, camera, evaluate, state, P, L, hall, tray, gpu, reveal, DURATION, samplesFor, shutterFor, sampleFactor, motionPx };
 }

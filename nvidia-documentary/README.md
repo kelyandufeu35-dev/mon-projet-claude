@@ -4,8 +4,9 @@ Production d'un documentaire à l'image photoréaliste et futuriste, rendu avec 
 (compositions HTML → MP4). Ce dossier contient le moteur de rendu, la scène pilote
 (GPU → centre de données) et les outils de développement.
 
-> **Statut.** Scène pilote de référence (32 s, 1080p, 24 i/s, son). Elle sert de standard visuel pour la
-> suite du documentaire. Lire « Ce que ce rendu est — et n'est pas » avant de la juger.
+> **Statut.** Scène pilote de référence rendue (32 s, 1920×1080, 24 i/s, son). Elle sert de standard visuel pour la
+> suite du documentaire. Lire « Ce que ce rendu est — et n'est pas » avant de la juger. Images de référence :
+> `docs/reference/`.
 
 ## La scène pilote
 
@@ -31,7 +32,7 @@ Vérifié dans l'environnement réel (Hyperframes 0.8.145, Chrome Headless Shell
 | Moteur | Hyperframes : chaque image est une page HTML « cherchée » à l'instant `t`, capturée dans Chrome puis encodée par FFmpeg. La scène 3D est un canevas WebGL2 (Three.js) piloté par l'évènement `hf-seek`. |
 | Technique | **Rastérisation** WebGL2 : matériaux PBR, éclairage par image (IBL), lumières analytiques, ombres par shadow maps, accumulation temporelle HDR. **Ni ray tracing, ni path tracing.** |
 | Réflexions | Environnement IBL calculé à partir de la géométrie de la salle ; sol à réflexion de Fresnel avec copies miroir des sources lumineuses. Pas de réflexions de scène complète (pas de SSR). |
-| Flou de mouvement, profondeur de champ | Réels (accumulation de sous-échantillons dans l'obturateur et sur la pupille), pas un filtre. Leur douceur est bornée par le nombre de sous-échantillons ; les ouvertures sont donc fermées (f/11–f/16). |
+| Flou de mouvement, profondeur de champ | Réels (accumulation de sous-échantillons dans l'obturateur et sur la pupille), pas un filtre. Leur douceur est bornée par le nombre de sous-échantillons ; les ouvertures sont donc fermées (f/11–f/16). L'obturateur et le nombre de sous-échantillons s'adaptent à la vitesse apparente de la caméra (voir `docs/PERFORMANCE.md`) : dans les mouvements les plus rapides, l'obturateur est raccourci (jusqu'à ~15° en macro/sortie) plutôt que de laisser apparaître des copies translucides. |
 | Photoréalisme | **Rendu CGI soigné, pas indiscernable d'une prise de vue réelle.** Les matériaux, la lumière et la caméra sont crédibles ; les textures sont procédurales et la géométrie reste stylisée (le plateau serveur est moins détaillé que le module). |
 | Personnages | Aucun dans la pilote : des visages animés crédibles ne sont pas réalisables avec ces outils. |
 | Caractéristiques techniques | Aucune valeur chiffrée n'est présentée comme exacte. Le GPU est un module d'accélérateur **générique**. |
@@ -76,12 +77,21 @@ npm run render:draft     # validation rapide : 960×540 internes, 2 sous-échant
 npm run render:final     # 1920×1080, 5 sous-échantillons de base, qualité d'encodage maximale (plusieurs heures sur CPU)
 ```
 
+```bash
+node tools/motion-profile.mjs --from 0 --to 32   # profil de mouvement : vitesse, obturateur et N par image (sans rendu)
+```
+
 Le rendu est découpé en tranches de 4 s (`tools/render-chunks.mjs`), chacune étant un vrai rendu
 Hyperframes ; il est **reprenable** (les tranches valides sont ignorées) et le son est mixé à l'assemblage.
 
 Variables de composition (`--variables '{"samples":12,"scale":1,"fps":24}'`) : `samples` = sous-échantillons
 de base par image (le calendrier de `world.js` les module : 100 % en macro, 40–60 % ensuite), `scale` =
 résolution interne (2 = 3840×2160), `fps` = cadence de l'obturateur (180°), `timeOffset` = décalage de lecture.
+
+Mesuré dans le conteneur sans GPU (4 cœurs, SwiftShader) pour la version finale : ~10 à 45 min par tranche de 4 s
+(macro et plongée ≈ 20 min ; sortie de la puce et plateau serveur ≈ 30–45 min, jusqu'à 10 sous-échantillons par
+image), soit environ 4 h de calcul pour les 32 s. Hyperframes interrompt une capture dont une image dépasse 60 s :
+`tools/render-chunks.mjs` relève ce délai (`HF_DE_STALL_MS`).
 
 ### Sur une machine à GPU (4K, 60 i/s)
 
@@ -110,11 +120,19 @@ procédurales à graine fixe, LED et impulsions pilotées par `t`. Même entrée
   de vraies lumières : excellent coût/qualité, mais pas de lumière locale dynamique dans l'allée.
 - Profondeur de champ volontairement modérée (voir plus haut) ; pas de bokeh très prononcé.
 - 24 i/s : mouvements de caméra lents pour limiter les saccades ; le 60 i/s demande un GPU.
+- Les micro-billes entre la puce et les piles mémoire (4–8 s) sont une trame très fine : à pleine résolution elle
+  présente un léger moiré/scintillement. Acceptable à l'échelle du cadre, à retravailler (texture filtrée) pour la suite.
 - Aucun humain, aucun robot, aucune séquence « économie » ni « fabrication » dans la pilote.
 
 ## Suite proposée
 
-Mêmes moteur, optique, éclairage et étalonnage que la pilote.
+Mêmes moteur, optique, éclairage et étalonnage que la pilote. Cadrage de la production confirmé par le
+commanditaire : **voix off masculine, diffusion TikTok, durée courte (≈ 45–60 s, un peu plus si utile), logo autorisé**.
+
+0. **Version TikTok** : composition verticale 9:16 (1080×1920, même coût en pixels que 1080p), accroche dans les
+   2 premières secondes, plans courts, sous-titres incrustés synchronisés avec la voix off, logo fourni par le
+   commanditaire (fichier officiel).
+   La pilote 16:9 reste la référence de qualité.
 
 1. **Fabrication** : wafers de silicium, bras robotisés, salle blanche (géométrie procédurale à produire).
 2. **Économie** : bâtiments instanciés, flux lumineux (`addWirePulse` sur des courbes), panneaux

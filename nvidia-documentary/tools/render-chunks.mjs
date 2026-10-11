@@ -68,7 +68,7 @@ if (!args['concat-only']) {
       '--variables', JSON.stringify({ samples, scale, fps, timeOffset: start }),
       '--player-ready-timeout', '300000', '--protocol-timeout', '3600000', '--quiet',
       '-o', chunkFile(i),
-    ], { cwd: 'pilot', stdio: ['ignore', 'pipe', 'pipe'], encoding: 'utf8', maxBuffer: 1 << 28 });
+    ], { cwd: 'pilot', stdio: ['ignore', 'pipe', 'pipe'], encoding: 'utf8', maxBuffer: 1 << 28, env: { ...process.env, HF_DE_STALL_MS: process.env.HF_DE_STALL_MS || '1200000' } });
     fs.writeFileSync(path.join(outDir, `chunk-${pad(i)}.log`), (r.stdout || '') + (r.stderr || ''));
     fs.rmSync(path.join('pilot', comp), { force: true });
     if (r.status !== 0 || !probeOk(chunkFile(i), frames)) {

@@ -28,11 +28,17 @@ const hud = createHud({ root: hudEl, world, width: 1920, height: 1080 });
 window.__shot = async (t, samples) => {
   const ex = window.__extra || {};
   const t0 = performance.now();
-  world.pipe.renderFrame({ time: t, frameIndex: Math.round(t * 24), shutter: ex.shutter ?? world.shutterFor(t, 24), samples: samples || world.samplesFor(t, (window.__extra && window.__extra.base) || 5), evaluate: world.evaluate });
+  world.pipe.renderFrame({ time: t, frameIndex: Math.round(t * 24), shutter: ex.shutter ?? world.shutterFor(t, 24, (window.__extra && window.__extra.base) || 5), samples: samples || world.samplesFor(t, (window.__extra && window.__extra.base) || 5), evaluate: world.evaluate });
   world.evaluate(t);
   hud.update(t);
   const gl = world.pipe.renderer.getContext();
   world.pipe.renderer.setRenderTarget(null);
   gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(4));
   return { ms: Math.round(performance.now() - t0), t };
+};
+
+// Sonde : nombre de sous-échantillons retenus et vitesse apparente, sans rendu.
+window.__speed = async (t, base = 5, fps = 24) => {
+  const sh = world.shutterFor(t, fps, base);
+  return { t, shutter: sh * fps, px: world.motionPx(t, sh), n: world.samplesFor(t, base, fps), manual: Math.max(2, Math.round(base * world.sampleFactor(t))) };
 };
