@@ -189,3 +189,49 @@ export function makeRouting({ px = 1024, seed = 5, pitch = 18, density = 0.55, c
   t.minFilter = THREE.LinearMipmapLinearFilter;
   return { map: t };
 }
+
+/** Motifs alpha génériques pour couches translucides : 'dots', 'tiles', 'rings', 'grid'. */
+export function makePattern(kind, { px = 1024, seed = 9 } = {}) {
+  const rnd = mulberry32(seed);
+  const k = cvs(px);
+  const g = k.getContext('2d');
+  g.clearRect(0, 0, px, px);
+  g.fillStyle = '#fff';
+  g.strokeStyle = '#fff';
+  if (kind === 'dots') {
+    const pitch = px / 40;
+    for (let y = pitch / 2; y < px; y += pitch) for (let x = pitch / 2; x < px; x += pitch) {
+      const r = pitch * (0.08 + rnd() * 0.22);
+      g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.fill();
+    }
+  } else if (kind === 'tiles') {
+    const n = 8, p = px / n;
+    for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) {
+      if (rnd() < 0.18) continue;
+      g.lineWidth = 5;
+      const x = i * p + p * 0.1, y = j * p + p * 0.1, w = p * 0.8, h = p * 0.8, r = p * 0.12;
+      g.beginPath();
+      g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath();
+      g.stroke();
+      if (rnd() < 0.35) { g.globalAlpha = 0.55; g.fill(); g.globalAlpha = 1; }
+    }
+  } else if (kind === 'rings') {
+    g.lineWidth = 4;
+    for (let r = px * 0.06; r < px * 0.5; r += px * 0.04) {
+      g.beginPath();
+      const a0 = rnd() * Math.PI * 2, a1 = a0 + Math.PI * (0.5 + rnd() * 1.3);
+      g.arc(px / 2, px / 2, r, a0, a1);
+      g.stroke();
+    }
+  } else {
+    g.lineWidth = 3;
+    const n = 32, p = px / n;
+    for (let i = 0; i <= n; i++) { g.beginPath(); g.moveTo(i * p, 0); g.lineTo(i * p, px); g.stroke(); g.beginPath(); g.moveTo(0, i * p); g.lineTo(px, i * p); g.stroke(); }
+  }
+  const t = new THREE.CanvasTexture(k);
+  t.colorSpace = THREE.NoColorSpace;
+  t.anisotropy = 8;
+  t.generateMipmaps = true;
+  t.minFilter = THREE.LinearMipmapLinearFilter;
+  return { map: t };
+}

@@ -12,3 +12,7 @@ tools/.venv-tts/
 tiktok/voice/
 tiktok/samples/
 tiktok/out/
+tiktok/video/scene.js
+tiktok/video/chunk-*.html
+tiktok/video/renders/
+tiktok/video/.hyperframes/

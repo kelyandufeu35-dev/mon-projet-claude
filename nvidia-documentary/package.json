@@ -18,6 +18,8 @@
     "render:draft": "npm run build && [ -f pilot/assets/bed.wav ] || npm run audio && node tools/render-chunks.mjs --name preview --samples 2 --scale 0.5 --quality draft",
     "render:final": "npm run build && [ -f pilot/assets/bed.wav ] || npm run audio && node tools/render-chunks.mjs --name final --samples 5 --scale 1 --quality delivery",
     "render:gpu-4k60": "npm run build && [ -f pilot/assets/bed.wav ] || npm run audio && cd pilot && npx hyperframes render --browser-gpu --gpu --fps 60 --quality delivery --variables '{\"samples\":12,\"scale\":2,\"fps\":60}' --player-ready-timeout 300000 --protocol-timeout 3600000 -o renders/pilot-4k60.mp4",
-    "voice": "node tools/voice.mjs"
+    "voice": "node tools/voice.mjs",
+    "build:tiktok": "esbuild tiktok/src/main.js --bundle --format=iife --outfile=tiktok/video/scene.js --minify --log-level=warning",
+    "render:tiktok": "node tools/render-chunks.mjs --project tiktok/video --duration 63 --name tiktok --samples 5 --scale 1 --quality delivery"
   }
 }

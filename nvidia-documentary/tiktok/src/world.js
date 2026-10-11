@@ -14,6 +14,9 @@ import { createWorld as createPilot } from '../../pilot/src/world.js';
 import { S, DURATION, bump } from './timing.js';
 import { createStub } from './shots/stub.js';
 import { createFab } from './shots/fab.js';
+import { createStack } from './shots/stack.js';
+import { createCampus } from './shots/campus.js';
+import { createGlobe } from './shots/globe.js';
 
 export { DURATION };
 
@@ -30,7 +33,7 @@ const piecewise = (a) => (t) => {
 };
 
 // Temps de la pilote (16:9) réemployée : puce et plongée (plans 1-2), puis plateau et allée (plan 4).
-const mapChip = piecewise([[0, 0], [S.design, S.design], [7.3, 8.3], [S.foundry, 14.2]]);
+const mapChip = piecewise([[0, 0], [S.design, 6.4], [7.3, 8.5], [S.foundry, 14.2]]);
 const mapHall = piecewise([[S.systems, 21.4], [S.software, 31.8]]);
 
 // Recadrage vertical des images-clés de la pilote : à l'intérieur de la puce (avant la sortie), la caméra
@@ -63,9 +66,9 @@ export function createTikTokWorld({ canvas, width, height, samples = 6, shadowTy
   const factories = {
     pilot: () => tweakPilotKeys(createPilot({ canvas, width, height, samples, shadowType, pipe })),
     fab: () => createFab(common),
-    stack: () => createStub({ ...common, color: 0x2a0b3a }),
-    campus: () => createStub({ ...common, color: 0x3a2a0b }),
-    globe: () => createStub({ ...common, color: 0x0b3a1c }),
+    stack: () => createStack(common),
+    campus: () => createCampus(common),
+    globe: () => createGlobe(common),
   };
   const get = (id) => (worlds[id] ||= factories[id]());
 
@@ -111,5 +114,8 @@ export function createTikTokWorld({ canvas, width, height, samples = 6, shadowTy
     sampleFactor: (t) => viewAt(t).sampleFactor(t),
   });
 
-  return { pipe, evaluate, DURATION, get, sequenceAt, samplesFor: planner.samplesFor, shutterFor: planner.shutterFor, motionPx: planner.motionPx, dummy };
+  // Point d'ancrage (projeté par l'interface) d'un décor : { camera, point }.
+  const anchor = (id) => { const w = get(id === 'cuda' ? 'stack' : id); return { camera: w.camera, point: w.anchors[id] }; };
+
+  return { pipe, evaluate, anchor, DURATION, get, sequenceAt, samplesFor: planner.samplesFor, shutterFor: planner.shutterFor, motionPx: planner.motionPx, dummy };
 }

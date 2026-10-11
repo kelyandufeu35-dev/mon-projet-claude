@@ -582,7 +582,7 @@ export function createFab({ pipe, width, height }) {
     evaluate,
     placeCamera,
     shutterFrac: () => 0.5,
-    sampleFactor: (t) => (segAt(t).id === 'A2' || segAt(t).id === 'B' ? 1.0 : 0.8),
+    sampleFactor: (t) => (segAt(t).id === 'A2' || segAt(t).id === 'B' ? 2.0 : 1.4),
     scene,
   };
 }
