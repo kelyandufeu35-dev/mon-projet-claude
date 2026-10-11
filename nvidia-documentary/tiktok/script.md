@@ -6,8 +6,8 @@ fabrique pas, ce qu'elle vend vraiment, pourquoi les développeurs restent, et q
 | | |
 |---|---|
 | Format | 9:16, 1080×1920, 24 i/s (30 i/s possible sur machine à GPU) |
-| Durée | ≈ 63 s (voix `bm_george`) · 58 s (voix française native `ff_siwis`) |
-| Voix off | masculine, **français**, Kokoro (synthèse locale d'Hyperframes). Pas de sous-titres. |
+| Durée | 63 s (images calées sur `bm_george` ; la voix féminine `ff_siwis` est ajustée aux mêmes créneaux) |
+| Voix off | **français**, Kokoro (synthèse locale d'Hyperframes) : version masculine (`bm_george`) et version féminine (`ff_siwis`, voix française native). Pas de sous-titres. |
 | Texte à l'écran | deux mots seulement : « CUDA » (hologramme, plan 5) et « NVIDIA » (dernier plan, composé en texte) |
 | Son | voix off + nappe musicale synthétisée en retrait + effets aux transitions |
 | Public | TikTok : accroche dans les 2 premières secondes, un plan nouveau toutes les 8 à 13 s |
@@ -15,6 +15,22 @@ fabrique pas, ce qu'elle vend vraiment, pourquoi les développeurs restent, et q
 La narration exacte est dans `narration.fr.json` (source unique ; version anglaise conservée dans
 `narration.en.json`). Les durées ci-dessous viennent de la synthèse réelle (`tools/voice.mjs`, voix `bm_george`) :
 on cale les plans sur elles, pas l'inverse.
+
+## Changer de voix sans refaire le rendu
+
+Les images sont calées sur la chronologie de `bm_george` (`timeline.fr.json`). Pour une autre voix, on ne refait que le son :
+
+```bash
+node tools/voice.mjs --voice ff_siwis --fit tiktok/timeline.fr.json     # vitesse ajustée par phrase pour tenir dans les mêmes créneaux
+node tools/cues.mjs --voice ff_siwis                                    # instants-clés de cette voix
+# écarts moyens par phrase -> tiktok/voice/fr/ff_siwis/shifts.json, puis :
+node tools/voice.mjs --voice ff_siwis --fit tiktok/timeline.fr.json --shifts tiktok/voice/fr/ff_siwis/shifts.json
+node tools/mix-tiktok.mjs --voice tiktok/voice/fr/ff_siwis/narration.wav --out tiktok/audio/mix-ff_siwis.wav --voice-gain 2.14
+ffmpeg -i <video.mp4> -i tiktok/audio/mix-ff_siwis.wav -map 0:v -map 1:a -c:v copy -c:a aac -shortest <sortie.mp4>
+```
+
+Version féminine livrée : vitesses de 0,88 à 0,96, mots-clés à ±0,3 s des images (« CUDA » à 0,05 s).
+Si une voix s'écarte trop de la chronologie, il faut refaire le rendu avec sa propre `timeline` (`--write-timeline`).
 
 ## Voix : ce que Kokoro permet vraiment
 

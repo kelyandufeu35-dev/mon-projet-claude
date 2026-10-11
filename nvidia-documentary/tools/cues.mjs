@@ -2,7 +2,8 @@
 // Instants-clés de la voix off : synthétise le début de chaque phrase (jusqu'au mot-clé) et ajoute sa durée
 // au début de la phrase mesuré par tools/voice.mjs. Sert à caler les images sur des mots précis.
 // Usage : node tools/cues.mjs [--voice bm_george] [--lang fr]
-// Sorties : tiktok/voice/<langue>/<voix>/cues.json  { "<id>": instant (s) }  et  tiktok/timeline.<langue>.json
+// Sorties : tiktok/voice/<langue>/<voix>/cues.json  { "<id>": instant (s) } ; avec --write-timeline, écrit aussi
+// tiktok/timeline.<langue>.json (la chronologie sur laquelle la vidéo est rendue : n'y toucher qu'en refaisant le rendu).
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
@@ -27,11 +28,14 @@ for (const c of cues) {
   const beat = timing.beats.find((b) => b.id === c.beat);
   const key = crypto.createHash('sha1').update(`${voice}|${speed}|${c.before}`).digest('hex').slice(0, 12);
   const wav = path.join(cacheDir, `${key}.wav`);
-  if (!fs.existsSync(wav)) execFileSync('npx', ['hyperframes', 'tts', c.before, '-v', voice, '-s', String(speed), '-l', LANG[lang], '-o', wav], { env, stdio: ['ignore', 'pipe', 'pipe'] });
-  out[c.id] = +(beat.start + dur(wav)).toFixed(2);
+  const sp = beat.speed ?? speed;
+  const key2 = crypto.createHash('sha1').update(`${voice}|${sp}|${c.before}`).digest('hex').slice(0, 12);
+  const wav2 = path.join(cacheDir, `${key2}.wav`);
+  if (!fs.existsSync(wav2)) execFileSync('npx', ['hyperframes', 'tts', c.before, '-v', voice, '-s', String(sp), '-l', LANG[lang], '-o', wav2], { env, stdio: ['ignore', 'pipe', 'pipe'] });
+  out[c.id] = +(beat.start + dur(wav2)).toFixed(2);
 }
 fs.writeFileSync(path.join(dir, 'cues.json'), JSON.stringify(out, null, 2));
 // Chronologie unique de la composition (importée par tiktok/src) : phrases + instants-clés.
 const beats = Object.fromEntries(timing.beats.map((b) => [b.id, { start: b.start, end: b.end }]));
-fs.writeFileSync(`tiktok/timeline.${lang}.json`, JSON.stringify({ voice, lang, total: timing.total, beats, cues: out }, null, 2) + '\n');
+if (args['write-timeline']) fs.writeFileSync(`tiktok/timeline.${lang}.json`, JSON.stringify({ voice, lang, total: timing.total, beats, cues: out }, null, 2) + '\n');
 console.log(JSON.stringify(out, null, 1));

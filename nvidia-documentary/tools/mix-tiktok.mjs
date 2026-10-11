@@ -54,7 +54,7 @@ const lav = inputs.flatMap(([src, kind]) => ['-f', 'lavfi', '-i', kind === 'raw'
 // Graphe de filtres. Entrées : 0 voix ; 1 sine55, 2 sine82.5, 3 bruit rose, 4 nappe, 5 pulsation, 6 tics,
 // 7 impacts, 8 bruit blanc (claquements), 9 montées (tonalité), 10 bruit blanc (montées), 11 carillons.
 const fc = [
-  `[0]aresample=48000,highpass=f=75,acompressor=threshold=0.08:ratio=3:attack=8:release=140:makeup=2,aecho=0.85:0.45:55:0.10,apad=whole_dur=${D},atrim=0:${D},volume=${args['no-voice'] ? 0 : 2.4}[vo]`,
+  `[0]aresample=48000,highpass=f=75,acompressor=threshold=0.08:ratio=3:attack=8:release=140:makeup=2,aecho=0.85:0.45:55:0.10,apad=whole_dur=${D},atrim=0:${D},volume=${args['no-voice'] ? 0 : +(args['voice-gain'] || 2.4)}[vo]`,
   '[vo]asplit=2[v1][v2]',
   "[1]volume='0.50+0.22*sin(2*PI*t*0.11)':eval=frame[a0]",
   "[2]volume='0.28*(0.6+0.4*sin(2*PI*t*0.07+1))':eval=frame[a1]",
