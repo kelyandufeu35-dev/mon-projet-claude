@@ -26,6 +26,7 @@ fs.mkdirSync(outDir, { recursive: true });
 const env = { ...process.env, HYPERFRAMES_PYTHON: path.resolve('tools/.venv-tts/bin/python') };
 
 const LANG = { en: 'en-us', fr: 'fr-fr' };
+const PY = path.resolve('tools/.venv-tts/bin/python');
 const dur = (f) => +execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', f], { encoding: 'utf8' }).trim();
 
 const fit = args.fit ? JSON.parse(fs.readFileSync(args.fit, 'utf8')) : null;
@@ -38,7 +39,7 @@ const synth = (b, sp) => {
   if (!fs.existsSync(wav) || !fs.existsSync(stamp)) {
     for (const f of fs.readdirSync(outDir)) if (f.startsWith(`${b.id}.wav.`)) fs.rmSync(path.join(outDir, f));
     const raw = pitch ? `${wav}.raw.wav` : wav;
-    execFileSync('npx', ['hyperframes', 'tts', spoken, '-v', voice, '-s', String(sp), '-l', LANG[lang] || lang, '-o', raw], { env, stdio: ['ignore', 'pipe', 'pipe'] });
+    execFileSync(PY, ['tools/tts.py', spoken, voice, String(sp), LANG[lang] || lang, raw], { stdio: ['ignore', 'pipe', 'pipe'] });
     if (pitch) {
       // Décalage de hauteur par ré-échantillonnage, durée conservée par atempo.
       const k = 2 ** (pitch / 12);

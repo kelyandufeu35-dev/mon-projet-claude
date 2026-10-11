@@ -19,6 +19,7 @@ const timing = JSON.parse(fs.readFileSync(path.join(dir, 'timing.json'), 'utf8')
 const cues = JSON.parse(fs.readFileSync(`tiktok/cues.${lang}.json`, 'utf8')).cues;
 const env = { ...process.env, HYPERFRAMES_PYTHON: path.resolve('tools/.venv-tts/bin/python') };
 const LANG = { en: 'en-us', fr: 'fr-fr' };
+const PY = path.resolve('tools/.venv-tts/bin/python');
 const cacheDir = path.join(dir, 'cues');
 fs.mkdirSync(cacheDir, { recursive: true });
 
@@ -31,7 +32,7 @@ for (const c of cues) {
   const sp = beat.speed ?? speed;
   const key2 = crypto.createHash('sha1').update(`${voice}|${sp}|${c.before}`).digest('hex').slice(0, 12);
   const wav2 = path.join(cacheDir, `${key2}.wav`);
-  if (!fs.existsSync(wav2)) execFileSync('npx', ['hyperframes', 'tts', c.before, '-v', voice, '-s', String(sp), '-l', LANG[lang], '-o', wav2], { env, stdio: ['ignore', 'pipe', 'pipe'] });
+  if (!fs.existsSync(wav2)) execFileSync(PY, ['tools/tts.py', c.before, voice, String(sp), LANG[lang], wav2], { stdio: ['ignore', 'pipe', 'pipe'] });
   out[c.id] = +(beat.start + dur(wav2)).toFixed(2);
 }
 fs.writeFileSync(path.join(dir, 'cues.json'), JSON.stringify(out, null, 2));
