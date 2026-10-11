@@ -1,3 +1,14 @@
+# Projets
+
+Ce dépôt contient deux sites indépendants :
+
+| Dossier | Projet |
+| --- | --- |
+| `/` (racine) | **NEXUS** : site vitrine immersif en 3D (décrit ci-dessous) |
+| [`boutique/`](boutique/) | **Pattoune** : boutique en ligne mono-produit pour un jouet chien et chat, prête pour le dropshipping. Mode d’emploi complet dans [`boutique/GUIDE.md`](boutique/GUIDE.md) |
+
+---
+
 # NEXUS — cœur énergétique
 
 Site immersif d'un laboratoire fictif. Le scroll raconte en cinq séquences la découverte, l'assemblage et l'activation d'un cœur énergétique modélisé entièrement en géométrie procédurale (React, TypeScript, Three.js, React Three Fiber).

@@ -1,0 +1,3 @@
+Mets ici les photos de ton produit (jpg ou webp, 1200 x 1200 px conseillé),
+puis liste-les dans src/config.ts, partie product.images.
+Exemple : /produit/photo-1.jpg
