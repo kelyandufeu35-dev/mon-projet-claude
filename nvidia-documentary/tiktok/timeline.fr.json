@@ -1,0 +1,58 @@
+{
+  "voice": "bm_george",
+  "lang": "fr",
+  "total": 62.83,
+  "beats": {
+    "hook": {
+      "start": 0.4,
+      "end": 4.69
+    },
+    "design": {
+      "start": 4.99,
+      "end": 13.18
+    },
+    "foundry": {
+      "start": 13.53,
+      "end": 24.52
+    },
+    "systems": {
+      "start": 24.87,
+      "end": 33.25
+    },
+    "software": {
+      "start": 33.6,
+      "end": 41.66
+    },
+    "economy": {
+      "start": 42.01,
+      "end": 54.81
+    },
+    "close": {
+      "start": 55.16,
+      "end": 62.33
+    }
+  },
+  "cues": {
+    "design.cores": 6.31,
+    "design.ia": 11.92,
+    "foundry.tsmc": 14.7,
+    "foundry.wafers": 15.88,
+    "foundry.layers": 18.16,
+    "foundry.nofactory": 20.04,
+    "foundry.design": 22.81,
+    "systems.sells": 27.02,
+    "systems.network": 28.94,
+    "systems.racks": 29.26,
+    "systems.dc": 29.52,
+    "systems.one": 30.74,
+    "software.cuda": 35.46,
+    "software.dev": 35.78,
+    "software.why": 37.95,
+    "economy.cloud": 42.91,
+    "economy.labs": 45.06,
+    "economy.race": 47.6,
+    "economy.revenue": 50.14,
+    "close.engine": 58.27,
+    "close.sells": 60.9
+  }
+}

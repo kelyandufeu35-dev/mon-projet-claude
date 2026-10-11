@@ -9,7 +9,7 @@ import * as THREE from 'three';
 
 export const sharedTime = { value: 0 };
 
-function patch(material, key, fn) {
+export function patch(material, key, fn) {
   const prev = material.onBeforeCompile;
   const prevKey = material.userData.__patchKeys || '';
   material.onBeforeCompile = (shader, renderer) => {

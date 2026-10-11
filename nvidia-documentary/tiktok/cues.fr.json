@@ -1,0 +1,26 @@
+{
+  "note": "Instants-clés de la narration : `before` = texte (version phonétique `tts`) prononcé AVANT le mot-clé ; l'instant = début de la phrase + durée synthétisée de ce préfixe.",
+  "cues": [
+    { "id": "design.cores",    "beat": "design",   "before": "Elle les conçoit :" },
+    { "id": "design.ia",       "beat": "design",   "before": "Elle les conçoit : des milliers de petits cœurs qui font d'énormes quantités de calculs en même temps. Pensées pour les jeux vidéo," },
+    { "id": "foundry.tsmc",    "beat": "foundry",  "before": "Des fonderies," },
+    { "id": "foundry.wafers",  "beat": "foundry",  "before": "Des fonderies, comme té ès èm cé," },
+    { "id": "foundry.layers",  "beat": "foundry",  "before": "Des fonderies, comme té ès èm cé, transforment des plaques de silicium en puces," },
+    { "id": "foundry.nofactory","beat": "foundry", "before": "Des fonderies, comme té ès èm cé, transforment des plaques de silicium en puces, couche microscopique après couche." },
+    { "id": "foundry.design",  "beat": "foundry",  "before": "Des fonderies, comme té ès èm cé, transforment des plaques de silicium en puces, couche microscopique après couche. Envidia ne possède aucune usine de puces." },
+    { "id": "systems.sells",   "beat": "systems",  "before": "Mais la puce n'est que le début." },
+    { "id": "systems.network", "beat": "systems",  "before": "Mais la puce n'est que le début. Envidia vend des systèmes entiers :" },
+    { "id": "systems.racks",   "beat": "systems",  "before": "Mais la puce n'est que le début. Envidia vend des systèmes entiers : réseau," },
+    { "id": "systems.dc",      "beat": "systems",  "before": "Mais la puce n'est que le début. Envidia vend des systèmes entiers : réseau, baies," },
+    { "id": "systems.one",     "beat": "systems",  "before": "Mais la puce n'est que le début. Envidia vend des systèmes entiers : réseau, baies, centres de données complets" },
+    { "id": "software.cuda",   "beat": "software", "before": "Et une couche logicielle," },
+    { "id": "software.dev",    "beat": "software", "before": "Et une couche logicielle, Couda," },
+    { "id": "software.why",    "beat": "software", "before": "Et une couche logicielle, Couda, permet aux développeurs de tout programmer." },
+    { "id": "economy.cloud",   "beat": "economy",  "before": "Qui paie ?" },
+    { "id": "economy.labs",    "beat": "economy",  "before": "Qui paie ? D'abord les grands acteurs du cloud," },
+    { "id": "economy.race",    "beat": "economy",  "before": "Qui paie ? D'abord les grands acteurs du cloud, puis les laboratoires d'i a et les entreprises," },
+    { "id": "economy.revenue", "beat": "economy",  "before": "Qui paie ? D'abord les grands acteurs du cloud, puis les laboratoires d'i a et les entreprises, tous en course pour la puissance de calcul." },
+    { "id": "close.engine",    "beat": "close",    "before": "Alors Envidia n'est pas vraiment une usine à puces." },
+    { "id": "close.sells",     "beat": "close",    "before": "Alors Envidia n'est pas vraiment une usine à puces. Elle conçoit le moteur de l'ère de l'i a," }
+  ]
+}

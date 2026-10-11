@@ -11,12 +11,15 @@ import { buildArchitecture } from '../../engine/arch.js';
 import { CameraRig, configureCamera, track } from '../../engine/camera.js';
 import { addReveal, sharedTime } from '../../engine/shaders.js';
 import { smoothNoise, clamp } from '../../engine/rng.js';
+import { createMotionPlanner } from '../../engine/motion.js';
 
 export const DURATION = 32;
 const mm = 0.001;
 
-export function createWorld({ canvas, width, height, samples = 6, shadowType = 'basic' }) {
-  const pipe = new CinePipeline({ canvas, width, height, samples, shadowType });
+// `pipe` : pipeline partagé (la version verticale réunit plusieurs mondes sur un seul rendu) ;
+// `rigKeys` : images-clés de caméra de remplacement (même repère que ci-dessous, voir `L`).
+export function createWorld({ canvas, width, height, samples = 6, shadowType = 'basic', pipe: sharedPipe = null, rigKeys = null }) {
+  const pipe = sharedPipe || new CinePipeline({ canvas, width, height, samples, shadowType });
   const renderer = pipe.renderer;
 
   const scene = new THREE.Scene();
@@ -98,7 +101,7 @@ export function createWorld({ canvas, width, height, samples = 6, shadowType = '
   // --- Trajectoire de caméra ---------------------------------------------------------------------
   const k = (t, pos, target, o = {}) => ({ t, pos, target, ...o });
   const UP_TOP = [-1, 0, 0]; // vue de dessus du package : le haut de l'écran pointe vers -z local (= -x monde)
-  const rig = new CameraRig([
+  const defaultKeys = [
     // A. Macro : orbite lente autour de la puce, de 35° à la verticale d'élévation. Ouvertures fermées
     // (f/16) : la profondeur de champ reste maîtrisée pour un rendu sans images fantômes.
     k(0.0, L(0.046, 0.094, 0.116), L(0.004, 0.0012, 0.000), { focal: 70, fstop: 16, near: 0.02, far: 3, ease: 'inOut' }),
@@ -119,7 +122,8 @@ export function createWorld({ canvas, width, height, samples = 6, shadowType = '
     k(24.2, [0.10, 1.55, 2.40], [-1.15, 1.22, 0.0], { focal: 26, fstop: 8, near: 0.04, far: 120, ease: 'inOut' }),
     k(27.4, [0.06, 1.62, 5.20], [-0.30, 1.40, -8.0], { focal: 22, fstop: 8, near: 0.05, far: 150, ease: 'inOut' }),
     k(32.0, [0.00, 1.90, 7.30], [0.00, 1.62, -30.0], { focal: 21, fstop: 8, near: 0.05, far: 150, ease: 'out' }),
-  ], { shake: null });
+  ];
+  const rig = new CameraRig(rigKeys ?? defaultKeys, { shake: null });
 
   // --- Pistes ---------------------------------------------------------------------------------------
   const exposure = track([[0, 1.3], [2.5, 1.15], [6, 0.95], [8, 0.9], [10.5, 1.25], [13, 1.0], [15.5, 1.0], [18.5, 1.0], [22, 1.5], [26.5, 1.6], [30, 1.5], [32, 1.5]]);
@@ -229,50 +233,13 @@ export function createWorld({ canvas, width, height, samples = 6, shadowType = '
     [17.0, 0.06], [17.6, 0.10],
     [18.8, 0.5], [32, 0.5],          // plateau et allée : 180°
   ], 'linear');
-  // Vitesse apparente maximale (px sur une image de 1920 de large) des points de l'espace devant la caméra
-  // pendant l'ouverture de l'obturateur. Sert à dimensionner le nombre de sous-échantillons : l'écart
-  // entre deux copies successives d'un même contour doit rester de l'ordre du pixel, sinon le flou de
-  // mouvement se lit comme des copies translucides distinctes.
-  const _c0 = new THREE.PerspectiveCamera(), _c1 = new THREE.PerspectiveCamera(), _cm = new THREE.PerspectiveCamera();
-  const _p = new THREE.Vector3(), _a = new THREE.Vector3(), _b = new THREE.Vector3();
-  const GRID = [-0.85, -0.4, 0, 0.4, 0.85];
-  function motionPx(t, shutterSec) {
-    if (shutterSec <= 0) return 0;
-    const ta = Math.max(0, t - shutterSec / 2), tb = Math.min(DURATION, t + shutterSec / 2);
-    placeCamera(_c0, ta);
-    placeCamera(_c1, tb);
-    const lens = placeCamera(_cm, t).lens;
-    const F = lens.focusDistance;
-    let worst = 0;
-    for (const dk of [0.5, 1, 2]) {
-      for (const x of GRID) {
-        for (const y of GRID) {
-          _p.set(x, y, 0.5).unproject(_cm).sub(_cm.position).normalize().multiplyScalar(F * dk).add(_cm.position);
-          _a.copy(_p).project(_c0);
-          _b.copy(_p).project(_c1);
-          if (_a.z > 1 || _b.z > 1 || Math.abs(_a.x) > 1.1 || Math.abs(_a.y) > 1.1) continue;
-          const d = Math.hypot((_b.x - _a.x) * 960, (_b.y - _a.y) * 540);
-          if (d > worst) worst = d;
-        }
-      }
-    }
-    return worst;
-  }
-  const GHOST_PX = 6.0; // écart toléré entre deux sous-échantillons consécutifs
-  const BUDGET = 2;     // sous-échantillons maximum = BUDGET × base
-  // Obturateur effectif : celui de la piste, raccourci quand le mouvement est si rapide que le budget
-  // d'échantillons ne suffirait pas à le remplir sans copies visibles.
-  function shutterFor(t, fps, base = 5) {
-    const s0 = shutterFrac(t) / fps;
-    const disp = motionPx(t, s0);
-    const maxDisp = (BUDGET * base - 1) * GHOST_PX;
-    return disp > maxDisp ? Math.max(s0 * maxDisp / disp, 0.03 / fps) : s0;
-  }
-  function samplesFor(t, base, fps = 24) {
-    const manual = Math.max(2, Math.round(base * sampleFactor(t)));
-    const need = Math.ceil(motionPx(t, shutterFor(t, fps, base)) / GHOST_PX) + 1;
-    return Math.max(manual, Math.min(need, BUDGET * base));
-  }
+  const planner = createMotionPlanner({
+    placeCamera: (cam, t) => placeCamera(cam, t).lens,
+    duration: DURATION,
+    shutterFrac,
+    sampleFactor,
+  });
+  const { motionPx, shutterFor, samplesFor } = planner;
 
-  return { pipe, scene, camera, evaluate, state, P, L, hall, tray, gpu, reveal, DURATION, samplesFor, shutterFor, sampleFactor, motionPx };
+  return { pipe, scene, camera, evaluate, placeCamera, rig, defaultKeys, UP_TOP, shutterFrac, state, P, L, hall, tray, gpu, reveal, DURATION, samplesFor, shutterFor, sampleFactor, motionPx };
 }
