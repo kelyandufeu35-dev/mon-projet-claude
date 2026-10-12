@@ -231,6 +231,7 @@
         }
         renderSections(json.sections);
         await refreshCount();
+        burst(addBtn);
         openDrawer();
         if (addLabel) {
           addLabel.textContent = 'Ajouté au panier';
@@ -300,6 +301,61 @@
       }).observe(footer);
   }
 
+  /* ------------------------------------------------- Fun: animations */
+  const calm = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Petite explosion de croquettes depuis le bouton d'ajout au panier.
+  function burst(from) {
+    if (calm() || !from || !Element.prototype.animate) return;
+    const r = from.getBoundingClientRect();
+    const x = r.left + r.width / 2;
+    const y = r.top + r.height / 2;
+    for (let i = 0; i < 14; i++) {
+      const k = document.createElement('span');
+      k.className = 'kibble-burst';
+      k.style.left = `${x}px`;
+      k.style.top = `${y}px`;
+      document.body.appendChild(k);
+      const angle = Math.PI + (Math.PI * i) / 13 + (Math.random() - 0.5) * 0.3;
+      const dist = 70 + Math.random() * 90;
+      const dx = Math.cos(angle) * dist;
+      const dy = Math.sin(angle) * dist;
+      k.animate(
+        [
+          { transform: 'translate(-50%, -50%) scale(0.4)', opacity: 1 },
+          { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) rotate(${dx * 3}deg)`, opacity: 1, offset: 0.55 },
+          { transform: `translate(calc(-50% + ${dx * 1.15}px), calc(-50% + ${dy + 140}px)) rotate(${dx * 5}deg)`, opacity: 0 },
+        ],
+        { duration: 900 + Math.random() * 300, easing: 'cubic-bezier(0.2, 0.7, 0.4, 1)' },
+      ).onfinish = () => k.remove();
+    }
+  }
+
+  // Les blocs apparaissent en glissant quand on les atteint en faisant défiler.
+  const REVEAL = '.section .eyebrow, .section .h2, .benefit, .step, .specs, .table-scroll, .promise__grid li, .faq details, .final__text, .final__art, .review';
+  function initReveal() {
+    if (calm() || !('IntersectionObserver' in window)) return;
+    const io = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          e.target.classList.add('is-in');
+          io.unobserve(e.target);
+        }),
+      { rootMargin: '0px 0px -8% 0px' },
+    );
+    document.querySelectorAll(REVEAL).forEach((el) => {
+      if (el.hasAttribute('data-reveal')) return;
+      // Ce qui est déjà visible au chargement reste affiché (pas de clignotement).
+      if (el.getBoundingClientRect().top < window.innerHeight) return;
+      const siblings = [...el.parentElement.children].filter((c) => c.matches(REVEAL));
+      el.style.setProperty('--d', Math.max(0, siblings.indexOf(el)));
+      el.setAttribute('data-reveal', '');
+      io.observe(el);
+    });
+    document.documentElement.classList.add('reveal-on');
+  }
+
   /* -------------------------------------------- Address country select */
   function initCountrySelects() {
     document.querySelectorAll('select[data-default]').forEach((s) => {
@@ -313,6 +369,7 @@
     initDelivery();
     initSticky();
     initCountrySelects();
+    initReveal();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();

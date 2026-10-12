@@ -1,9 +1,15 @@
 <section class="section final">
+  <div class="final__paws" aria-hidden="true">
+    {%- for i in (1..6) -%}<span style="--i: {{ i }}">{% render 'icon', name: 'paw' %}</span>{%- endfor -%}
+  </div>
   <div class="wrap final__inner">
-    {%- if section.settings.title != blank -%}<h2 class="final__title">{{ section.settings.title | escape }}</h2>{%- endif -%}
-    {%- if section.settings.button_label != blank -%}
-      <a href="{{ section.settings.button_link | default: '#contenu' }}" class="btn btn--sun btn--lg" data-scroll-buy>{{ section.settings.button_label | escape }}</a>
-    {%- endif -%}
+    <div class="final__text">
+      {%- if section.settings.title != blank -%}<h2 class="final__title">{{ section.settings.title | escape }}</h2>{%- endif -%}
+      {%- if section.settings.button_label != blank -%}
+        <a href="{{ section.settings.button_link | default: '#contenu' }}" class="btn btn--ink btn--lg" data-scroll-buy>{{ section.settings.button_label | escape }}</a>
+      {%- endif -%}
+    </div>
+    <div class="final__art">{% render 'toy-scene', scene: 'party' %}</div>
   </div>
 </section>
 

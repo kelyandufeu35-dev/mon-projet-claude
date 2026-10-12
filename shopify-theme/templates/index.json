@@ -7,31 +7,32 @@
         "subtitle": "Le jouet qui occupe ton chien ou ton chat pendant que tu n’es pas là.",
         "preselect_offer": 2,
         "title_as_h1": true,
-        "show_description": false
+        "show_description": false,
+        "product": "balle-a-friandises-pattoune-1"
       },
       "blocks": {
         "h1": {
           "type": "highlight",
           "settings": {
-            "text": "Distribue les croquettes en roulant"
+            "text": "Libère les croquettes en roulant"
           }
         },
         "h2": {
           "type": "highlight",
           "settings": {
-            "text": "Difficulté réglable"
+            "text": "Caoutchouc souple (TPE)"
           }
         },
         "h3": {
           "type": "highlight",
           "settings": {
-            "text": "Se démonte et passe sous l’eau"
+            "text": "Petit format, pour chats et petits chiens"
           }
         },
         "h4": {
           "type": "highlight",
           "settings": {
-            "text": "Convient aux chiens et aux chats"
+            "text": "Livraison offerte"
           }
         }
       },
@@ -74,8 +75,8 @@
           "type": "benefit",
           "settings": {
             "icon": "drop",
-            "title": "Simple à laver",
-            "text": "Les deux moitiés se dévissent et se rincent à l’eau tiède. Pas de recoin impossible à nettoyer."
+            "title": "Simple à nettoyer",
+            "text": "Un rinçage à l’eau tiède avec un peu de liquide vaisselle suffit."
           }
         }
       },
@@ -94,21 +95,21 @@
           "type": "step",
           "settings": {
             "title": "Remplis",
-            "text": "Dévisse la balle et verse une poignée de croquettes sèches."
+            "text": "Glisse quelques croquettes sèches par l’ouverture de la balle."
           }
         },
         "b2": {
           "type": "step",
           "settings": {
-            "title": "Règle",
-            "text": "Tourne la molette : ouverture large pour débuter, étroite pour les experts."
+            "title": "Donne",
+            "text": "Pose la balle au sol devant ton animal."
           }
         },
         "b3": {
           "type": "step",
           "settings": {
             "title": "Laisse jouer",
-            "text": "Pose la balle au sol. Elle roule, tourne et libère les croquettes au hasard."
+            "text": "En roulant, la balle libère les croquettes une à une."
           }
         }
       },
@@ -125,36 +126,36 @@
         "b1": {
           "type": "spec",
           "settings": {
-            "label": "Diamètre",
-            "value": "À compléter"
+            "label": "Matière",
+            "value": "Caoutchouc thermoplastique souple (TPE)"
           }
         },
         "b2": {
           "type": "spec",
           "settings": {
-            "label": "Matière",
-            "value": "À compléter avec la fiche du fournisseur"
+            "label": "Format",
+            "value": "Petite balle ronde"
           }
         },
         "b3": {
           "type": "spec",
           "settings": {
-            "label": "Poids",
-            "value": "À compléter"
+            "label": "Pour",
+            "value": "Chats et petits chiens (pas pour les grands chiens, qui pourraient l’avaler)"
           }
         },
         "b4": {
           "type": "spec",
           "settings": {
             "label": "Entretien",
-            "value": "Démontable, lavage à l’eau tiède"
+            "value": "Rinçage à l’eau tiède"
           }
         },
         "b5": {
           "type": "spec",
           "settings": {
-            "label": "Pour",
-            "value": "Chien et chat"
+            "label": "Livraison",
+            "value": "Offerte, en 12 à 18 jours avec suivi"
           }
         }
       },
@@ -197,15 +198,7 @@
         "b4": {
           "type": "row",
           "settings": {
-            "label": "Difficulté réglable",
-            "ours": true,
-            "other": false
-          }
-        },
-        "b5": {
-          "type": "row",
-          "settings": {
-            "label": "Passe sous l’eau",
+            "label": "Se rince à l’eau",
             "ours": true,
             "other": true
           }
@@ -215,8 +208,7 @@
         "b1",
         "b2",
         "b3",
-        "b4",
-        "b5"
+        "b4"
       ]
     },
     "avis": {
@@ -231,8 +223,8 @@
           "type": "item",
           "settings": {
             "icon": "truck",
-            "title": "Livraison offerte dès 35 €",
-            "text": "Livré en 7 à 14 jours ouvrés avec numéro de suivi."
+            "title": "Livraison offerte",
+            "text": "Livré en 12 à 18 jours avec numéro de suivi."
           }
         },
         "b2": {
@@ -273,21 +265,21 @@
           "type": "question",
           "settings": {
             "question": "Quelles croquettes mettre dedans ?",
-            "answer": "<p>Des croquettes sèches de petite ou moyenne taille. Le réglage de difficulté permet d’adapter l’ouverture à leur taille.</p>"
+            "answer": "<p>Des croquettes sèches de petite taille, qui passent facilement par l’ouverture. La balle est petite : ne la donne pas à un grand chien, qui pourrait l’avaler.</p>"
           }
         },
         "b3": {
           "type": "question",
           "settings": {
             "question": "Comment le nettoyer ?",
-            "answer": "<p>Dévisse les deux moitiés et rince-les à l’eau tiède avec un peu de liquide vaisselle. Laisse sécher avant de remonter.</p>"
+            "answer": "<p>Rince la balle à l’eau tiède avec un peu de liquide vaisselle, puis laisse-la sécher.</p>"
           }
         },
         "b4": {
           "type": "question",
           "settings": {
             "question": "Quand vais-je recevoir ma commande ?",
-            "answer": "<p>Les commandes sont préparées en 1 à 3 jours ouvrés puis livrées en 7 à 14 jours ouvrés. Tu reçois un numéro de suivi par e-mail dès l’expédition.</p>"
+            "answer": "<p>Ta commande est expédiée depuis notre entrepôt partenaire et livrée en 12 à 18 jours. Tu reçois un numéro de suivi par e-mail dès l’expédition.</p>"
           }
         },
         "b5": {
@@ -308,11 +300,52 @@
     },
     "final": {
       "type": "final-cta",
-      "settings": {}
+      "settings": {
+        "button_label": "Je commande ma balle"
+      }
+    },
+    "bandeau": {
+      "type": "marquee",
+      "settings": {
+        "label": "Nos promesses"
+      },
+      "blocks": {
+        "m1": {
+          "type": "item",
+          "settings": {
+            "text": "Livraison offerte"
+          }
+        },
+        "m2": {
+          "type": "item",
+          "settings": {
+            "text": "Pour chats et petits chiens"
+          }
+        },
+        "m3": {
+          "type": "item",
+          "settings": {
+            "text": "14 jours pour changer d’avis"
+          }
+        },
+        "m4": {
+          "type": "item",
+          "settings": {
+            "text": "Fini l’ennui quand tu pars"
+          }
+        }
+      },
+      "block_order": [
+        "m1",
+        "m2",
+        "m3",
+        "m4"
+      ]
     }
   },
   "order": [
     "produit",
+    "bandeau",
     "avantages",
     "etapes",
     "fiche",

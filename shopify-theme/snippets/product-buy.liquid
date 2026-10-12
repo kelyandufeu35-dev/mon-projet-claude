@@ -35,6 +35,23 @@
 
 <div class="hero__grid" data-product-root data-section="{{ section.id }}">
   <div class="hero__visual">
+    <div class="hero__deco" aria-hidden="true">
+      <span class="hero__blob"></span>
+      {%- for i in (1..5) -%}<span class="hero__kibble" style="--i: {{ i }}"></span>{%- endfor -%}
+      <span class="hero__paw">{% render 'icon', name: 'paw' %}</span>
+    </div>
+    {%- if section.settings.sticker != blank -%}
+      <div class="sticker-spin" aria-hidden="true">
+        <svg viewBox="0 0 120 120">
+          <defs><path id="sticker-path-{{ section.id }}" d="M60 60m-44 0a44 44 0 1 1 88 0a44 44 0 1 1-88 0" /></defs>
+          <text><textPath href="#sticker-path-{{ section.id }}" textLength="274" lengthAdjust="spacing">{{ section.settings.sticker | escape }}</textPath></text>
+        </svg>
+        <span class="sticker-spin__core">{% render 'icon', name: 'paw' %}</span>
+      </div>
+    {%- endif -%}
+    {%- if settings.bundle2_qty > 1 and settings.bundle2_discount > 0 -%}
+      <p class="sticker-deal" aria-hidden="true"><strong>−{{ settings.bundle2_discount }} %</strong> dès {{ settings.bundle2_qty }}</p>
+    {%- endif -%}
     {%- if product.media.size > 0 -%}
       <div class="gallery" data-gallery>
         <div class="gallery__main">

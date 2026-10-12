@@ -5,6 +5,19 @@
     <ol class="steps">
       {%- for block in section.blocks -%}
         <li class="step" {{ block.shopify_attributes }}>
+          {%- liquid
+            case forloop.index
+              when 1
+                assign scene = 'fill'
+              when 2
+                assign scene = 'drop'
+              when 3
+                assign scene = 'roll'
+              else
+                assign scene = 'party'
+            endcase
+          -%}
+          <div class="step__art">{% render 'toy-scene', scene: scene %}</div>
           <span class="step__num" aria-hidden="true">{{ forloop.index }}</span>
           <h3>{{ block.settings.title | escape }}</h3>
           <p>{{ block.settings.text | escape }}</p>
