@@ -26,7 +26,9 @@
   endif
 -%}
 
-{%- if threshold > 0 -%}
+{%- if threshold == 0 -%}
+  <p class="ship-free">{% render 'icon', name: 'truck' %} <strong>Livraison offerte</strong> sur ta commande</p>
+{%- else -%}
   <div class="ship-meter">
     <p>
       {% render 'icon', name: 'truck' %}
@@ -75,9 +77,16 @@
   {%- endfor -%}
 </ul>
 
-{%- if next_qty > 0 -%}
+{%- if next_qty > 0 and cart.items.size == 1 -%}
   {%- assign missing = next_qty | minus: cart.item_count -%}
-  <p class="upsell">
+  {%- comment -%} Un clic ajoute ce qu'il manque pour atteindre l'offre suivante. {%- endcomment -%}
+  <button type="button" class="upsell" data-line="1" data-qty="{{ next_qty }}">
+    <span class="upsell__plus">{% render 'icon', name: 'plus' %}</span>
+    <span>Ajoute {{ missing }} balle{% if missing > 1 %}s{% endif %} et profite de <strong>−{{ next_discount }} %</strong> sur tout le lot</span>
+  </button>
+{%- elsif next_qty > 0 -%}
+  {%- assign missing = next_qty | minus: cart.item_count -%}
+  <p class="upsell upsell--note">
     Ajoute {{ missing }} article{% if missing > 1 %}s{% endif %} pour profiter de <strong>−{{ next_discount }} %</strong>.
   </p>
 {%- endif -%}
@@ -98,7 +107,9 @@
     <dd>{{ cart.total_price | money }}</dd>
   </div>
 </dl>
-<p class="drawer__fine">{{ 'cart.shipping_note' | t }}</p>
+<p class="drawer__fine">
+  {%- if threshold == 0 -%}Livraison offerte · aucun frais ajouté au paiement.{%- else -%}{{ 'cart.shipping_note' | t }}{%- endif -%}
+</p>
 
 <form action="{{ routes.cart_url }}" method="post" class="drawer__checkout">
   <button type="submit" name="checkout" class="btn btn--sun btn--block btn--lg">

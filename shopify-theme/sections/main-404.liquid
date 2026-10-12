@@ -1,7 +1,8 @@
-<section class="page wrap">
-  <h1 class="h1">Page introuvable</h1>
-  <p class="lead">Cette page n’existe pas ou a été déplacée.</p>
-  <p><a href="{{ routes.root_url }}" class="btn btn--ink">Retour à la boutique</a></p>
+<section class="page wrap page--lost">
+  <div class="page--lost__art">{% render 'toy-scene', scene: 'roll' %}</div>
+  <h1 class="h1">Oups, cette page a roulé sous le canapé.</h1>
+  <p class="lead">Elle n’existe pas ou a été déplacée. La balle, elle, est toujours là.</p>
+  <p><a href="{{ routes.root_url }}" class="btn btn--sun btn--lg">Voir la balle à friandises</a></p>
 </section>
 
 {% schema %}

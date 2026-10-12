@@ -11,8 +11,9 @@
 
     {%- if cart.item_count == 0 -%}
       <div class="drawer__empty">
+        <span class="drawer__empty-icon" aria-hidden="true">{% render 'icon', name: 'paw' %}</span>
         <p>{{ 'cart.empty' | t }}</p>
-        <button type="button" class="btn btn--ink" data-cart-close>Continuer mes achats</button>
+        <a href="{{ routes.root_url }}#contenu" class="btn btn--sun" data-cart-close>Découvrir la balle</a>
       </div>
     {%- else -%}
       {% render 'cart-summary', compact: true %}

@@ -8,7 +8,7 @@
   --line: #d9dcef;
   --cobalt-deep: color-mix(in srgb, var(--cobalt) 80%, #000);
   --sun-deep: color-mix(in srgb, var(--sun) 82%, #a15c00);
-  --ok: #157a4a;
+  --ok: #0e6a3e;
   --err: #c2262e;
 
   --display: 'Bricolage Grotesque', 'Arial Narrow', system-ui, sans-serif;
@@ -2619,6 +2619,108 @@ main:focus {
 }
 .showcase__phone .sound-btn {
   bottom: 30px;
+}
+
+/* ------------------------------------------------------------- Panier */
+.drawer__panel {
+  border-left: 3px solid var(--ink);
+}
+.ship-free {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border: 2px solid var(--ink);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--mint) 40%, var(--card));
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.ship-free svg {
+  font-size: 22px;
+}
+.line {
+  border: 2px solid var(--ink) !important;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.line__thumb img {
+  border: 2px solid var(--ink);
+}
+.upsell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px dashed var(--ink);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--sun) 35%, var(--card));
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.2s var(--ease), background-color 0.2s;
+}
+button.upsell:hover {
+  transform: translateY(-2px);
+  background: var(--sun);
+}
+.upsell--note {
+  cursor: default;
+}
+.upsell__plus {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--card);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.drawer__empty {
+  justify-items: center;
+  text-align: center;
+}
+.drawer__empty-icon {
+  display: grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  border: 3px solid var(--ink);
+  border-radius: 24px;
+  background: var(--sun);
+  box-shadow: var(--hard);
+  font-size: 44px;
+  transform: rotate(-8deg);
+}
+
+/* --------------------------------------------- Pages simples (panier…) */
+/* La règle .wrap élargie plus haut ne doit pas étirer ces pages. */
+.page.wrap {
+  max-width: 900px;
+}
+.page--lost {
+  justify-items: center;
+  text-align: center;
+}
+.page--lost .h1 {
+  max-width: 18ch;
+}
+.page--lost__art {
+  width: min(320px, 80%);
+}
+.field input,
+.field textarea {
+  border: 2px solid var(--ink);
+  box-shadow: 3px 3px 0 color-mix(in srgb, var(--ink) 85%, transparent);
+  transition: box-shadow 0.2s, transform 0.2s var(--ease);
+}
+.field input:focus-visible,
+.field textarea:focus-visible {
+  border-color: var(--ink);
+  box-shadow: 4px 4px 0 var(--sun);
+  transform: translate(-1px, -1px);
 }
 
 /* ------------------------------------------------------ Chiens et chats */

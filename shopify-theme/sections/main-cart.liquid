@@ -2,7 +2,7 @@
   <h1 class="h1">{{ 'cart.title' | t }}</h1>
   {%- if cart.item_count == 0 -%}
     <p class="lead">{{ 'cart.empty' | t }}</p>
-    <p><a href="{{ routes.root_url }}" class="btn btn--ink">Retour à la boutique</a></p>
+    <p><a href="{{ routes.root_url }}" class="btn btn--sun">Découvrir la balle</a></p>
   {%- else -%}
     <div class="cart-page" data-cart-page>
       {% render 'cart-summary', compact: false %}

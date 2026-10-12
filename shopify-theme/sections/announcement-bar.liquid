@@ -1,11 +1,11 @@
 {%- if section.settings.text != blank -%}
-  <p class="announce">
+  <aside class="announce" aria-label="Annonce">
     {%- if section.settings.link != blank -%}
       <a href="{{ section.settings.link }}">{{ section.settings.text | escape }}</a>
     {%- else -%}
       {{ section.settings.text | escape }}
     {%- endif -%}
-  </p>
+  </aside>
 {%- endif -%}
 
 {% schema %}

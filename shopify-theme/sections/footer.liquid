@@ -19,8 +19,9 @@
     </div>
 
     {%- if section.settings.menu != blank -%}
-      <nav aria-label="{{ section.settings.menu.title | escape }}">
-        <h2>{{ section.settings.menu.title | escape }}</h2>
+      {%- assign menu_title = section.settings.menu.title | default: 'Liens' -%}
+      <nav aria-label="{{ menu_title | escape }}">
+        <h2>{{ menu_title | escape }}</h2>
         <ul>
           {%- for link in section.settings.menu.links -%}
             <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
