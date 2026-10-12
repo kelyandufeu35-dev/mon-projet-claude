@@ -199,7 +199,6 @@
         "type": "text",
         "id": "contact_email",
         "label": "E-mail de contact affiché",
-        "default": "",
         "info": "Vide = e-mail de la boutique (Paramètres → Général)."
       },
       {
