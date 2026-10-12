@@ -26,7 +26,7 @@ def srgb(h):
     return tuple(x / 12.92 if x <= 0.04045 else ((x + 0.055) / 1.055) ** 2.4 for x in c) + (1.0,)
 
 
-BACKDROP = {"main": "#f4ece2", "kibbles": "#f7b733", "size": "#f6f4f1"}[SCENE]
+BACKDROP = {"main": "#f4ece2", "kibbles": "#f7b733", "size": "#f6f4f1", "spin": "#f4ece2"}[SCENE]
 
 # ------------------------------------------------------------ Balle
 def faceted_ball(rings=9, per_ring=16, raise_=1.034):
@@ -245,7 +245,30 @@ scene.view_settings.look = "None"
 scene.view_settings.exposure = 0.0
 scene.render.image_settings.file_format = "PNG"
 scene.render.filepath = OUT
-bpy.ops.render.render(write_still=True)
+if SCENE == "spin":
+    # La balle roule sur elle-même (fond transparent, ombre seule au sol).
+    bd.hide_render = True
+    bpy.ops.mesh.primitive_plane_add(size=8, location=(0, 0, 0))
+    floor = bpy.context.object
+    floor.is_shadow_catcher = True
+    scene.render.film_transparent = True
+    scene.render.image_settings.color_mode = "RGBA"
+    frames = 90
+    scene.frame_start, scene.frame_end = 1, frames
+    ball.rotation_mode = "XYZ"
+    rx = ball.rotation_euler.x
+    ball.keyframe_insert("rotation_euler", index=0, frame=1)
+    ball.rotation_euler.x = rx - 2 * math.pi
+    ball.keyframe_insert("rotation_euler", index=0, frame=frames + 1)
+    act = ball.animation_data.action
+    curves = act.fcurves if hasattr(act, "fcurves") else [c for l in act.layers for st in l.strips for c in st.channelbag(act.slots[0]).fcurves]
+    for fc in curves:
+        for kp in fc.keyframe_points:
+            kp.interpolation = "LINEAR"
+    scene.render.filepath = OUT.rstrip("/") + "/f_"
+    bpy.ops.render.render(animation=True)
+else:
+    bpy.ops.render.render(write_still=True)
 
 # Position à l'écran des bords gauche/droit de la balle (pour la cote 8 cm).
 from bpy_extras.object_utils import world_to_camera_view
