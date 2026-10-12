@@ -1,0 +1,84 @@
+{%- liquid
+  assign featured = section.settings.product
+  assign video = blank
+  assign image = section.settings.image
+  if featured != blank
+    for media in featured.media
+      if media.media_type == 'video'
+        assign video = media
+        break
+      endif
+    endfor
+    if image == blank
+      assign image = featured.featured_image
+    endif
+  endif
+  assign title = section.settings.title | escape
+  if section.settings.highlight != blank
+    assign hl = section.settings.highlight | escape
+    assign hl_html = '<mark>' | append: hl | append: '</mark>'
+    assign title = title | replace: hl, hl_html
+  endif
+-%}
+<section class="lead-hero" aria-labelledby="lead-hero-title-{{ section.id }}">
+  <div class="wrap lead-hero__grid">
+    <div class="lead-hero__text">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="lead-hero__eyebrow"><span class="lead-hero__dot" aria-hidden="true"></span>{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      <h1 class="lead-hero__title" id="lead-hero-title-{{ section.id }}">{{ title }}</h1>
+      {%- if section.settings.subtitle != blank -%}
+        <p class="lead-hero__sub">{{ section.settings.subtitle | escape }}</p>
+      {%- endif -%}
+      <div class="lead-hero__cta">
+        <a href="#{{ section.settings.target | default: 'acheter' }}" class="btn btn--sun btn--lg" data-scroll-buy>
+          {{ section.settings.button_label | escape }}
+          {%- if featured != blank %} · {{ featured.price | money }}{% endif -%}
+          {% render 'icon', name: 'arrow' %}
+        </a>
+        {%- if section.settings.link_label != blank -%}
+          <a href="#{{ section.settings.link_target }}" class="lead-hero__link">{{ section.settings.link_label | escape }}</a>
+        {%- endif -%}
+      </div>
+      <ul class="lead-hero__trust">
+        <li>{% render 'icon', name: 'truck' %} Livraison offerte</li>
+        <li>{% render 'icon', name: 'return' %} 14 jours pour changer d’avis</li>
+        <li>{% render 'icon', name: 'lock' %} Paiement sécurisé</li>
+      </ul>
+    </div>
+    <div class="lead-hero__media">
+      <div class="lead-hero__frame" data-video data-parallax>
+        {%- if video != blank -%}
+          {{ video | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'auto', image_size: '900x' }}
+          <button type="button" class="sound-btn" data-sound aria-pressed="false">{% render 'icon', name: 'sound' %}<span data-sound-label>Activer le son</span></button>
+        {%- elsif image != blank -%}
+          {{ image | image_url: width: 1000 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '500, 750, 1000', sizes: '(min-width: 1000px) 40vw, 90vw', alt: featured.title }}
+        {%- endif -%}
+      </div>
+      {%- if section.settings.badge != blank -%}
+        <p class="lead-hero__badge"><strong>{{ section.settings.badge | escape }}</strong>{{ section.settings.badge_sub | escape }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Haut de page",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Produit", "info": "Sa première vidéo est jouée en boucle (sinon sa photo principale)." },
+    { "type": "image_picker", "id": "image", "label": "Image (si pas de vidéo)" },
+    { "type": "text", "id": "eyebrow", "label": "Petit texte au-dessus", "default": "Pour chiens et chats" },
+    { "type": "text", "id": "title", "label": "Accroche", "default": "Le jouet qui l’occupe quand tu pars." },
+    { "type": "text", "id": "highlight", "label": "Mot ou groupe de mots surligné", "info": "Doit apparaître tel quel dans l’accroche.", "default": "l’occupe" },
+    { "type": "text", "id": "subtitle", "label": "Phrase sous l’accroche", "default": "Il pousse la balle, elle roule et libère ses croquettes une à une. Moins d’ennui, des repas plus lents." },
+    { "type": "text", "id": "button_label", "label": "Texte du bouton", "default": "Je commande" },
+    { "type": "text", "id": "target", "label": "Ancre du bouton (sans #)", "default": "acheter" },
+    { "type": "text", "id": "link_label", "label": "Lien secondaire", "default": "Voir comment ça marche" },
+    { "type": "text", "id": "link_target", "label": "Ancre du lien secondaire (sans #)", "default": "comment" },
+    { "type": "text", "id": "badge", "label": "Pastille : texte en gras", "default": "−20 %" },
+    { "type": "text", "id": "badge_sub", "label": "Pastille : texte", "default": "dès 3 balles" }
+  ],
+  "presets": [{ "name": "Haut de page" }]
+}
+{% endschema %}

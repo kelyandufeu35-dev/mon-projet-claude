@@ -209,10 +209,58 @@
         "m3",
         "m4"
       ]
+    },
+    "confiance": {
+      "type": "trust-bar",
+      "settings": {
+        "label": "Nos garanties",
+        "show_payments": true
+      },
+      "blocks": {
+        "t1": {
+          "type": "item",
+          "settings": {
+            "icon": "truck",
+            "title": "Livraison offerte",
+            "text": "Suivie, en 12 à 18 jours"
+          }
+        },
+        "t2": {
+          "type": "item",
+          "settings": {
+            "icon": "return",
+            "title": "14 jours pour changer d’avis",
+            "text": "Sans avoir à te justifier"
+          }
+        },
+        "t3": {
+          "type": "item",
+          "settings": {
+            "icon": "lock",
+            "title": "Paiement sécurisé",
+            "text": "Carte bancaire, Apple Pay…"
+          }
+        },
+        "t4": {
+          "type": "item",
+          "settings": {
+            "icon": "mail",
+            "title": "Une vraie personne répond",
+            "text": "En français, sous 48 h ouvrées"
+          }
+        }
+      },
+      "block_order": [
+        "t1",
+        "t2",
+        "t3",
+        "t4"
+      ]
     }
   },
   "order": [
     "main",
+    "confiance",
     "bandeau",
     "avantages",
     "etapes",

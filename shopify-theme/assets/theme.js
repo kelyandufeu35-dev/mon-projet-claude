@@ -336,7 +336,7 @@
   }
 
   // Les blocs apparaissent en glissant quand on les atteint en faisant défiler.
-  const REVEAL = '.section .eyebrow, .section .h2, .benefit, .step, .specs, .table-scroll, .promise__grid li, .faq details, .final__text, .final__art, .review, .showcase__phone, .showcase__list li, .pet-card';
+  const REVEAL = '.section .eyebrow, .section .h2, .trust-bar__item, .benefit, .step, .specs, .table-scroll, .promise__grid li, .faq details, .final__text, .final__art, .review, .showcase__phone, .showcase__list li, .pet-card';
   function initReveal() {
     if (calm() || !('IntersectionObserver' in window)) return;
     const io = new IntersectionObserver(
@@ -358,6 +358,33 @@
       io.observe(el);
     });
     document.documentElement.classList.add('reveal-on');
+  }
+
+  /* ------------------------------------- En-tête compact et parallaxe */
+  // Un seul écouteur de défilement, calculs regroupés dans requestAnimationFrame.
+  function initScrollFx() {
+    if (initScrollFx.done) return; // l'éditeur de thème relance init() : un seul écouteur
+    initScrollFx.done = true;
+    const header = document.querySelector('.header');
+    const layers = calm() ? [] : [...document.querySelectorAll('[data-parallax]')];
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      if (header) header.classList.toggle('is-scrolled', window.scrollY > 24);
+      for (const el of layers) {
+        const r = el.getBoundingClientRect();
+        // -1 quand l'élément entre par le bas, 0 au centre, 1 quand il sort par le haut.
+        const p = Math.max(-1, Math.min(1, (window.innerHeight / 2 - (r.top + r.height / 2)) / window.innerHeight));
+        el.style.transform = `translateY(${(p * -36).toFixed(1)}px) scale(${(1 + 0.05 * Math.max(0, p)).toFixed(3)})`;
+      }
+    };
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    }, { passive: true });
+    update();
   }
 
   /* --------------------------------------------------- Son des vidéos */
@@ -397,6 +424,7 @@
     initSticky();
     initCountrySelects();
     initReveal();
+    initScrollFx();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();

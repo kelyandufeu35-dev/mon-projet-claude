@@ -205,6 +205,13 @@
         </span>
       </button>
       <p class="form-error" role="alert" data-form-error hidden></p>
+      {%- if shop.enabled_payment_types.size > 0 -%}
+        <ul class="payments payments--buy" aria-label="Moyens de paiement acceptés">
+          {%- for type in shop.enabled_payment_types -%}
+            <li>{{ type | payment_type_svg_tag: class: 'payment-icon' }}</li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
     {% endform %}
 
     {%- if section.blocks.size > 0 -%}
@@ -225,6 +232,33 @@
       <li>{% render 'icon', name: 'return' %}<span>14 jours pour changer d’avis</span></li>
       <li>{% render 'icon', name: 'lock' %}<span>Paiement sécurisé</span></li>
     </ul>
+
+    {%- if section.settings.inbox != blank -%}
+      <div class="inbox">
+        <p class="inbox__title">Ce que tu reçois</p>
+        <ul>
+          {%- assign inbox_lines = section.settings.inbox | newline_to_br | split: '<br />' -%}
+          {%- for line in inbox_lines -%}
+            {%- assign l = line | strip -%}
+            {%- if l != blank -%}<li>{% render 'icon', name: 'check' %} {{ l | escape }}</li>{%- endif -%}
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.size_guide -%}
+      <details class="size-guide">
+        <summary>{% render 'icon', name: 'paw' %} Quelle taille pour mon animal ?</summary>
+        <div class="size-guide__body">
+          <p>La balle mesure <strong>8 cm</strong>. Elle doit toujours rester plus grosse que la gueule de ton animal.</p>
+          <ul>
+            <li class="is-ok"><span>{% render 'icon', name: 'check' %}</span><strong>Chats</strong> parfaite pour la pousser du bout de la patte</li>
+            <li class="is-ok"><span>{% render 'icon', name: 'check' %}</span><strong>Chiots et petits chiens</strong> idéale pour les occuper</li>
+            <li class="is-no"><span>{% render 'icon', name: 'close' %}</span><strong>Grands chiens</strong> trop petite : il pourrait l’avaler</li>
+          </ul>
+        </div>
+      </details>
+    {%- endif -%}
 
     {%- if section.settings.show_description and product.description != blank -%}
       <details class="description">

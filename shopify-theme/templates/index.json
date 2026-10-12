@@ -6,7 +6,7 @@
         "pets": "Chien, Chat",
         "subtitle": "Le jouet qui occupe ton chien ou ton chat pendant que tu n’es pas là.",
         "preselect_offer": 2,
-        "title_as_h1": true,
+        "title_as_h1": false,
         "show_description": false,
         "product": "balle-a-friandises-pattoune-1"
       },
@@ -215,41 +215,6 @@
       "type": "reviews",
       "settings": {}
     },
-    "engagements": {
-      "type": "promise",
-      "settings": {},
-      "blocks": {
-        "b1": {
-          "type": "item",
-          "settings": {
-            "icon": "truck",
-            "title": "Livraison offerte",
-            "text": "Livré en 12 à 18 jours avec numéro de suivi."
-          }
-        },
-        "b2": {
-          "type": "item",
-          "settings": {
-            "icon": "return",
-            "title": "14 jours pour changer d’avis",
-            "text": "Tu peux te rétracter sans justification."
-          }
-        },
-        "b3": {
-          "type": "item",
-          "settings": {
-            "icon": "mail",
-            "title": "Une vraie personne répond",
-            "text": "Écris-nous, réponse sous 48 h ouvrées."
-          }
-        }
-      },
-      "block_order": [
-        "b1",
-        "b2",
-        "b3"
-      ]
-    },
     "faq": {
       "type": "faq",
       "settings": {},
@@ -420,9 +385,74 @@
         "chien",
         "chat"
       ]
+    },
+    "haut": {
+      "type": "hero-banner",
+      "settings": {
+        "product": "balle-a-friandises-pattoune-1",
+        "eyebrow": "Pour chiens et chats",
+        "title": "Le jouet qui l’occupe quand tu pars.",
+        "highlight": "l’occupe",
+        "subtitle": "Il pousse la balle, elle roule et libère ses croquettes une à une. Moins d’ennui, des repas plus lents.",
+        "button_label": "Je commande",
+        "target": "acheter",
+        "link_label": "Voir comment ça marche",
+        "link_target": "comment",
+        "badge": "−20 %",
+        "badge_sub": "dès 3 balles"
+      }
+    },
+    "confiance": {
+      "type": "trust-bar",
+      "settings": {
+        "label": "Nos garanties",
+        "show_payments": true
+      },
+      "blocks": {
+        "t1": {
+          "type": "item",
+          "settings": {
+            "icon": "truck",
+            "title": "Livraison offerte",
+            "text": "Suivie, en 12 à 18 jours"
+          }
+        },
+        "t2": {
+          "type": "item",
+          "settings": {
+            "icon": "return",
+            "title": "14 jours pour changer d’avis",
+            "text": "Sans avoir à te justifier"
+          }
+        },
+        "t3": {
+          "type": "item",
+          "settings": {
+            "icon": "lock",
+            "title": "Paiement sécurisé",
+            "text": "Carte bancaire, Apple Pay…"
+          }
+        },
+        "t4": {
+          "type": "item",
+          "settings": {
+            "icon": "mail",
+            "title": "Une vraie personne répond",
+            "text": "En français, sous 48 h ouvrées"
+          }
+        }
+      },
+      "block_order": [
+        "t1",
+        "t2",
+        "t3",
+        "t4"
+      ]
     }
   },
   "order": [
+    "haut",
+    "confiance",
     "produit",
     "bandeau",
     "en_action",
@@ -432,7 +462,6 @@
     "fiche",
     "comparatif",
     "avis",
-    "engagements",
     "faq",
     "final"
   ]
