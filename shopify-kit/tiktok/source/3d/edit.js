@@ -99,12 +99,15 @@
     } else {
       slam('14,99 €', t, 7.5, { y: 400, size: 230, color: '#fff', rot: -4 });
       if (t >= 8.0) sticker('Livraison offerte', { y: 1380, size: 72, bg: C.mint, rot: 2, p: prog(t, 8.0, 8.25) });
-      if (t >= 8.5) sticker('Lien en bio', { y: 1530, size: 72, bg: C.pink, rot: -3, p: prog(t, 8.5, 8.75) });
+      // « Lien en bio » seulement dans la version TikTok (inutile sur le site).
+      if (VARIANT !== 'site' && t >= 8.5) sticker('Lien en bio', { y: 1530, size: 72, bg: C.pink, rot: -3, p: prog(t, 8.5, 8.75) });
       if (t >= 9.0) sticker('Pattoune', { y: 200, size: 48, bg: C.paper, rot: -3, maxW: 420, p: prog(t, 9.0, 9.2) });
     }
   }
 
-  window.setup = async () => {
+  let VARIANT = 'tiktok';
+  window.setup = async (name) => {
+    VARIANT = name === 'site' ? 'site' : 'tiktok';
     await document.fonts.load('800 80px "Bricolage Grotesque"');
     for (const [name, , n] of SHOTS) {
       FR[name] = await Promise.all(Array.from({ length: n }, (_, i) => loadImage(`frames/${name}/f_${String(i + 1).padStart(4, '0')}.jpg`)));
