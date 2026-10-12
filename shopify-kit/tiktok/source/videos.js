@@ -20,7 +20,7 @@ function endCard(t, t0, { deal } = {}) {
 const VIDEOS = {
   // 1. Chien : « POV : ton chien s'ennuie quand tu pars »
   chien: {
-    duration: 15,
+    duration: 17.5,
     draw(t) {
       if (t < 3.2) {
         photo(IMG.chien, 1.04 + 0.1 * easeInOut(prog(t, 0, 3.2)), 0.74, 0.4);
@@ -56,7 +56,7 @@ const VIDEOS = {
 
   // 2. Chat : « Ton chat mange trop vite ? »
   chat: {
-    duration: 15,
+    duration: 17.5,
     draw(t) {
       if (t < 3.2) {
         photo(IMG.chat, 1.04 + 0.1 * easeInOut(prog(t, 0, 3.2)), 0.86, 0.35);
@@ -98,7 +98,7 @@ const VIDEOS = {
 
   // 3. « 3 raisons d'adopter la balle Pattoune »
   raisons: {
-    duration: 15,
+    duration: 17,
     draw(t) {
       if (t < 2.8) {
         fill(C.cobalt);
