@@ -2464,8 +2464,47 @@ main:focus {
 .kibble-burst:nth-child(3n) { background: var(--bubble); border-radius: 50%; width: 10px; height: 10px; }
 .kibble-burst:nth-child(3n + 1) { background: var(--sun); }
 
+/* ------------------------------------------- Mise en page plus large */
+.wrap {
+  max-width: 1360px;
+}
+.hero {
+  padding-block: 32px 40px;
+}
+@media (min-width: 1001px) {
+  .hero__grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(24px, 5vw, 80px);
+  }
+}
+.hero__visual {
+  width: 100%;
+  max-width: 600px;
+  justify-self: center;
+}
+/* Shopify ajoute width/height à l'image : la hauteur doit suivre le carré. */
+.gallery__main img,
+.gallery__main video {
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+.buybox {
+  max-width: 560px;
+}
+/* Une seule option possible : on l'annonce sans bouton à choisir. */
+.field--single .swatches {
+  display: none;
+}
+.field--single legend {
+  margin-bottom: 0;
+}
+
 /* ------------------------------------------------------------ Mobile */
 @media (max-width: 1000px) {
+  .hero__visual {
+    max-width: 520px;
+  }
   .final__inner {
     grid-template-columns: 1fr;
   }

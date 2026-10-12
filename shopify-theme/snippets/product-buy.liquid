@@ -119,7 +119,7 @@
       {%- unless product.has_only_default_variant -%}
         {%- for option in product.options_with_values -%}
           {%- assign option_index = forloop.index0 -%}
-          <fieldset class="field" data-option="{{ forloop.index0 }}">
+          <fieldset class="field{% if option.values.size == 1 %} field--single{% endif %}" data-option="{{ forloop.index0 }}">
             <legend>{{ option.name | escape }} : <strong data-option-label>{{ option.selected_value | escape }}</strong></legend>
             <div class="swatches">
               {%- for value in option.values -%}
