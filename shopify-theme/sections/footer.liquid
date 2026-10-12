@@ -1,6 +1,6 @@
 {%- liquid
   assign brand = settings.brand_name | default: shop.name
-  assign contact = settings.contact_email | default: shop.email
+  assign contact = settings.contact_email
 -%}
 <footer class="footer">
   <div class="wrap footer__grid">
@@ -15,6 +15,9 @@
           Une question ? <a href="mailto:{{ contact }}">{{ contact }}</a>
           {%- if settings.response_time != blank %}<br>Réponse {{ settings.response_time | escape }}.{% endif %}
         </p>
+      {%- endif -%}
+      {%- if contact == blank and pages.contact != empty -%}
+        <p class="footer__mail">Une question ? <a href="{{ pages.contact.url }}">Écris-nous</a>, on te répond vite.</p>
       {%- endif -%}
     </div>
 
