@@ -8,6 +8,30 @@
     "theme_support_url": "https://help.shopify.com/fr"
   },
   {
+    "name": "Marque et référencement",
+    "settings": [
+      {
+        "type": "text",
+        "id": "brand_name",
+        "label": "Nom de la marque",
+        "default": "Pattoune",
+        "info": "Affiché dans l’en-tête, le pied de page, l’onglet du navigateur et les aperçus de partage. Vide = nom de la boutique."
+      },
+      {
+        "type": "text",
+        "id": "home_title",
+        "label": "Titre de la page d’accueil (Google, onglet)",
+        "default": "Pattoune · La balle à friandises qui occupe chiens et chats"
+      },
+      {
+        "type": "textarea",
+        "id": "home_description",
+        "label": "Description de la page d’accueil (Google)",
+        "default": "La balle à friandises Pattoune libère les croquettes en roulant : elle occupe ton chien ou ton chat quand tu pars et ralentit les repas. Livraison offerte."
+      }
+    ]
+  },
+  {
     "name": "Logo et icône",
     "settings": [
       {
@@ -175,7 +199,8 @@
         "type": "text",
         "id": "contact_email",
         "label": "E-mail de contact affiché",
-        "default": "contact@exemple-boutique.fr"
+        "default": "",
+        "info": "Vide = e-mail de la boutique (Paramètres → Général)."
       },
       {
         "type": "text",

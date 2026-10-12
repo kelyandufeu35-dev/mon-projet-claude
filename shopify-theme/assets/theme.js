@@ -334,7 +334,7 @@
   }
 
   // Les blocs apparaissent en glissant quand on les atteint en faisant défiler.
-  const REVEAL = '.section .eyebrow, .section .h2, .benefit, .step, .specs, .table-scroll, .promise__grid li, .faq details, .final__text, .final__art, .review';
+  const REVEAL = '.section .eyebrow, .section .h2, .benefit, .step, .specs, .table-scroll, .promise__grid li, .faq details, .final__text, .final__art, .review, .showcase__phone, .showcase__list li, .pet-card';
   function initReveal() {
     if (calm() || !('IntersectionObserver' in window)) return;
     const io = new IntersectionObserver(

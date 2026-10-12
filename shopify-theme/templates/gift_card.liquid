@@ -4,13 +4,13 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Carte cadeau · {{ shop.name }}</title>
+    <title>Carte cadeau · {{ settings.brand_name | default: shop.name }}</title>
     {{ 'theme.css' | asset_url | stylesheet_tag }}
     {{ content_for_header }}
   </head>
   <body>
     <main class="page wrap">
-      <h1 class="h1">Ta carte cadeau {{ shop.name }}</h1>
+      <h1 class="h1">Ta carte cadeau {{ settings.brand_name | default: shop.name }}</h1>
       <p class="lead">Solde : <strong>{{ gift_card.balance | money }}</strong>{% if gift_card.expired %} (expirée){% endif %}</p>
       <p>Code : <strong class="gift-code">{{ gift_card.code | format_code }}</strong></p>
       {%- if gift_card.pass_url -%}<p><a href="{{ gift_card.pass_url }}">Ajouter à Apple Wallet</a></p>{%- endif -%}

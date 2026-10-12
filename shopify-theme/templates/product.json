@@ -154,10 +154,18 @@
             "question": "Puis-je retourner le produit ?",
             "answer": "<p>Oui, tu disposes de 14 jours après réception pour te rétracter, sans avoir à te justifier. Écris-nous pour obtenir l’adresse de retour.</p>"
           }
+        },
+        "b6": {
+          "type": "question",
+          "settings": {
+            "question": "Quelle taille fait la balle ?",
+            "answer": "<p>Elle mesure 8 cm de diamètre. Elle convient aux chats et aux petits chiens ; ne la donne pas à un grand chien, qui pourrait l’avaler.</p>"
+          }
         }
       },
       "block_order": [
         "b1",
+        "b6",
         "b2",
         "b3",
         "b4",

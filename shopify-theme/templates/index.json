@@ -134,7 +134,7 @@
           "type": "spec",
           "settings": {
             "label": "Format",
-            "value": "Petite balle ronde"
+            "value": "Balle ronde à facettes, 8 cm de diamètre"
           }
         },
         "b3": {
@@ -288,10 +288,18 @@
             "question": "Puis-je retourner le produit ?",
             "answer": "<p>Oui, tu disposes de 14 jours après réception pour te rétracter, sans avoir à te justifier. Écris-nous pour obtenir l’adresse de retour.</p>"
           }
+        },
+        "b6": {
+          "type": "question",
+          "settings": {
+            "question": "Quelle taille fait la balle ?",
+            "answer": "<p>Elle mesure 8 cm de diamètre. Elle convient aux chats et aux petits chiens ; ne la donne pas à un grand chien, qui pourrait l’avaler.</p>"
+          }
         }
       },
       "block_order": [
         "b1",
+        "b6",
         "b2",
         "b3",
         "b4",
@@ -341,12 +349,85 @@
         "m3",
         "m4"
       ]
+    },
+    "en_action": {
+      "type": "video-showcase",
+      "settings": {
+        "product": "balle-a-friandises-pattoune-1",
+        "eyebrow": "En action",
+        "title": "Elle roule, il joue, les croquettes tombent.",
+        "button_label": "Je commande ma balle",
+        "anchor": "en-action"
+      },
+      "blocks": {
+        "p1": {
+          "type": "point",
+          "settings": {
+            "icon": "spark",
+            "title": "Il s’occupe tout seul",
+            "text": "Il pousse la balle, elle roule et libère une croquette de temps en temps."
+          }
+        },
+        "p2": {
+          "type": "point",
+          "settings": {
+            "icon": "clock",
+            "title": "Des repas moins pressés",
+            "text": "Les croquettes tombent une à une au lieu d’être avalées d’un coup."
+          }
+        },
+        "p3": {
+          "type": "point",
+          "settings": {
+            "icon": "nose",
+            "title": "Son flair au travail",
+            "text": "Il cherche, renifle et gagne sa récompense."
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2",
+        "p3"
+      ]
+    },
+    "animaux": {
+      "type": "pets",
+      "settings": {
+        "eyebrow": "Pour qui ?",
+        "title": "Chiens et chats l’adorent.",
+        "anchor": "pour-qui"
+      },
+      "blocks": {
+        "chien": {
+          "type": "pet",
+          "settings": {
+            "image": "shopify://shop_images/balle-pattoune-chien.jpg",
+            "title": "Pour les chiens",
+            "text": "Petits chiens et chiots : la balle (8 cm) les occupe pendant ton absence. Pas pour les grands chiens, qui pourraient l’avaler."
+          }
+        },
+        "chat": {
+          "type": "pet",
+          "settings": {
+            "image": "shopify://shop_images/balle-pattoune-chat.jpg",
+            "title": "Pour les chats",
+            "text": "Ton chat la pousse du bout de la patte et chasse ses croquettes, comme un vrai jeu de chasse."
+          }
+        }
+      },
+      "block_order": [
+        "chien",
+        "chat"
+      ]
     }
   },
   "order": [
     "produit",
     "bandeau",
+    "en_action",
     "avantages",
+    "animaux",
     "etapes",
     "fiche",
     "comparatif",

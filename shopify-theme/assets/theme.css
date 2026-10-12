@@ -2492,6 +2492,14 @@ main:focus {
 .buybox {
   max-width: 560px;
 }
+/* Vignettes de la galerie : toujours de petits carrés, quelle que soit la
+   taille déclarée de l'image. */
+.gallery__thumbs img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
 /* Une seule option possible : on l'annonce sans bouton à choisir. */
 .field--single .swatches {
   display: none;
@@ -2500,8 +2508,130 @@ main:focus {
   margin-bottom: 0;
 }
 
+/* ------------------------------------------------ Vidéo « en action » */
+.showcase {
+  background:
+    radial-gradient(circle at 2px 2px, color-mix(in srgb, var(--ink) 12%, transparent) 1.6px, transparent 0) 0 0 / 24px 24px,
+    color-mix(in srgb, var(--lilac) 32%, var(--paper));
+}
+.showcase__grid {
+  display: grid !important;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  align-items: center;
+  gap: clamp(32px, 6vw, 96px) !important;
+}
+.showcase__phone {
+  justify-self: center;
+  width: min(100%, 360px);
+  aspect-ratio: 9 / 16;
+  padding: 10px;
+  border: 3px solid var(--ink);
+  border-radius: 40px;
+  background: var(--ink);
+  box-shadow: 10px 10px 0 var(--sun);
+  transform: rotate(-3deg);
+}
+.showcase__phone video,
+.showcase__phone img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 30px;
+}
+.showcase__text {
+  display: grid;
+  gap: 22px;
+  justify-items: start;
+}
+.showcase__list {
+  display: grid;
+  gap: 14px;
+}
+.showcase__list li {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.showcase__list strong {
+  display: block;
+  font-family: var(--display);
+  font-stretch: 85%;
+  font-size: var(--step-1);
+}
+.showcase__icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 2px solid var(--ink);
+  border-radius: 14px;
+  background: var(--sun);
+  box-shadow: 3px 3px 0 var(--ink);
+  font-size: 24px;
+}
+.showcase__list li:nth-child(2) .showcase__icon { background: var(--bubble); }
+.showcase__list li:nth-child(3) .showcase__icon { background: var(--mint); }
+
+/* ------------------------------------------------------ Chiens et chats */
+.pets__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: clamp(24px, 4vw, 48px);
+  margin-top: 16px;
+}
+.pet-card {
+  margin: 0;
+  display: grid;
+  gap: 18px;
+  transform: rotate(var(--tilt, -2deg));
+  transition: transform 0.4s var(--ease);
+}
+.pet-card:nth-child(2) { --tilt: 2deg; }
+.pet-card:hover { transform: rotate(0deg) translateY(-6px); }
+.pet-card__img {
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 3px solid var(--ink);
+  border-radius: 32px;
+  background: var(--card);
+  box-shadow: var(--hard-lg);
+}
+.pet-card__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s var(--ease);
+}
+.pet-card:hover .pet-card__img img { transform: scale(1.05); }
+.pet-card figcaption {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+}
+.pet-card__tag {
+  padding: 6px 16px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--sun);
+  box-shadow: 3px 3px 0 var(--ink);
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: var(--step-1);
+  transform: rotate(-2deg);
+}
+.pet-card:nth-child(2) .pet-card__tag { background: var(--bubble); }
+.pet-card p { color: var(--ink-2); max-width: 44ch; }
+
 /* ------------------------------------------------------------ Mobile */
 @media (max-width: 1000px) {
+  .showcase__grid {
+    grid-template-columns: 1fr;
+  }
+  .showcase__phone {
+    width: min(78%, 320px);
+  }
   .hero__visual {
     max-width: 520px;
   }

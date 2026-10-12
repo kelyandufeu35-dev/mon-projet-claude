@@ -1,14 +1,18 @@
+{%- liquid
+  assign brand = settings.brand_name | default: shop.name
+  assign contact = settings.contact_email | default: shop.email
+-%}
 <footer class="footer">
   <div class="wrap footer__grid">
     <div class="footer__brand">
       <a href="{{ routes.root_url }}" class="logo logo--light">
         <span class="logo__mark">{% render 'icon', name: 'paw' %}</span>
-        <span class="logo__name">{{ shop.name }}</span>
+        <span class="logo__name">{{ brand }}</span>
       </a>
       {%- if section.settings.tagline != blank -%}<p>{{ section.settings.tagline | escape }}</p>{%- endif -%}
-      {%- if settings.contact_email != blank -%}
+      {%- if contact != blank -%}
         <p class="footer__mail">
-          Une question ? <a href="mailto:{{ settings.contact_email }}">{{ settings.contact_email }}</a>
+          Une question ? <a href="mailto:{{ contact }}">{{ contact }}</a>
           {%- if settings.response_time != blank %}<br>Réponse {{ settings.response_time | escape }}.{% endif %}
         </p>
       {%- endif -%}
@@ -48,7 +52,7 @@
     {%- endif -%}
   </div>
   <div class="wrap footer__bottom">
-    <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}</span>
+    <span>&copy; {{ 'now' | date: '%Y' }} {{ brand }}</span>
     {%- if shop.enabled_payment_types.size > 0 -%}
       <ul class="payments" aria-label="Moyens de paiement">
         {%- for type in shop.enabled_payment_types -%}

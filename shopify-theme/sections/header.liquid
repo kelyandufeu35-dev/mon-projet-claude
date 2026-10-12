@@ -1,22 +1,28 @@
+{%- assign brand = settings.brand_name | default: shop.name -%}
 <header class="header">
   <div class="header__inner wrap">
     <a href="{{ routes.root_url }}" class="logo">
       {%- if settings.logo != blank -%}
         {%- assign logo_style = 'width: ' | append: settings.logo_width | append: 'px' -%}
-        {{ settings.logo | image_url: width: 480 | image_tag: alt: shop.name, class: 'logo__img', style: logo_style, widths: '160, 240, 320, 480', sizes: '240px' }}
+        {{ settings.logo | image_url: width: 480 | image_tag: alt: brand, class: 'logo__img', style: logo_style, widths: '160, 240, 320, 480', sizes: '240px' }}
       {%- else -%}
         <span class="logo__mark">{% render 'icon', name: 'paw' %}</span>
-        <span class="logo__name">{{ shop.name }}</span>
+        <span class="logo__name">{{ brand }}</span>
       {%- endif -%}
     </a>
 
-    {%- if section.settings.menu != blank -%}
-      <nav class="header__nav" aria-label="Navigation principale">
+    <nav class="header__nav" aria-label="Navigation principale">
+      {%- if section.settings.menu != blank -%}
         {%- for link in section.settings.menu.links -%}
           <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
         {%- endfor -%}
-      </nav>
-    {%- endif -%}
+      {%- else -%}
+        {%- comment -%} Liens par défaut tant qu'aucun menu n'est choisi. {%- endcomment -%}
+        <a href="{{ routes.root_url }}#en-action">Le jouet</a>
+        <a href="{{ routes.root_url }}#comment">Comment ça marche</a>
+        <a href="{{ routes.root_url }}#faq">Questions</a>
+      {%- endif -%}
+    </nav>
 
     <a href="{{ routes.cart_url }}" class="cart-btn" data-cart-open aria-label="Panier, {{ cart.item_count }} article{% if cart.item_count > 1 %}s{% endif %}">
       {% render 'icon', name: 'bag' %}
