@@ -153,8 +153,10 @@
         const qty = Number(input.value);
         const discount = Number(input.dataset.discount || 0);
         const full = variant.price * qty;
-        // Shopify arrondit la remise unité par unité, à l'inférieur.
-        const total = full - Math.floor((variant.price * discount) / 100) * qty;
+        // Montant fixe par article s'il existe, sinon pourcentage arrondi à
+        // l'inférieur unité par unité (comme Shopify).
+        const unitOff = input.dataset.unitOff ? Number(input.dataset.unitOff) : Math.floor((variant.price * discount) / 100);
+        const total = full - unitOff * qty;
         const card = input.closest('.offer');
         const totalEl = card.querySelector('[data-offer-total]');
         const fullEl = card.querySelector('[data-offer-full]');

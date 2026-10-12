@@ -114,7 +114,7 @@
       },
       {
         "type": "paragraph",
-        "content": "Crée les mêmes remises dans Shopify : Réductions → Créer → Réduction automatique, « Montant de réduction sur les produits », quantité minimale d’articles."
+        "content": "Crée les mêmes remises dans Shopify : Réductions → Créer → Réduction automatique, « Montant de réduction sur les produits », quantité minimale d’articles. Si la remise Shopify est un montant fixe par article, indique ce montant ci-dessous : le site affichera exactement le prix payé, sans écart d’arrondi."
       },
       {
         "type": "number",
@@ -127,6 +127,13 @@
         "id": "bundle1_discount",
         "label": "Offre 2 : remise (%)",
         "default": 15
+      },
+      {
+        "type": "text",
+        "id": "bundle1_amount",
+        "label": "Offre 2 : montant fixe retiré par article (€)",
+        "info": "Ex. 2,25. Vide = la remise en % ci-dessus s’applique.",
+        "default": "2,25"
       },
       {
         "type": "text",
@@ -145,6 +152,13 @@
         "id": "bundle2_discount",
         "label": "Offre 3 : remise (%)",
         "default": 20
+      },
+      {
+        "type": "text",
+        "id": "bundle2_amount",
+        "label": "Offre 3 : montant fixe retiré par article (€)",
+        "info": "Ex. 2,25. Vide = la remise en % ci-dessus s’applique.",
+        "default": "3,00"
       },
       {
         "type": "text",

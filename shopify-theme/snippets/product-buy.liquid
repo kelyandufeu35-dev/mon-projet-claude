@@ -10,19 +10,25 @@
   assign offer_qtys = '1'
   assign offer_discounts = '0'
   assign offer_badges = ''
+  assign offer_amounts = '0'
   if settings.bundle1_qty > 1
     assign offer_qtys = offer_qtys | append: ',' | append: settings.bundle1_qty
     assign offer_discounts = offer_discounts | append: ',' | append: settings.bundle1_discount
     assign offer_badges = offer_badges | append: '|' | append: settings.bundle1_badge
+    assign amount_cents = settings.bundle1_amount | replace: ',', '.' | times: 100 | round
+    assign offer_amounts = offer_amounts | append: ',' | append: amount_cents
   endif
   if settings.bundle2_qty > settings.bundle1_qty
     assign offer_qtys = offer_qtys | append: ',' | append: settings.bundle2_qty
     assign offer_discounts = offer_discounts | append: ',' | append: settings.bundle2_discount
     assign offer_badges = offer_badges | append: '|' | append: settings.bundle2_badge
+    assign amount_cents = settings.bundle2_amount | replace: ',', '.' | times: 100 | round
+    assign offer_amounts = offer_amounts | append: ',' | append: amount_cents
   endif
   assign qtys = offer_qtys | split: ','
   assign discounts = offer_discounts | split: ','
   assign badges = offer_badges | split: '|'
+  assign amounts = offer_amounts | split: ','
   assign preselect = section.settings.preselect_offer | default: 1
   if preselect > qtys.size
     assign preselect = qtys.size
@@ -151,16 +157,22 @@
                 assign d = discounts[forloop.index0] | plus: 0
                 assign full = price | times: qn
                 comment
-                  Shopify arrondit la remise unité par unité, à l'inférieur :
-                  on fait pareil pour afficher exactement le total payé.
+                  Remise par article : montant fixe s'il est renseigné (aucun
+                  arrondi possible), sinon pourcentage arrondi à l'inférieur.
                 endcomment
-                assign unit_saved = price | times: d | divided_by: 100
+                assign unit_off = amounts[forloop.index0] | plus: 0
+                if unit_off > 0
+                  assign unit_saved = unit_off
+                  assign d = unit_off | times: 100.0 | divided_by: price | round
+                else
+                  assign unit_saved = price | times: d | divided_by: 100
+                endif
                 assign saved = unit_saved | times: qn
                 assign total = full | minus: saved
                 assign badge = badges[forloop.index0]
               -%}
               <label class="offer">
-                <input type="radio" name="offer-{{ section.id }}" value="{{ qn }}" data-offer data-discount="{{ d }}" {% if forloop.index == preselect %}checked{% endif %}>
+                <input type="radio" name="offer-{{ section.id }}" value="{{ qn }}" data-offer data-discount="{{ d }}"{% if unit_off > 0 %} data-unit-off="{{ unit_off }}"{% endif %} {% if forloop.index == preselect %}checked{% endif %}>
                 <span class="offer__body">
                   <span class="offer__top">
                     <span class="offer__label">{{ qn }} article{% if qn > 1 %}s{% endif %}</span>
