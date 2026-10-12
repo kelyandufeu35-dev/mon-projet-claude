@@ -1,0 +1,24 @@
+{
+  "general": {
+    "skip": "Aller au contenu",
+    "close": "Fermer",
+    "menu": "Menu"
+  },
+  "cart": {
+    "title": "Ton panier",
+    "empty": "Ton panier est vide pour l’instant.",
+    "checkout": "Commander",
+    "subtotal": "Sous-total",
+    "total": "Total TTC",
+    "remove": "Retirer",
+    "quantity": "Quantité",
+    "shipping_note": "Frais de port calculés à l’étape suivante.",
+    "taxes_included": "TVA incluse."
+  },
+  "product": {
+    "add": "Ajouter au panier",
+    "added": "Ajouté au panier",
+    "sold_out": "Épuisé",
+    "unavailable": "Indisponible"
+  }
+}

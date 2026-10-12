@@ -1,0 +1,36 @@
+CONDITIONS GÉNÉRALES DE VENTE
+(À coller dans Shopify : Paramètres → Politiques → Conditions d'utilisation)
+Remplace tout ce qui est entre crochets et relis chaque article.
+
+1. Vendeur
+Le site est exploité par [Nom ou raison sociale], [forme juridique], [adresse], SIRET [numéro]. Contact : [e-mail].
+
+2. Produits
+Les caractéristiques essentielles des produits sont présentées sur leur fiche. Les photos sont aussi fidèles que possible mais n'ont pas de valeur contractuelle pour les nuances de couleur.
+
+3. Prix
+Les prix sont indiqués en euros, toutes taxes comprises. Les frais de livraison sont indiqués avant la validation de la commande. Les remises sur les lots sont appliquées automatiquement dans le panier.
+
+4. Commande
+La commande est validée après acceptation des présentes conditions et confirmation du paiement. Un e-mail de confirmation récapitulant la commande est envoyé au client.
+
+5. Paiement
+Le paiement s'effectue en ligne par carte bancaire ou par les moyens proposés au moment du paiement, via la plateforme sécurisée de Shopify. Nous n'avons jamais accès à tes coordonnées bancaires.
+
+6. Livraison
+Nous livrons en [pays livrés]. Les commandes sont préparées en [1 à 3] jours ouvrés et livrées en [7 à 14] jours ouvrés à compter de l'expédition. Les produits peuvent être expédiés directement par notre fournisseur. Si le produit n'est pas livré dans le délai annoncé, tu peux nous demander de livrer dans un délai supplémentaire raisonnable ; à défaut, tu peux annuler la commande et être remboursé (articles L216-6 et suivants du Code de la consommation).
+
+7. Droit de rétractation
+Tu disposes de 14 jours à compter de la réception pour te rétracter, sans justification. Les conditions et le formulaire figurent dans notre politique de remboursement. Les frais de retour sont à ta charge, sauf produit non conforme. Le remboursement intervient au plus tard 14 jours après ta demande et peut être différé jusqu'à la réception du produit retourné.
+
+8. Garanties légales
+Tous nos produits bénéficient de la garantie légale de conformité (articles L217-3 et suivants du Code de la consommation), valable 2 ans à compter de la livraison, et de la garantie des vices cachés (articles 1641 et suivants du Code civil). Pour la mettre en œuvre, écris-nous avec ton numéro de commande et une photo du défaut.
+
+9. Utilisation des jouets
+Les jouets pour animaux doivent être utilisés sous surveillance, au moins au début. Retire le jouet s'il est abîmé ou si ton animal le mâche. Aucun jouet n'est indestructible.
+
+10. Données personnelles
+Les données collectées servent à traiter les commandes. Voir notre politique de confidentialité.
+
+11. Litiges
+Les présentes conditions sont soumises au droit français. En cas de litige, contacte-nous d'abord : nous cherchons toujours une solution amiable. À défaut, tu peux saisir gratuitement le médiateur de la consommation : [nom et site du médiateur].

@@ -1,0 +1,20 @@
+<section class="page page--wide wrap">
+  <h1 class="h1">Collections</h1>
+  <ul class="grid">
+    {%- for c in collections -%}
+      <li>
+        <a href="{{ c.url }}" class="card">
+          {%- if c.featured_image -%}{{ c.featured_image | image_url: width: 600 | image_tag: loading: 'lazy', alt: c.title }}{%- endif -%}
+          <span class="card__title">{{ c.title | escape }}</span>
+        </a>
+      </li>
+    {%- endfor -%}
+  </ul>
+</section>
+
+{% schema %}
+{
+  "name": "Liste des collections",
+  "settings": []
+}
+{% endschema %}

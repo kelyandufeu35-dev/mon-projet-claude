@@ -1,0 +1,56 @@
+<section class="page wrap">
+  {%- if section.settings.title != blank -%}<h1 class="h1">{{ section.settings.title | escape }}</h1>{%- endif -%}
+  {%- if section.settings.text != blank -%}<p class="lead">{{ section.settings.text | escape }}</p>{%- endif -%}
+  {%- form 'contact', class: 'form' -%}
+    {%- if form.posted_successfully? -%}
+      <p class="notice notice--ok" role="status">Message envoyé. On te répond {{ settings.response_time | escape }}.</p>
+    {%- endif -%}
+    {%- if form.errors -%}
+      <div class="notice" role="alert">{{ form.errors | default_errors }}</div>
+    {%- endif -%}
+    <div class="form__row">
+      <div class="field">
+        <label for="ContactName">Nom</label>
+        <input id="ContactName" type="text" name="contact[name]" autocomplete="name" value="{{ form.name }}" required>
+      </div>
+      <div class="field">
+        <label for="ContactEmail">E-mail</label>
+        <input id="ContactEmail" type="email" name="contact[email]" autocomplete="email" value="{{ form.email }}" required>
+      </div>
+    </div>
+    <div class="field">
+      <label for="ContactOrder">Numéro de commande <span class="field__opt">(si tu en as un)</span></label>
+      <input id="ContactOrder" type="text" name="contact[Commande]">
+    </div>
+    <div class="field">
+      <label for="ContactBody">Message</label>
+      <textarea id="ContactBody" name="contact[body]" rows="6" required>{{ form.body }}</textarea>
+    </div>
+    <button type="submit" class="btn btn--ink btn--lg">Envoyer le message</button>
+  {%- endform -%}
+</section>
+
+{% schema %}
+{
+  "name": "Formulaire de contact",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre",
+      "default": "Contact"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Texte",
+      "default": "Une question sur le jouet ou ta commande ? On te répond sous 48 h ouvrées."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Formulaire de contact"
+    }
+  ]
+}
+{% endschema %}

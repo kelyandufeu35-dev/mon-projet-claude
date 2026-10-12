@@ -1,0 +1,8 @@
+{%- comment -%} Carte produit. Paramètre : item (produit). {%- endcomment -%}
+<a href="{{ item.url }}" class="card">
+  {%- if item.featured_media -%}
+    {{ item.featured_media | image_url: width: 600 | image_tag: loading: 'lazy', alt: item.title, widths: '300, 450, 600', sizes: '(min-width: 1000px) 25vw, 50vw' }}
+  {%- endif -%}
+  <span class="card__title">{{ item.title | escape }}</span>
+  <span class="card__meta">{{ item.price | money }}</span>
+</a>

@@ -1,0 +1,27 @@
+<section class="page wrap">
+  <h1 class="h1">Mon compte</h1>
+  <p><a href="{{ routes.account_logout_url }}">Se déconnecter</a> · <a href="{{ routes.account_addresses_url }}">Mes adresses ({{ customer.addresses_count }})</a></p>
+  <h2 class="h2">Mes commandes</h2>
+  {%- paginate customer.orders by 20 -%}
+    {%- if customer.orders.size > 0 -%}
+      <div class="table-scroll">
+        <table class="compare">
+          <thead><tr><th scope="col">Commande</th><th scope="col">Date</th><th scope="col">Statut</th><th scope="col">Total</th></tr></thead>
+          <tbody>
+            {%- for order in customer.orders -%}
+              <tr>
+                <th scope="row"><a href="{{ order.customer_url }}">{{ order.name }}</a></th>
+                <td>{{ order.created_at | date: '%d/%m/%Y' }}</td>
+                <td>{{ order.fulfillment_status_label }}</td>
+                <td>{{ order.total_price | money }}</td>
+              </tr>
+            {%- endfor -%}
+          </tbody>
+        </table>
+      </div>
+    {%- else -%}
+      <p>Aucune commande pour l’instant.</p>
+    {%- endif -%}
+    {%- if paginate.pages > 1 -%}{{ paginate | default_pagination }}{%- endif -%}
+  {%- endpaginate -%}
+</section>

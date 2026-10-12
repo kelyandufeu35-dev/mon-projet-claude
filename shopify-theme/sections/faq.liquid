@@ -1,0 +1,104 @@
+<section class="section" id="{{ section.settings.anchor | default: section.id }}">
+  <div class="wrap split">
+    <div>
+      {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+      {%- if section.settings.title != blank -%}<h2 class="h2">{{ section.settings.title | escape }}</h2>{%- endif -%}
+    </div>
+    <div class="faq">
+      {%- for block in section.blocks -%}
+        <details {{ block.shopify_attributes }}>
+          <summary>{{ block.settings.question | escape }}</summary>
+          <div class="rte">{{ block.settings.answer }}</div>
+        </details>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Questions fréquentes",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Petit titre",
+      "default": "Questions fréquentes"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre",
+      "default": "Avant de te décider."
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Ancre de lien (sans #)",
+      "default": "faq"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Une question ?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Réponse",
+          "default": "<p>La réponse.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Questions fréquentes",
+      "blocks": [
+        {
+          "type": "question",
+          "settings": {
+            "question": "Mon animal peut-il l’utiliser sans surveillance ?",
+            "answer": "<p>Surveille les premières séances pour voir comment il joue. Retire le jouet s’il commence à le mâchouiller ou s’il est abîmé. Aucun jouet n’est indestructible.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Quelles croquettes mettre dedans ?",
+            "answer": "<p>Des croquettes sèches de petite ou moyenne taille. Le réglage de difficulté permet d’adapter l’ouverture à leur taille.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Comment le nettoyer ?",
+            "answer": "<p>Dévisse les deux moitiés et rince-les à l’eau tiède avec un peu de liquide vaisselle. Laisse sécher avant de remonter.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Quand vais-je recevoir ma commande ?",
+            "answer": "<p>Les commandes sont préparées en 1 à 3 jours ouvrés puis livrées en 7 à 14 jours ouvrés. Tu reçois un numéro de suivi par e-mail dès l’expédition.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Puis-je retourner le produit ?",
+            "answer": "<p>Oui, tu disposes de 14 jours après réception pour te rétracter, sans avoir à te justifier. Écris-nous pour obtenir l’adresse de retour.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

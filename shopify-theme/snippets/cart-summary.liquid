@@ -1,0 +1,111 @@
+{%- comment -%}
+  Contenu du panier : jauge de livraison offerte, articles, offre suivante,
+  totaux et bouton de paiement. Utilisé par le panier latéral et la page panier.
+  Paramètre : compact (booléen) — version panier latéral.
+{%- endcomment -%}
+{%- liquid
+  assign threshold = settings.free_shipping_threshold | default: 0 | times: 100
+  assign remaining = threshold | minus: cart.total_price
+  if threshold > 0
+    assign pct = cart.total_price | times: 100 | divided_by: threshold
+    if pct > 100
+      assign pct = 100
+    endif
+  else
+    assign pct = 100
+  endif
+
+  assign next_qty = 0
+  assign next_discount = 0
+  if settings.bundle1_qty > cart.item_count and settings.bundle1_discount > 0
+    assign next_qty = settings.bundle1_qty
+    assign next_discount = settings.bundle1_discount
+  elsif settings.bundle2_qty > cart.item_count and settings.bundle2_discount > 0
+    assign next_qty = settings.bundle2_qty
+    assign next_discount = settings.bundle2_discount
+  endif
+-%}
+
+{%- if threshold > 0 -%}
+  <div class="ship-meter">
+    <p>
+      {% render 'icon', name: 'truck' %}
+      {%- if remaining > 0 -%}
+        Plus que <strong>{{ remaining | money }}</strong> pour la livraison offerte
+      {%- else -%}
+        <strong>Livraison offerte</strong>
+      {%- endif -%}
+    </p>
+    <span class="ship-meter__bar" aria-hidden="true"><span style="width: {{ pct }}%"></span></span>
+  </div>
+{%- endif -%}
+
+<ul class="lines">
+  {%- for item in cart.items -%}
+    <li class="line">
+      <a href="{{ item.url }}" class="line__thumb">
+        {%- if item.image -%}
+          {{ item.image | image_url: width: 160 | image_tag: alt: item.product.title, loading: 'lazy', width: 72, height: 72 }}
+        {%- endif -%}
+      </a>
+      <div class="line__info">
+        <a href="{{ item.url }}" class="line__name">{{ item.product.title | escape }}</a>
+        {%- unless item.product.has_only_default_variant -%}
+          <p class="line__variant">{{ item.variant.title | escape }}</p>
+        {%- endunless -%}
+        {%- for allocation in item.line_level_discount_allocations -%}
+          <p class="line__discount">{{ allocation.discount_application.title | escape }} (−{{ allocation.amount | money }})</p>
+        {%- endfor -%}
+        <div class="stepper" role="group" aria-label="{{ 'cart.quantity' | t }}, {{ item.product.title | escape }}">
+          <button type="button" data-line="{{ forloop.index }}" data-qty="{{ item.quantity | minus: 1 }}" aria-label="Retirer un">{% render 'icon', name: 'minus' %}</button>
+          <span>{{ item.quantity }}</span>
+          <button type="button" data-line="{{ forloop.index }}" data-qty="{{ item.quantity | plus: 1 }}" aria-label="Ajouter un">{% render 'icon', name: 'plus' %}</button>
+        </div>
+      </div>
+      <div class="line__side">
+        <p class="line__price">
+          {%- if item.original_line_price > item.final_line_price -%}
+            <s>{{ item.original_line_price | money }}</s>
+          {%- endif -%}
+          {{ item.final_line_price | money }}
+        </p>
+        <button type="button" class="link-btn" data-line="{{ forloop.index }}" data-qty="0">{{ 'cart.remove' | t }}</button>
+      </div>
+    </li>
+  {%- endfor -%}
+</ul>
+
+{%- if next_qty > 0 -%}
+  {%- assign missing = next_qty | minus: cart.item_count -%}
+  <p class="upsell">
+    Ajoute {{ missing }} article{% if missing > 1 %}s{% endif %} pour profiter de <strong>−{{ next_discount }} %</strong>.
+  </p>
+{%- endif -%}
+
+<dl class="totals">
+  <div>
+    <dt>{{ 'cart.subtotal' | t }}</dt>
+    <dd>{{ cart.original_total_price | money }}</dd>
+  </div>
+  {%- if cart.total_discount > 0 -%}
+    <div class="totals__discount">
+      <dt>Remises</dt>
+      <dd>−{{ cart.total_discount | money }}</dd>
+    </div>
+  {%- endif -%}
+  <div class="totals__grand">
+    <dt>{{ 'cart.total' | t }}</dt>
+    <dd>{{ cart.total_price | money }}</dd>
+  </div>
+</dl>
+<p class="drawer__fine">{{ 'cart.shipping_note' | t }}</p>
+
+<form action="{{ routes.cart_url }}" method="post" class="drawer__checkout">
+  <button type="submit" name="checkout" class="btn btn--sun btn--block btn--lg">
+    {{ 'cart.checkout' | t }} {% render 'icon', name: 'arrow' %}
+  </button>
+</form>
+<p class="drawer__fine">{% render 'icon', name: 'lock' %} <span>Paiement sécurisé par Shopify.</span></p>
+{%- if compact -%}
+  <a href="{{ routes.cart_url }}" class="drawer__link">Voir le panier complet</a>
+{%- endif -%}

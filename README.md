@@ -5,7 +5,8 @@ Ce dépôt contient deux sites indépendants :
 | Dossier | Projet |
 | --- | --- |
 | `/` (racine) | **NEXUS** : site vitrine immersif en 3D (décrit ci-dessous) |
-| [`boutique/`](boutique/) | **Pattoune** : boutique en ligne mono-produit pour un jouet chien et chat, prête pour le dropshipping. Mode d’emploi complet dans [`boutique/GUIDE.md`](boutique/GUIDE.md) |
+| [`shopify-theme/`](shopify-theme/) | **Pattoune pour Shopify** : thème Shopify mono-produit (jouet chien et chat). Installation et textes légaux dans [`shopify-kit/`](shopify-kit/GUIDE-SHOPIFY.md) |
+| [`boutique/`](boutique/) | **Pattoune autonome** : la même boutique en site indépendant (paiement Shopify ou Stripe). Mode d’emploi dans [`boutique/GUIDE.md`](boutique/GUIDE.md) |
 
 ---
 

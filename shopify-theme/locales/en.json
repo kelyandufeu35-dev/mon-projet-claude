@@ -1,0 +1,24 @@
+{
+  "general": {
+    "skip": "Skip to content",
+    "close": "Close",
+    "menu": "Menu"
+  },
+  "cart": {
+    "title": "Your cart",
+    "empty": "Your cart is empty.",
+    "checkout": "Check out",
+    "subtotal": "Subtotal",
+    "total": "Total",
+    "remove": "Remove",
+    "quantity": "Quantity",
+    "shipping_note": "Shipping calculated at checkout.",
+    "taxes_included": "Taxes included."
+  },
+  "product": {
+    "add": "Add to cart",
+    "added": "Added to cart",
+    "sold_out": "Sold out",
+    "unavailable": "Unavailable"
+  }
+}

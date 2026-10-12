@@ -1,0 +1,32 @@
+<section class="page page--wide wrap">
+  <h1 class="h1">Recherche</h1>
+  <form action="{{ routes.search_url }}" method="get" role="search" class="search-form">
+    <label class="visually-hidden" for="SearchQ">Rechercher</label>
+    <input id="SearchQ" type="search" name="q" value="{{ search.terms | escape }}" placeholder="Rechercher…">
+    <input type="hidden" name="type" value="product">
+    <button type="submit" class="btn btn--ink">Rechercher</button>
+  </form>
+  {%- if search.performed -%}
+    {%- paginate search.results by 24 -%}
+      <ul class="grid">
+        {%- for item in search.results -%}
+          {%- if item.object_type == 'product' -%}
+            <li>{% render 'product-card', item: item %}</li>
+          {%- else -%}
+            <li><a href="{{ item.url }}" class="card"><span class="card__title">{{ item.title | escape }}</span></a></li>
+          {%- endif -%}
+        {%- else -%}
+          <li><p>Aucun résultat pour « {{ search.terms | escape }} ».</p></li>
+        {%- endfor -%}
+      </ul>
+      {%- if paginate.pages > 1 -%}{{ paginate | default_pagination }}{%- endif -%}
+    {%- endpaginate -%}
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Recherche",
+  "settings": []
+}
+{% endschema %}

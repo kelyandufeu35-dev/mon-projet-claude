@@ -1,0 +1,21 @@
+<section class="page page--wide wrap">
+  <h1 class="h1">{{ collection.title | escape }}</h1>
+  {%- if collection.description != blank -%}<div class="rte lead">{{ collection.description }}</div>{%- endif -%}
+  {%- paginate collection.products by 24 -%}
+    <ul class="grid">
+      {%- for item in collection.products -%}
+        <li>{% render 'product-card', item: item %}</li>
+      {%- else -%}
+        <li><p>Aucun produit dans cette collection.</p></li>
+      {%- endfor -%}
+    </ul>
+    {%- if paginate.pages > 1 -%}{{ paginate | default_pagination }}{%- endif -%}
+  {%- endpaginate -%}
+</section>
+
+{% schema %}
+{
+  "name": "Collection",
+  "settings": []
+}
+{% endschema %}

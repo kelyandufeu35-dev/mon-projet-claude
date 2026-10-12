@@ -1,0 +1,13 @@
+{
+  "type": "footer",
+  "name": "Groupe pied de page",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "tagline": "Des jouets qui occupent vraiment."
+      }
+    }
+  },
+  "order": ["footer"]
+}

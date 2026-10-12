@@ -1,0 +1,111 @@
+<section class="section" id="{{ section.settings.anchor | default: section.id }}">
+  <div class="wrap split">
+    <div>
+      {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+      {%- if section.settings.title != blank -%}<h2 class="h2">{{ section.settings.title | escape }}</h2>{%- endif -%}
+      {%- if section.settings.text != blank -%}<p class="lead">{{ section.settings.text | escape }}</p>{%- endif -%}
+    </div>
+    <dl class="specs">
+      {%- for block in section.blocks -%}
+        <div {{ block.shopify_attributes }}>
+          <dt>{{ block.settings.label | escape }}</dt>
+          <dd>{{ block.settings.value | escape }}</dd>
+        </div>
+      {%- endfor -%}
+    </dl>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Fiche technique",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Petit titre",
+      "default": "Fiche technique"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre",
+      "default": "Tout ce qu’il faut savoir avant de commander."
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Texte",
+      "default": "Une question qui n’est pas ici ? Écris-nous, on répond sous 48 h ouvrées."
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Ancre de lien (sans #)",
+      "default": "le-jouet"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "spec",
+      "name": "Caractéristique",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Nom",
+          "default": "Caractéristique"
+        },
+        {
+          "type": "text",
+          "id": "value",
+          "label": "Valeur",
+          "default": "Valeur"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Fiche technique",
+      "blocks": [
+        {
+          "type": "spec",
+          "settings": {
+            "label": "Diamètre",
+            "value": "À compléter"
+          }
+        },
+        {
+          "type": "spec",
+          "settings": {
+            "label": "Matière",
+            "value": "À compléter avec la fiche du fournisseur"
+          }
+        },
+        {
+          "type": "spec",
+          "settings": {
+            "label": "Poids",
+            "value": "À compléter"
+          }
+        },
+        {
+          "type": "spec",
+          "settings": {
+            "label": "Entretien",
+            "value": "Démontable, lavage à l’eau tiède"
+          }
+        },
+        {
+          "type": "spec",
+          "settings": {
+            "label": "Pour",
+            "value": "Chien et chat"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

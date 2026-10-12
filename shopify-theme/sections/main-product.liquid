@@ -1,0 +1,62 @@
+<section class="hero" aria-label="Produit">
+  <div class="wrap">
+    {% render 'product-buy', product: product, section: section %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Produit",
+  "class": "section-product",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "title_as_h1",
+      "label": "Titre principal de la page (H1)",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "pets",
+      "label": "Pour quels animaux (séparés par des virgules)",
+      "default": "Chien, Chat"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Phrase d’accroche",
+      "default": "Le jouet qui occupe ton chien ou ton chat pendant que tu n’es pas là."
+    },
+    {
+      "type": "range",
+      "id": "preselect_offer",
+      "label": "Offre cochée par défaut",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Afficher la description Shopify du produit",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "highlight",
+      "name": "Point fort",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texte",
+          "default": "Distribue les croquettes en roulant"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

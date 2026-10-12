@@ -1,0 +1,194 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Pattoune",
+    "theme_version": "1.0.0",
+    "theme_author": "Pattoune",
+    "theme_documentation_url": "https://help.shopify.com/fr/manual/online-store/themes",
+    "theme_support_url": "https://help.shopify.com/fr"
+  },
+  {
+    "name": "Logo et icône",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo",
+        "info": "Laisse vide pour afficher le nom de la boutique avec l’icône patte."
+      },
+      {
+        "type": "range",
+        "id": "logo_width",
+        "label": "Largeur du logo",
+        "min": 60,
+        "max": 240,
+        "step": 10,
+        "unit": "px",
+        "default": 140
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Icône d’onglet (favicon)",
+        "info": "Image carrée, 64 × 64 px minimum."
+      }
+    ]
+  },
+  {
+    "name": "Couleurs",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_paper",
+        "label": "Fond de page",
+        "default": "#f5f6fb"
+      },
+      {
+        "type": "color",
+        "id": "color_ink",
+        "label": "Texte",
+        "default": "#14162b"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Couleur principale (bleu)",
+        "default": "#2338e8"
+      },
+      {
+        "type": "color",
+        "id": "color_button",
+        "label": "Bouton d’achat (jaune)",
+        "default": "#ffc23a"
+      },
+      {
+        "type": "color",
+        "id": "color_pop",
+        "label": "Couleur d’accent (rose)",
+        "default": "#ff7aa8"
+      }
+    ]
+  },
+  {
+    "name": "Livraison et remises",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Ces valeurs servent seulement à l’affichage. Les vrais frais de port et remises se règlent dans Shopify (Paramètres → Expédition, et Réductions). Garde les mêmes chiffres des deux côtés."
+      },
+      {
+        "type": "number",
+        "id": "free_shipping_threshold",
+        "label": "Livraison offerte dès (€)",
+        "default": 35,
+        "info": "0 = pas de jauge de livraison offerte."
+      },
+      {
+        "type": "text",
+        "id": "delivery_text",
+        "label": "Délai de livraison affiché",
+        "default": "7 à 14 jours ouvrés",
+        "info": "Indique le vrai délai de ton fournisseur."
+      },
+      {
+        "type": "number",
+        "id": "processing_days",
+        "label": "Jours de préparation avant expédition",
+        "default": 2
+      },
+      {
+        "type": "number",
+        "id": "delivery_min_days",
+        "label": "Délai minimum (jours ouvrés)",
+        "default": 7
+      },
+      {
+        "type": "number",
+        "id": "delivery_max_days",
+        "label": "Délai maximum (jours ouvrés)",
+        "default": 14
+      },
+      {
+        "type": "header",
+        "content": "Offres groupées"
+      },
+      {
+        "type": "paragraph",
+        "content": "Crée les mêmes remises dans Shopify : Réductions → Créer → Réduction automatique, « Montant de réduction sur les produits », quantité minimale d’articles."
+      },
+      {
+        "type": "number",
+        "id": "bundle1_qty",
+        "label": "Offre 2 : nombre d’articles",
+        "default": 2
+      },
+      {
+        "type": "number",
+        "id": "bundle1_discount",
+        "label": "Offre 2 : remise (%)",
+        "default": 15
+      },
+      {
+        "type": "text",
+        "id": "bundle1_badge",
+        "label": "Offre 2 : badge",
+        "default": "Duo"
+      },
+      {
+        "type": "number",
+        "id": "bundle2_qty",
+        "label": "Offre 3 : nombre d’articles",
+        "default": 3
+      },
+      {
+        "type": "number",
+        "id": "bundle2_discount",
+        "label": "Offre 3 : remise (%)",
+        "default": 20
+      },
+      {
+        "type": "text",
+        "id": "bundle2_badge",
+        "label": "Offre 3 : badge",
+        "default": "Meilleur prix"
+      }
+    ]
+  },
+  {
+    "name": "Contact",
+    "settings": [
+      {
+        "type": "text",
+        "id": "contact_email",
+        "label": "E-mail de contact affiché",
+        "default": "contact@exemple-boutique.fr"
+      },
+      {
+        "type": "text",
+        "id": "response_time",
+        "label": "Délai de réponse",
+        "default": "sous 48 h ouvrées"
+      }
+    ]
+  },
+  {
+    "name": "Réseaux sociaux",
+    "settings": [
+      {
+        "type": "url",
+        "id": "social_instagram",
+        "label": "Instagram"
+      },
+      {
+        "type": "url",
+        "id": "social_tiktok",
+        "label": "TikTok"
+      },
+      {
+        "type": "url",
+        "id": "social_facebook",
+        "label": "Facebook"
+      }
+    ]
+  }
+]

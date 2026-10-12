@@ -1,0 +1,20 @@
+<section class="page wrap">
+  <h1 class="h1">Connexion</h1>
+  {%- form 'customer_login', class: 'form' -%}
+    {{ form.errors | default_errors }}
+    <div class="field"><label for="LoginEmail">E-mail</label><input id="LoginEmail" type="email" name="customer[email]" autocomplete="email" required></div>
+    {%- if form.password_needed -%}
+      <div class="field"><label for="LoginPassword">Mot de passe</label><input id="LoginPassword" type="password" name="customer[password]" autocomplete="current-password" required></div>
+    {%- endif -%}
+    <button type="submit" class="btn btn--ink">Se connecter</button>
+  {%- endform -%}
+  <p><a href="{{ routes.account_register_url }}">Créer un compte</a></p>
+  {%- form 'recover_customer_password', class: 'form' -%}
+    {{ form.errors | default_errors }}
+    {%- if form.posted_successfully? -%}<p class="notice notice--ok">Un e-mail de réinitialisation vient d’être envoyé.</p>{%- endif -%}
+    <details><summary>Mot de passe oublié ?</summary>
+      <div class="field"><label for="RecoverEmail">E-mail</label><input id="RecoverEmail" type="email" name="email" autocomplete="email" required></div>
+      <button type="submit" class="btn btn--ghost">Recevoir le lien</button>
+    </details>
+  {%- endform -%}
+</section>

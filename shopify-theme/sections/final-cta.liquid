@@ -1,0 +1,39 @@
+<section class="section final">
+  <div class="wrap final__inner">
+    {%- if section.settings.title != blank -%}<h2 class="final__title">{{ section.settings.title | escape }}</h2>{%- endif -%}
+    {%- if section.settings.button_label != blank -%}
+      <a href="{{ section.settings.button_link | default: '#contenu' }}" class="btn btn--sun btn--lg" data-scroll-buy>{{ section.settings.button_label | escape }}</a>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Appel à l’action",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre",
+      "default": "Une balle, une poignée de croquettes, et le salon redevient calme."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texte du bouton",
+      "default": "Choisir ma couleur"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Lien du bouton",
+      "info": "Vide = remonte vers le bouton d’achat."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Appel à l’action"
+    }
+  ]
+}
+{% endschema %}

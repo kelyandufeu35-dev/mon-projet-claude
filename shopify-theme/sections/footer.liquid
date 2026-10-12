@@ -1,0 +1,72 @@
+<footer class="footer">
+  <div class="wrap footer__grid">
+    <div class="footer__brand">
+      <a href="{{ routes.root_url }}" class="logo logo--light">
+        <span class="logo__mark">{% render 'icon', name: 'paw' %}</span>
+        <span class="logo__name">{{ shop.name }}</span>
+      </a>
+      {%- if section.settings.tagline != blank -%}<p>{{ section.settings.tagline | escape }}</p>{%- endif -%}
+      {%- if settings.contact_email != blank -%}
+        <p class="footer__mail">
+          Une question ? <a href="mailto:{{ settings.contact_email }}">{{ settings.contact_email }}</a>
+          {%- if settings.response_time != blank %}<br>Réponse {{ settings.response_time | escape }}.{% endif %}
+        </p>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.menu != blank -%}
+      <nav aria-label="{{ section.settings.menu.title | escape }}">
+        <h2>{{ section.settings.menu.title | escape }}</h2>
+        <ul>
+          {%- for link in section.settings.menu.links -%}
+            <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    {%- endif -%}
+
+    <nav aria-label="Informations légales">
+      <h2>Légal</h2>
+      <ul>
+        {%- for policy in shop.policies -%}
+          {%- if policy != blank -%}
+            <li><a href="{{ policy.url }}">{{ policy.title | escape }}</a></li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    </nav>
+
+    {%- if settings.social_instagram != blank or settings.social_tiktok != blank or settings.social_facebook != blank -%}
+      <nav aria-label="Réseaux sociaux">
+        <h2>Suivre</h2>
+        <ul>
+          {%- if settings.social_instagram != blank -%}<li><a href="{{ settings.social_instagram }}" target="_blank" rel="noopener">Instagram</a></li>{%- endif -%}
+          {%- if settings.social_tiktok != blank -%}<li><a href="{{ settings.social_tiktok }}" target="_blank" rel="noopener">TikTok</a></li>{%- endif -%}
+          {%- if settings.social_facebook != blank -%}<li><a href="{{ settings.social_facebook }}" target="_blank" rel="noopener">Facebook</a></li>{%- endif -%}
+        </ul>
+      </nav>
+    {%- endif -%}
+  </div>
+  <div class="wrap footer__bottom">
+    <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}</span>
+    {%- if shop.enabled_payment_types.size > 0 -%}
+      <ul class="payments" aria-label="Moyens de paiement">
+        {%- for type in shop.enabled_payment_types -%}
+          <li>{{ type | payment_type_svg_tag: class: 'payment-icon' }}</li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Pied de page",
+  "class": "section-footer",
+  "enabled_on": { "groups": ["footer"] },
+  "settings": [
+    { "type": "text", "id": "tagline", "label": "Slogan", "default": "Des jouets qui occupent vraiment." },
+    { "type": "link_list", "id": "menu", "label": "Menu « Aide »", "default": "footer", "info": "Les pages légales (CGV, remboursement, confidentialité…) s’ajoutent automatiquement depuis Paramètres → Politiques." }
+  ]
+}
+{% endschema %}

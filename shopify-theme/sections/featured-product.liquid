@@ -1,0 +1,108 @@
+{%- assign featured = section.settings.product -%}
+<section class="hero" aria-label="Produit">
+  <div class="wrap">
+    {%- if featured != blank -%}
+      {% render 'product-buy', product: featured, section: section %}
+    {%- else -%}
+      <div class="placeholder-box">
+        <p class="eyebrow">À configurer</p>
+        <h1 class="h2">Choisis ton produit</h1>
+        <p class="lead">Dans l’éditeur de thème, clique sur cette section puis sélectionne le produit à mettre en avant.</p>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Produit vedette",
+  "class": "section-product",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Produit"
+    },
+    {
+      "type": "checkbox",
+      "id": "title_as_h1",
+      "label": "Titre principal de la page (H1)",
+      "default": true,
+      "info": "À laisser coché sur la page d’accueil."
+    },
+    {
+      "type": "text",
+      "id": "pets",
+      "label": "Pour quels animaux (séparés par des virgules)",
+      "default": "Chien, Chat"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Phrase d’accroche",
+      "default": "Le jouet qui occupe ton chien ou ton chat pendant que tu n’es pas là."
+    },
+    {
+      "type": "range",
+      "id": "preselect_offer",
+      "label": "Offre cochée par défaut",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Afficher la description Shopify du produit",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "highlight",
+      "name": "Point fort",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texte",
+          "default": "Distribue les croquettes en roulant"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Produit vedette",
+      "blocks": [
+        {
+          "type": "highlight",
+          "settings": {
+            "text": "Distribue les croquettes en roulant"
+          }
+        },
+        {
+          "type": "highlight",
+          "settings": {
+            "text": "Difficulté réglable"
+          }
+        },
+        {
+          "type": "highlight",
+          "settings": {
+            "text": "Se démonte et passe sous l’eau"
+          }
+        },
+        {
+          "type": "highlight",
+          "settings": {
+            "text": "Convient aux chiens et aux chats"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

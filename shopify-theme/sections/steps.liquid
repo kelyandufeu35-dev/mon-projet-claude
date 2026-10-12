@@ -1,0 +1,90 @@
+<section class="section section--cobalt" id="{{ section.settings.anchor | default: section.id }}">
+  <div class="wrap">
+    {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+    {%- if section.settings.title != blank -%}<h2 class="h2">{{ section.settings.title | escape }}</h2>{%- endif -%}
+    <ol class="steps">
+      {%- for block in section.blocks -%}
+        <li class="step" {{ block.shopify_attributes }}>
+          <span class="step__num" aria-hidden="true">{{ forloop.index }}</span>
+          <h3>{{ block.settings.title | escape }}</h3>
+          <p>{{ block.settings.text | escape }}</p>
+        </li>
+      {%- endfor -%}
+    </ol>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Étapes",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Petit titre",
+      "default": "Comment ça marche"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre",
+      "default": "Prêt en trente secondes."
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Ancre de lien (sans #)",
+      "default": "comment"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Étape",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titre",
+          "default": "Étape"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Texte",
+          "default": "Décris l’étape."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Étapes",
+      "blocks": [
+        {
+          "type": "step",
+          "settings": {
+            "title": "Remplis",
+            "text": "Dévisse la balle et verse une poignée de croquettes sèches."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "Règle",
+            "text": "Tourne la molette : ouverture large pour débuter, étroite pour les experts."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "Laisse jouer",
+            "text": "Pose la balle au sol. Elle roule, tourne et libère les croquettes au hasard."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
