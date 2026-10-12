@@ -133,7 +133,12 @@
                 assign qn = q | plus: 0
                 assign d = discounts[forloop.index0] | plus: 0
                 assign full = price | times: qn
-                assign saved = full | times: d | divided_by: 100.0 | round
+                comment
+                  Shopify arrondit la remise unité par unité, à l'inférieur :
+                  on fait pareil pour afficher exactement le total payé.
+                endcomment
+                assign unit_saved = price | times: d | divided_by: 100
+                assign saved = unit_saved | times: qn
                 assign total = full | minus: saved
                 assign badge = badges[forloop.index0]
               -%}
