@@ -13,8 +13,9 @@
 {%- if video != blank -%}
   <section class="section showcase" id="{{ section.settings.anchor | default: section.id }}">
     <div class="wrap showcase__grid">
-      <div class="showcase__phone">
+      <div class="showcase__phone" data-video>
         {{ video | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'metadata', image_size: '720x' }}
+        <button type="button" class="sound-btn" data-sound aria-pressed="false">{% render 'icon', name: 'sound' %}<span data-sound-label>Activer le son</span></button>
       </div>
       <div class="showcase__text">
         {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}

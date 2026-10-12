@@ -173,6 +173,8 @@
       if (!id) return;
       root.querySelectorAll('[data-media-id]').forEach((slide) => {
         slide.hidden = slide.dataset.mediaId !== String(id);
+        // Une vidéo cachée ne doit pas continuer à parler.
+        if (slide.hidden) slide.querySelectorAll('video').forEach((v) => setSound(v, false));
       });
       root.querySelectorAll('[data-thumb]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.thumb === String(id))));
     }
@@ -357,6 +359,29 @@
     });
     document.documentElement.classList.add('reveal-on');
   }
+
+  /* --------------------------------------------------- Son des vidéos */
+  function setSound(video, on) {
+    if (!video) return;
+    video.muted = !on;
+    if (on) video.play().catch(() => {});
+    const wrap = video.closest('[data-video]');
+    const btn = wrap && wrap.querySelector('[data-sound]');
+    if (btn) {
+      btn.setAttribute('aria-pressed', String(on));
+      const label = btn.querySelector('[data-sound-label]');
+      if (label) label.textContent = on ? 'Couper le son' : 'Activer le son';
+    }
+  }
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-sound]');
+    if (!btn) return;
+    const video = btn.closest('[data-video]').querySelector('video');
+    const on = video.muted;
+    // Une seule vidéo avec le son à la fois.
+    if (on) document.querySelectorAll('[data-video] video').forEach((v) => v !== video && setSound(v, false));
+    setSound(video, on);
+  });
 
   /* -------------------------------------------- Address country select */
   function initCountrySelects() {
