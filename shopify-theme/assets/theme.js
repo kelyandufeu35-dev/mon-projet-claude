@@ -131,7 +131,9 @@
     if (!dataEl || !form) return;
     const data = JSON.parse(dataEl.textContent);
     const variantInput = form.querySelector('[data-variant-input]');
-    const qtyInput = form.querySelector('[data-qty-input]');
+    const addTotal = form.querySelector('[data-add-total]');
+    // Quantité : celle de l’offre cochée (radios name="quantity"), sinon le champ caché.
+    const qty = () => Number((form.querySelector('[data-offer]:checked') || form.querySelector('[name="quantity"]') || { value: 1 }).value) || 1;
     const addBtn = form.querySelector('[data-add-button]');
     const addLabel = form.querySelector('[data-add-label]');
     const errorEl = form.querySelector('[data-form-error]');
@@ -167,16 +169,29 @@
         if (fullEl) fullEl.textContent = money(full);
         if (unitEl) unitEl.textContent = money(Math.floor(total / qty));
       });
+      // Total du bouton = offre cochée (motion.js ne fait que l’animer). La valeur précédente est
+      // gardée dans ptOdo pour que l’odomètre de motion.js roule de l’ancien au nouveau total.
       const offer = root.querySelector('[data-offer]:checked');
-      if (offer) qtyInput.value = offer.value;
+      const card = offer && offer.closest('[data-offer-card], .offer');
+      const total = card && card.querySelector('[data-offer-total]');
+      if (total && addTotal) {
+        const text = total.textContent.trim();
+        const sr = addTotal.querySelector('.pt-sr');
+        if (addTotal.ptOdo == null) addTotal.ptOdo = addTotal.textContent.trim();
+        if (sr) sr.textContent = text;
+        else addTotal.textContent = text;
+      }
     }
 
     function showMedia(id) {
       if (!id) return;
       root.querySelectorAll('[data-media-id]').forEach((slide) => {
         slide.hidden = slide.dataset.mediaId !== String(id);
-        // Une vidéo cachée ne doit pas continuer à parler.
-        if (slide.hidden) slide.querySelectorAll('video').forEach((v) => setSound(v, false));
+        // Vidéo produit : lue quand on la choisit (jamais en mouvement réduit), en pause et
+        // muette une fois cachée. Les boucles [data-step-video] sont gérées par motion.js.
+        slide.querySelectorAll('[data-video] video').forEach((v) => {
+          if (slide.hidden) { v.pause(); v.muted = true; } else if (!calm()) v.play().catch(() => {});
+        });
       });
       root.querySelectorAll('[data-thumb]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.thumb === String(id))));
     }
@@ -236,9 +251,10 @@
           return;
         }
         renderSections(json.sections);
-        await refreshCount();
-        // motion.js fait voler la balle jusqu’au panier (650 ms), puis le panier s’ouvre.
-        document.dispatchEvent(new CustomEvent('pattoune:cart-added', { detail: { button: addBtn, quantity: Number(qtyInput.value) } }));
+        // motion.js fait voler la balle jusqu’au panier (650 ms) : le compteur change à l’arrivée,
+        // puis le panier s’ouvre.
+        document.dispatchEvent(new CustomEvent('pattoune:cart-added', { detail: { button: addBtn, quantity: qty() } }));
+        setTimeout(refreshCount, calm() ? 0 : 650);
         setTimeout(openDrawer, calm() ? 0 : 650);
         if (addLabel) {
           addLabel.textContent = 'Ajouté au panier';
@@ -257,6 +273,8 @@
     });
 
     updateOffers();
+    // Retour arrière (bfcache ou formulaire restauré) : le total suit l’offre réellement cochée.
+    addEventListener('pageshow', updateOffers);
   }
 
   /* -------------------------------------------------- Delivery window */

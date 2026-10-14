@@ -1,10 +1,11 @@
 {%- comment -%}
   Page produit (v9 Cinéma) : la zone d’achat arrive tout de suite, sans intro ni
-  révélation (reveal: false). Le titre du produit est le H1. Voir snippets/product-buy.liquid.
+  révélation (reveal: false). Le titre du produit est le H1. Premier média : la balle 3D de la
+  pub sur scène sombre (réglage « Animation 3D en premier »). Voir snippets/product-buy.liquid.
 {%- endcomment -%}
 <section class="pt-achat pt-achat--page" id="{{ section.settings.anchor | default: 'acheter' | escape }}" aria-labelledby="pt-buy-title-{{ section.id }}">
   <div class="pt-wrap">
-    {% render 'product-buy', product: product, section: section, reveal: false %}
+    {% render 'product-buy', product: product, section: section, reveal: false, scene: section.settings.scene_first %}
   </div>
 </section>
 
@@ -18,6 +19,13 @@
       "id": "title_as_h1",
       "label": "Titre principal de la page (H1)",
       "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "scene_first",
+      "label": "Animation 3D en premier dans la galerie",
+      "default": true,
+      "info": "La balle de la publicité, sur scène sombre, avant les photos. Idéal pour les visiteurs qui arrivent d’une pub."
     },
     {
       "type": "text",

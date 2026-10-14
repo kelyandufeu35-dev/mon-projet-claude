@@ -273,8 +273,7 @@
         if (calm) btn.hidden = true;
         else btn.addEventListener('click', () => {
           paused = !paused;
-          btn.setAttribute('aria-pressed', String(paused));
-          btn.setAttribute('aria-label', paused ? 'Relancer l’animation' : 'Mettre en pause l’animation');
+          btn.setAttribute('aria-pressed', String(paused)); // libellé fixe, l’état est dans aria-pressed
           sync();
         });
       }
@@ -352,19 +351,33 @@
     if (!a.width || !b.width) return Promise.resolve();
     const x0 = a.left + a.width / 2 - 20, y0 = a.top + a.height / 2 - 20;
     const x1 = b.left + b.width / 2 - 20, y1 = b.top + b.height / 2 - 20;
-    const wrap = document.body.appendChild(span('pt-fly'));
-    wrap.setAttribute('aria-hidden', 'true');
-    const img = wrap.appendChild(new Image(40, 40));
+    const img = new Image(40, 40);
     img.alt = '';
     img.src = window.theme.ballSrc;
     const dur = 650;
-    wrap.animate([{ transform: `translateX(${x0}px)` }, { transform: `translateX(${x1}px)` }], { duration: dur, easing: 'linear', fill: 'both' });
-    return img.animate([
-      { transform: `translateY(${y0}px) rotate(0deg) scale(1)`, easing: 'cubic-bezier(.22, .9, .36, 1)' },
-      { transform: `translateY(${y0 - 120}px) rotate(-150deg) scale(.9)`, offset: 0.35, easing: 'cubic-bezier(.6, 0, .9, .55)' },
-      { transform: `translateY(${y1}px) rotate(-400deg) scale(.45)` },
-    ], { duration: dur, fill: 'both' }).finished.then(() => wrap.remove(), () => wrap.remove());
+    // Balle pas encore décodée après 120 ms : pas de vol, rebond du compteur seul.
+    const ready = img.decode ? Promise.race([img.decode().then(() => true, () => false), new Promise((r) => setTimeout(r, 120, false))]) : Promise.resolve(true);
+    return ready.then((ok) => {
+      if (!ok) return;
+      const wrap = document.body.appendChild(span('pt-fly'));
+      wrap.setAttribute('aria-hidden', 'true');
+      wrap.appendChild(img);
+      wrap.animate([{ transform: `translateX(${x0}px)` }, { transform: `translateX(${x1}px)` }], { duration: dur, easing: 'linear', fill: 'both' });
+      return img.animate([
+        { transform: `translateY(${y0}px) rotate(0deg) scale(1)`, easing: 'cubic-bezier(.22, .9, .36, 1)' },
+        { transform: `translateY(${y0 - 120}px) rotate(-150deg) scale(.9)`, offset: 0.35, easing: 'cubic-bezier(.6, 0, .9, .55)' },
+        { transform: `translateY(${y1}px) rotate(-400deg) scale(.45)` },
+      ], { duration: dur, fill: 'both' }).finished.then(() => wrap.remove(), () => wrap.remove());
+    });
   }
+  // Page avec bouton d’achat : la balle du vol est chargée d’avance.
+  if (!calm && document.querySelector('[data-add-button]') && window.theme && window.theme.ballSrc) new Image().src = window.theme.ballSrc;
+  // Galerie : Safari ne donne pas le focus au bouton cliqué ; la transition de photo suit le clic.
+  document.addEventListener('click', (e) => {
+    const t = e.target.closest && e.target.closest('[data-thumb]');
+    const g = t && t.closest('.pt-gallery');
+    if (g) g.classList.add('is-touched');
+  });
   document.addEventListener('pattoune:cart-added', (e) => {
     const btn = e.detail && e.detail.button;
     const cart = document.querySelector('[data-hd] [data-cart-open]');

@@ -4,6 +4,7 @@
       "type": "main-product",
       "settings": {
         "title_as_h1": true,
+        "scene_first": true,
         "eyebrow": "Chiens et chats",
         "preselect_offer": 2,
         "offers_legend": "Combien de balles\u202f?",

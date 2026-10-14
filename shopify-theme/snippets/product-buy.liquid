@@ -3,7 +3,8 @@
   garanties, volets « Ce que tu reçois » et « Quelle taille ». Barre d’achat
   mobile et données structurées en fin de snippet.
   Paramètres : product, section, reveal (booléen : révélations au défilement,
-  accueil seulement ; jamais sur le prix, les offres, le bouton ni les garanties).
+  accueil seulement ; jamais sur le prix, les offres, le bouton ni les garanties),
+  scene (booléen : 1er média = la balle 3D du haut de page sur scène sombre, page produit).
   Contrat avec theme.js et motion.js : attributs data-* (FINAL_SPEC § 3.5).
   Styles : assets/sections-v9.css (préfixe pt-).
 {%- endcomment -%}
@@ -45,6 +46,9 @@
   assign preselect_qty = qtys[preselect_index] | default: 1
 
   assign initial_media_id = current.featured_media.id | default: product.featured_media.id
+  if scene
+    assign initial_media_id = 'scene'
+  endif
   assign selected_total = price
 -%}
 
@@ -52,6 +56,20 @@
   {%- comment -%} Galerie : volet à l’entrée (accueil), fondu doux au changement de photo. {%- endcomment -%}
   <div class="pt-gallery" data-gallery>
     <div class="pt-gallery__main"{% if reveal %} data-reveal="clip"{% endif %}>
+      {%- if scene -%}
+        <div class="pt-gallery__slide pt-gallery__slide--scene" data-media-id="scene"{% if initial_media_id != 'scene' %} hidden{% endif %}>
+          <picture>
+            <source type="image/webp" srcset="{{ 'pt-hero-poster-720.webp' | asset_url }} 720w, {{ 'pt-hero-poster.webp' | asset_url }} 1080w" sizes="(min-width: 900px) 52vw, 100vw">
+            <img src="{{ 'pt-hero-poster.jpg' | asset_url }}" width="1080" height="1440" alt="{{ product.title | escape }}, balle rouge à facettes sous un rai de lumière" loading="eager" fetchpriority="high" decoding="async">
+          </picture>
+          <span class="pt-step__vid" data-step-video aria-hidden="true">
+            <video muted loop playsinline preload="none" width="1080" height="1440">
+              <source src="{{ 'pt-hero-loop.webm' | asset_url }}" type="video/webm">
+              <source src="{{ 'pt-hero-loop.mp4' | asset_url }}" type="video/mp4">
+            </video>
+          </span>
+        </div>
+      {%- endif -%}
       {%- if product.media.size > 0 -%}
         {%- for media in product.media -%}
           {%- liquid
@@ -60,14 +78,15 @@
               assign loading = 'eager'
             endif
           -%}
+          {%- assign media_alt = media.alt | default: product.title -%}
           <div class="pt-gallery__slide" data-media-id="{{ media.id }}"{% if media.id != initial_media_id %} hidden{% endif %}>
             {%- case media.media_type -%}
               {%- when 'image' -%}
-                {{ media | image_url: width: 1400 | image_tag: widths: '480, 720, 960, 1200, 1400', sizes: '(min-width: 900px) 52vw, 100vw', loading: loading, alt: media.alt | default: product.title }}
+                {{ media | image_url: width: 1400 | image_tag: widths: '480, 720, 960, 1200, 1400', sizes: '(min-width: 900px) 52vw, 100vw', loading: loading, alt: media_alt }}
               {%- when 'video' -%}
+                {%- comment -%} Ni lecture automatique ni préchargement : theme.js la lance quand on la choisit (hors mouvement réduit) ; commandes natives (pause, son). {%- endcomment -%}
                 <div class="pt-gallery__video" data-video>
-                  {{ media | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'metadata', image_size: '1200x' }}
-                  <button type="button" class="pt-sound" data-sound aria-pressed="false">{% render 'icon', name: 'sound' %}<span data-sound-label>Activer le son</span></button>
+                  {{ media | video_tag: autoplay: false, loop: true, muted: true, controls: true, playsinline: true, preload: 'none', image_size: '1200x' }}
                 </div>
               {%- when 'external_video' -%}
                 {{ media | media_tag: image_size: '1200x', autoplay: false, loop: true, controls: true }}
@@ -84,8 +103,20 @@
         </div>
       {%- endif -%}
     </div>
-    {%- if product.media.size > 1 -%}
+    {%- liquid
+      assign thumbs = product.media.size
+      if scene
+        assign thumbs = thumbs | plus: 1
+      endif
+    -%}
+    {%- if thumbs > 1 -%}
       <div class="pt-gallery__thumbs" role="group" aria-label="Choisir une photo"{% if reveal %} data-reveal-group{% endif %}>
+        {%- if scene -%}
+          <button type="button" class="pt-thumb pt-thumb--scene" data-thumb="scene" aria-label="Animation 3D" aria-pressed="{% if initial_media_id == 'scene' %}true{% else %}false{% endif %}">
+            <img src="{{ 'pt-hero-poster-720.webp' | asset_url }}" alt="" width="720" height="960" loading="lazy" decoding="async">
+            <span class="pt-thumb__play" aria-hidden="true">{% render 'icon', name: 'play' %}</span>
+          </button>
+        {%- endif -%}
         {%- for media in product.media -%}
           <button type="button" class="pt-thumb" data-thumb="{{ media.id }}" aria-label="{% if media.media_type == 'video' or media.media_type == 'external_video' %}Vidéo{% else %}Photo{% endif %} {{ forloop.index }}" aria-pressed="{% if media.id == initial_media_id %}true{% else %}false{% endif %}"{% if reveal %} data-reveal="up"{% endif %}>
             {{ media.preview_image | image_url: width: 160 | image_tag: loading: 'lazy', alt: '' }}
@@ -116,7 +147,8 @@
 
     {% form 'product', product, id: form_id, class: 'pt-buy__form', novalidate: 'novalidate', data-product-form: '' %}
       <input type="hidden" name="id" value="{{ current.id }}" data-variant-input>
-      <input type="hidden" name="quantity" value="{{ preselect_qty }}" data-qty-input>
+      {%- comment -%} Quantité : portée par l’offre cochée (radios name="quantity"), juste même sans JS. {%- endcomment -%}
+      {%- if qtys.size < 2 -%}<input type="hidden" name="quantity" value="1">{%- endif -%}
 
       {%- unless product.has_only_default_variant -%}
         {%- for option in product.options_with_values -%}
@@ -126,7 +158,7 @@
             <div class="pt-swatches">
               {%- for value in option.values -%}
                 <label class="pt-swatch">
-                  <input type="radio" name="option-{{ option_index }}-{{ section.id }}" value="{{ value | escape }}"{% if option.selected_value == value %} checked{% endif %}>
+                  <input type="radio" name="option-{{ option_index }}-{{ section.id }}" value="{{ value | escape }}" autocomplete="off"{% if option.selected_value == value %} checked{% endif %}>
                   {%- if value.swatch.color -%}
                     <span class="pt-swatch__dot" style="background: {{ value.swatch.color }}"></span>
                   {%- elsif value.swatch.image -%}
@@ -167,7 +199,7 @@
               endif
             -%}
             <label class="pt-offer" data-offer-card>
-              <input class="pt-offer__input" type="radio" name="offer-{{ section.id }}" value="{{ qn }}" data-offer data-discount="{{ d }}"{% if unit_off > 0 %} data-unit-off="{{ unit_off }}"{% endif %}{% if forloop.index == preselect %} checked{% endif %}>
+              <input class="pt-offer__input" type="radio" name="quantity" value="{{ qn }}" autocomplete="off" data-offer data-discount="{{ d }}"{% if unit_off > 0 %} data-unit-off="{{ unit_off }}"{% endif %}{% if forloop.index == preselect %} checked{% endif %}>
               <span class="pt-offer__dot" aria-hidden="true"></span>
               <span class="pt-offer__name">
                 {{- qn }} {% if qn > 1 %}{{ unit_plural | escape }}{% else %}{{ unit_singular | escape }}{% endif -%}
@@ -179,6 +211,7 @@
               </span>
               <span class="pt-offer__total">
                 <strong data-offer-total>{% render 'pt-money', cents: total %}</strong>
+                {%- if d > 0 %}<span class="pt-sr"> au lieu de </span>{% endif -%}
                 <s data-offer-full{% if d == 0 %} hidden{% endif %}>{% render 'pt-money', cents: full %}</s>
               </span>
             </label>

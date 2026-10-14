@@ -128,16 +128,16 @@ html.pt-motion .pt-spec.is-in::after { animation: ptb-dot var(--pt-d-pop) var(--
 .pt-gallery__slide[hidden] { display: none; }
 .pt-gallery__slide :is(img, video) { display: block; width: 100%; height: 100%; object-fit: cover; }
 .pt-gallery__slide--3d img { object-fit: contain; padding: 20%; }
+/* Scène sombre de la pub (page produit) : même nuit que le haut de page. */
+.pt-gallery__slide--scene { background: radial-gradient(70% 50% at 50% 115%, var(--pt-ink-deep), transparent 75%), linear-gradient(180deg, #101225, var(--pt-ink) 40%); }
+.pt-gallery__slide--scene :is(img, video) { object-position: 50% 58%; }
 /* Changement de photo : fondu et léger recul, seulement après un choix du visiteur
-   (:focus-within), jamais au premier affichage (aucun retard du LCP). */
-html.pt-motion .pt-gallery:focus-within .pt-gallery__slide { transition: opacity 600ms var(--pt-e-ui), scale 1200ms var(--pt-e-out); }
+   (.is-touched, posé au clic par motion.js car Safari ne donne pas le focus aux boutons, ou
+   :focus-within au clavier), jamais au premier affichage (aucun retard du LCP). */
+html.pt-motion .pt-gallery:is(.is-touched, :focus-within) .pt-gallery__slide { transition: opacity 600ms var(--pt-e-ui), scale 1200ms var(--pt-e-out); }
 @starting-style {
-  html.pt-motion .pt-gallery:focus-within .pt-gallery__slide { opacity: 0; scale: 1.04; }
+  html.pt-motion .pt-gallery:is(.is-touched, :focus-within) .pt-gallery__slide { opacity: 0; scale: 1.04; }
 }
-.pt-sound { position: absolute; left: 16px; bottom: 16px; z-index: 2; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 18px 0 14px; border: 0; border-radius: 999px; background: rgb(251 247 241 / .92); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); color: var(--pt-ink); font-size: var(--pt-fs-sm); font-weight: 700; transition: background-color var(--pt-d-ui) var(--pt-e-ui), scale var(--pt-d-micro) var(--pt-e-ui); }
-.pt-sound svg { width: 18px; height: 18px; }
-.pt-sound[aria-pressed='true'] { background: var(--pt-sun); }
-.pt-sound:active { scale: .97; }
 .pt-gallery__thumbs { display: flex; flex-wrap: wrap; gap: 10px; padding: 4px; margin: -4px; }
 .pt-thumb { position: relative; flex: none; width: 72px; height: 72px; padding: 0; border: 0; border-radius: 16px; overflow: hidden; background: var(--pt-sand); box-shadow: 0 0 0 2px var(--pt-cream), 0 0 0 3.5px transparent; transition: translate var(--pt-d-micro) var(--pt-e-ui), box-shadow var(--pt-d-ui) var(--pt-e-ui); }
 .pt-thumb img { width: 100%; height: 100%; aspect-ratio: 1; object-fit: cover; transition: opacity var(--pt-d-ui) var(--pt-e-ui); }
