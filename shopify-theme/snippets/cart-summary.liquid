@@ -33,7 +33,7 @@
     <p>
       {% render 'icon', name: 'truck' %}
       {%- if remaining > 0 -%}
-        Plus que <strong>{{ remaining | money }}</strong> pour la livraison offerte
+        Plus que <strong>{% render 'pt-money', cents: remaining %}</strong> pour la livraison offerte
       {%- else -%}
         <strong>Livraison offerte</strong>
       {%- endif -%}
@@ -56,7 +56,7 @@
           <p class="line__variant">{{ item.variant.title | escape }}</p>
         {%- endunless -%}
         {%- for allocation in item.line_level_discount_allocations -%}
-          <p class="line__discount">{{ allocation.discount_application.title | escape }} (−{{ allocation.amount | money }})</p>
+          <p class="line__discount">{{ allocation.discount_application.title | escape }} (−{% render 'pt-money', cents: allocation.amount %})</p>
         {%- endfor -%}
         <div class="stepper" role="group" aria-label="{{ 'cart.quantity' | t }}, {{ item.product.title | escape }}">
           <button type="button" data-line="{{ forloop.index }}" data-qty="{{ item.quantity | minus: 1 }}" aria-label="Retirer un">{% render 'icon', name: 'minus' %}</button>
@@ -67,9 +67,9 @@
       <div class="line__side">
         <p class="line__price">
           {%- if item.original_line_price > item.final_line_price -%}
-            <s>{{ item.original_line_price | money }}</s>
+            <s>{% render 'pt-money', cents: item.original_line_price %}</s>
           {%- endif -%}
-          {{ item.final_line_price | money }}
+          {% render 'pt-money', cents: item.final_line_price %}
         </p>
         <button type="button" class="link-btn" data-line="{{ forloop.index }}" data-qty="0">{{ 'cart.remove' | t }}</button>
       </div>
@@ -82,29 +82,29 @@
   {%- comment -%} Un clic ajoute ce qu'il manque pour atteindre l'offre suivante. {%- endcomment -%}
   <button type="button" class="upsell" data-line="1" data-qty="{{ next_qty }}">
     <span class="upsell__plus">{% render 'icon', name: 'plus' %}</span>
-    <span>Ajoute {{ missing }} balle{% if missing > 1 %}s{% endif %} et profite de <strong>−{{ next_discount }} %</strong> sur tout le lot</span>
+    <span>Ajoute {{ missing }} balle{% if missing > 1 %}s{% endif %} et profite de <strong>−{{ next_discount }}&nbsp;%</strong> sur tout le lot</span>
   </button>
 {%- elsif next_qty > 0 -%}
   {%- assign missing = next_qty | minus: cart.item_count -%}
   <p class="upsell upsell--note">
-    Ajoute {{ missing }} article{% if missing > 1 %}s{% endif %} pour profiter de <strong>−{{ next_discount }} %</strong>.
+    Ajoute {{ missing }} article{% if missing > 1 %}s{% endif %} pour profiter de <strong>−{{ next_discount }}&nbsp;%</strong>.
   </p>
 {%- endif -%}
 
 <dl class="totals">
   <div>
     <dt>{{ 'cart.subtotal' | t }}</dt>
-    <dd>{{ cart.original_total_price | money }}</dd>
+    <dd>{% render 'pt-money', cents: cart.original_total_price %}</dd>
   </div>
   {%- if cart.total_discount > 0 -%}
     <div class="totals__discount">
       <dt>Remises</dt>
-      <dd>−{{ cart.total_discount | money }}</dd>
+      <dd>−{% render 'pt-money', cents: cart.total_discount %}</dd>
     </div>
   {%- endif -%}
   <div class="totals__grand">
     <dt>{{ 'cart.total' | t }}</dt>
-    <dd>{{ cart.total_price | money }}</dd>
+    <dd>{% render 'pt-money', cents: cart.total_price %}</dd>
   </div>
 </dl>
 <p class="drawer__fine">

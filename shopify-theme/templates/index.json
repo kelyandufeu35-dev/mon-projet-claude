@@ -7,7 +7,7 @@
         "eyebrow": "Pour chiens et chats", "title": "Le jouet qui l’occupe quand tu pars.", "highlight": "l’occupe",
         "subtitle": "Il pousse la balle, elle roule et libère ses croquettes une à une. Moins d’ennui, des repas plus lents.",
         "button_label": "Je commande", "target": "acheter", "link_label": "Voir le principe", "link_target": "principe",
-        "show_proof": true, "proof_1": "Livraison offerte", "proof_2": "14\u00a0jours pour changer d’avis", "proof_3": "Paiement sécurisé"
+        "show_proof": true, "proof_1": "Livraison offerte", "proof_2": "Retour sous 14\u00a0jours (droit légal)", "proof_3": "Paiement sécurisé"
       }
     },
     "principe": {
@@ -36,7 +36,7 @@
       "settings": {
         "product": "balle-a-friandises-pattoune-1", "title_as_h1": false, "eyebrow": "Chiens et chats", "preselect_offer": 2,
         "offers_legend": "Combien de balles\u202f?", "unit_singular": "balle", "unit_plural": "balles",
-        "trust_1": "Colis suivi", "trust_2": "14\u00a0jours pour changer d’avis", "trust_3": "Paiement sécurisé",
+        "trust_1": "Colis suivi", "trust_2": "Retour sous 14\u00a0jours (droit légal)", "trust_3": "Paiement sécurisé",
         "inbox": "1 balle à friandises de 8\u00a0cm, en caoutchouc souple (TPE)\nUne ouverture pour glisser les croquettes sèches\nUn colis suivi, numéro envoyé par e-mail",
         "size_guide": true, "show_description": false, "sticky_label": "Balle Pattoune", "anchor": "acheter"
       }
@@ -47,14 +47,14 @@
         "q1": { "type": "question", "settings": { "question": "Quelle taille fait la balle\u202f?", "answer": "<p>Elle mesure 8\u00a0cm de diamètre. Elle convient aux chats et aux petits chiens\u202f; ne la donne pas à un grand chien, qui pourrait l’avaler.</p>" } },
         "q2": { "type": "question", "settings": { "question": "Quelles croquettes mettre dedans\u202f?", "answer": "<p>Des croquettes sèches de petite taille, qui passent facilement par l’ouverture.</p>" } },
         "q3": { "type": "question", "settings": { "question": "Peut-il jouer sans surveillance\u202f?", "answer": "<p>Surveille les premières séances pour voir comment il joue. Retire le jouet s’il commence à le mâchouiller ou s’il est abîmé. Aucun jouet n’est indestructible.</p>" } },
-        "q4": { "type": "question", "settings": { "question": "Livraison et retours\u202f?", "answer": "<p>La livraison est offerte et suivie, en 12 à 18\u00a0jours. Tu disposes de 14\u00a0jours après réception pour changer d’avis, sans avoir à te justifier.</p>" } }
+        "q4": { "type": "question", "settings": { "question": "Livraison et retours\u202f?", "answer": "<p>La livraison est offerte et suivie, en 12 à 18\u00a0jours, en France métropolitaine. Tu disposes de 14\u00a0jours après réception pour changer d’avis, sans avoir à te justifier.</p>" } }
       },
       "block_order": ["q1", "q2", "q3", "q4"],
       "settings": { "eyebrow": "Questions", "title": "Avant de te décider.", "aside": "Une autre question\u202f?", "link_label": "Écris-nous", "aside_after": ", une vraie personne te répond en français.", "anchor": "faq" }
     },
     "final": {
       "type": "final-cta",
-      "settings": { "title": "Une balle, quelques croquettes, et le salon redevient calme.", "highlight": "calme.", "button_label": "Je commande ma balle", "note": "Livraison offerte · 14\u00a0jours pour changer d’avis" }
+      "settings": { "title": "Une balle, quelques croquettes, et le salon redevient calme.", "highlight": "calme.", "button_label": "Je commande ma balle", "note": "Livraison offerte · Retour sous 14\u00a0jours (droit légal)" }
     }
   },
   "order": ["haut", "principe", "fiche", "produit", "faq", "final"]

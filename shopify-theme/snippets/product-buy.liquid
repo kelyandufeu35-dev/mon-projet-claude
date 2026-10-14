@@ -42,8 +42,6 @@
   if preselect > qtys.size
     assign preselect = qtys.size
   endif
-  assign preselect_index = preselect | minus: 1
-  assign preselect_qty = qtys[preselect_index] | default: 1
 
   assign initial_media_id = current.featured_media.id | default: product.featured_media.id
   if scene

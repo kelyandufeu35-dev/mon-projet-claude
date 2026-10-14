@@ -27,7 +27,7 @@
         "type": "textarea",
         "id": "home_description",
         "label": "Description de la page d’accueil (Google)",
-        "default": "La balle à friandises Pattoune libère les croquettes en roulant : elle occupe ton chien ou ton chat quand tu pars et ralentit les repas. Livraison offerte."
+        "default": "La balle à friandises Pattoune libère les croquettes en roulant : elle occupe ton chien ou ton chat quand tu pars et ralentit les repas. Livraison offerte."
       }
     ]
   },
@@ -129,7 +129,7 @@
         "type": "text",
         "id": "delivery_text",
         "label": "Délai de livraison affiché",
-        "default": "7 à 14 jours ouvrés",
+        "default": "7 à 14 jours ouvrés",
         "info": "Indique le vrai délai de ton fournisseur."
       },
       {
@@ -216,14 +216,14 @@
       {
         "type": "text",
         "id": "contact_email",
-        "label": "E-mail de contact affiché",
-        "info": "Vide = e-mail de la boutique (Paramètres → Général)."
+        "label": "E-mail de contact (jamais affiché sur le site)",
+        "info": "Ce réglage n’est plus utilisé : aucune adresse n’apparaît sur la boutique. Le contact passe par la page Contact."
       },
       {
         "type": "text",
         "id": "response_time",
         "label": "Délai de réponse",
-        "default": "sous 48 h ouvrées"
+        "default": "sous 48 h ouvrées"
       }
     ]
   },

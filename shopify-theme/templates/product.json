@@ -11,7 +11,7 @@
         "unit_singular": "balle",
         "unit_plural": "balles",
         "trust_1": "Colis suivi",
-        "trust_2": "14\u00a0jours pour changer d’avis",
+        "trust_2": "Retour sous 14\u00a0jours (droit légal)",
         "trust_3": "Paiement sécurisé",
         "inbox": "1 balle à friandises de 8\u00a0cm, en caoutchouc souple (TPE)\nUne ouverture pour glisser les croquettes sèches\nUn colis suivi, numéro envoyé par e-mail",
         "size_guide": true,
@@ -140,7 +140,7 @@
           "type": "question",
           "settings": {
             "question": "Livraison et retours\u202f?",
-            "answer": "<p>La livraison est offerte et suivie, en 12 à 18\u00a0jours. Tu disposes de 14\u00a0jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
+            "answer": "<p>La livraison est offerte et suivie, en 12 à 18\u00a0jours, en France métropolitaine. Tu disposes de 14\u00a0jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
           }
         }
       },
@@ -165,7 +165,7 @@
         "title": "Une balle, quelques croquettes, et le salon redevient calme.",
         "highlight": "calme.",
         "button_label": "Je commande ma balle",
-        "note": "Livraison offerte · 14\u00a0jours pour changer d’avis"
+        "note": "Livraison offerte · Retour sous 14\u00a0jours (droit légal)"
       }
     }
   },

@@ -1,89 +1,66 @@
-/* ==========================================================================
-   Pattoune v9 « Cinéma » · système de mouvement (chantier A)
-   1. Jetons · 2. Base · 3. Primitives · 4. En-tête · 5. Haut de page
-   6. Révélations (data-reveal) · 7. Défilement (data-scroll) · 8. Micro-interactions
-   9. Transitions de page · 10. Points de rupture · 11. Réduire les animations
-   Règles : on n’anime que transform / translate / scale / rotate, opacity, clip-path,
-   stroke-dashoffset, fill-opacity, color et background-position (reflets).
-   Les états cachés n’existent que sous html.pt-motion (posé dans le <head>, jamais
-   avec « réduire les animations », retiré si motion.js ne démarre pas).
-   ========================================================================== */
-
-/* ------------------------------------------------------------ 1. Jetons */
+/* Pattoune v9 « Cinéma » · mouvement (chantier A) : 1 jetons · 2 base · 3 primitives · 4 en-tête
+   5 haut de page · 6 révélations · 7 défilement · 8 micro-interactions · 9 transitions de page
+   10 points de rupture · 11 réduire les animations. Propriétés animées : transform/translate/
+   scale/rotate, opacity, clip-path, stroke-dashoffset, fill-opacity. États cachés sous
+   html.pt-motion (posé dans le <head>, jamais en mouvement réduit). Version commentée : FINAL_SPEC § 4. */
+/* 1. Jetons */
 :root {
-  /* Couleurs (les 4 premières suivent les réglages du thème, injectés par theme.liquid) */
   --pt-ink: var(--ink, #14162b);   --pt-sun: var(--sun, #ffc23a);
   --pt-cream: var(--paper, #f4ece2); --pt-red: var(--red, #c4140f);
   --pt-ink-deep: #0b0c18; --pt-ink-2: #1d2040; --pt-paper: #fbf7f1; --pt-sand: #eadfd0;
-  --pt-ok: #0e6a3e;                      /* « Ajouté au panier » : crème dessus 5,7:1 */
-  --pt-on-dark-2: #c9c2bd;               /* texte secondaire sur encre : 10:1 */
-  --pt-on-light-2: #4a4a5e;              /* texte secondaire sur crème : 7,4:1 */
-  --pt-muted-title: #7e7d87;             /* titres d’étape inactifs (≥ 32 px gras) : 3,5:1 */
+  --pt-ok: #0e6a3e;
+  --pt-on-dark-2: #c9c2bd;
+  --pt-on-light-2: #4a4a5e;
+  --pt-muted-title: #7e7d87;
   --pt-line-dark: rgb(244 236 226 / .14); --pt-line-light: rgb(20 22 43 / .14);
-  /* Typo */
   --pt-display: 'Bricolage Grotesque', 'Arial Narrow', system-ui, sans-serif;
   --pt-body: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --pt-fs-display: clamp(3.1rem, 0.85rem + 8.6vw, 8.6rem);   /* 50 → 138 px */
-  --pt-fs-statement: clamp(3.4rem, 0.9rem + 10.2vw, 11rem);  /* 54 → 176 px */
-  --pt-fs-h2: clamp(2.6rem, 1.15rem + 5.4vw, 6.4rem);        /* 42 → 102 px */
-  --pt-fs-h3: clamp(2rem, 1.35rem + 2.4vw, 3.6rem);          /* 32 → 58 px */
+  --pt-fs-display: clamp(3.1rem, 0.85rem + 8.6vw, 8.6rem);
+  --pt-fs-statement: clamp(3.4rem, 0.9rem + 10.2vw, 11rem);
+  --pt-fs-h2: clamp(2.6rem, 1.15rem + 5.4vw, 6.4rem);
+  --pt-fs-h3: clamp(2rem, 1.35rem + 2.4vw, 3.6rem);
   --pt-fs-lead: clamp(1.0625rem, 0.98rem + 0.36vw, 1.3125rem);
   --pt-fs-body: 1.0625rem; --pt-fs-sm: .9375rem; --pt-fs-xs: .8125rem;
-  /* Espace */
   --pt-section: clamp(88px, 10vw, 168px); --pt-gutter: clamp(20px, 5vw, 72px); --pt-maxw: 1320px;
   --pt-r-lg: 32px; --pt-r-md: 20px; --pt-r-sm: 12px; --pt-hd-h: 84px;
-  /* Mouvement : 5 courbes, 6 durées, 3 décalages */
-  --pt-e-out: cubic-bezier(.16, 1, .3, 1);      /* révélations, entrées */
-  --pt-e-inout: cubic-bezier(.76, 0, .24, 1);   /* volets, iris, traits */
-  --pt-e-in: cubic-bezier(.55, 0, 1, .45);      /* chutes */
-  --pt-e-ui: cubic-bezier(.2, .7, .2, 1);       /* survols, états */
-  --pt-e-spring: cubic-bezier(.34, 1.56, .64, 1); /* surgissements (ressort) */
+  --pt-e-out: cubic-bezier(.16, 1, .3, 1);
+  --pt-e-inout: cubic-bezier(.76, 0, .24, 1);
+  --pt-e-in: cubic-bezier(.55, 0, 1, .45);
+  --pt-e-ui: cubic-bezier(.2, .7, .2, 1);
+  --pt-e-spring: cubic-bezier(.34, 1.56, .64, 1);
   --pt-d-micro: 160ms; --pt-d-ui: 320ms; --pt-d-pop: 480ms;
   --pt-d-reveal: 900ms; --pt-d-mask: 1100ms; --pt-d-media: 1600ms;
   --pt-stagger: 80ms; --pt-stagger-word: 55ms; --pt-stagger-lit: 90ms;
-  --pt-t0: 140ms;                                /* départ du haut de page sans intro */
+  --pt-t0: 140ms;
 }
 html.has-intro { --pt-t0: 1380ms; }
-
-/* -------------------------------------------------------------- 2. Base */
+/* 2. Base */
 html { scroll-padding-top: calc(var(--pt-hd-h) + 16px); }
-/* Arrivée avec une ancre (/#faq) : saut direct, pas de défilement doux au chargement (pt-loaded : motion.js). */
 html:not(.pt-loaded) { scroll-behavior: auto !important; }
-/* Éditeur de thème : une section rechargée s’affiche telle quelle, sans rejouer sa chorégraphie. */
 .pt-static :is([data-reveal], [data-reveal] *, .pt-hero__curtain, .pt-hero__media *, .pt-hero__copy *),
 .pt-static :is([data-reveal], [data-reveal] *, .pt-hero__copy *)::before, .pt-static :is([data-reveal], [data-reveal] *)::after { animation: none !important; }
-/* Rebond du défilement en haut de l’accueil : on reste dans la nuit du haut de page. */
 html:has(> body.template-index) { background: var(--pt-ink-deep); }
 :focus-visible { outline: 3px solid var(--pt-ink); outline-offset: 3px; border-radius: 8px; }
 :is(.pt-dark, .pt-hd) :focus-visible { outline-color: var(--pt-sun); }
 .pt-sr { position: absolute !important; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .pt-hd-sentinel { position: absolute; top: 0; left: 0; width: 1px; height: 40px; pointer-events: none; }
 body:not(.template-index) #contenu { padding-top: calc(var(--pt-hd-h) + 12px); }
-
-/* -------------------------------------------------------- 3. Primitives */
+/* 3. Primitives */
 .pt-wrap { width: 100%; max-width: var(--pt-maxw); margin-inline: auto; padding-inline: var(--pt-gutter); }
 .pt-dark { --pt-link-on: var(--pt-ink); background: var(--pt-ink); color: var(--pt-cream); }
-
-/* Titres : Bricolage étroit, très serré, lignes équilibrées */
 .pt-display, .pt-h2, .pt-h3 { font-family: var(--pt-display); font-weight: 800; font-stretch: 75%; text-wrap: balance; }
 .pt-display { font-size: var(--pt-fs-display); line-height: .86; letter-spacing: -.035em; }
 .pt-h2 { font-size: var(--pt-fs-h2); line-height: .9; letter-spacing: -.032em; }
 .pt-h3 { font-size: var(--pt-fs-h3); line-height: .95; letter-spacing: -.03em; }
 .pt-lead { max-width: 36ch; font-size: var(--pt-fs-lead); line-height: 1.55; color: var(--pt-on-light-2); }
 .pt-dark .pt-lead { color: var(--pt-on-dark-2); }
-
-/* Sur-titre : petites capitales espacées, trait qui se trace à la révélation */
 .pt-eyebrow { display: inline-flex; align-items: center; gap: 12px; font-family: var(--pt-body); font-size: var(--pt-fs-xs); font-weight: 700; line-height: 1.3; letter-spacing: .16em; text-transform: uppercase; }
 .pt-eyebrow::before { content: ''; flex: none; width: 28px; height: 2px; border-radius: 2px; background: currentColor; transform-origin: left center; }
 .pt-eyebrow--sun { color: var(--pt-sun); }
 .pt-eyebrow--red { color: var(--pt-red); }
-
-/* Mots masqués (sortie de pt-split) : chaque mot monte dans sa propre fenêtre */
 .pt-w { display: inline-block; overflow: clip; padding: .02em .06em .1em; margin: -.02em -.06em -.1em; vertical-align: top; }
 .pt-w > span { display: inline-block; }
 .pt-hl { font-style: normal; color: var(--pt-hl-color, var(--pt-sun)); }
-
-/* Bouton pilule : reflet diagonal au survol, flèche qui avance, appui (scale) */
 .pt-btn {
   position: relative; isolation: isolate; overflow: hidden;
   display: inline-flex; align-items: center; justify-content: center; gap: 12px;
@@ -93,7 +70,8 @@ body:not(.template-index) #contenu { padding-top: calc(var(--pt-hd-h) + 12px); }
   transition: scale var(--pt-d-micro) var(--pt-e-ui), translate 600ms var(--pt-e-spring), background-color var(--pt-d-ui) var(--pt-e-ui), color var(--pt-d-ui) var(--pt-e-ui), box-shadow var(--pt-d-ui) var(--pt-e-ui);
 }
 .pt-btn::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(105deg, transparent 30%, rgb(255 255 255 / .45) 50%, transparent 70%); transform: translateX(-120%); pointer-events: none; }
-.pt-btn--sun, .pt-btn--sun:hover { background: var(--pt-sun); color: var(--pt-ink); box-shadow: 0 18px 40px -18px rgb(255 194 58 / .55); }
+.pt-btn--sun, .pt-btn--sun:hover { background: var(--pt-sun); color: var(--pt-ink); box-shadow: 0 14px 30px -18px rgb(20 22 43 / .35); }
+:is(.pt-dark, .pt-hero, .pt-sticky) .pt-btn--sun { box-shadow: 0 18px 40px -18px rgb(255 194 58 / .55); }
 .pt-btn--ink, .pt-btn--ink:hover { background: var(--pt-ink); color: var(--pt-cream); box-shadow: 0 18px 40px -22px rgb(20 22 43 / .7); }
 .pt-btn--ink::after { background: linear-gradient(105deg, transparent 30%, rgb(255 255 255 / .16) 50%, transparent 70%); }
 .pt-btn--xl { min-height: 64px; padding: 0 30px 0 32px; font-size: 1.125rem; }
@@ -107,11 +85,10 @@ body:not(.template-index) #contenu { padding-top: calc(var(--pt-hd-h) + 12px); }
 @media (hover: hover) {
   .pt-btn:hover::after { transform: translateX(120%); transition: transform 900ms var(--pt-e-out); }
   .pt-btn:hover .pt-btn__arrow { translate: 4px 0; }
-  .pt-btn--sun:hover { box-shadow: 0 24px 54px -16px rgb(255 194 58 / .72); }
+  .pt-btn--sun:hover { box-shadow: 0 18px 36px -16px rgb(20 22 43 / .4); }
+  :is(.pt-dark, .pt-hero, .pt-sticky) .pt-btn--sun:hover { box-shadow: 0 24px 54px -16px rgb(255 194 58 / .72); }
   .pt-btn--ink:hover { box-shadow: 0 24px 50px -20px rgb(20 22 43 / .8); }
 }
-
-/* Lien secondaire : cercle de 44 px qui se remplit, soulignement qui se rétracte */
 .pt-link { display: inline-flex; align-items: center; gap: 12px; min-height: 48px; font-weight: 600; text-decoration: none; }
 .pt-link, .pt-link:hover { color: inherit; }
 .pt-link__icon { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid currentColor; transition: background-color var(--pt-d-ui) var(--pt-e-ui), color var(--pt-d-ui) var(--pt-e-ui), translate var(--pt-d-ui) var(--pt-e-out); }
@@ -123,25 +100,19 @@ body:not(.template-index) #contenu { padding-top: calc(var(--pt-hd-h) + 12px); }
   .pt-link:hover .pt-link__icon svg { color: var(--pt-link-on, var(--pt-cream)); }
   .pt-link:hover > span:last-child::after { transform: scaleX(0); }
 }
-
-/* Rond « + » des volets : tourne de 180° en ressort, la barre verticale pivote en « × » */
 .pt-plus { position: relative; flex: none; width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--pt-line-light); color: var(--pt-ink); transition: rotate var(--pt-d-ui) var(--pt-e-spring), background-color var(--pt-d-ui) var(--pt-e-ui), border-color var(--pt-d-ui) var(--pt-e-ui), color var(--pt-d-ui) var(--pt-e-ui); }
 .pt-plus::before, .pt-plus::after { content: ''; position: absolute; left: calc(50% - 6px); top: calc(50% - .75px); width: 12px; height: 1.5px; border-radius: 1px; background: currentColor; transition: rotate var(--pt-d-ui) var(--pt-e-spring); }
 .pt-plus::after { rotate: 90deg; }
 details[open] > summary .pt-plus { rotate: 180deg; background: var(--pt-ink); border-color: var(--pt-ink); color: var(--pt-cream); }
 details[open] > summary .pt-plus::before { rotate: 45deg; }
 details[open] > summary .pt-plus::after { rotate: 135deg; }
-
-/* Logo : 4 doigts + coussinet balle (snippet pt-logo-mark) ; les doigts sautent au survol */
 .pt-logo { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; font-family: var(--pt-display); font-weight: 800; font-stretch: 85%; font-size: 1.375rem; letter-spacing: -.02em; text-decoration: none; }
 .pt-logo, .pt-logo:hover { color: inherit; }
 .pt-logo__mark { flex: none; width: 34px; height: 32px; overflow: visible; }
 .pt-logo__mark > g[fill] { transition: translate var(--pt-d-pop) var(--pt-e-spring); }
 .pt-logo__img { height: auto; aspect-ratio: auto; }
 @media (hover: hover) { .pt-logo:hover .pt-logo__mark > g[fill] { translate: 0 -34px; } }
-
-/* --------------------------------------------------------- 4. En-tête */
-/* view-transition-name sur la pastille et non sur .pt-hd : un ancêtre nommé devient « backdrop root » et le flou ne voit plus la page */
+/* 4. En-tête */
 .pt-hd { position: fixed; inset: 0 0 auto; z-index: 50; padding: 12px var(--pt-gutter) 0; pointer-events: none; }
 .pt-hd__bar {
   pointer-events: auto; view-transition-name: pt-hd; display: flex; align-items: center; gap: 24px;
@@ -150,43 +121,34 @@ details[open] > summary .pt-plus::after { rotate: 135deg; }
   transition: background-color var(--pt-d-ui) var(--pt-e-ui), border-color var(--pt-d-ui) var(--pt-e-ui), box-shadow var(--pt-d-ui) var(--pt-e-ui);
 }
 .pt-hd:is(.is-scrolled, .is-solid) .pt-hd__bar { background: rgb(20 22 43 / .92); -webkit-backdrop-filter: blur(16px) saturate(140%); backdrop-filter: blur(16px) saturate(140%); border-color: var(--pt-line-dark); box-shadow: 0 18px 40px -24px rgb(0 0 0 / .6); }
-/* Navigation : soulignement soleil qui se dessine de gauche à droite et repart à droite */
 .pt-hd__nav { display: flex; gap: 4px; margin-left: auto; transition: translate 560ms var(--pt-e-out); }
 .pt-hd__nav a { position: relative; display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; font-size: var(--pt-fs-sm); font-weight: 600; text-decoration: none; color: rgb(244 236 226 / .8); transition: color var(--pt-d-micro) var(--pt-e-ui); }
 .pt-hd__nav a::after { content: ''; position: absolute; left: 14px; right: 14px; bottom: 9px; height: 1.5px; border-radius: 1px; background: var(--pt-sun); transform: scaleX(0); transform-origin: right center; transition: transform var(--pt-d-ui) var(--pt-e-out); }
 .pt-hd__nav a:is(:hover, :focus-visible, [aria-current]) { color: var(--pt-cream); }
 .pt-hd__nav a:is(:hover, [aria-current])::after { transform: none; transform-origin: left center; }
-/* Tant que la pastille n’est pas formée, la navigation occupe la place du bouton (mesurée par motion.js) */
 .pt-hd:not(.is-scrolled, .is-solid) .pt-hd__nav { translate: var(--pt-cta-shift, 0px) 0; }
-/* Bouton « Je commande » : n’existe visuellement qu’en pastille */
 .pt-hd__cta { min-height: 44px; padding: 0 6px 0 18px; gap: 10px; font-size: var(--pt-fs-sm); opacity: 0; translate: 0 -6px; visibility: hidden; pointer-events: none; transition: opacity var(--pt-d-ui) var(--pt-e-ui), translate var(--pt-d-ui) var(--pt-e-ui), visibility 0s linear var(--pt-d-ui), scale var(--pt-d-micro) var(--pt-e-ui), box-shadow var(--pt-d-ui) var(--pt-e-ui); }
 .pt-hd__cta, .pt-hd__cta:hover { box-shadow: none; }
 .pt-hd__cta .pt-btn__arrow { width: 32px; height: 32px; margin-right: 0; }
-/* Page produit : le bouton n’apparaît qu’une fois la zone d’achat dépassée (.is-past-buy, motion.js). */
 .template-product .pt-hd:not(.is-past-buy) .pt-hd__cta { opacity: 0; translate: 0 -6px; visibility: hidden; pointer-events: none; }
 .template-product .pt-hd:not(.is-past-buy) .pt-hd__nav { translate: var(--pt-cta-shift, 0px) 0; }
 .pt-hd:is(.is-scrolled, .is-solid) .pt-hd__cta { opacity: 1; translate: none; visibility: visible; pointer-events: auto; transition: opacity 420ms var(--pt-e-out) 80ms, translate 420ms var(--pt-e-out) 80ms, visibility 0s, scale var(--pt-d-micro) var(--pt-e-ui), box-shadow var(--pt-d-ui) var(--pt-e-ui); }
-/* Panier */
 .pt-hd__cart { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 8px 0 16px; border-radius: 999px; background: rgb(244 236 226 / .1); font-size: var(--pt-fs-sm); font-weight: 700; text-decoration: none; transition: background-color var(--pt-d-micro) var(--pt-e-ui); }
 .pt-hd__cart, .pt-hd__cart:hover { color: var(--pt-cream); }
 .pt-hd__cart:hover { background: rgb(244 236 226 / .18); }
 .pt-hd__cart svg { width: 20px; height: 20px; }
 .pt-hd__count { display: grid; place-items: center; min-width: 28px; height: 28px; padding: 0 6px; border-radius: 999px; background: var(--pt-sun); color: var(--pt-ink); font-size: .8125rem; font-weight: 800; font-variant-numeric: tabular-nums; }
 .pt-hd__count[data-empty] { background: rgb(244 236 226 / .16); color: var(--pt-cream); }
-/* Entrée (accueil) : l’en-tête descend une fois la scène installée */
 html.pt-motion:not(.pt-vt) .template-index .pt-hd { animation: pt-hd-in var(--pt-d-reveal) var(--pt-e-out) calc(var(--pt-t0) + 500ms) backwards; }
 @keyframes pt-hd-in { from { opacity: 0; translate: 0 -16px; } }
-
-/* ---------------------------------------------------- 5. Haut de page */
+/* 5. Haut de page */
 .pt-hero { --pt-px: 0; --pt-py: 0; position: relative; isolation: isolate; display: grid; align-items: end; min-height: max(660px, 100svh); overflow: clip; }
 .pt-hero__bg { position: absolute; inset: 0; z-index: -3; overflow: hidden; background:
   radial-gradient(42% 52% at 73% 58%, rgb(196 20 15 / .16), transparent 70%),
   radial-gradient(70% 50% at 50% 115%, var(--pt-ink-deep), transparent 75%),
   linear-gradient(180deg, #101225 0%, var(--pt-ink) 40%, var(--pt-ink) 100%); }
-/* Lumière d’ambiance qui glisse avec le pointeur (bureau) */
 .pt-hero__bg::after { content: ''; position: absolute; inset: -12%; background: radial-gradient(28% 36% at 72% 42%, rgb(255 238 214 / .07), transparent 70%); translate: calc(var(--pt-px) * 70px) calc(var(--pt-py) * 44px); transition: translate 1600ms var(--pt-e-out); }
 .pt-hero__grain { position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .06; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"); }
-/* Scène : rai de lumière, balle en boucle, poussières ; légère parallaxe au pointeur */
 .pt-hero__stage { position: absolute; z-index: -1; bottom: 0; right: max(0px, calc((100% - var(--pt-maxw)) / 2)); height: min(96svh, 900px); aspect-ratio: 3 / 4; translate: calc(var(--pt-px) * -14px) calc(var(--pt-py) * -10px); transition: translate 1200ms var(--pt-e-out); }
 .pt-hero__beam {
   position: absolute; left: 49.3%; bottom: 58%; width: 62%; height: 60vh; transform: translateX(-50%); transform-origin: 50% 100%;
@@ -202,17 +164,13 @@ html.pt-motion:not(.pt-vt) .template-index .pt-hd { animation: pt-hd-in var(--pt
           mask: linear-gradient(to right, transparent 0, #000 18%, #000 82%, transparent 100%), linear-gradient(to bottom, transparent 0, #000 30%, #000 78%, transparent 100%);
           mask-composite: intersect; }
 .pt-hero__media :is(img, video) { position: absolute; inset: 0; display: block; width: 100%; height: 100%; aspect-ratio: 3 / 4; object-fit: cover; }
-/* La vidéo apparaît en fondu au-dessus du poster dès qu’elle joue (jamais d’écran noir). Cachée dès la
-   première image (pt-motion, posé dans le <head>) et pas seulement à l’arrivée de motion.js : pas de fondu 1 → 0. */
 html:is(.pt-js, .pt-motion) .pt-hero__media video { opacity: 0; transition: opacity 800ms var(--pt-e-ui); will-change: opacity, scale; }
 .pt-hero.is-playing .pt-hero__media video { opacity: 1; }
 .pt-hero__curtain { position: absolute; inset: 0; background: var(--pt-ink); opacity: 0; pointer-events: none; }
 .pt-hero__motes { position: absolute; left: 34%; right: 34%; top: -10%; bottom: 46%; pointer-events: none; translate: calc(var(--pt-px) * 24px) calc(var(--pt-py) * 16px); transition: translate 1200ms var(--pt-e-out); }
 .pt-hero__motes i { position: absolute; left: var(--x); top: var(--y); width: var(--s, 3px); aspect-ratio: 1; border-radius: 50%; background: rgb(255 236 210 / .8); box-shadow: 0 0 6px rgb(255 236 210 / .6); opacity: 0; }
-/* Texte */
 .pt-hero__copy { position: relative; z-index: 1; max-width: 780px; padding-block: clamp(96px, 15svh, 148px) clamp(48px, 8svh, 120px); }
 .pt-hero__eyebrow { margin-bottom: clamp(20px, 3vh, 32px); }
-/* Titre sensible à la hauteur (portables 1 280 × 720, 1 366 × 768) ; interligne desserré : jambes et hampes ne se touchent pas. */
 .pt-hero__title { margin-bottom: clamp(24px, 3.4vh, 36px); font-size: clamp(3.1rem, min(0.85rem + 8.6vw, 14svh), 8.6rem); line-height: .92; }
 .pt-hero__title .pt-hl { display: block; width: fit-content; }
 .pt-hero__sub { max-width: 46ch; margin-bottom: clamp(28px, 4vh, 40px); font-size: var(--pt-fs-lead); line-height: 1.55; color: var(--pt-on-dark-2); }
@@ -220,7 +178,6 @@ html:is(.pt-js, .pt-motion) .pt-hero__media video { opacity: 0; transition: opac
 .pt-hero__proof { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: clamp(28px, 4vh, 40px); font-size: var(--pt-fs-sm); color: var(--pt-on-dark-2); }
 .pt-hero__proof li { display: inline-flex; align-items: center; gap: 8px; }
 .pt-hero__proof svg { flex: none; width: 18px; height: 18px; color: var(--pt-sun); }
-/* Bouton pause (WCAG 2.2.2) : vidéo, faisceau et poussières bougent plus de 5 s */
 .pt-hero__pause { position: absolute; z-index: 3; right: max(var(--pt-gutter), calc((100% - var(--pt-maxw)) / 2 + var(--pt-gutter))); bottom: 28px; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 1.5px solid rgb(244 236 226 / .3); border-radius: 50%; background: rgb(11 12 24 / .35); color: rgb(244 236 226 / .7); cursor: pointer; transition: color var(--pt-d-micro) var(--pt-e-ui), border-color var(--pt-d-micro) var(--pt-e-ui), scale var(--pt-d-micro) var(--pt-e-ui); }
 .pt-hero__pause:is(:hover, :focus-visible) { color: var(--pt-cream); border-color: rgb(244 236 226 / .7); }
 .pt-hero__pause:active { scale: .92; }
@@ -229,8 +186,6 @@ html:is(.pt-js, .pt-motion) .pt-hero__media video { opacity: 0; transition: opac
 .pt-hero__pause[aria-pressed='true'] .pt-hero__pause-i--play { display: block; }
 html:not(.pt-js) .pt-hero__pause { display: none; }
 .pt-hero:is(.is-paused, .is-offscreen) :is(.pt-hero__beam, .pt-hero__motes i) { animation-play-state: paused; }
-
-/* Chorégraphie d’entrée (t0 = --pt-t0 : 140 ms sans intro, 1 380 ms avec, ou instant du saut + 60 ms) */
 html.pt-motion .pt-hero__curtain { animation: pt-curtain 1400ms var(--pt-e-out) var(--pt-t0) both; }
 html.pt-motion .pt-hero__media :is(img, video) { animation: pt-settle 2200ms var(--pt-e-out) var(--pt-t0) backwards; }
 html.pt-motion .pt-hero__eyebrow { animation: pt-fade-up 900ms var(--pt-e-out) calc(var(--pt-t0) + 60ms) backwards; }
@@ -247,16 +202,10 @@ html.pt-motion .pt-hero__motes i { animation: pt-mote var(--dur, 9s) linear calc
 @keyframes pt-fade-up { from { opacity: 0; transform: translateY(18px); } }
 @keyframes pt-fade { from { opacity: 0; } }
 @keyframes pt-sweep { from { transform: scaleX(0); } }
-/* 130 % et non 108 % : avec la rotation, le haut des lettres hautes (« l’ », « j ») dépassait du masque. */
 @keyframes pt-rise-hero { from { transform: translateY(130%) rotate(4deg); } }
 @keyframes pt-beam-flicker { 0% { opacity: 0; } 18% { opacity: .7; } 26% { opacity: .15; } 40% { opacity: .9; } 48% { opacity: .5; } 100% { opacity: 1; } }
 @keyframes pt-sway { from { transform: translateX(-50%) rotate(-1.4deg); } to { transform: translateX(-50%) rotate(1.4deg); } }
 @keyframes pt-mote { 0% { opacity: 0; transform: translate(0, 40px); } 20% { opacity: .9; } 80% { opacity: .5; } 100% { opacity: 0; transform: translate(var(--dx, 12px), -120px); } }
-
-/* Reflet unique sur les mots mis en valeur (.pt-hl). motion.js glisse dans chaque mot un calque vide
-   <i class="pt-shine" data-t="mot">, masqué en bande douce : le calque traverse le mot pendant que son
-   texte clair (::after) recule d’autant. Le texte reste en place, seule la lumière passe ; on n’anime
-   que transform, la couleur du mot reste pleine (sans JS ou en mouvement réduit : pas de calque). */
 .pt-hl .pt-w > span { position: relative; }
 .pt-shine { position: absolute; inset: 0; pointer-events: none; font-style: normal; transform: translateX(-110%);
   -webkit-mask: linear-gradient(100deg, transparent 18%, #000 50%, transparent 82%) no-repeat;
@@ -268,67 +217,44 @@ html.pt-motion [data-reveal='mask'].is-in .pt-shine { animation: pt-shine-win 13
 html.pt-motion [data-reveal='mask'].is-in .pt-shine::after { animation: pt-shine-txt 1300ms var(--pt-e-inout) calc(var(--pt-d, 0) * var(--pt-stagger) + var(--pt-wi, 0) * var(--pt-stagger-word) + 1500ms) both; }
 @keyframes pt-shine-win { from { transform: translateX(-110%); } to { transform: translateX(110%); } }
 @keyframes pt-shine-txt { from { transform: translateX(110%); } to { transform: translateX(-110%); } }
-
-/* Sortie au défilement : le texte monte et s’éteint, la scène recule (navigateurs compatibles).
-   Les animations liées au défilement ne sont créées qu’une fois l’intro passée ou finie : l’intro
-   couvre la page et tout défilement la passe, rien ne change à l’œil. */
 @supports (animation-timeline: view()) {
   html.pt-motion:not(.has-intro:not(.intro-skip, .intro-done)) .pt-hero__copy { animation: pt-hero-out linear both; animation-timeline: view(); animation-range: exit 0% exit 90%; }
   html.pt-motion:not(.has-intro:not(.intro-skip, .intro-done)) .pt-hero__stage { animation: pt-stage-out linear both; animation-timeline: view(); animation-range: exit 0% exit 100%; }
   @keyframes pt-hero-out { to { transform: translateY(-14vh); opacity: .15; } }
   @keyframes pt-stage-out { to { transform: translateY(10vh) scale(.92); } }
 }
-
-/* ------------------------------------------- 6. Révélations (data-reveal) */
-/* Animation CSS en fill-mode « backwards » déclenchée par .is-in (motion.js, IntersectionObserver).
-   État caché :not(.is-in) = image-clé « from » ; « to » = état naturel : une fois finie, l’animation
-   n’agit plus et les transitions propres aux composants restent intactes.
-   Décalage : --pt-d (0…5) × 80 ms, donné en ligne ou par [data-reveal-group].
-   Un élément ne porte pas à la fois une révélation (autre que « none ») et un data-scroll. */
+/* 6. Révélations (data-reveal) */
 html.pt-motion [data-reveal='up']:not(.is-in) { opacity: 0; transform: translateY(32px); }
 html.pt-motion [data-reveal='up'].is-in { animation: pt-up var(--pt-d-reveal) var(--pt-e-out) backwards calc(var(--pt-d, 0) * var(--pt-stagger)); }
 @keyframes pt-up { from { opacity: 0; transform: translateY(32px); } }
-
 html.pt-motion [data-reveal='fade']:not(.is-in) { opacity: 0; }
 html.pt-motion [data-reveal='fade'].is-in { animation: pt-fade var(--pt-d-reveal) var(--pt-e-out) backwards calc(var(--pt-d, 0) * var(--pt-stagger)); }
-
 html.pt-motion [data-reveal='scale']:not(.is-in) { opacity: 0; transform: scale(.92); }
 html.pt-motion [data-reveal='scale'].is-in { animation: pt-scale-in var(--pt-d-mask) var(--pt-e-out) backwards calc(var(--pt-d, 0) * var(--pt-stagger)); }
 @keyframes pt-scale-in { from { opacity: 0; transform: scale(.92); } }
-
 html.pt-motion [data-reveal='mask']:not(.is-in) .pt-w > span { transform: translateY(125%) rotate(3deg); }
 html.pt-motion [data-reveal='mask'].is-in .pt-w > span { animation: pt-rise var(--pt-d-mask) var(--pt-e-out) backwards calc(var(--pt-d, 0) * var(--pt-stagger) + var(--pt-wi, 0) * var(--pt-stagger-word)); }
 @keyframes pt-rise { from { transform: translateY(125%) rotate(3deg); } }
-
 html.pt-motion [data-reveal='clip']:not(.is-in) { clip-path: inset(14% 10% round var(--pt-r, 32px)); }
 html.pt-motion [data-reveal='clip']:not(.is-in) :is(img, video) { transform: scale(1.18); }
 html.pt-motion [data-reveal='clip'].is-in { animation: pt-clip var(--pt-d-mask) var(--pt-e-inout) backwards calc(var(--pt-d, 0) * var(--pt-stagger)); }
 html.pt-motion [data-reveal='clip'].is-in :is(img, video) { animation: pt-clip-media var(--pt-d-media) var(--pt-e-out) backwards calc(var(--pt-d, 0) * var(--pt-stagger)); }
 @keyframes pt-clip { from { clip-path: inset(14% 10% round var(--pt-r, 32px)); } to { clip-path: inset(0 round var(--pt-r, 32px)); } }
 @keyframes pt-clip-media { from { transform: scale(1.18); } }
-
 html.pt-motion [data-reveal='line']:not(.is-in) { transform: scaleX(0); transform-origin: var(--pt-origin, left center); }
 html.pt-motion [data-reveal='line'].is-in { transform-origin: var(--pt-origin, left center); animation: pt-line var(--pt-d-reveal) var(--pt-e-inout) backwards calc(var(--pt-d, 0) * var(--pt-stagger)); }
 @keyframes pt-line { from { transform: scaleX(0); } }
-
 [data-reveal='draw'] [pathLength='1'] { stroke-dasharray: 1; }
 html.pt-motion [data-reveal='draw']:not(.is-in) [pathLength='1'] { stroke-dashoffset: 1; }
 html.pt-motion [data-reveal='draw'].is-in [pathLength='1'] { animation: pt-draw-on var(--pt-d-reveal) var(--pt-e-inout) backwards calc(var(--pt-d, 0) * var(--pt-stagger) + var(--pt-k, 0) * 70ms); }
 @keyframes pt-draw-on { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
-
-/* « lit » : la ligne s’allume mot par mot (observateur dédié à 70 % de la hauteur d’écran) */
 html.pt-motion [data-reveal='lit']:not(.is-in) .pt-w > span { opacity: var(--pt-lit-o, .14); transform: translateY(.06em); }
 html.pt-motion [data-reveal='lit'].is-in .pt-w > span { animation: pt-lit 700ms var(--pt-e-ui) backwards calc(var(--pt-wi, 0) * var(--pt-stagger-lit)); }
 @keyframes pt-lit { from { opacity: var(--pt-lit-o, .14); transform: translateY(.06em); } }
-
-/* Sur-titres révélés : le trait se trace juste après la montée */
 html.pt-motion .pt-eyebrow[data-reveal]:not(.is-in)::before { transform: scaleX(0); }
 html.pt-motion .pt-eyebrow[data-reveal].is-in::before { animation: pt-sweep 800ms var(--pt-e-inout) backwards calc(var(--pt-d, 0) * var(--pt-stagger) + 160ms); }
-
 [data-count-to] { font-variant-numeric: tabular-nums; }
-
-/* ----------------------------------------- 7. Défilement (data-scroll) */
-/* (même réserve pendant l’intro que pour la sortie du haut de page) */
+/* 7. Défilement (data-scroll) */
 @supports (animation-timeline: view()) {
   html.pt-motion:not(.has-intro:not(.intro-skip, .intro-done)) [data-scroll='drift'] { animation: pt-drift linear both; animation-timeline: view(); animation-range: cover; }
   html.pt-motion:not(.has-intro:not(.intro-skip, .intro-done)) [data-scroll='zoom'] { animation: pt-zoom linear both; animation-timeline: view(); animation-range: entry 0% cover 50%; }
@@ -339,22 +265,17 @@ html.pt-motion .pt-eyebrow[data-reveal].is-in::before { animation: pt-sweep 800m
   @keyframes pt-spin { from { rotate: -14deg; } to { rotate: 14deg; } }
   @keyframes pt-iris-in { from { clip-path: circle(0% at var(--pt-iris-x, 50%) var(--pt-iris-y, 22%)); } to { clip-path: circle(150% at var(--pt-iris-x, 50%) var(--pt-iris-y, 22%)); } }
 }
-
-/* ------------------------------------------------ 8. Micro-interactions */
-/* Aimant (motion.js écrit style.translate) : retour en ressort, suivi rapide pendant le survol */
+/* 8. Micro-interactions */
 [data-magnetic]:not(.pt-btn) { transition: translate 600ms var(--pt-e-spring); }
 [data-magnetic].is-magnet:not(.pt-btn) { transition: translate 120ms linear; }
 .pt-btn.is-magnet { transition: scale var(--pt-d-micro) var(--pt-e-ui), translate 120ms linear, background-color var(--pt-d-ui) var(--pt-e-ui), color var(--pt-d-ui) var(--pt-e-ui), box-shadow var(--pt-d-ui) var(--pt-e-ui); }
-/* Odomètre : chaque caractère changé monte dans sa fenêtre (prix du bouton, compteur du récit) */
 .pt-odo { display: inline-flex; white-space: pre; font-variant-numeric: tabular-nums; }
 .pt-odo__c { position: relative; display: inline-block; overflow: clip; vertical-align: top; }
 .pt-odo__c > span { display: inline-block; }
 .pt-odo__c > .pt-odo__old { position: absolute; left: 0; top: 0; }
-/* Balle qui vole jusqu’au panier (WAAPI, transform seulement) */
 .pt-fly { position: fixed; left: 0; top: 0; z-index: 150; width: 40px; pointer-events: none; }
 .pt-fly img { display: block; width: 40px; height: 40px; filter: drop-shadow(0 10px 12px rgb(0 0 0 / .35)); }
-
-/* --------------------------------------------- 9. Transitions de page */
+/* 9. Transitions de page */
 @media (prefers-reduced-motion: no-preference) {
   @view-transition { navigation: auto; }
   ::view-transition-old(root) { animation: 220ms var(--pt-e-ui) both pt-vt-out; }
@@ -363,27 +284,23 @@ html.pt-motion .pt-eyebrow[data-reveal].is-in::before { animation: pt-sweep 800m
 }
 @keyframes pt-vt-out { to { opacity: 0; } }
 @keyframes pt-vt-in { from { opacity: 0; transform: translateY(16px); } }
-
-/* ------------------------------------------------ 10. Points de rupture */
+/* 10. Points de rupture */
 @media (max-width: 899px) {
   :root { --pt-hd-h: 68px; }
   .pt-hd__nav, .pt-hd__cta { display: none; }
   .pt-hd { padding-top: 8px; }
-  /* Fondu au-dessus de la pastille : le texte qui défile dessous ne paraît pas coupé net. */
   .pt-hd::before { content: ''; position: absolute; z-index: -1; inset: 0 0 auto; height: 28px; background: linear-gradient(var(--pt-hd-fade, var(--pt-cream)) 30%, transparent); pointer-events: none; }
   .template-index .pt-hd:not(.is-scrolled)::before, .pt-hd.is-over-dark::before { --pt-hd-fade: var(--pt-ink); }
   .template-index .pt-hd:not(.is-scrolled)::before { opacity: 0; }
   .pt-hd__bar { min-height: 56px; padding-left: 14px; }
   .pt-hd__cart { margin-left: auto; padding-left: 12px; }
   .pt-hd__cart-label { display: none; }
-
   .pt-hero { min-height: max(620px, 100svh); }
   .pt-hero__stage { left: 0; right: 0; top: 0; bottom: auto; width: 100%; height: 56svh; aspect-ratio: auto; }
   .pt-hero__media { -webkit-mask: linear-gradient(to bottom, transparent 0, #000 22%, #000 62%, transparent 100%); mask: linear-gradient(to bottom, transparent 0, #000 22%, #000 62%, transparent 100%); }
   .pt-hero__media :is(img, video) { aspect-ratio: auto; object-position: 50% 40%; }
   .pt-hero__beam { width: 70%; bottom: 52%; }
   .pt-hero__copy { padding-block: 0 52px; }
-  /* Voile de lisibilité : le sur-titre ne passe plus sur les croquettes du socle */
   .pt-hero__copy::before { content: ''; position: absolute; z-index: -1; left: calc(-1 * var(--pt-gutter)); right: calc(-1 * var(--pt-gutter)); top: -140px; bottom: 0; pointer-events: none; background: linear-gradient(to bottom, rgb(20 22 43 / 0), rgb(20 22 43 / .85) 140px, rgb(20 22 43 / .85)); }
   .pt-hero__eyebrow { margin-bottom: 14px; }
   .pt-hero__title { margin-bottom: 16px; font-size: clamp(2.9rem, 1rem + 9.2vw, 4.4rem); }
@@ -394,8 +311,6 @@ html.pt-motion .pt-eyebrow[data-reveal].is-in::before { animation: pt-sweep 800m
   .pt-hero__proof svg { width: 16px; height: 16px; }
   .pt-hero__pause { top: calc(var(--pt-hd-h) + 8px); bottom: auto; right: var(--pt-gutter); }
 }
-/* Écrans courts (Safari sur iPhone, barres visibles) : la scène se réduit et remonte, la balle
-   reste au-dessus du texte au lieu de passer sous le voile. */
 @media (max-width: 899px) and (max-height: 760px) {
   .pt-hero__media { scale: .8; transform-origin: 50% 10%;
     -webkit-mask: linear-gradient(to right, transparent 0, #000 16%, #000 84%, transparent 100%), linear-gradient(to bottom, transparent 0, #000 20%, #000 64%, transparent 100%);
@@ -412,12 +327,10 @@ html.pt-motion .pt-eyebrow[data-reveal].is-in::before { animation: pt-sweep 800m
 @media (max-width: 380px) {
   .pt-hero__proof li:nth-child(3) { display: none; }
 }
-
 @media (min-width: 900px) and (max-height: 820px) {
   .pt-hero__sub { margin-bottom: 20px; }
   .pt-hero__proof { margin-top: 18px; }
 }
-/* Tablette portrait : le média garde son format 3:4, centré, sans agrandissement. */
 @media (min-width: 600px) and (max-width: 899px) {
   .pt-hero__media { left: 50%; right: auto; width: auto; height: 100%; aspect-ratio: 3 / 4; translate: -50% 0;
     -webkit-mask: linear-gradient(to right, transparent 0, #000 18%, #000 82%, transparent 100%), linear-gradient(to bottom, transparent 0, #000 22%, #000 62%, transparent 100%);
@@ -426,8 +339,7 @@ html.pt-motion .pt-eyebrow[data-reveal].is-in::before { animation: pt-sweep 800m
             mask-composite: intersect; }
   .pt-hero__cta .pt-btn { width: auto; min-width: 320px; }
 }
-
-/* ------------------------------------------- 11. Réduire les animations */
+/* 11. Réduire les animations */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 1ms !important; animation-delay: 0ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; transition-delay: 0ms !important; }

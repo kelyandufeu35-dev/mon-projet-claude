@@ -1,20 +1,10 @@
-/* ==========================================================================
-   Pattoune v9 · sections « Cinéma » (chantier B)
-   1. Le principe · 2. La balle · 3. Achat · 4. Questions · 5. Clôture
-   6. Pied de page · 7. Panier · 8. Mobile · 9. Réduire les animations
-   Jetons, primitives (.pt-btn, .pt-h2…) et API de mouvement (data-reveal,
-   data-scroll, data-story…) : assets/motion.css et motion.js.
-   On n’anime que transform / translate / scale / rotate, opacity, clip-path,
-   stroke-dashoffset, fill-opacity et color. États cachés : sous html.pt-motion.
-   ========================================================================== */
-
-/* ============================================================ 1. Le principe */
+/* Pattoune v9 « Cinéma » · sections (chantier B) : principe, balle, achat, questions, clôture,
+   pied de page, panier, mobile. Jetons, primitives et API de mouvement : motion.css / motion.js.
+   On n’anime que transform/translate/scale/rotate, opacity, clip-path, stroke-dashoffset,
+   fill-opacity ; états cachés sous html.pt-motion. Version commentée : FINAL_SPEC § 5. */
+/* 1. Le principe */
 .pt-principe { position: relative; z-index: 1; overflow-x: clip; padding-block: clamp(72px, 9vw, 140px) clamp(56px, 6vw, 96px); background: var(--pt-cream); color: var(--pt-ink); }
-/* L’aube : l’horizon crème se pose sur le noir du haut de page puis s’aplatit au défilement.
-   Active dès le chargement, intro comprise : rien d’autre n’anime ce calque, et l’attendre la fin de
-   l’intro faisait sauter la courbe (pleine pendant l’intro, aplatie d’un coup à sa fin). */
 .pt-principe::before { content: ''; position: absolute; left: 0; right: 0; bottom: calc(100% - 1px); height: clamp(28px, 4.2vw, 64px); border-radius: 50% 50% 0 0 / 100% 100% 0 0; background: var(--pt-cream); transform-origin: 50% 100%; pointer-events: none; }
-/* Frise de la section (et non du calque, haut de 28 à 64 px) : pleine à l’arrivée, aplatie sur le premier tiers d’écran défilé. */
 .pt-principe { view-timeline: --pt-dawn block; }
 @supports (animation-timeline: view()) {
   html.pt-motion .pt-principe::before { animation: ptb-dawn linear both; animation-timeline: --pt-dawn; animation-range: entry 0% entry 35%; }
@@ -23,16 +13,11 @@
 .pt-principe__head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 400px); gap: 28px 48px; margin-bottom: clamp(64px, 9vw, 140px); }
 .pt-principe__head > * { grid-column: 1 / -1; }
 .pt-principe__head .pt-lead { grid-column: 2; margin-top: 8px; color: var(--pt-on-light-2); }
-
-/* Énoncé en escalier : chaque ligne s’allume mot par mot (data-reveal="lit"). */
 .pt-statement { font-size: var(--pt-fs-statement); line-height: .86; letter-spacing: -.04em; }
 .pt-statement__line { display: block; width: fit-content; color: var(--pt-ink); }
 .pt-statement__line:nth-child(2) { padding-left: 1.05em; }
 .pt-statement__line:nth-child(3) { padding-left: 2.1em; }
 .pt-statement__line--red { color: var(--pt-red); --pt-lit-o: .16; }
-/* « Elle roule. » : la balle arrive de la droite en roulant et se pose au bout de la ligne
-   (taille en em). L’ancre observée reste en place ; dedans, le chariot glisse (translate),
-   la balle tourne (rotate) et son ombre au sol ne tourne pas. */
 .pt-principe__roll { position: relative; display: inline-block; width: .62em; height: .62em; margin-left: .22em; vertical-align: baseline; pointer-events: none; }
 .pt-principe__slide { position: absolute; inset: 0; }
 .pt-principe__slide::after { content: ''; position: absolute; left: 10%; right: 10%; bottom: -7%; z-index: -1; height: 16%; border-radius: 50%; background: radial-gradient(closest-side, rgb(20 22 43 / .3), rgb(20 22 43 / 0)); }
@@ -42,22 +27,17 @@ html.pt-motion .pt-principe__roll.is-in .pt-principe__slide { animation: ptb-rol
 html.pt-motion .pt-principe__roll.is-in .pt-principe__ball { animation: ptb-roll-spin 1400ms var(--pt-e-out) calc(2 * var(--pt-stagger-lit) + 200ms) backwards; }
 @keyframes ptb-roll-in { from { opacity: 0; translate: 55vw 0; } 12% { opacity: 1; } }
 @keyframes ptb-roll-spin { from { rotate: 560deg; } }
-
-/* Récit : cadre collant (ordinateur) où les photos se succèdent en volet, étapes qui défilent. */
 .pt-story { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(40px, 7vw, 120px); align-items: start; }
 .pt-story__frame { --pt-r: var(--pt-r-lg); position: sticky; top: calc((100svh - min(74svh, 760px)) / 2); height: 74svh; max-height: 760px; border-radius: var(--pt-r-lg); overflow: hidden; isolation: isolate; background: var(--pt-sand); box-shadow: 0 50px 90px -60px rgb(20 22 43 / .55); }
 .pt-story__frame::after { content: ''; position: absolute; inset: 75% 0 0; z-index: 1; background: linear-gradient(rgb(20 22 43 / 0), rgb(20 22 43 / .12)); pointer-events: none; }
-/* Chaque photo entre en volet depuis le bas ; en remontant, le volet redescend. */
 .pt-story__media { position: absolute; inset: 0; clip-path: inset(100% 0 0 0); scale: 1.14; transition: clip-path 1000ms var(--pt-e-inout), scale 1400ms var(--pt-e-out); }
 .pt-story__media:first-child, .pt-story__media.is-on { clip-path: inset(0); scale: 1; }
 .pt-story__media img { width: 100%; height: 100%; aspect-ratio: 1; object-fit: cover; transition: scale 6s linear; }
-/* Lente avancée de caméra sur la photo en cours (une fois, pas de boucle). */
 html.pt-motion .pt-story__media.is-current img { scale: 1.06; }
 .pt-story__media .pt-story__ph { object-fit: contain; padding: 22%; }
 .pt-story__count { position: absolute; z-index: 2; left: 24px; bottom: 22px; display: flex; align-items: baseline; gap: 6px; padding: 8px 14px; border-radius: 999px; background: rgb(251 247 241 / .92); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); color: var(--pt-ink); font-size: var(--pt-fs-sm); font-weight: 700; font-variant-numeric: tabular-nums; }
 .pt-story__count b { display: inline-flex; min-width: 2ch; }
 .pt-story__count > span { color: var(--pt-on-light-2); }
-/* Boucle vidéo d’une étape (pt-step-video) : en fondu au-dessus de la photo dès qu’elle joue (motion.js). */
 .pt-step__vid { position: absolute; inset: 0; z-index: 1; opacity: 0; transition: opacity 700ms var(--pt-e-ui); }
 .pt-step__vid.is-playing { opacity: 1; }
 .pt-step__vid video { display: block; width: 100%; height: 100%; object-fit: cover; }
@@ -69,7 +49,6 @@ html.pt-motion .pt-story__media.is-current img { scale: 1.06; }
 .pt-step__text { max-width: 34ch; font-size: var(--pt-fs-lead); color: var(--pt-on-light-2); }
 .pt-step__bar { width: 100%; max-width: 360px; height: 2px; border-radius: 2px; background: var(--pt-line-light); overflow: hidden; }
 .pt-step__bar::after { content: ''; display: block; height: 100%; background: var(--pt-red); transform: scaleX(0); transform-origin: left; transition: transform 900ms var(--pt-e-inout); }
-/* Étape active : titre encre, pastille qui se remplit en ressort, trait rouge tracé, texte qui glisse. */
 @media (min-width: 900px) {
   html.pt-motion .pt-story .pt-step:not(.is-active) .pt-h3 { color: var(--pt-muted-title); }
   .pt-story .pt-step.is-active .pt-step__num b { background: var(--pt-ink); border-color: var(--pt-ink); color: var(--pt-cream); scale: 1.08; }
@@ -77,8 +56,7 @@ html.pt-motion .pt-story__media.is-current img { scale: 1.06; }
   html.pt-motion .pt-story .pt-step__text { transition: translate 600ms var(--pt-e-out); }
   html.pt-motion .pt-story .pt-step:not(.is-active) .pt-step__text { translate: -8px 0; }
 }
-
-/* ============================================================== 2. La balle */
+/* 2. La balle */
 .pt-objet { position: relative; overflow: clip; padding-block: var(--pt-section); background: var(--pt-cream); color: var(--pt-ink); }
 .pt-objet__head { display: grid; justify-items: center; gap: 22px; margin-bottom: clamp(32px, 5vw, 64px); text-align: center; }
 .pt-objet__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 520px) minmax(0, 1fr); align-items: center; gap: clamp(16px, 3vw, 48px); }
@@ -86,9 +64,7 @@ html.pt-motion .pt-story__media.is-current img { scale: 1.06; }
 .pt-objet__zoom { display: block; width: 100%; height: 100%; }
 .pt-objet__img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; -webkit-mask: radial-gradient(closest-side, #000 72%, transparent 100%); mask: radial-gradient(closest-side, #000 72%, transparent 100%); }
 .pt-objet__img--3d { object-fit: contain; padding: 18%; }
-/* Lumière chaude sous la balle, comme le socle de la pub. */
 .pt-objet__glow { position: absolute; inset: -14%; z-index: -1; border-radius: 50%; background: radial-gradient(closest-side, rgb(255 194 58 / .2), rgb(196 20 15 / .05) 55%, transparent 72%); pointer-events: none; }
-/* Anneau pointillé : tourne au défilement (data-scroll="spin"), un point rouge en orbite. */
 .pt-objet__ring { position: absolute; inset: 6%; border-radius: 50%; border: 1.5px dashed rgb(20 22 43 / .2); pointer-events: none; }
 .pt-objet__ring::after { content: ''; position: absolute; top: -5px; left: calc(50% - 4.5px); width: 9px; height: 9px; border-radius: 50%; background: var(--pt-red); box-shadow: 0 0 0 5px rgb(196 20 15 / .12); }
 .pt-objet__specs { display: grid; gap: clamp(40px, 7vw, 96px); }
@@ -96,7 +72,6 @@ html.pt-motion .pt-story__media.is-current img { scale: 1.06; }
 .pt-spec strong { font-family: var(--pt-display); font-size: var(--pt-spec-fs); font-weight: 800; font-stretch: 75%; line-height: 1; letter-spacing: -.02em; text-wrap: balance; }
 .pt-spec__num { font-variant-numeric: tabular-nums; }
 .pt-spec > span { max-width: 26ch; font-size: var(--pt-fs-sm); color: var(--pt-on-light-2); }
-/* Trait qui se trace vers la balle, terminé par un point qui surgit en ressort. */
 .pt-spec::before, .pt-spec::after { content: ''; position: absolute; pointer-events: none; }
 .pt-spec::before { top: calc(var(--pt-spec-fs) * .5); width: clamp(24px, 3.4vw, 52px); height: 1.5px; background: var(--pt-ink); opacity: .35; }
 .pt-spec::after { top: calc(var(--pt-spec-fs) * .5 - 2.25px); width: 6px; height: 6px; border-radius: 50%; background: var(--pt-red); }
@@ -108,32 +83,24 @@ html.pt-motion .pt-story__media.is-current img { scale: 1.06; }
 .pt-objet__specs--right .pt-spec::after { left: -3px; }
 html.pt-motion .pt-spec:not(.is-in)::before { transform: scaleX(0); }
 html.pt-motion .pt-spec:not(.is-in)::after { scale: 0; }
-html.pt-motion .pt-spec.is-in::before { animation: ptb-trace var(--pt-d-reveal) var(--pt-e-inout) backwards calc(var(--pt-d, 0) * var(--pt-stagger) + 200ms); }
+html.pt-motion .pt-spec.is-in::before { animation: pt-sweep var(--pt-d-reveal) var(--pt-e-inout) backwards calc(var(--pt-d, 0) * var(--pt-stagger) + 200ms); }
 html.pt-motion .pt-spec.is-in::after { animation: ptb-dot var(--pt-d-pop) var(--pt-e-spring) backwards calc(var(--pt-d, 0) * var(--pt-stagger) + 760ms); }
-@keyframes ptb-trace { from { transform: scaleX(0); } }
 @keyframes ptb-dot { from { scale: 0; } }
 .pt-objet__warn { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: clamp(32px, 5vw, 56px); font-size: var(--pt-fs-sm); color: var(--pt-on-light-2); text-align: center; }
 .pt-objet__warn svg { flex: none; width: 20px; height: 20px; color: var(--pt-red); }
-
-/* ================================================================== 3. Achat */
+/* 3. Achat */
 .pt-achat { position: relative; padding-block: var(--pt-section) clamp(64px, 7vw, 112px); background: var(--pt-cream); color: var(--pt-ink); }
 .pt-achat--page { padding-top: 24px; }
 .pt-achat__empty { display: grid; gap: 20px; justify-items: start; }
 .pt-buy-grid { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 96px); align-items: start; }
-
-/* Galerie */
 .pt-gallery { position: sticky; top: calc(var(--pt-hd-h) + 24px); display: grid; gap: 14px; min-width: 0; }
 .pt-gallery__main { --pt-r: var(--pt-r-lg); position: relative; aspect-ratio: 1; border-radius: var(--pt-r-lg); overflow: hidden; isolation: isolate; background: var(--pt-sand); }
 .pt-gallery__slide, .pt-gallery__video { position: absolute; inset: 0; }
 .pt-gallery__slide[hidden] { display: none; }
 .pt-gallery__slide :is(img, video) { display: block; width: 100%; height: 100%; object-fit: cover; }
 .pt-gallery__slide--3d img { object-fit: contain; padding: 20%; }
-/* Scène sombre de la pub (page produit) : même nuit que le haut de page. */
 .pt-gallery__slide--scene { background: radial-gradient(70% 50% at 50% 115%, var(--pt-ink-deep), transparent 75%), linear-gradient(180deg, #101225, var(--pt-ink) 40%); }
 .pt-gallery__slide--scene :is(img, video) { object-position: 50% 58%; }
-/* Changement de photo : fondu et léger recul, seulement après un choix du visiteur
-   (.is-touched, posé au clic par motion.js car Safari ne donne pas le focus aux boutons, ou
-   :focus-within au clavier), jamais au premier affichage (aucun retard du LCP). */
 html.pt-motion .pt-gallery:is(.is-touched, :focus-within) .pt-gallery__slide { transition: opacity 600ms var(--pt-e-ui), scale 1200ms var(--pt-e-out); }
 @starting-style {
   html.pt-motion .pt-gallery:is(.is-touched, :focus-within) .pt-gallery__slide { opacity: 0; scale: 1.04; }
@@ -149,8 +116,6 @@ html.pt-motion .pt-gallery:is(.is-touched, :focus-within) .pt-gallery__slide { t
 }
 .pt-thumb__play { position: absolute; inset: 0; display: grid; place-items: center; color: #fff; background: rgb(20 22 43 / .25); }
 .pt-thumb__play svg { width: 22px; height: 22px; fill: currentColor; }
-
-/* Colonne d’achat */
 .pt-buy { display: grid; gap: 20px; min-width: 0; padding-top: 8px; }
 .pt-buy__title { font-family: var(--pt-display); font-size: clamp(2.6rem, 1.6rem + 3.2vw, 4.6rem); font-weight: 800; font-stretch: 75%; line-height: .9; letter-spacing: -.03em; text-wrap: balance; }
 .pt-buy__price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; }
@@ -159,8 +124,6 @@ html.pt-motion .pt-gallery:is(.is-touched, :focus-within) .pt-gallery__slide { t
 .pt-buy__ttc { font-size: var(--pt-fs-sm); }
 :is(.pt-buy__price, .pt-offer__total) s[hidden] { display: none; }
 .pt-buy__form { display: grid; gap: 14px; margin: 0; }
-
-/* Options (couleur, modèle) : masquées quand il n’y a qu’un choix. */
 .pt-field { min-width: 0; margin: 0; padding: 0; border: 0; }
 .pt-field--single { display: none; }
 .pt-field legend { padding: 0 0 10px; font-weight: 700; }
@@ -170,8 +133,6 @@ html.pt-motion .pt-gallery:is(.is-touched, :focus-within) .pt-gallery__slide { t
 .pt-swatch__dot { width: 24px; height: 24px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgb(20 22 43 / .15); }
 .pt-swatch:has(:checked) { border-color: var(--pt-ink); background: #fff; }
 :is(.pt-swatch, .pt-offer):has(:focus-visible) { outline: 3px solid var(--pt-ink); outline-offset: 3px; }
-
-/* Offres groupées : toujours visibles, aucune révélation. */
 .pt-offers { display: grid; gap: 10px; min-width: 0; margin: 6px 0 0; padding: 0; border: 0; }
 .pt-offers legend { padding: 0 0 12px; font-weight: 700; font-size: 1.0625rem; }
 .pt-offer { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 4px 16px; min-height: 76px; padding: 14px 20px; border: 1.5px solid var(--pt-line-light); border-radius: var(--pt-r-md); background: var(--pt-paper); cursor: pointer; overflow: clip; isolation: isolate; -webkit-tap-highlight-color: transparent; transition: border-color var(--pt-d-ui) var(--pt-e-ui), background-color var(--pt-d-ui) var(--pt-e-ui), box-shadow var(--pt-d-ui) var(--pt-e-ui), translate var(--pt-d-micro) var(--pt-e-ui), scale var(--pt-d-micro) var(--pt-e-ui); }
@@ -181,7 +142,6 @@ html.pt-motion .pt-gallery:is(.is-touched, :focus-within) .pt-gallery__slide { t
 }
 .pt-offer:active { scale: .99; }
 .pt-offer:has(:checked) { border-color: var(--pt-ink); background: #fff; box-shadow: 0 16px 36px -22px rgb(20 22 43 / .5); }
-/* Point : grossit en ressort quand l’offre est cochée. */
 .pt-offer__dot { display: grid; place-items: center; grid-row: span 2; width: 24px; height: 24px; border: 1.5px solid rgb(20 22 43 / .45); border-radius: 50%; transition: border-color var(--pt-d-ui) var(--pt-e-ui); }
 .pt-offer__dot::after { content: ''; width: 12px; height: 12px; border-radius: 50%; background: var(--pt-ink); scale: 0; transition: scale var(--pt-d-pop) var(--pt-e-spring); }
 .pt-offer:has(:checked) .pt-offer__dot { border-color: var(--pt-ink); }
@@ -196,13 +156,9 @@ html.pt-motion .pt-gallery:is(.is-touched, :focus-within) .pt-gallery__slide { t
 .pt-badge--sun { background: var(--pt-sun); color: var(--pt-ink); }
 .pt-offer:has(:checked) .pt-badge { animation: ptb-pop var(--pt-d-pop) var(--pt-e-spring); }
 @keyframes ptb-pop { from { scale: .9; } }
-/* Reflet chaud qui traverse l’offre cochée : une fois à l’entrée (accueil), puis à chaque choix. */
 .pt-offer::after { content: ''; position: absolute; inset: 0; z-index: 2; background: linear-gradient(105deg, transparent 32%, rgb(255 194 58 / .3) 50%, transparent 68%); transform: translateX(-110%); pointer-events: none; }
-html.pt-motion .pt-offers.is-in .pt-offer:has(:checked)::after { animation: ptb-glint 1100ms var(--pt-e-inout) 300ms both; }
-@keyframes ptb-glint { from { transform: translateX(-110%); } to { transform: translateX(110%); } }
+html.pt-motion .pt-offers.is-in .pt-offer:has(:checked)::after { animation: pt-shine-win 1100ms var(--pt-e-inout) 300ms both; }
 .pt-offers__note { margin-top: -4px; font-size: var(--pt-fs-xs); color: var(--pt-on-light-2); }
-
-/* Bouton d’achat : libellé · total qui roule (motion.js) ; « Ajouté » : fond vert, coche tracée. */
 .pt-add { display: grid; grid-template-columns: auto auto auto; justify-content: center; align-items: center; column-gap: 12px; margin-top: 4px; }
 .pt-add__label { grid-area: 1 / 1; }
 .pt-add > .pt-btn__sep { grid-area: 1 / 2; }
@@ -217,13 +173,9 @@ html.pt-motion .pt-offers.is-in .pt-offer:has(:checked)::after { animation: ptb-
 .pt-form-error { display: flex; align-items: flex-start; gap: 10px; padding: 12px 16px; border-radius: 14px; background: #fbe9e7; color: #8f0f0b; font-size: var(--pt-fs-sm); font-weight: 600; }
 .pt-form-error[hidden] { display: none; }
 .pt-form-error::before { content: '!'; display: grid; place-items: center; flex: none; width: 22px; height: 22px; border-radius: 50%; background: var(--pt-red); color: #fff; font-size: 13px; font-weight: 800; }
-
-/* Garanties : trois tuiles calmes, aucune animation. */
 .pt-trust { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .pt-trust li { display: grid; align-content: start; justify-items: start; gap: 8px; padding: 14px; border-radius: 16px; background: var(--pt-paper); box-shadow: inset 0 0 0 1px rgb(20 22 43 / .05); font-size: var(--pt-fs-xs); font-weight: 600; line-height: 1.35; }
 .pt-trust svg { width: 22px; height: 22px; color: var(--pt-red); }
-
-/* Volets d’information (et questions, § 4) : ouverture douce, contenu en fondu montant. */
 .pt-more-group { border-top: 1px solid var(--pt-line-light); }
 .pt-more { border-bottom: 1px solid var(--pt-line-light); }
 .pt-more, .pt-faq__item { interpolate-size: allow-keywords; }
@@ -243,11 +195,8 @@ html.pt-motion .pt-offers.is-in .pt-offer:has(:checked)::after { animation: ptb-
 }
 html.pt-motion :is(.pt-more[open] .pt-more__body, .pt-faq__item[open] .pt-faq__a) { animation: ptb-open 420ms var(--pt-e-out) 60ms backwards; }
 @keyframes ptb-open { from { opacity: 0; translate: 0 8px; } }
-
-/* Barre d’achat mobile (affichée sous 900 px, § 8) */
 .pt-sticky { display: none; }
-
-/* =============================================================== 4. Questions */
+/* 4. Questions */
 .pt-faq { padding-block: 0 var(--pt-section); background: var(--pt-cream); color: var(--pt-ink); }
 .pt-faq__rule { display: block; height: 1px; background: var(--pt-line-light); }
 .pt-faq__grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); align-items: start; gap: clamp(32px, 6vw, 96px); padding-top: clamp(64px, 7vw, 112px); }
@@ -263,10 +212,8 @@ html.pt-motion :is(.pt-more[open] .pt-more__body, .pt-faq__item[open] .pt-faq__a
   .pt-faq__item > summary:hover .pt-faq__q { translate: 4px 0; }
 }
 .pt-faq__a { max-width: 60ch; padding: 0 56px 26px 0; color: var(--pt-on-light-2); }
-
-/* ================================================================ 5. Clôture */
+/* 5. Clôture */
 .pt-fin { position: relative; isolation: isolate; overflow: clip; padding-block: clamp(120px, 14vw, 220px) clamp(96px, 10vw, 160px); background: var(--pt-ink); color: var(--pt-cream); text-align: center; }
-/* Faisceau conique, comme dans la pub. */
 .pt-fin__beam { position: absolute; left: 50%; top: 0; z-index: -1; width: min(90vw, 900px); height: 78%; translate: -50% 0; background: linear-gradient(rgb(255 238 214 / .16), rgb(255 238 214 / 0)); clip-path: polygon(40% 0, 60% 0, 92% 100%, 8% 100%); -webkit-mask: linear-gradient(90deg, transparent 6%, #000 40%, #000 60%, transparent 94%); mask: linear-gradient(90deg, transparent 6%, #000 40%, #000 60%, transparent 94%); pointer-events: none; }
 .pt-fin__mark { position: relative; width: clamp(110px, 12vw, 150px); aspect-ratio: 660 / 620; margin: 0 auto clamp(32px, 4vw, 48px); }
 .pt-fin__mark svg { position: relative; width: 100%; height: 100%; overflow: visible; }
@@ -277,15 +224,11 @@ html.pt-motion :is(.pt-more[open] .pt-more__body, .pt-faq__item[open] .pt-faq__a
 .pt-fin__ball img { display: block; width: 100%; height: 100%; }
 .pt-fin__title { max-width: 18ch; margin: 0 auto 40px; }
 .pt-fin__note { margin-top: 22px; font-size: var(--pt-fs-sm); color: var(--pt-on-dark-2); }
-/* Chorégraphie : faisceau qui s’allume (paliers de l’intro), doigts tracés puis remplis,
-   balle qui tombe en tournant, écrasement à l’impact, doigts qui sautent, onde jaune. */
 html.pt-motion .pt-fin__beam:not(.is-in) { opacity: 0; }
-html.pt-motion .pt-fin__beam.is-in { animation: ptb-beam-on 1400ms linear backwards; }
-@keyframes ptb-beam-on { 0% { opacity: 0; } 18% { opacity: .7; } 26% { opacity: .15; } 40% { opacity: .9; } 48% { opacity: .5; } 100% { opacity: 1; } }
+html.pt-motion .pt-fin__beam.is-in { animation: pt-beam-flicker 1400ms linear backwards; }
 html.pt-motion .pt-fin__mark ellipse { stroke: var(--pt-cream); stroke-width: 7; stroke-dasharray: 1; }
 html.pt-motion .pt-fin__mark:not(.is-in) ellipse { fill-opacity: 0; stroke-dashoffset: 1; }
-html.pt-motion .pt-fin__mark.is-in ellipse { animation: ptb-draw 600ms var(--pt-e-inout) calc(var(--pt-k) * 80ms) backwards, ptb-fill 400ms ease-out calc(450ms + var(--pt-k) * 60ms) backwards; }
-@keyframes ptb-draw { from { stroke-dashoffset: 1; } }
+html.pt-motion .pt-fin__mark.is-in ellipse { animation: pt-draw-on 600ms var(--pt-e-inout) calc(var(--pt-k) * 80ms) backwards, ptb-fill 400ms ease-out calc(450ms + var(--pt-k) * 60ms) backwards; }
 @keyframes ptb-fill { from { fill-opacity: 0; } }
 html.pt-motion .pt-fin__mark:not(.is-in) :is(.pt-fin__ball, .pt-fin__halo) { opacity: 0; }
 html.pt-motion .pt-fin__mark.is-in .pt-fin__ball { animation: ptb-drop 700ms var(--pt-e-in) 450ms backwards; }
@@ -296,13 +239,10 @@ html.pt-motion .pt-fin__mark.is-in .pt-fin__toes { animation: ptb-hop 420ms var(
 @keyframes ptb-hop { 40% { translate: 0 -14px; } }
 html.pt-motion .pt-fin__mark.is-in .pt-fin__ripple { animation: ptb-ripple 900ms var(--pt-e-out) 1120ms; }
 @keyframes ptb-ripple { from { opacity: .8; scale: .9; } to { opacity: 0; scale: 2.3; } }
-html.pt-motion .pt-fin__mark.is-in .pt-fin__halo { animation: ptb-fade 1200ms var(--pt-e-out) 1080ms backwards; }
-@keyframes ptb-fade { from { opacity: 0; } }
-
-/* =========================================================== 6. Pied de page */
+html.pt-motion .pt-fin__mark.is-in .pt-fin__halo { animation: pt-fade 1200ms var(--pt-e-out) 1080ms backwards; }
+/* 6. Pied de page */
 .pt-footer { position: relative; overflow: clip; background: var(--pt-ink); color: var(--pt-on-dark-2); font-size: var(--pt-fs-sm); }
 .pt-footer__grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 32px; padding-top: 56px; }
-/* Filet du haut seulement après la clôture sombre (sinon il souligne la jointure avec le crème). */
 body:has(.pt-fin) .pt-footer__grid { border-top: 1px solid var(--pt-line-dark); }
 .pt-footer--social .pt-footer__grid { grid-template-columns: 1.4fr 1fr 1fr 1fr; }
 .pt-footer__logo { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; font-family: var(--pt-display); font-size: 1.375rem; font-weight: 800; font-stretch: 85%; letter-spacing: -.02em; text-decoration: none; }
@@ -312,33 +252,23 @@ body:has(.pt-fin) .pt-footer__grid { border-top: 1px solid var(--pt-line-dark); 
 .pt-footer__brand p a { color: var(--pt-cream); font-weight: 700; text-underline-offset: 4px; }
 .pt-footer h2 { margin-bottom: 6px; color: var(--pt-cream); font-family: var(--pt-body); font-size: var(--pt-fs-xs); font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
 .pt-footer__col a { position: relative; display: inline-flex; align-items: center; min-width: 44px; min-height: 44px; padding-block: 8px; line-height: 1.35; color: inherit; text-decoration: none; transition: color var(--pt-d-micro) var(--pt-e-ui); }
-/* Soulignement qui se dessine de gauche à droite au survol et repart à droite. */
 .pt-footer__col a::after { content: ''; position: absolute; left: 0; right: 0; bottom: 9px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: right center; transition: transform var(--pt-d-ui) var(--pt-e-out); }
 .pt-footer__col a:hover { color: var(--pt-cream); }
 .pt-footer__col a:hover::after { transform: none; transform-origin: left center; }
 .pt-footer__bottom { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-top: 40px; padding-block: 20px; border-top: 1px solid var(--pt-line-dark); font-size: var(--pt-fs-xs); }
 .pt-footer__pay { display: flex; flex-wrap: wrap; gap: 6px; }
 .pt-footer__pay-icon { width: 38px; height: 24px; }
-/* Mot-symbole géant : contour crème gravé, rogné par le bas, lettres qui montent une à une.
-   Remplissage opaque à peine plus clair que l’encre, peint après le contour (paint-order) :
-   il masque les contours internes de la police variable. Boîte prolongée vers le haut
-   (padding / marge négative) pour croiser la zone d’observation, même tout en bas de page. */
 .pt-footer__word { margin: calc(clamp(4px, 1.5vw, 20px) - 16vh) 0 -.18em; padding-top: 16vh; color: rgb(244 236 226 / .24); font-family: var(--pt-display); font-size: min(24vw, 21rem); font-weight: 800; font-stretch: 75%; line-height: .8; letter-spacing: -.01em; text-align: center; white-space: nowrap; -webkit-text-fill-color: #181a31; -webkit-text-stroke: 2px currentColor; paint-order: stroke fill; user-select: none; pointer-events: none; }
 .pt-footer__gap { display: inline-block; width: .22em; }
-/* Après la montée (pt-rise, motion.css), une lumière dorée parcourt les contours, lettre après lettre. */
-/* (copie dorée de la lettre posée au-dessus, en fondu d’opacité : aucun recalcul de couleur) */
 .pt-footer__word .pt-w > span { position: relative; }
 .pt-footer__word .pt-w > span::after { content: attr(data-t); position: absolute; left: 0; top: 0; color: rgb(255 194 58 / .8); opacity: 0; }
 html.pt-motion .pt-footer__word[data-reveal='mask'].is-in .pt-w > span::after { animation: ptb-glow 1400ms var(--pt-e-inout) calc(900ms + var(--pt-wi, 0) * 80ms) both; }
 @keyframes ptb-glow { 45% { opacity: 1; } }
-
-/* ========================================================== 7. Panier latéral */
-/* Le tiroir glisse depuis la droite ; à chaque ouverture (#cart-drawer.is-opening, motion.js),
-   ses lignes montent en cascade et la jauge se remplit. Restyle sobre, sans changer le balisage. */
+/* 7. Panier latéral */
 #cart-drawer { width: min(460px, 100vw); background: var(--pt-cream); color: var(--pt-ink); box-shadow: -40px 0 90px -50px rgb(11 12 24 / .7); }
 #cart-drawer[open] { animation: ptb-drawer-in 560ms var(--pt-e-out); }
 @keyframes ptb-drawer-in { from { transform: translateX(100%); } }
-#cart-drawer::backdrop { background: rgb(11 12 24 / .5); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); animation: ptb-fade 400ms var(--pt-e-ui); }
+#cart-drawer::backdrop { background: rgb(11 12 24 / .5); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); animation: pt-fade 400ms var(--pt-e-ui); }
 #cart-drawer.is-opening .line { animation: ptb-up 600ms var(--pt-e-out) 120ms backwards; }
 #cart-drawer.is-opening .line:nth-child(2) { animation-delay: 180ms; }
 #cart-drawer.is-opening .line:nth-child(3) { animation-delay: 240ms; }
@@ -360,7 +290,7 @@ html.pt-motion .pt-footer__word[data-reveal='mask'].is-in .pt-w > span::after { 
 :is(#cart-drawer, [data-cart-page]) .line:first-child { border-top: 1px solid var(--pt-line-light) !important; }
 :is(#cart-drawer, [data-cart-page]) .line__thumb { border-radius: 14px; background: var(--pt-sand); }
 :is(#cart-drawer, [data-cart-page]) .line__thumb img { border: 0 !important; border-radius: 14px; }
-:is(#cart-drawer, [data-cart-page]) .line__name { padding-block: 12px; margin-block: -12px; color: var(--pt-ink); } /* cible de 44 px sans décaler la ligne */
+:is(#cart-drawer, [data-cart-page]) .line__name { padding-block: 12px; margin-block: -12px; color: var(--pt-ink); }
 :is(#cart-drawer, [data-cart-page]) .stepper { border: 1.5px solid var(--pt-line-light); }
 :is(#cart-drawer, [data-cart-page]) .stepper button { width: 44px; height: 44px; color: var(--pt-ink); }
 :is(#cart-drawer, [data-cart-page]) .stepper button:hover:not(:disabled) { background: var(--pt-sand); }
@@ -369,31 +299,31 @@ html.pt-motion .pt-footer__word[data-reveal='mask'].is-in .pt-w > span::after { 
 :is(#cart-drawer, [data-cart-page]) button.upsell:hover { background: #fff; translate: 0 -1px; }
 :is(#cart-drawer, [data-cart-page]) .upsell__plus { border: 0; background: var(--pt-sun); box-shadow: none; }
 :is(#cart-drawer, [data-cart-page]) .totals__grand { border-top: 1px solid var(--pt-ink); font-family: var(--pt-display); font-stretch: 85%; }
-:is(#cart-drawer, [data-cart-page]) .btn--sun { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 56px; padding: 0 26px; border: 0 !important; border-radius: 999px; background: var(--pt-sun); color: var(--pt-ink); font-weight: 700; text-decoration: none; box-shadow: 0 18px 40px -18px rgb(255 194 58 / .55) !important; transform: none; transition: scale var(--pt-d-micro) var(--pt-e-ui), box-shadow var(--pt-d-ui) var(--pt-e-ui); }
-:is(#cart-drawer, [data-cart-page]) .btn--sun:hover { transform: none; box-shadow: 0 22px 50px -16px rgb(255 194 58 / .7) !important; }
+:is(#cart-drawer, [data-cart-page]) .btn--sun { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 56px; padding: 0 26px; border: 0 !important; border-radius: 999px; background: var(--pt-sun); color: var(--pt-ink); font-weight: 700; text-decoration: none; box-shadow: 0 14px 30px -18px rgb(20 22 43 / .35) !important; transform: none; transition: scale var(--pt-d-micro) var(--pt-e-ui), box-shadow var(--pt-d-ui) var(--pt-e-ui); }
+:is(#cart-drawer, [data-cart-page]) .btn--sun:hover { transform: none; box-shadow: 0 18px 36px -16px rgb(20 22 43 / .4) !important; }
 :is(#cart-drawer, [data-cart-page]) .btn--sun:active { scale: .975; }
 #cart-drawer .drawer__empty { background: var(--pt-paper); border: 0; box-shadow: none; }
 #cart-drawer .drawer__empty-icon { border: 0; border-radius: 50%; background: var(--pt-sun); box-shadow: none; transform: none; }
 #cart-drawer .drawer__link { display: inline-flex; align-items: center; min-height: 44px; color: var(--pt-ink); }
-
-/* ================================================================= 8. Mobile */
+/* Pages secondaires */
+.pt-lost__ball { display: block; width: 100%; max-width: 200px; height: auto; aspect-ratio: 1; margin-inline: auto; filter: drop-shadow(0 24px 28px rgb(20 22 43 / .22)); }
+.field :is(input, textarea) { border: 1.5px solid rgb(20 22 43 / .5); border-radius: var(--pt-r-sm); background: var(--pt-paper); box-shadow: none; transform: none; transition: border-color var(--pt-d-ui) var(--pt-e-ui); }
+.field :is(input, textarea):focus-visible { border-color: var(--pt-ink); outline: 2px solid var(--pt-ink); outline-offset: 2px; box-shadow: none; transform: none; }
+/* 8. Mobile */
 @media (max-width: 899px) {
   .pt-principe::before { height: 30px; }
   .pt-principe__head { grid-template-columns: 1fr; gap: 22px; }
   .pt-principe__head .pt-lead { grid-column: 1; margin-top: 0; }
   .pt-statement__line:nth-child(2) { padding-left: .7em; }
   .pt-statement__line:nth-child(3) { padding-left: 1.4em; }
-  /* Récit : pas de cadre ; chaque étape a sa photo carrée, sans état inactif ni trait. */
   .pt-story { grid-template-columns: 1fr; }
   .pt-story__frame, .pt-step__bar { display: none; }
   .pt-step { min-height: 0; gap: 14px; padding-block: 0 56px; }
   .pt-step__img { --pt-r: var(--pt-r-md); position: relative; display: block; margin: 0 0 10px; aspect-ratio: 1; border-radius: var(--pt-r-md); overflow: hidden; background: var(--pt-sand); }
   .pt-step__img img { width: 100%; height: 100%; aspect-ratio: 1; object-fit: cover; }
-
-  /* La balle : photo en tête puis grille 2 × 2, traits courts au-dessus de chaque point. */
   .pt-objet__grid { grid-template-columns: 1fr 1fr; align-items: start; gap: 28px 20px; }
   .pt-objet__photo { grid-column: 1 / -1; grid-row: 1; justify-self: center; width: 100%; max-width: 420px; }
-  .pt-objet__glow { inset: -4%; } /* reste dans la gouttière */
+  .pt-objet__glow { inset: -4%; }
   .pt-objet__specs { gap: 28px; }
   .pt-objet__specs--left { grid-column: 1; grid-row: 2; }
   .pt-objet__specs--right { grid-column: 2; grid-row: 2; }
@@ -403,7 +333,6 @@ html.pt-motion .pt-footer__word[data-reveal='mask'].is-in .pt-w > span::after { 
   .pt-spec::before { top: 0; left: 0 !important; right: auto !important; width: 32px; transform-origin: left center !important; }
   .pt-spec::after { top: -2.25px; left: 30px !important; right: auto !important; }
   .pt-objet__warn { justify-content: flex-start; text-align: left; }
-
   .pt-buy-grid { grid-template-columns: 1fr; }
   .pt-gallery { position: static; }
   .pt-gallery__thumbs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
@@ -411,8 +340,6 @@ html.pt-motion .pt-footer__word[data-reveal='mask'].is-in .pt-w > span::after { 
   .pt-trust { grid-template-columns: 1fr; gap: 0; }
   .pt-trust li { grid-template-columns: auto 1fr; align-items: center; gap: 12px; padding: 6px 0; background: none; box-shadow: none; font-size: var(--pt-fs-sm); }
   .pt-trust svg { width: 20px; height: 20px; }
-
-  /* Barre d’achat : pilule encre qui remonte en ressort (data-show posé par theme.js). */
   .pt-sticky { position: fixed; left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); z-index: 40; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 8px 8px 20px; border-radius: 999px; background: rgb(20 22 43 / .92); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); color: var(--pt-cream); box-shadow: 0 20px 40px -20px rgb(0 0 0 / .6); translate: 0 140%; transition: translate 560ms var(--pt-e-spring); }
   .pt-sticky[data-show] { translate: none; }
   .pt-sticky :focus-visible { outline-color: var(--pt-sun); }
@@ -420,15 +347,12 @@ html.pt-motion .pt-footer__word[data-reveal='mask'].is-in .pt-w > span::after { 
   .pt-sticky__text strong { display: block; color: var(--pt-cream); }
   .pt-sticky__text > span { color: var(--pt-on-dark-2); }
   .pt-sticky__btn { flex: none; min-height: 48px; padding: 0 22px; font-size: 1rem; }
-
   .pt-faq__grid { grid-template-columns: 1fr; }
   .pt-faq__a { padding-right: 0; }
-
   .pt-footer__grid, .pt-footer--social .pt-footer__grid { grid-template-columns: 1fr 1fr; gap: 28px 20px; }
   .pt-footer__brand { grid-column: 1 / -1; }
 }
-
-/* ================================================== 9. Réduire les animations */
+/* 9. Réduire les animations */
 @media (prefers-reduced-motion: reduce) {
   .pt-principe::before { animation: none !important; }
   .pt-story__media img { scale: none !important; }
