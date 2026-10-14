@@ -109,8 +109,8 @@
     {%- endif -%}
 
     <p class="pt-buy__price">
-      <span class="pt-buy__amount" data-price>{{ price | money | replace: ' ', '&nbsp;' }}</span>
-      <s data-compare{% unless current.compare_at_price > current.price %} hidden{% endunless %}>{{ current.compare_at_price | money | replace: ' ', '&nbsp;' }}</s>
+      <span class="pt-buy__amount" data-price>{% render 'pt-money', cents: price %}</span>
+      <s data-compare{% unless current.compare_at_price > current.price %} hidden{% endunless %}>{% render 'pt-money', cents: current.compare_at_price %}</s>
       <span class="pt-buy__ttc">TTC · livraison offerte</span>
     </p>
 
@@ -174,12 +174,12 @@
                 {%- if badge != blank %} <span class="pt-badge{% if forloop.last %} pt-badge--sun{% endif %}">{{ badge | escape }}</span>{% endif -%}
               </span>
               <span class="pt-offer__unit">
-                {%- if qn > 1 -%}<span data-offer-unit>{{ total | divided_by: qn | money | replace: ' ', '&nbsp;' }}</span> l’unité{%- else -%}Prix unitaire{%- endif -%}
+                {%- if qn > 1 -%}<span data-offer-unit>{%- assign unit_price = total | divided_by: qn -%}{% render 'pt-money', cents: unit_price %}</span> l’unité{%- else -%}Prix unitaire{%- endif -%}
                 {%- if d > 0 %} · <em>−{{ d }}&nbsp;%</em>{% endif -%}
               </span>
               <span class="pt-offer__total">
-                <strong data-offer-total>{{ total | money | replace: ' ', '&nbsp;' }}</strong>
-                <s data-offer-full{% if d == 0 %} hidden{% endif %}>{{ full | money | replace: ' ', '&nbsp;' }}</s>
+                <strong data-offer-total>{% render 'pt-money', cents: total %}</strong>
+                <s data-offer-full{% if d == 0 %} hidden{% endif %}>{% render 'pt-money', cents: full %}</s>
               </span>
             </label>
           {%- endfor -%}
@@ -192,7 +192,7 @@
           {%- if current.available -%}{{ 'product.add' | t }}{%- else -%}{{ 'product.sold_out' | t }}{%- endif -%}
         </span>
         <span class="pt-btn__sep" aria-hidden="true"></span>
-        <span class="pt-add__total" data-add-total>{{ selected_total | money | replace: ' ', '&nbsp;' }}</span>
+        <span class="pt-add__total" data-add-total>{% render 'pt-money', cents: selected_total %}</span>
         <svg class="pt-add__check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path pathLength="1" d="m5 12.5 4.2 4L19 7"/></svg>
       </button>
       <p class="pt-form-error" role="alert" data-form-error hidden></p>
@@ -245,7 +245,7 @@
           {"id": {{ v.id }}, "options": {{ v.options | json }}, "price": {{ v.price }}, "compare": {{ v.compare_at_price | default: 0 }}, "available": {{ v.available }}, "media": {{ v.featured_media.id | default: 0 }}}{% unless forloop.last %},{% endunless %}
         {%- endfor -%}
       ],
-      "money": {{ shop.money_format | json }}
+      "money": {% if cart.currency.iso_code == 'EUR' %}"{% raw %}{{amount_with_comma_separator}}{% endraw %} €"{% else %}{{ shop.money_format | json }}{% endif %}
     }
   </script>
 </div>
@@ -258,7 +258,7 @@
 <div class="pt-sticky" data-sticky-buy aria-hidden="true">
   <p class="pt-sticky__text">
     <strong>{{ section.settings.sticky_label | default: product.title | escape }}</strong>
-    <span><span data-sticky-price>{{ price | money | replace: ' ', '&nbsp;' }}</span> · livraison offerte</span>
+    <span><span data-sticky-price>{% render 'pt-money', cents: price %}</span> · livraison offerte</span>
   </p>
   <a class="pt-btn pt-btn--sun pt-sticky__btn" href="#{{ anchor | escape }}" tabindex="-1">Choisir</a>
 </div>

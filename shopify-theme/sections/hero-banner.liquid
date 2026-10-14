@@ -2,8 +2,9 @@
   Haut de page « Cinéma » : scène sombre, rai de lumière, balle sur son socle en boucle vidéo.
   - Le H1 et l’image fixe (poster) sont dans le HTML initial (LCP) : aucun état caché en dehors
     de la chorégraphie d’entrée, qui ne joue que sous html.pt-motion (voir assets/motion.css § 5).
-  - La vidéo n’a pas d’autoplay : motion.js la lance si les animations sont permises, en vue et
-    pas en pause, puis elle apparaît en fondu au-dessus du poster (.is-playing).
+  - La vidéo n’a ni autoplay ni préchargement (preload="none") : motion.js la charge et la lance si
+    les animations sont permises, l’intro finie, en vue et pas en pause, puis elle apparaît en fondu
+    au-dessus du poster (.is-playing). Boucle et poster du thème : 1 080 × 1 440 (3:4).
   - Médias : réglage « Vidéo » sinon boucle du thème ; réglage « Image fixe » sinon poster du thème.
 {%- endcomment -%}
 {%- liquid
@@ -20,13 +21,16 @@
       {%- if section.settings.image != blank -%}
         {{ section.settings.image | image_url: width: 1080 | image_tag: loading: 'eager', fetchpriority: 'high', preload: true, widths: '540, 720, 1080', sizes: '(min-width: 900px) 40vw, 100vw', class: 'pt-hero__poster', alt: '' }}
       {%- else -%}
-        <img class="pt-hero__poster" src="{{ 'pt-hero-poster.jpg' | asset_url }}" width="540" height="720" alt="" loading="eager" fetchpriority="high" decoding="async">
+        <picture>
+          <source type="image/webp" srcset="{{ 'pt-hero-poster-720.webp' | asset_url }} 720w, {{ 'pt-hero-poster.webp' | asset_url }} 1080w" sizes="(min-width: 900px) min(72svh, 675px), 100vw">
+          <img class="pt-hero__poster" src="{{ 'pt-hero-poster.jpg' | asset_url }}" width="1080" height="1440" alt="" loading="eager" fetchpriority="high" decoding="async">
+        </picture>
       {%- endif -%}
       {%- if section.settings.show_video -%}
         {%- if section.settings.video != blank -%}
-          {{ section.settings.video | video_tag: muted: true, loop: true, playsinline: true, preload: 'auto' }}
+          {{ section.settings.video | video_tag: muted: true, loop: true, playsinline: true, preload: 'none' }}
         {%- else -%}
-          <video muted loop playsinline preload="auto" width="540" height="720">
+          <video muted loop playsinline preload="none" width="1080" height="1440">
             <source src="{{ 'pt-hero-loop.webm' | asset_url }}" type="video/webm">
             <source src="{{ 'pt-hero-loop.mp4' | asset_url }}" type="video/mp4">
           </video>
@@ -62,7 +66,8 @@
           {{- section.settings.button_label | escape -}}
           {%- if featured != blank -%}
             <span class="pt-btn__sep" aria-hidden="true"></span>
-            {{- featured.price | money | replace: ' ', '&nbsp;' -}}
+            {%- if featured.price_varies or settings.bundle1_qty > 1 -%}dès&nbsp;{%- endif -%}
+            {%- render 'pt-money', cents: featured.price -%}
           {%- endif -%}
           <span class="pt-btn__arrow" aria-hidden="true">{% render 'icon', name: 'arrow' %}</span>
         </a>

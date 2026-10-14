@@ -196,6 +196,17 @@
         hd.style.setProperty('--pt-cta-shift', w ? `${Math.round(w + gap)}px` : '0px');
       }).observe(cta);
     }
+    if (!IO) return;
+    // Page produit : bouton « Je commande » seulement une fois la zone d’achat dépassée.
+    const buy = document.body.classList.contains('template-product') && document.querySelector('[data-product-root]');
+    if (buy) new IntersectionObserver(([e]) => hd.classList.toggle('is-past-buy', !e.isIntersecting && e.boundingClientRect.top < 0)).observe(buy);
+    // Fondu mobile au-dessus de la pastille : encre sur les sections sombres, crème ailleurs.
+    const dark = new Set();
+    const io = new IntersectionObserver((es) => {
+      es.forEach((e) => (e.isIntersecting ? dark.add(e.target) : dark.delete(e.target)));
+      hd.classList.toggle('is-over-dark', dark.size > 0);
+    }, { rootMargin: '0px 0px -94% 0px' });
+    $$('.pt-dark, .pt-footer').forEach((el) => io.observe(el));
   }
 
   /* ---------- Hero */
@@ -205,11 +216,14 @@
       hero.ptHero = true;
       const video = hero.querySelector('video');
       const btn = hero.querySelector('[data-hero-pause]');
-      let paused = false, visible = true;
+      const lite = !!(navigator.connection && navigator.connection.saveData);
+      // Première lecture seulement une fois l’intro finie ou passée (elle recouvre la vidéo).
+      const intro = () => h.classList.contains('has-intro') && !h.classList.contains('intro-done') && !h.classList.contains('intro-skip');
+      let paused = false, visible = true, ready = !intro();
       const sync = () => {
         hero.classList.toggle('is-paused', paused);
         if (!video) return;
-        if (!calm && visible && !paused) {
+        if (!calm && !lite && ready && visible && !paused) {
           const p = video.play();
           if (p && p.catch) p.catch(() => {});
         } else video.pause();
@@ -218,6 +232,8 @@
         video.muted = true;
         video.playsInline = true;
         video.removeAttribute('autoplay');
+        if (!calm && !lite) video.preload = 'auto';
+        if (!ready) document.addEventListener('pt:intro-end', () => { ready = true; sync(); }, { once: true });
         video.addEventListener('playing', () => hero.classList.add('is-playing'));
         if (calm) video.pause();
       }

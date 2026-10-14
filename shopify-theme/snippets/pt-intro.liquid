@@ -128,7 +128,7 @@
     function finish() {
       if (done) return; done = true; off();
       if (!started) { h.classList.remove('has-intro'); h.style.setProperty('--pt-t0', '140ms'); }
-      h.classList.add('intro-done'); el.remove();
+      h.classList.add('intro-done'); el.remove(); document.dispatchEvent(new Event('pt:intro-end'));
     }
     function skip() {
       if (h.classList.contains('intro-skip')) return;
@@ -143,7 +143,7 @@
       });
       var dt = s && tl && !wait ? Math.max(0, tl.currentTime - s) : 0;
       if (dt < 1300) h.style.setProperty('--pt-t0', Math.round(dt + 60) + 'ms');
-      h.classList.add('intro-skip'); off(); setTimeout(finish, 300);
+      h.classList.add('intro-skip'); off(); setTimeout(finish, 300); document.dispatchEvent(new Event('pt:intro-end'));
     }
     evs.forEach(function (e) { addEventListener(e, skip, { capture: true, passive: true }); });
     // Minuteur de secours armé au premier rai de lumière réellement animé (et non à l’exécution du

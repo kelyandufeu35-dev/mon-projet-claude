@@ -50,7 +50,7 @@ html { scroll-padding-top: calc(var(--pt-hd-h) + 16px); }
 /* Arrivée avec une ancre (/#faq) : saut direct, pas de défilement doux au chargement (pt-loaded : motion.js). */
 html:not(.pt-loaded) { scroll-behavior: auto !important; }
 /* Éditeur de thème : une section rechargée s’affiche telle quelle, sans rejouer sa chorégraphie. */
-.pt-static :is([data-reveal], [data-reveal] *, .pt-hero__curtain, .pt-hero__media > *, .pt-hero__copy *),
+.pt-static :is([data-reveal], [data-reveal] *, .pt-hero__curtain, .pt-hero__media *, .pt-hero__copy *),
 .pt-static :is([data-reveal], [data-reveal] *, .pt-hero__copy *)::before, .pt-static :is([data-reveal], [data-reveal] *)::after { animation: none !important; }
 /* Rebond du défilement en haut de l’accueil : on reste dans la nuit du haut de page. */
 html:has(> body.template-index) { background: var(--pt-ink-deep); }
@@ -79,7 +79,7 @@ body:not(.template-index) #contenu { padding-top: calc(var(--pt-hd-h) + 12px); }
 .pt-eyebrow--red { color: var(--pt-red); }
 
 /* Mots masqués (sortie de pt-split) : chaque mot monte dans sa propre fenêtre */
-.pt-w { display: inline-block; overflow: clip; padding: .02em .02em .1em; margin: -.02em -.02em -.1em; vertical-align: top; }
+.pt-w { display: inline-block; overflow: clip; padding: .02em .06em .1em; margin: -.02em -.06em -.1em; vertical-align: top; }
 .pt-w > span { display: inline-block; }
 .pt-hl { font-style: normal; color: var(--pt-hl-color, var(--pt-sun)); }
 
@@ -149,7 +149,7 @@ details[open] > summary .pt-plus::after { rotate: 135deg; }
   border: 1px solid transparent; border-radius: 999px; color: var(--pt-cream);
   transition: background-color var(--pt-d-ui) var(--pt-e-ui), border-color var(--pt-d-ui) var(--pt-e-ui), box-shadow var(--pt-d-ui) var(--pt-e-ui);
 }
-.pt-hd:is(.is-scrolled, .is-solid) .pt-hd__bar { background: rgb(14 15 30 / .78); -webkit-backdrop-filter: blur(16px) saturate(140%); backdrop-filter: blur(16px) saturate(140%); border-color: var(--pt-line-dark); box-shadow: 0 18px 40px -24px rgb(0 0 0 / .6); }
+.pt-hd:is(.is-scrolled, .is-solid) .pt-hd__bar { background: rgb(20 22 43 / .92); -webkit-backdrop-filter: blur(16px) saturate(140%); backdrop-filter: blur(16px) saturate(140%); border-color: var(--pt-line-dark); box-shadow: 0 18px 40px -24px rgb(0 0 0 / .6); }
 /* Navigation : soulignement soleil qui se dessine de gauche à droite et repart à droite */
 .pt-hd__nav { display: flex; gap: 4px; margin-left: auto; transition: translate 560ms var(--pt-e-out); }
 .pt-hd__nav a { position: relative; display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; font-size: var(--pt-fs-sm); font-weight: 600; text-decoration: none; color: rgb(244 236 226 / .8); transition: color var(--pt-d-micro) var(--pt-e-ui); }
@@ -160,7 +160,11 @@ details[open] > summary .pt-plus::after { rotate: 135deg; }
 .pt-hd:not(.is-scrolled, .is-solid) .pt-hd__nav { translate: var(--pt-cta-shift, 0px) 0; }
 /* Bouton « Je commande » : n’existe visuellement qu’en pastille */
 .pt-hd__cta { min-height: 44px; padding: 0 6px 0 18px; gap: 10px; font-size: var(--pt-fs-sm); opacity: 0; translate: 0 -6px; visibility: hidden; pointer-events: none; transition: opacity var(--pt-d-ui) var(--pt-e-ui), translate var(--pt-d-ui) var(--pt-e-ui), visibility 0s linear var(--pt-d-ui), scale var(--pt-d-micro) var(--pt-e-ui), box-shadow var(--pt-d-ui) var(--pt-e-ui); }
+.pt-hd__cta, .pt-hd__cta:hover { box-shadow: none; }
 .pt-hd__cta .pt-btn__arrow { width: 32px; height: 32px; margin-right: 0; }
+/* Page produit : le bouton n’apparaît qu’une fois la zone d’achat dépassée (.is-past-buy, motion.js). */
+.template-product .pt-hd:not(.is-past-buy) .pt-hd__cta { opacity: 0; translate: 0 -6px; visibility: hidden; pointer-events: none; }
+.template-product .pt-hd:not(.is-past-buy) .pt-hd__nav { translate: var(--pt-cta-shift, 0px) 0; }
 .pt-hd:is(.is-scrolled, .is-solid) .pt-hd__cta { opacity: 1; translate: none; visibility: visible; pointer-events: auto; transition: opacity 420ms var(--pt-e-out) 80ms, translate 420ms var(--pt-e-out) 80ms, visibility 0s, scale var(--pt-d-micro) var(--pt-e-ui), box-shadow var(--pt-d-ui) var(--pt-e-ui); }
 /* Panier */
 .pt-hd__cart { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 8px 0 16px; border-radius: 999px; background: rgb(244 236 226 / .1); font-size: var(--pt-fs-sm); font-weight: 700; text-decoration: none; transition: background-color var(--pt-d-micro) var(--pt-e-ui); }
@@ -197,7 +201,7 @@ html.pt-motion:not(.pt-vt) .template-index .pt-hd { animation: pt-hd-in var(--pt
   -webkit-mask-composite: source-in;
           mask: linear-gradient(to right, transparent 0, #000 18%, #000 82%, transparent 100%), linear-gradient(to bottom, transparent 0, #000 30%, #000 78%, transparent 100%);
           mask-composite: intersect; }
-.pt-hero__media > img, .pt-hero__media video { position: absolute; inset: 0; display: block; width: 100%; height: 100%; aspect-ratio: 3 / 4; object-fit: cover; }
+.pt-hero__media :is(img, video) { position: absolute; inset: 0; display: block; width: 100%; height: 100%; aspect-ratio: 3 / 4; object-fit: cover; }
 /* La vidéo apparaît en fondu au-dessus du poster dès qu’elle joue (jamais d’écran noir). Cachée dès la
    première image (pt-motion, posé dans le <head>) et pas seulement à l’arrivée de motion.js : pas de fondu 1 → 0. */
 html:is(.pt-js, .pt-motion) .pt-hero__media video { opacity: 0; transition: opacity 800ms var(--pt-e-ui); will-change: opacity, scale; }
@@ -206,11 +210,12 @@ html:is(.pt-js, .pt-motion) .pt-hero__media video { opacity: 0; transition: opac
 .pt-hero__motes { position: absolute; left: 34%; right: 34%; top: -10%; bottom: 46%; pointer-events: none; translate: calc(var(--pt-px) * 24px) calc(var(--pt-py) * 16px); transition: translate 1200ms var(--pt-e-out); }
 .pt-hero__motes i { position: absolute; left: var(--x); top: var(--y); width: var(--s, 3px); aspect-ratio: 1; border-radius: 50%; background: rgb(255 236 210 / .8); box-shadow: 0 0 6px rgb(255 236 210 / .6); opacity: 0; }
 /* Texte */
-.pt-hero__copy { position: relative; z-index: 1; max-width: 780px; padding-block: 148px clamp(72px, 9vh, 120px); }
+.pt-hero__copy { position: relative; z-index: 1; max-width: 780px; padding-block: clamp(96px, 15svh, 148px) clamp(48px, 8svh, 120px); }
 .pt-hero__eyebrow { margin-bottom: clamp(20px, 3vh, 32px); }
-.pt-hero__title { margin-bottom: clamp(24px, 3.4vh, 36px); }
+/* Titre sensible à la hauteur (portables 1 280 × 720, 1 366 × 768) ; interligne desserré : jambes et hampes ne se touchent pas. */
+.pt-hero__title { margin-bottom: clamp(24px, 3.4vh, 36px); font-size: clamp(3.1rem, min(0.85rem + 8.6vw, 14svh), 8.6rem); line-height: .92; }
 .pt-hero__title .pt-hl { display: block; width: fit-content; }
-.pt-hero__sub { max-width: 34ch; margin-bottom: clamp(28px, 4vh, 40px); font-size: var(--pt-fs-lead); line-height: 1.55; color: var(--pt-on-dark-2); }
+.pt-hero__sub { max-width: 46ch; margin-bottom: clamp(28px, 4vh, 40px); font-size: var(--pt-fs-lead); line-height: 1.55; color: var(--pt-on-dark-2); }
 .pt-hero__cta { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; }
 .pt-hero__proof { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: clamp(28px, 4vh, 40px); font-size: var(--pt-fs-sm); color: var(--pt-on-dark-2); }
 .pt-hero__proof li { display: inline-flex; align-items: center; gap: 8px; }
@@ -227,7 +232,7 @@ html:not(.pt-js) .pt-hero__pause { display: none; }
 
 /* Chorégraphie d’entrée (t0 = --pt-t0 : 140 ms sans intro, 1 380 ms avec, ou instant du saut + 60 ms) */
 html.pt-motion .pt-hero__curtain { animation: pt-curtain 1400ms var(--pt-e-out) var(--pt-t0) both; }
-html.pt-motion .pt-hero__media > :is(img, video) { animation: pt-settle 2200ms var(--pt-e-out) var(--pt-t0) backwards; }
+html.pt-motion .pt-hero__media :is(img, video) { animation: pt-settle 2200ms var(--pt-e-out) var(--pt-t0) backwards; }
 html.pt-motion .pt-hero__eyebrow { animation: pt-fade-up 900ms var(--pt-e-out) calc(var(--pt-t0) + 60ms) backwards; }
 html.pt-motion .pt-hero__eyebrow::before { animation: pt-sweep 800ms var(--pt-e-inout) calc(var(--pt-t0) + 100ms) backwards; }
 html.pt-motion .pt-hero__title .pt-w > span { animation: pt-rise-hero 1150ms var(--pt-e-out) calc(var(--pt-t0) + 80ms + var(--pt-wi, 0) * 60ms) backwards; }
@@ -363,6 +368,11 @@ html.pt-motion .pt-eyebrow[data-reveal].is-in::before { animation: pt-sweep 800m
 @media (max-width: 899px) {
   :root { --pt-hd-h: 68px; }
   .pt-hd__nav, .pt-hd__cta { display: none; }
+  .pt-hd { padding-top: 8px; }
+  /* Fondu au-dessus de la pastille : le texte qui défile dessous ne paraît pas coupé net. */
+  .pt-hd::before { content: ''; position: absolute; z-index: -1; inset: 0 0 auto; height: 28px; background: linear-gradient(var(--pt-hd-fade, var(--pt-cream)) 30%, transparent); pointer-events: none; }
+  .template-index .pt-hd:not(.is-scrolled)::before, .pt-hd.is-over-dark::before { --pt-hd-fade: var(--pt-ink); }
+  .template-index .pt-hd:not(.is-scrolled)::before { opacity: 0; }
   .pt-hd__bar { min-height: 56px; padding-left: 14px; }
   .pt-hd__cart { margin-left: auto; padding-left: 12px; }
   .pt-hd__cart-label { display: none; }
@@ -370,7 +380,7 @@ html.pt-motion .pt-eyebrow[data-reveal].is-in::before { animation: pt-sweep 800m
   .pt-hero { min-height: max(620px, 100svh); }
   .pt-hero__stage { left: 0; right: 0; top: 0; bottom: auto; width: 100%; height: 56svh; aspect-ratio: auto; }
   .pt-hero__media { -webkit-mask: linear-gradient(to bottom, transparent 0, #000 22%, #000 62%, transparent 100%); mask: linear-gradient(to bottom, transparent 0, #000 22%, #000 62%, transparent 100%); }
-  .pt-hero__media > img, .pt-hero__media video { aspect-ratio: auto; object-position: 50% 40%; }
+  .pt-hero__media :is(img, video) { aspect-ratio: auto; object-position: 50% 40%; }
   .pt-hero__beam { width: 70%; bottom: 52%; }
   .pt-hero__copy { padding-block: 0 52px; }
   /* Voile de lisibilité : le sur-titre ne passe plus sur les croquettes du socle */
@@ -401,6 +411,20 @@ html.pt-motion .pt-eyebrow[data-reveal].is-in::before { animation: pt-sweep 800m
 }
 @media (max-width: 380px) {
   .pt-hero__proof li:nth-child(3) { display: none; }
+}
+
+@media (min-width: 900px) and (max-height: 820px) {
+  .pt-hero__sub { margin-bottom: 20px; }
+  .pt-hero__proof { margin-top: 18px; }
+}
+/* Tablette portrait : le média garde son format 3:4, centré, sans agrandissement. */
+@media (min-width: 600px) and (max-width: 899px) {
+  .pt-hero__media { left: 50%; right: auto; width: auto; height: 100%; aspect-ratio: 3 / 4; translate: -50% 0;
+    -webkit-mask: linear-gradient(to right, transparent 0, #000 18%, #000 82%, transparent 100%), linear-gradient(to bottom, transparent 0, #000 22%, #000 62%, transparent 100%);
+    -webkit-mask-composite: source-in;
+            mask: linear-gradient(to right, transparent 0, #000 18%, #000 82%, transparent 100%), linear-gradient(to bottom, transparent 0, #000 22%, #000 62%, transparent 100%);
+            mask-composite: intersect; }
+  .pt-hero__cta .pt-btn { width: auto; min-width: 320px; }
 }
 
 /* ------------------------------------------- 11. Réduire les animations */

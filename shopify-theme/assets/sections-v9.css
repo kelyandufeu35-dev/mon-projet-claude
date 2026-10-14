@@ -407,7 +407,7 @@ html.pt-motion .pt-footer__word[data-reveal='mask'].is-in .pt-w > span { animati
   .pt-trust svg { width: 20px; height: 20px; }
 
   /* Barre d’achat : pilule encre qui remonte en ressort (data-show posé par theme.js). */
-  .pt-sticky { position: fixed; left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); z-index: 40; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 8px 8px 20px; border-radius: 999px; background: rgb(14 15 30 / .92); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); color: var(--pt-cream); box-shadow: 0 20px 40px -20px rgb(0 0 0 / .6); translate: 0 140%; transition: translate 560ms var(--pt-e-spring); }
+  .pt-sticky { position: fixed; left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); z-index: 40; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 8px 8px 20px; border-radius: 999px; background: rgb(20 22 43 / .92); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); color: var(--pt-cream); box-shadow: 0 20px 40px -20px rgb(0 0 0 / .6); translate: 0 140%; transition: translate 560ms var(--pt-e-spring); }
   .pt-sticky[data-show] { translate: none; }
   .pt-sticky :focus-visible { outline-color: var(--pt-sun); }
   .pt-sticky__text { min-width: 0; font-size: var(--pt-fs-sm); line-height: 1.25; }
