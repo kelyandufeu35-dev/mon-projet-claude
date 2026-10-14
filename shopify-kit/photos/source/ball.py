@@ -1,7 +1,7 @@
 """Rendu photo-réaliste de la balle à friandises (Blender / Cycles).
 
 Usage : python ball.py <scene> <sortie.png> [samples] [taille]
-scene = main (fond clair), kibbles (fond jaune + croquettes), size (fond blanc)
+scene = main (fond clair), kibbles (fond crème + croquettes), size (fond blanc)
 """
 import math
 import random
@@ -26,7 +26,7 @@ def srgb(h):
     return tuple(x / 12.92 if x <= 0.04045 else ((x + 0.055) / 1.055) ** 2.4 for x in c) + (1.0,)
 
 
-BACKDROP = {"main": "#f4ece2", "kibbles": "#f7b733", "size": "#f6f4f1", "spin": "#f4ece2"}[SCENE]
+BACKDROP = {"main": "#f4ece2", "kibbles": "#f4ece2", "size": "#f6f4f1", "spin": "#f4ece2"}[SCENE]
 
 # ------------------------------------------------------------ Balle
 def faceted_ball(rings=9, per_ring=16, raise_=1.034):
