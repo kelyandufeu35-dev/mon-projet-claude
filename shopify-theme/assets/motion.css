@@ -317,9 +317,9 @@ html.pt-motion [data-reveal='draw'].is-in [pathLength='1'] { animation: pt-draw-
 @keyframes pt-draw-on { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
 
 /* « lit » : la ligne s’allume mot par mot (observateur dédié à 70 % de la hauteur d’écran) */
-html.pt-motion [data-reveal='lit']:not(.is-in) .pt-w > span { color: var(--pt-lit-from, rgb(20 22 43 / .14)); transform: translateY(.06em); }
+html.pt-motion [data-reveal='lit']:not(.is-in) .pt-w > span { opacity: var(--pt-lit-o, .14); transform: translateY(.06em); }
 html.pt-motion [data-reveal='lit'].is-in .pt-w > span { animation: pt-lit 700ms var(--pt-e-ui) backwards calc(var(--pt-wi, 0) * var(--pt-stagger-lit)); }
-@keyframes pt-lit { from { color: var(--pt-lit-from, rgb(20 22 43 / .14)); transform: translateY(.06em); } }
+@keyframes pt-lit { from { opacity: var(--pt-lit-o, .14); transform: translateY(.06em); } }
 
 /* Sur-titres révélés : le trait se trace juste après la montée */
 html.pt-motion .pt-eyebrow[data-reveal]:not(.is-in)::before { transform: scaleX(0); }
@@ -333,7 +333,7 @@ html.pt-motion .pt-eyebrow[data-reveal].is-in::before { animation: pt-sweep 800m
   html.pt-motion:not(.has-intro:not(.intro-skip, .intro-done)) [data-scroll='drift'] { animation: pt-drift linear both; animation-timeline: view(); animation-range: cover; }
   html.pt-motion:not(.has-intro:not(.intro-skip, .intro-done)) [data-scroll='zoom'] { animation: pt-zoom linear both; animation-timeline: view(); animation-range: entry 0% cover 50%; }
   html.pt-motion:not(.has-intro:not(.intro-skip, .intro-done)) [data-scroll='spin'] { animation: pt-spin linear both; animation-timeline: view(); animation-range: cover; }
-  html.pt-motion:not(.has-intro:not(.intro-skip, .intro-done)) [data-scroll='iris'] { animation: pt-iris-in linear both; animation-timeline: view(); animation-range: entry 0% entry 85%; }
+  html.pt-motion:not(.has-intro:not(.intro-skip, .intro-done)) [data-scroll='iris'] { animation: pt-iris-in linear both; animation-timeline: view(); animation-range: entry 30% cover 55%; }
   @keyframes pt-drift { from { translate: 0 var(--pt-drift, 6vh); } to { translate: 0 calc(-1 * var(--pt-drift, 6vh)); } }
   @keyframes pt-zoom { from { scale: 1.12; } to { scale: 1; } }
   @keyframes pt-spin { from { rotate: -14deg; } to { rotate: 14deg; } }

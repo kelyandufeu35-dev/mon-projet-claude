@@ -14,8 +14,10 @@
    Active dès le chargement, intro comprise : rien d’autre n’anime ce calque, et l’attendre la fin de
    l’intro faisait sauter la courbe (pleine pendant l’intro, aplatie d’un coup à sa fin). */
 .pt-principe::before { content: ''; position: absolute; left: 0; right: 0; bottom: calc(100% - 1px); height: clamp(28px, 4.2vw, 64px); border-radius: 50% 50% 0 0 / 100% 100% 0 0; background: var(--pt-cream); transform-origin: 50% 100%; pointer-events: none; }
+/* Frise de la section (et non du calque, haut de 28 à 64 px) : pleine à l’arrivée, aplatie sur le premier tiers d’écran défilé. */
+.pt-principe { view-timeline: --pt-dawn block; }
 @supports (animation-timeline: view()) {
-  html.pt-motion .pt-principe::before { animation: ptb-dawn linear both; animation-timeline: view(); animation-range: entry 0% entry 70%; }
+  html.pt-motion .pt-principe::before { animation: ptb-dawn linear both; animation-timeline: --pt-dawn; animation-range: entry 0% entry 35%; }
 }
 @keyframes ptb-dawn { from { scale: 1 1; } to { scale: 1 .2; } }
 .pt-principe__head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 400px); gap: 28px 48px; margin-bottom: clamp(64px, 9vw, 140px); }
@@ -27,7 +29,7 @@
 .pt-statement__line { display: block; width: fit-content; color: var(--pt-ink); }
 .pt-statement__line:nth-child(2) { padding-left: 1.05em; }
 .pt-statement__line:nth-child(3) { padding-left: 2.1em; }
-.pt-statement__line--red { color: var(--pt-red); --pt-lit-from: rgb(196 20 15 / .16); }
+.pt-statement__line--red { color: var(--pt-red); --pt-lit-o: .16; }
 /* « Elle roule. » : la balle arrive de la droite en roulant et se pose au bout de la ligne
    (taille en em). L’ancre observée reste en place ; dedans, le chariot glisse (translate),
    la balle tourne (rotate) et son ombre au sol ne tourne pas. */
@@ -36,15 +38,15 @@
 .pt-principe__slide::after { content: ''; position: absolute; left: 10%; right: 10%; bottom: -7%; z-index: -1; height: 16%; border-radius: 50%; background: radial-gradient(closest-side, rgb(20 22 43 / .3), rgb(20 22 43 / 0)); }
 .pt-principe__ball, .pt-principe__ball img { display: block; width: 100%; height: 100%; }
 html.pt-motion .pt-principe__roll:not(.is-in) .pt-principe__slide { opacity: 0; translate: 55vw 0; }
-html.pt-motion .pt-principe__roll.is-in .pt-principe__slide { animation: ptb-roll-in 1700ms var(--pt-e-out) 350ms backwards; }
-html.pt-motion .pt-principe__roll.is-in .pt-principe__ball { animation: ptb-roll-spin 1700ms var(--pt-e-out) 350ms backwards; }
+html.pt-motion .pt-principe__roll.is-in .pt-principe__slide { animation: ptb-roll-in 1400ms var(--pt-e-out) calc(2 * var(--pt-stagger-lit) + 200ms) backwards; }
+html.pt-motion .pt-principe__roll.is-in .pt-principe__ball { animation: ptb-roll-spin 1400ms var(--pt-e-out) calc(2 * var(--pt-stagger-lit) + 200ms) backwards; }
 @keyframes ptb-roll-in { from { opacity: 0; translate: 55vw 0; } 12% { opacity: 1; } }
 @keyframes ptb-roll-spin { from { rotate: 560deg; } }
 
 /* Récit : cadre collant (ordinateur) où les photos se succèdent en volet, étapes qui défilent. */
 .pt-story { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(40px, 7vw, 120px); align-items: start; }
 .pt-story__frame { --pt-r: var(--pt-r-lg); position: sticky; top: calc((100svh - min(74svh, 760px)) / 2); height: 74svh; max-height: 760px; border-radius: var(--pt-r-lg); overflow: hidden; isolation: isolate; background: var(--pt-sand); box-shadow: 0 50px 90px -60px rgb(20 22 43 / .55); }
-.pt-story__frame::after { content: ''; position: absolute; inset: 55% 0 0; z-index: 1; background: linear-gradient(rgb(20 22 43 / 0), rgb(20 22 43 / .28)); pointer-events: none; }
+.pt-story__frame::after { content: ''; position: absolute; inset: 75% 0 0; z-index: 1; background: linear-gradient(rgb(20 22 43 / 0), rgb(20 22 43 / .12)); pointer-events: none; }
 /* Chaque photo entre en volet depuis le bas ; en remontant, le volet redescend. */
 .pt-story__media { position: absolute; inset: 0; clip-path: inset(100% 0 0 0); scale: 1.14; transition: clip-path 1000ms var(--pt-e-inout), scale 1400ms var(--pt-e-out); }
 .pt-story__media:first-child, .pt-story__media.is-on { clip-path: inset(0); scale: 1; }
@@ -55,14 +57,15 @@ html.pt-motion .pt-story__media.is-current img { scale: 1.06; }
 .pt-story__count { position: absolute; z-index: 2; left: 24px; bottom: 22px; display: flex; align-items: baseline; gap: 6px; padding: 8px 14px; border-radius: 999px; background: rgb(251 247 241 / .92); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); color: var(--pt-ink); font-size: var(--pt-fs-sm); font-weight: 700; font-variant-numeric: tabular-nums; }
 .pt-story__count b { display: inline-flex; min-width: 2ch; }
 .pt-story__count > span { color: var(--pt-on-light-2); }
-/* Rail de progression (--pt-story posé par motion.js, --pt-n en ligne). */
-.pt-story__rail { position: absolute; z-index: 2; inset: 24px 20px 24px auto; width: 2px; border-radius: 2px; background: rgb(251 247 241 / .3); overflow: hidden; }
-.pt-story__rail i { position: absolute; inset: 0; background: var(--pt-paper); transform-origin: 50% 0; transform: scaleY(calc((var(--pt-story, 0) + 1) / var(--pt-n, 3))); transition: transform 900ms var(--pt-e-inout); }
+/* Boucle vidéo d’une étape (pt-step-video) : en fondu au-dessus de la photo dès qu’elle joue (motion.js). */
+.pt-step__vid { position: absolute; inset: 0; z-index: 1; opacity: 0; transition: opacity 700ms var(--pt-e-ui); }
+.pt-step__vid.is-playing { opacity: 1; }
+.pt-step__vid video { display: block; width: 100%; height: 100%; object-fit: cover; }
 .pt-step { min-height: 74svh; display: flex; flex-direction: column; justify-content: center; gap: 18px; padding-block: 24px; }
 .pt-step__img { display: none; }
 .pt-step__num { display: flex; align-items: center; gap: 14px; font-size: var(--pt-fs-xs); font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--pt-on-light-2); }
 .pt-step__num b { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid var(--pt-line-light); color: var(--pt-ink); font-size: .875rem; letter-spacing: 0; transition: background-color var(--pt-d-pop) var(--pt-e-ui), border-color var(--pt-d-pop) var(--pt-e-ui), color var(--pt-d-pop) var(--pt-e-ui), scale var(--pt-d-pop) var(--pt-e-spring); }
-.pt-step .pt-h3 { max-width: 15ch; transition: color 500ms var(--pt-e-ui); }
+.pt-step .pt-h3 { max-width: 20ch; transition: color 500ms var(--pt-e-ui); }
 .pt-step__text { max-width: 34ch; font-size: var(--pt-fs-lead); color: var(--pt-on-light-2); }
 .pt-step__bar { width: 100%; max-width: 360px; height: 2px; border-radius: 2px; background: var(--pt-line-light); overflow: hidden; }
 .pt-step__bar::after { content: ''; display: block; height: 100%; background: var(--pt-red); transform: scaleX(0); transform-origin: left; transition: transform 900ms var(--pt-e-inout); }
@@ -76,7 +79,7 @@ html.pt-motion .pt-story__media.is-current img { scale: 1.06; }
 }
 
 /* ============================================================== 2. La balle */
-.pt-objet { position: relative; overflow: clip; padding-block: var(--pt-section); background: var(--pt-paper); color: var(--pt-ink); }
+.pt-objet { position: relative; overflow: clip; padding-block: var(--pt-section); background: var(--pt-cream); color: var(--pt-ink); }
 .pt-objet__head { display: grid; justify-items: center; gap: 22px; margin-bottom: clamp(32px, 5vw, 64px); text-align: center; }
 .pt-objet__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 520px) minmax(0, 1fr); align-items: center; gap: clamp(16px, 3vw, 48px); }
 .pt-objet__photo { position: relative; isolation: isolate; aspect-ratio: 1; margin: 0; }
@@ -272,7 +275,7 @@ html.pt-motion :is(.pt-more[open] .pt-more__body, .pt-faq__item[open] .pt-faq__a
 .pt-fin__ripple, .pt-fin__ball { position: absolute; left: 50%; top: 70.16%; width: 53.03%; aspect-ratio: 1; translate: -50% -50%; }
 .pt-fin__ripple { border: 2px solid var(--pt-sun); border-radius: 50%; opacity: 0; pointer-events: none; }
 .pt-fin__ball img { display: block; width: 100%; height: 100%; }
-.pt-fin__title { max-width: 15ch; margin: 0 auto 40px; }
+.pt-fin__title { max-width: 18ch; margin: 0 auto 40px; }
 .pt-fin__note { margin-top: 22px; font-size: var(--pt-fs-sm); color: var(--pt-on-dark-2); }
 /* Chorégraphie : faisceau qui s’allume (paliers de l’intro), doigts tracés puis remplis,
    balle qui tombe en tournant, écrasement à l’impact, doigts qui sautent, onde jaune. */
@@ -323,8 +326,11 @@ body:has(.pt-fin) .pt-footer__grid { border-top: 1px solid var(--pt-line-dark); 
 .pt-footer__word { margin: calc(clamp(4px, 1.5vw, 20px) - 16vh) 0 -.18em; padding-top: 16vh; color: rgb(244 236 226 / .24); font-family: var(--pt-display); font-size: min(24vw, 21rem); font-weight: 800; font-stretch: 75%; line-height: .8; letter-spacing: -.01em; text-align: center; white-space: nowrap; -webkit-text-fill-color: #181a31; -webkit-text-stroke: 2px currentColor; paint-order: stroke fill; user-select: none; pointer-events: none; }
 .pt-footer__gap { display: inline-block; width: .22em; }
 /* Après la montée (pt-rise, motion.css), une lumière dorée parcourt les contours, lettre après lettre. */
-html.pt-motion .pt-footer__word[data-reveal='mask'].is-in .pt-w > span { animation: pt-rise var(--pt-d-mask) var(--pt-e-out) backwards calc(var(--pt-d, 0) * var(--pt-stagger) + var(--pt-wi, 0) * var(--pt-stagger-word)), ptb-glow 1400ms var(--pt-e-inout) calc(900ms + var(--pt-wi, 0) * 80ms) both; }
-@keyframes ptb-glow { 0%, 100% { color: rgb(244 236 226 / .24); } 45% { color: rgb(255 194 58 / .8); } }
+/* (copie dorée de la lettre posée au-dessus, en fondu d’opacité : aucun recalcul de couleur) */
+.pt-footer__word .pt-w > span { position: relative; }
+.pt-footer__word .pt-w > span::after { content: attr(data-t); position: absolute; left: 0; top: 0; color: rgb(255 194 58 / .8); opacity: 0; }
+html.pt-motion .pt-footer__word[data-reveal='mask'].is-in .pt-w > span::after { animation: ptb-glow 1400ms var(--pt-e-inout) calc(900ms + var(--pt-wi, 0) * 80ms) both; }
+@keyframes ptb-glow { 45% { opacity: 1; } }
 
 /* ========================================================== 7. Panier latéral */
 /* Le tiroir glisse depuis la droite ; à chaque ouverture (#cart-drawer.is-opening, motion.js),
@@ -381,7 +387,7 @@ html.pt-motion .pt-footer__word[data-reveal='mask'].is-in .pt-w > span { animati
   .pt-story { grid-template-columns: 1fr; }
   .pt-story__frame, .pt-step__bar { display: none; }
   .pt-step { min-height: 0; gap: 14px; padding-block: 0 56px; }
-  .pt-step__img { --pt-r: var(--pt-r-md); display: block; margin: 0 0 10px; aspect-ratio: 1; border-radius: var(--pt-r-md); overflow: hidden; background: var(--pt-sand); }
+  .pt-step__img { --pt-r: var(--pt-r-md); position: relative; display: block; margin: 0 0 10px; aspect-ratio: 1; border-radius: var(--pt-r-md); overflow: hidden; background: var(--pt-sand); }
   .pt-step__img img { width: 100%; height: 100%; aspect-ratio: 1; object-fit: cover; }
 
   /* La balle : photo en tête puis grille 2 × 2, traits courts au-dessus de chaque point. */

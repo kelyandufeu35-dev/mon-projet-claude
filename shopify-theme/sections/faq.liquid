@@ -1,7 +1,9 @@
 {%- comment -%}
   Questions (v9 Cinéma) : filet qui se trace, titre masqué, questions en cascade
   qui s’ouvrent en douceur (::details-content). Le lien « Écris-nous » mène à la
-  page Contact : aucune adresse e-mail n’est jamais affichée. Styles : sections-v9.css.
+  page Contact : aucune adresse e-mail n’est jamais affichée. Questions en police de titre :
+  l’espace fine insécable (trop étroite dans Bricolage) devient une espace insécable normale.
+  Styles : sections-v9.css.
 {%- endcomment -%}
 {%- liquid
   assign anchor = section.settings.anchor | default: 'faq'
@@ -27,7 +29,7 @@
       <div class="pt-faq__list" data-reveal-group>
         {%- for block in section.blocks -%}
           <details class="pt-faq__item" data-reveal="up" {{ block.shopify_attributes }}>
-            <summary><span class="pt-faq__q">{{ block.settings.question | escape }}</span><span class="pt-plus" aria-hidden="true"></span></summary>
+            <summary><span class="pt-faq__q">{{ block.settings.question | escape | replace: ' ', '&nbsp;' }}</span><span class="pt-plus" aria-hidden="true"></span></summary>
             <div class="pt-faq__a rte">{{ block.settings.answer }}</div>
           </details>
         {%- endfor -%}

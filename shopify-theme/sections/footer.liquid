@@ -83,7 +83,7 @@
         {%- if letter == ' ' -%}
           <span class="pt-footer__gap"> </span>
         {%- else -%}
-          <span class="pt-w" style="--pt-wi:{{ forloop.index0 }}"><span>{{ letter | escape }}</span></span>
+          <span class="pt-w" style="--pt-wi:{{ forloop.index0 }}"><span data-t="{{ letter | escape }}">{{ letter | escape }}</span></span>
         {%- endif -%}
       {%- endfor -%}
     </p>

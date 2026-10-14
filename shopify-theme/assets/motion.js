@@ -46,7 +46,8 @@
       if (el.ptReveal) return;
       el.ptReveal = true;
       if (!ioMain) return show(el);
-      (el.dataset.reveal === 'lit' ? ioLit : ioMain).observe(el);
+      // Ce qui vit dans une ligne « lit » (balle de « Elle roule. ») suit l’observateur de la ligne.
+      (el.dataset.reveal === 'lit' || el.closest('[data-reveal="lit"]') ? ioLit : ioMain).observe(el);
     });
   }
 
@@ -156,6 +157,7 @@
         story.dataset.active = String(i);
         story.style.setProperty('--pt-story', i);
         if (counter) odometer(counter, String(i + 1).padStart(2, '0'));
+        syncVids();
       };
       set(0);
       if (!IO) return;
@@ -163,6 +165,36 @@
         if (e.isIntersecting) set(steps.indexOf(e.target));
       }), { rootMargin: '-45% 0px -45% 0px' });
       steps.forEach((s) => io.observe(s));
+    });
+  }
+
+  /* ---------- StepVideo */
+  // Boucles des étapes : lues seulement à l’écran (étape en cours dans le cadre sur ordinateur),
+  // en pause sinon, jamais en mouvement réduit ni en économie de données.
+  const lite = !!(navigator.connection && navigator.connection.saveData);
+  const vids = new Map();
+  function syncVids() {
+    vids.forEach((seen, box) => {
+      const v = box.querySelector('video');
+      const media = box.closest('[data-story-media]');
+      if (!v) return;
+      if (!calm && !lite && seen && (!media || media.classList.contains('is-current'))) {
+        v.preload = 'auto';
+        const p = v.play();
+        if (p && p.catch) p.catch(() => {});
+      } else if (!v.paused) v.pause();
+    });
+  }
+  const vio = IO ? new IntersectionObserver((es) => { es.forEach((e) => vids.set(e.target, e.isIntersecting)); syncVids(); }, { threshold: 0.2 }) : null;
+  function bindVids(root) {
+    within(root, '[data-step-video]').forEach((box) => {
+      const v = box.querySelector('video');
+      if (box.ptVid || !v || !vio) return;
+      box.ptVid = true;
+      v.muted = true;
+      v.addEventListener('playing', () => box.classList.add('is-playing'));
+      vids.set(box, false);
+      vio.observe(box);
     });
   }
 
@@ -358,6 +390,7 @@
     bindShine(root);
     bindReveals(root);
     bindCounts(root);
+    bindVids(root);
     bindStory(root);
     bindMagnets(root);
     bindHero(root);

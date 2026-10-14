@@ -2,7 +2,8 @@
   « Le principe » (v9 Cinéma) : énoncé qui s’allume ligne par ligne, puis récit
   en étapes. Sur ordinateur, un cadre collant fait défiler les photos en volet
   pendant que les étapes passent (data-story, géré par motion.js) ; sur mobile,
-  chaque étape a sa propre photo. Styles : assets/sections-v9.css.
+  chaque étape a sa propre photo. Une étape peut jouer une courte boucle vidéo par-dessus sa
+  photo (snippets/pt-step-video.liquid, lue par motion.js). Styles : assets/sections-v9.css.
 {%- endcomment -%}
 {%- liquid
   assign anchor = section.settings.anchor | default: 'principe'
@@ -47,10 +48,10 @@
             {%- else -%}
               <img class="pt-story__ph" src="{{ 'pt-balle-3d.webp' | asset_url }}" alt="" width="236" height="236" loading="lazy" decoding="async">
             {%- endif -%}
+            {%- render 'pt-step-video', block: block -%}
           </div>
         {%- endfor -%}
         <p class="pt-story__count"><b data-story-count>01</b><span>/&nbsp;0{{ n }}</span></p>
-        <span class="pt-story__rail"><i></i></span>
       </div>
 
       <ol class="pt-story__steps">
@@ -60,9 +61,10 @@
               {%- assign step_alt = block.settings.image.alt | default: block.settings.title -%}
               <figure class="pt-step__img" data-reveal="clip">
                 {{ block.settings.image | image_url: width: 960 | image_tag: loading: 'lazy', widths: '360, 540, 720, 960', sizes: '(min-width: 900px) 0px, 92vw', alt: step_alt }}
+                {%- render 'pt-step-video', block: block -%}
               </figure>
             {%- endif -%}
-            <p class="pt-step__num" data-reveal="up"><b>0{{ forloop.index }}</b>{{ block.settings.label | escape }}</p>
+            <p class="pt-step__num" data-reveal="up"><b>0{{ forloop.index }}</b><span class="pt-sr"> · </span>{{ block.settings.label | escape }}</p>
             {%- if block.settings.title != blank -%}
               <h3 class="pt-h3" data-reveal="mask">{% render 'pt-split', text: block.settings.title %}</h3>
             {%- endif -%}
@@ -155,6 +157,19 @@
           "id": "image",
           "label": "Photo",
           "info": "Format carré conseillé. Sur ordinateur, les photos défilent dans un cadre fixe."
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Vidéo en boucle (facultatif)",
+          "info": "Sans son, 4 à 6 s, format 3:4. Jouée par-dessus la photo quand l’étape est à l’écran, jamais avec « réduire les animations »."
+        },
+        {
+          "type": "checkbox",
+          "id": "theme_loop",
+          "label": "Animation fournie : la balle roule et libère ses croquettes",
+          "default": false,
+          "info": "Utilisée si aucune vidéo n’est choisie ci-dessus."
         }
       ]
     }
@@ -184,7 +199,8 @@
           "settings": {
             "label": "Laisse jouer",
             "title": "Elle roule, les croquettes tombent une à une.",
-            "text": "Chaque croquette se mérite : le repas dure plus longtemps et l’ennui recule quand il reste seul."
+            "text": "Chaque croquette se mérite : le repas dure plus longtemps et l’ennui recule quand il reste seul.",
+            "theme_loop": true
           }
         }
       ]
