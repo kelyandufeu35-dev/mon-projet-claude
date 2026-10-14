@@ -32,36 +32,42 @@
       </figure>
     {%- endcapture -%}
 
-    {%- comment -%} Points 1-2 à gauche de la balle, 3-4 à droite. {%- endcomment -%}
-    <ul class="pt-objet__specs pt-objet__specs--left" data-reveal-group>
-      {%- for block in section.blocks -%}
-        {%- if forloop.index == 3 -%}
-          </ul>
-          {{ photo }}
-          <ul class="pt-objet__specs pt-objet__specs--right" data-reveal-group>
-        {%- endif -%}
-        {%- liquid
-          comment
-            Libellé qui commence par un entier (« 8 cm ») : le nombre devient un compteur.
-          endcomment
-          assign lbl = block.settings.label | escape
-          assign num_s = ''
-          assign chars = lbl | split: ''
-          for ch in chars
-            if '0123456789' contains ch
-              assign num_s = num_s | append: ch
-            else
-              break
-            endif
-          endfor
-        -%}
-        <li class="pt-spec" data-reveal="up" style="--pt-d:{{ forloop.index0 }}" {{ block.shopify_attributes }}>
-          {%- if num_s != blank -%}<strong><span class="pt-spec__num" data-count-to="{{ num_s }}">{{ num_s }}</span>{{ lbl | remove_first: num_s }}</strong>{%- else -%}<strong>{{ lbl }}</strong>{%- endif -%}
-          {%- if block.settings.value != blank -%}<span>{{ block.settings.value | escape }}</span>{%- endif -%}
-        </li>
-      {%- endfor -%}
-    </ul>
-    {%- if section.blocks.size < 3 -%}{{ photo }}{%- endif -%}
+    {%- comment -%} Points 1-2 à gauche de la balle (alignés vers elle), 3-4 à droite. {%- endcomment -%}
+    {%- assign sides = 'left,right' | split: ',' -%}
+    {%- for side in sides -%}
+      {%- liquid
+        assign off = 0
+        if side == 'right'
+          assign off = 2
+          echo photo
+        endif
+      -%}
+      {%- if section.blocks.size > off -%}
+        <ul class="pt-objet__specs pt-objet__specs--{{ side }}" data-reveal-group>
+          {%- for block in section.blocks limit: 2 offset: off -%}
+            {%- liquid
+              comment
+                Libellé qui commence par un entier (« 8 cm ») : le nombre devient un compteur.
+              endcomment
+              assign lbl = block.settings.label | escape
+              assign num_s = ''
+              assign chars = lbl | split: ''
+              for ch in chars
+                if '0123456789' contains ch
+                  assign num_s = num_s | append: ch
+                else
+                  break
+                endif
+              endfor
+            -%}
+            <li class="pt-spec" data-reveal="up" style="--pt-d:{{ forloop.index0 | plus: off }}" {{ block.shopify_attributes }}>
+              {%- if num_s != blank -%}<strong><span class="pt-spec__num" data-count-to="{{ num_s }}">{{ num_s }}</span>{{ lbl | remove_first: num_s }}</strong>{%- else -%}<strong>{{ lbl }}</strong>{%- endif -%}
+              {%- if block.settings.value != blank -%}<span>{{ block.settings.value | escape }}</span>{%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    {%- endfor -%}
   </div>
 
   {%- if section.settings.warning != blank -%}
@@ -103,7 +109,7 @@
       "id": "anchor",
       "label": "Ancre de lien (sans #)",
       "default": "objet",
-      "info": "Le menu de l’en-tête pointe vers « objet »."
+      "info": "Le menu de l’en-tête pointe vers « objet »."
     }
   ],
   "blocks": [
@@ -116,14 +122,14 @@
           "type": "text",
           "id": "label",
           "label": "Libellé",
-          "default": "8 cm",
+          "default": "8 cm",
           "info": "S’il commence par un nombre, celui-ci compte à l’apparition."
         },
         {
           "type": "text",
           "id": "value",
           "label": "Précision",
-          "default": "De diamètre : parfaite pour les chats et les petits chiens."
+          "default": "De diamètre : parfaite pour les chats et les petits chiens."
         }
       ]
     }
@@ -135,8 +141,8 @@
         {
           "type": "spec",
           "settings": {
-            "label": "8 cm",
-            "value": "De diamètre : parfaite pour les chats et les petits chiens."
+            "label": "8 cm",
+            "value": "De diamètre : parfaite pour les chats et les petits chiens."
           }
         },
         {

@@ -18,10 +18,23 @@
     --pt-io: var(--pt-e-out, cubic-bezier(.16, 1, .3, 1));
     --pt-iio: var(--pt-e-inout, cubic-bezier(.76, 0, .24, 1));
     display: block; position: fixed; inset: 0; z-index: 200; overflow: hidden; pointer-events: auto;
+    background: var(--pt-ink-deep, #0b0c18);
+    animation: pt-iris 700ms var(--pt-iio) 1300ms both, pt-intro-end 1ms linear 2000ms forwards;
+  }
+  /* Halo bleu nuit en haut : le dégradé est peint sur un calque dix fois plus petit puis agrandi
+     (transform). Même rendu, mais la première image se peint ~50 ms plus vite qu’avec un dégradé
+     radial plein écran, et la page dessous (LCP) s’affiche d’autant plus tôt. */
+  html.has-intro .pt-intro::before {
+    content: ''; position: absolute; left: 0; top: 0; width: 10%; height: 10%;
+    transform: scale(10); transform-origin: 0 0; will-change: transform;
     background: radial-gradient(120% 70% at 50% -10%, #20244a 0%, var(--pt-ink-deep, #0b0c18) 58%);
+  }
+  /* Le trou circulaire n’est posé qu’au début de l’ouverture (classe .is-iris, ajoutée par le script
+     ci-dessous à l’événement animationstart de pt-iris) : un masque plein écran présent dès la
+     première image retardait l’affichage de la page dessous (LCP) d’environ 85 ms. */
+  html.has-intro .pt-intro.is-iris {
     -webkit-mask: radial-gradient(circle at 50% 50%, transparent var(--pt-iris), #000 calc(var(--pt-iris) + 1px));
             mask: radial-gradient(circle at 50% 50%, transparent var(--pt-iris), #000 calc(var(--pt-iris) + 1px));
-    animation: pt-iris 700ms var(--pt-iio) 1300ms both, pt-intro-end 1ms linear 2000ms forwards;
   }
   /* Liseré de lumière jaune sur le bord de l’ouverture */
   html.has-intro .pt-intro::after {
@@ -108,17 +121,48 @@
     var h = document.documentElement, el = document.getElementById('pt-intro');
     if (!el) return;
     if (!h.classList.contains('has-intro')) { el.remove(); return; }
-    var t = performance.now(), done = false, evs = ['pointerdown', 'keydown', 'wheel', 'touchstart', 'scroll'];
+    var done = false, evs = ['pointerdown', 'keydown', 'wheel', 'touchstart', 'scroll'];
+    var tl = document.timeline, anims = function () { return el.getAnimations ? el.getAnimations({ subtree: true }) : []; };
     function off() { evs.forEach(function (e) { removeEventListener(e, skip, true); }); }
     function finish() { if (done) return; done = true; off(); h.classList.add('intro-done'); el.remove(); }
     function skip() {
       if (h.classList.contains('intro-skip')) return;
-      var dt = performance.now() - t;
+      // Temps déjà écoulé dans la chorégraphie, mesuré sur l’horloge des animations CSS (elles
+      // démarrent à la première image, souvent bien après l’exécution de ce script) : le haut de
+      // page démarre 60 ms après le saut. Référence : le départ le plus tardif du calque et du haut
+      // de page ; si une animation attend encore sa première image, rien n’a été vu : 0.
+      var s = 0, wait = false, hero = document.querySelector('[data-hero]');
+      anims().concat(hero ? hero.getAnimations({ subtree: true }) : []).forEach(function (a) {
+        if (a.timeline !== tl || !a.animationName) return;
+        if (a.startTime == null) wait = true; else if (a.startTime > s) s = a.startTime;
+      });
+      var dt = s && tl && !wait ? Math.max(0, tl.currentTime - s) : 0;
       if (dt < 1300) h.style.setProperty('--pt-t0', Math.round(dt + 60) + 'ms');
       h.classList.add('intro-skip'); off(); setTimeout(finish, 300);
     }
     evs.forEach(function (e) { addEventListener(e, skip, { capture: true, passive: true }); });
+    el.addEventListener('animationstart', function (e) { if (e.animationName === 'pt-iris') el.classList.add('is-iris'); });
     el.addEventListener('animationend', function (e) { if (e.animationName === 'pt-intro-end') finish(); });
     setTimeout(finish, 2300);
+
+    // Synchronisation, une seule fois : les animations composées (transform, opacity) ne reçoivent
+    // leur heure de départ qu’une fois la première image peinte, les autres (traits, remplissages,
+    // ouverture) dès le calcul de style. Sur un appareil lent, l’écart dépasse 200 ms et la balle
+    // tomberait pendant l’ouverture. On cale le calque, le haut de page et l’en-tête sur la même
+    // heure de départ, celle des premières animations du calque. Aucune lecture de mise en page.
+    if (!tl || !window.Promise || !document.getAnimations) return;
+    new Promise(function (r) {
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', r, { once: true }); else r();
+    }).then(function () {
+      // Animations CSS seulement (pas les transitions), et une animation annulée ne bloque rien.
+      var list = document.getAnimations().filter(function (a) { return a.timeline === tl && a.animationName; });
+      return Promise.all(list.map(function (a) { return a.ready.catch(function () {}); })).then(function () { return list; });
+    }).then(function (list) {
+      if (done || h.classList.contains('intro-skip')) return;
+      var t0 = Infinity;
+      anims().forEach(function (a) { if (a.startTime != null && a.startTime < t0) t0 = a.startTime; });
+      if (!isFinite(t0)) return;
+      list.forEach(function (a) { if (a.startTime > t0 && a.startTime - t0 < 600) a.startTime = t0; });
+    }).catch(function () {});
   })();
 </script>

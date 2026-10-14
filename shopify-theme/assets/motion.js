@@ -1,26 +1,25 @@
-/* Pattoune v9 « Cinéma » · mouvement (chantier A). JS vanilla, sans dépendance.
-   Aucun écouteur « scroll » : IntersectionObserver, ResizeObserver et animations CSS seulement.
-   Aucune lecture de mise en page en boucle : seulement au survol (pointerenter) ou sur un événement
-   ponctuel (ajout au panier). Tous les modules sont relançables sur une racine (éditeur de thème) et
-   idempotents (drapeau pt* sur chaque élément lié).
-   API (FINAL_SPEC § 3.4) : data-reveal, data-reveal-group, data-count-to, data-story, data-magnetic,
-   data-hero, data-hero-pause, data-hd, data-hd-sentinel, data-add-total, data-offer-card,
-   événement « pattoune:cart-added » (émis par theme.js). */
+/* Pattoune v9 « Cinéma » · mouvement (chantier A). JS vanilla, sans dépendance, sans écouteur « scroll »
+   (IntersectionObserver et animations CSS). Mise en page lue seulement au survol ou sur un événement
+   ponctuel. Modules relançables sur une racine (éditeur) et idempotents (drapeau pt* par élément).
+   API : data-reveal(-group), data-count-to, data-story, data-magnetic, data-hero(-pause), data-hd,
+   data-hd-sentinel, data-add-total, data-offer-card, événement « pattoune:cart-added » (theme.js). */
 (() => {
   const h = document.documentElement;
+  // Échec au démarrage : états cachés retirés (tout visible), pt-js non posé.
+  const off = (err) => { h.classList.remove('pt-motion'); throw err; };
+  try {
   const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const animated = h.classList.contains('pt-motion'); // faux si calme, ou si le filet de 4 s est passé
   const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
   const IO = 'IntersectionObserver' in window;
   const WAAPI = !!Element.prototype.animate;
-  h.classList.add('pt-js');
 
   const E = { out: 'cubic-bezier(.16, 1, .3, 1)', inout: 'cubic-bezier(.76, 0, .24, 1)', spring: 'cubic-bezier(.34, 1.56, .64, 1)' };
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
   /** Éléments correspondant à sel dans root, root compris. */
   const within = (root, sel) => (root.matches && root.matches(sel) ? [root] : []).concat($$(sel, root));
 
-  /* ------------------------------------------------------------- Reveal */
+  /* ---------- Reveal */
   const show = (el) => {
     if (el.classList.contains('is-in')) return;
     el.classList.add('is-in');
@@ -51,9 +50,9 @@
     });
   }
 
-  /* -------------------------------------------------------------- Shine */
-  // Calque de reflet des mots mis en valeur (voir motion.css § 5) : vide, masqué aux lecteurs
-  // d’écran ; le texte clair vient de data-t par ::after (hors textContent et innerText).
+  /* ---------- Shine */
+  // Reflet des mots mis en valeur (motion.css § 5) : calque vide caché aux lecteurs d’écran,
+  // texte clair rendu par ::after depuis data-t.
   function bindShine(root) {
     if (!animated) return;
     within(root, '.pt-hl .pt-w > span').forEach((s) => {
@@ -67,9 +66,9 @@
     });
   }
 
-  /* -------------------------------------------------------------- Count */
-  // Le HTML porte la valeur finale (juste sans JS). Le comptage part au moment où le bloc
-  // qui le contient se révèle, décalé comme lui, puis s’arrête exactement sur la valeur finale.
+  /* ---------- Count */
+  // Le HTML porte la valeur finale (juste sans JS) ; le comptage part avec la révélation du bloc
+  // (même décalage) et s’arrête exactement sur la valeur finale.
   function count(el, host) {
     if (el.ptCounted || !animated) return;
     el.ptCounted = true;
@@ -99,49 +98,42 @@
     });
   }
 
-  /* ----------------------------------------------------------- Odometer */
-  // Remplace le texte de el par text : une copie lisible (.pt-sr) et une version animée masquée
-  // aux lecteurs d’écran, un caractère par fenêtre. Les caractères changés (alignés à droite)
-  // montent de 100 % pendant que l’ancien sort par le haut.
+  /* ---------- Odometer */
+  // Texte de el → copie lisible (.pt-sr) + version animée cachée aux lecteurs d’écran, un caractère
+  // par fenêtre ; les caractères changés (alignés à droite) montent, l’ancien sort par le haut.
+  const span = (cls, txt) => {
+    const e = document.createElement('span');
+    if (cls) e.className = cls;
+    if (txt != null) e.textContent = txt;
+    return e;
+  };
   function odometer(el, text) {
     if (!el) return;
     const prev = el.ptOdo != null ? el.ptOdo : el.textContent.trim();
     el.ptOdo = text;
-    const sr = document.createElement('span');
-    sr.className = 'pt-sr';
-    sr.textContent = text;
-    const odo = document.createElement('span');
-    odo.className = 'pt-odo';
+    const sr = span('pt-sr', text);
+    const odo = span('pt-odo');
     odo.setAttribute('aria-hidden', 'true');
-    const chars = Array.from(text);
-    const old = Array.from(prev);
+    const chars = Array.from(text), old = Array.from(prev);
     const shift = chars.length - old.length;
     const roll = !calm && WAAPI && prev !== text;
     let k = 0;
     chars.forEach((ch, i) => {
-      const c = document.createElement('span');
-      c.className = 'pt-odo__c';
-      const s = document.createElement('span');
-      s.textContent = ch;
-      c.appendChild(s);
-      odo.appendChild(c);
+      const c = odo.appendChild(span('pt-odo__c'));
+      const s = c.appendChild(span('', ch));
       const was = old[i - shift];
       if (!roll || ch === was) return;
-      const delay = k++ * 30;
-      const opts = { duration: 420, delay, easing: E.out, fill: 'backwards' };
+      const opts = { duration: 420, delay: k++ * 30, easing: E.out, fill: 'backwards' };
       s.animate([{ transform: 'translateY(100%)', opacity: 0 }, { transform: 'none', opacity: 1 }], opts);
       if (was && was.trim()) {
-        const o = document.createElement('span');
-        o.className = 'pt-odo__old';
-        o.textContent = was;
-        c.appendChild(o);
+        const o = c.appendChild(span('pt-odo__old', was));
         o.animate([{ transform: 'none', opacity: 1 }, { transform: 'translateY(-100%)', opacity: 0 }], { ...opts, fill: 'forwards' }).finished.then(() => o.remove(), () => o.remove());
       }
     });
     el.replaceChildren(sr, odo);
   }
 
-  /* -------------------------------------------------------------- Story */
+  /* ---------- Story */
   function bindStory(root) {
     within(root, '[data-story]').forEach((story) => {
       if (story.ptStory) return;
@@ -174,7 +166,7 @@
     });
   }
 
-  /* --------------------------------------------------------- OfferTotal */
+  /* ---------- OfferTotal */
   // Après theme.js (écouteur du formulaire), le total de l’offre cochée roule dans le bouton.
   document.addEventListener('change', (e) => {
     const t = e.target;
@@ -187,7 +179,7 @@
     if (total && target) odometer(target, total.textContent.trim());
   });
 
-  /* --------------------------------------------------------- HeaderPill */
+  /* ---------- HeaderPill */
   function bindHeader() {
     const hd = document.querySelector('[data-hd]');
     if (!hd || hd.ptHd) return;
@@ -206,15 +198,14 @@
     }
   }
 
-  /* --------------------------------------------------------------- Hero */
+  /* ---------- Hero */
   function bindHero(root) {
     within(root, '[data-hero]').forEach((hero) => {
       if (hero.ptHero) return;
       hero.ptHero = true;
       const video = hero.querySelector('video');
       const btn = hero.querySelector('[data-hero-pause]');
-      let paused = false;
-      let visible = true;
+      let paused = false, visible = true;
       const sync = () => {
         hero.classList.toggle('is-paused', paused);
         if (!video) return;
@@ -248,11 +239,9 @@
       if (fine && animated) bindLight(hero);
     });
   }
-  // Lumière vivante : --pt-px / --pt-py (−0,5 à 0,5) au plus une fois par image, sans lecture de mise en page.
+  // Lumière vivante : --pt-px / --pt-py (−0,5 à 0,5), au plus une fois par image, sans mesure.
   function bindLight(hero) {
-    let raf = 0;
-    let x = 0;
-    let y = 0;
+    let raf = 0, x = 0, y = 0;
     const write = () => {
       raf = 0;
       hero.style.setProperty('--pt-px', x.toFixed(3));
@@ -265,22 +254,18 @@
       if (!raf) raf = requestAnimationFrame(write);
     });
     hero.addEventListener('pointerleave', () => {
-      x = 0;
-      y = 0;
+      x = y = 0;
       if (!raf) raf = requestAnimationFrame(write);
     });
   }
 
-  /* ----------------------------------------------------------- Magnetic */
+  /* ---------- Magnetic */
   function bindMagnets(root) {
     if (!(fine && animated)) return;
     within(root, '[data-magnetic]').forEach((el) => {
       if (el.ptMagnet) return;
       el.ptMagnet = true;
-      let r = null;
-      let raf = 0;
-      let tx = 0;
-      let ty = 0;
+      let r = null, raf = 0, tx = 0, ty = 0;
       const write = () => {
         raf = 0;
         el.style.translate = `${tx.toFixed(1)}px ${ty.toFixed(1)}px`;
@@ -306,31 +291,24 @@
     });
   }
 
-  /* --------------------------------------------------------------- Cart */
+  /* ---------- Cart */
   const bump = () => {
     if (calm || !WAAPI) return;
     $$('[data-cart-count]').forEach((c) => c.animate([{ scale: 1 }, { scale: 1.35 }, { scale: 1 }], { duration: 500, easing: E.spring }));
   };
-  // La balle part du bouton d’achat, monte de 120 px puis plonge dans le panier de l’en-tête
-  // en tournant et en rapetissant : x linéaire sur le conteneur, y (avec rotation, échelle) sur l’image.
+  // Balle du bouton d’achat au panier de l’en-tête : x linéaire sur le conteneur ; montée de 120 px,
+  // plongée, rotation et réduction sur l’image.
   function fly(from, to) {
     const a = from.getBoundingClientRect();
     const b = to.getBoundingClientRect();
     if (!a.width || !b.width) return Promise.resolve();
-    const x0 = a.left + a.width / 2 - 20;
-    const y0 = a.top + a.height / 2 - 20;
-    const x1 = b.left + b.width / 2 - 20;
-    const y1 = b.top + b.height / 2 - 20;
-    const wrap = document.createElement('div');
-    wrap.className = 'pt-fly';
+    const x0 = a.left + a.width / 2 - 20, y0 = a.top + a.height / 2 - 20;
+    const x1 = b.left + b.width / 2 - 20, y1 = b.top + b.height / 2 - 20;
+    const wrap = document.body.appendChild(span('pt-fly'));
     wrap.setAttribute('aria-hidden', 'true');
-    const img = document.createElement('img');
-    img.src = (window.theme && window.theme.ballSrc) || '';
+    const img = wrap.appendChild(new Image(40, 40));
     img.alt = '';
-    img.width = 40;
-    img.height = 40;
-    wrap.appendChild(img);
-    document.body.appendChild(wrap);
+    img.src = window.theme.ballSrc;
     const dur = 650;
     wrap.animate([{ transform: `translateX(${x0}px)` }, { transform: `translateX(${x1}px)` }], { duration: dur, easing: 'linear', fill: 'both' });
     return img.animate([
@@ -359,7 +337,7 @@
     }).observe(d, { attributes: true, attributeFilter: ['open'] });
   }
 
-  /* ------------------------------------------------------------- Editor */
+  /* ---------- Editor */
   const init = (root = document) => {
     bindShine(root);
     bindReveals(root);
@@ -376,6 +354,9 @@
   document.addEventListener('shopify:section:select', reveal);
   document.addEventListener('shopify:block:select', reveal);
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => init());
-  else init();
+  // pt-js seulement une fois tout branché (sinon le filet de 4 s du <head> joue).
+  const start = () => { try { init(); h.classList.add('pt-js'); } catch (e) { off(e); } };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+  else start();
+  } catch (e) { off(e); }
 })();
