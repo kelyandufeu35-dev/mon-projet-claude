@@ -122,8 +122,8 @@
         "type": "number",
         "id": "free_shipping_threshold",
         "label": "Livraison offerte dès (€)",
-        "default": 35,
-        "info": "0 = pas de jauge de livraison offerte."
+        "default": 0,
+        "info": "0 = livraison offerte sans minimum (pas de jauge). La boutique offre la livraison dès 1 balle."
       },
       {
         "type": "text",
