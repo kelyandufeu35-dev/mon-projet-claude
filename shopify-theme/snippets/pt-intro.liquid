@@ -121,10 +121,15 @@
     var h = document.documentElement, el = document.getElementById('pt-intro');
     if (!el) return;
     if (!h.classList.contains('has-intro')) { el.remove(); return; }
-    var done = false, evs = ['pointerdown', 'keydown', 'wheel', 'touchstart', 'scroll'];
+    var done = false, started = false, evs = ['pointerdown', 'keydown', 'wheel', 'touchstart', 'scroll'];
     var tl = document.timeline, anims = function () { return el.getAnimations ? el.getAnimations({ subtree: true }) : []; };
     function off() { evs.forEach(function (e) { removeEventListener(e, skip, true); }); }
-    function finish() { if (done) return; done = true; off(); h.classList.add('intro-done'); el.remove(); }
+    // Fin : si le calque n’a jamais été animé (rendu très tardif), pas d’intro et départ immédiat du haut de page.
+    function finish() {
+      if (done) return; done = true; off();
+      if (!started) { h.classList.remove('has-intro'); h.style.setProperty('--pt-t0', '140ms'); }
+      h.classList.add('intro-done'); el.remove();
+    }
     function skip() {
       if (h.classList.contains('intro-skip')) return;
       // Temps déjà écoulé dans la chorégraphie, mesuré sur l’horloge des animations CSS (elles
@@ -141,9 +146,14 @@
       h.classList.add('intro-skip'); off(); setTimeout(finish, 300);
     }
     evs.forEach(function (e) { addEventListener(e, skip, { capture: true, passive: true }); });
-    el.addEventListener('animationstart', function (e) { if (e.animationName === 'pt-iris') el.classList.add('is-iris'); });
+    // Minuteur de secours armé au premier rai de lumière réellement animé (et non à l’exécution du
+    // script : onglet en arrière-plan, rendu retardé) ; plafond absolu de 6 s.
+    el.addEventListener('animationstart', function (e) {
+      if (e.animationName === 'pt-iris') el.classList.add('is-iris');
+      if (e.animationName === 'pt-beam-on' && !started) { started = true; setTimeout(finish, 2100); }
+    });
     el.addEventListener('animationend', function (e) { if (e.animationName === 'pt-intro-end') finish(); });
-    setTimeout(finish, 2300);
+    setTimeout(finish, 6000);
 
     // Synchronisation, une seule fois : les animations composées (transform, opacity) ne reçoivent
     // leur heure de départ qu’une fois la première image peinte, les autres (traits, remplissages,

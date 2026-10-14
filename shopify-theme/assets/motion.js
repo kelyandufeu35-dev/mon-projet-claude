@@ -348,11 +348,19 @@
     bindHeader();
     bindDrawer();
   };
-  document.addEventListener('shopify:section:load', (e) => init(e.target));
+  document.addEventListener('shopify:section:load', (e) => {
+    e.target.classList.add('pt-static');
+    init(e.target);
+    within(e.target, '[data-reveal]').forEach(show);
+  });
   // Dans l’éditeur, la section ou le bloc choisi s’affiche aussitôt en entier.
   const reveal = (e) => within(e.target, '[data-reveal]').forEach(show);
   document.addEventListener('shopify:section:select', reveal);
   document.addEventListener('shopify:block:select', reveal);
+
+  // Défilement doux seulement après le chargement (l’arrivée sur /#ancre saute directement).
+  const loaded = () => requestAnimationFrame(() => h.classList.add('pt-loaded'));
+  if (document.readyState === 'complete') loaded(); else addEventListener('load', loaded, { once: true });
 
   // pt-js seulement une fois tout branché (sinon le filet de 4 s du <head> joue).
   const start = () => { try { init(); h.classList.add('pt-js'); } catch (e) { off(e); } };

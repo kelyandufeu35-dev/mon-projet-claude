@@ -47,6 +47,11 @@ html.has-intro { --pt-t0: 1380ms; }
 
 /* -------------------------------------------------------------- 2. Base */
 html { scroll-padding-top: calc(var(--pt-hd-h) + 16px); }
+/* Arrivée avec une ancre (/#faq) : saut direct, pas de défilement doux au chargement (pt-loaded : motion.js). */
+html:not(.pt-loaded) { scroll-behavior: auto !important; }
+/* Éditeur de thème : une section rechargée s’affiche telle quelle, sans rejouer sa chorégraphie. */
+.pt-static :is([data-reveal], [data-reveal] *, .pt-hero__curtain, .pt-hero__media > *, .pt-hero__copy *),
+.pt-static :is([data-reveal], [data-reveal] *, .pt-hero__copy *)::before, .pt-static :is([data-reveal], [data-reveal] *)::after { animation: none !important; }
 /* Rebond du défilement en haut de l’accueil : on reste dans la nuit du haut de page. */
 html:has(> body.template-index) { background: var(--pt-ink-deep); }
 :focus-visible { outline: 3px solid var(--pt-ink); outline-offset: 3px; border-radius: 8px; }
@@ -165,7 +170,7 @@ details[open] > summary .pt-plus::after { rotate: 135deg; }
 .pt-hd__count { display: grid; place-items: center; min-width: 28px; height: 28px; padding: 0 6px; border-radius: 999px; background: var(--pt-sun); color: var(--pt-ink); font-size: .8125rem; font-weight: 800; font-variant-numeric: tabular-nums; }
 .pt-hd__count[data-empty] { background: rgb(244 236 226 / .16); color: var(--pt-cream); }
 /* Entrée (accueil) : l’en-tête descend une fois la scène installée */
-html.pt-motion .template-index .pt-hd { animation: pt-hd-in var(--pt-d-reveal) var(--pt-e-out) calc(var(--pt-t0) + 500ms) backwards; }
+html.pt-motion:not(.pt-vt) .template-index .pt-hd { animation: pt-hd-in var(--pt-d-reveal) var(--pt-e-out) calc(var(--pt-t0) + 500ms) backwards; }
 @keyframes pt-hd-in { from { opacity: 0; translate: 0 -16px; } }
 
 /* ---------------------------------------------------- 5. Haut de page */

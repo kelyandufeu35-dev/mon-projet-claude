@@ -4,12 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     {%- comment -%}
-      Mouvement, avant toute feuille de style pour éviter tout flash :
-      - html.pt-motion : états cachés des révélations (jamais avec « réduire les animations ») ;
-        filet de sécurité : retiré si motion.js n’a pas démarré (html.pt-js) 4 s après ;
-      - html.has-intro : intro d’arrivée, accueil seulement, une fois par visite (sessionStorage),
-        jamais dans l’éditeur de thème ni si le réglage « Intro animée » est décoché.
-      Si le stockage est bloqué, l’exception tombe après pt-motion : pas d’intro, mais des révélations.
+      Mouvement, avant toute feuille de style (aucun flash) :
+      - html.pt-motion : états cachés des révélations (jamais avec « réduire les animations »),
+        retirés si motion.js n’a pas démarré (html.pt-js) 4 s après ;
+      - html.has-intro : intro d’arrivée, seulement si l’accueil est la 1re page vue de la visite
+        (drapeau sessionStorage posé sur toutes les pages), page visible et non pré-rendue, sans
+        ancre (#faq…), hors éditeur de thème et si le réglage « Intro animée » est coché ;
+      - html.pt-vt : arrivée par transition de page (l’en-tête reste fixe, sans entrée).
     {%- endcomment -%}
     {%- liquid
       assign pt_intro = false
@@ -21,12 +22,20 @@
     -%}
     <script>
       (function (h) {
+        var seen = '1';
+        try { seen = sessionStorage.getItem('pt-intro'); sessionStorage.setItem('pt-intro', '1'); } catch (e) { seen = '1'; }
         try {
+          addEventListener('pagereveal', function (e) { if (e.viewTransition) h.classList.add('pt-vt'); });
           if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
           h.classList.add('pt-motion');
           setTimeout(function () { if (!h.classList.contains('pt-js')) h.classList.remove('pt-motion'); }, 4000);
           {%- if pt_intro %}
-          if (!sessionStorage.getItem('pt-intro')) { sessionStorage.setItem('pt-intro', '1'); h.classList.add('has-intro'); }
+          if (!seen && !location.hash && document.visibilityState === 'visible' && !document.prerendering) {
+            h.classList.add('has-intro');
+            var l = document.createElement('link');
+            l.rel = 'preload'; l.as = 'image'; l.type = 'image/webp'; l.href = {{ 'pt-balle-3d.webp' | asset_url | json }};
+            document.head.appendChild(l);
+          }
           {%- endif %}
         } catch (e) {}
       })(document.documentElement);
@@ -65,9 +74,6 @@
 
     {{ 'bricolage-latin.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
     {{ 'figtree-latin.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
-    {%- if pt_intro %}
-      {{ 'pt-balle-3d.webp' | asset_url | preload_tag: as: 'image', type: 'image/webp' }}
-    {%- endif %}
     <style>
       @font-face {
         font-family: 'Bricolage Grotesque';
