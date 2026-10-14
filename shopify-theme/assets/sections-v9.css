@@ -11,10 +11,11 @@
 /* ============================================================ 1. Le principe */
 .pt-principe { position: relative; z-index: 1; overflow-x: clip; padding-block: clamp(72px, 9vw, 140px) clamp(56px, 6vw, 96px); background: var(--pt-cream); color: var(--pt-ink); }
 /* L’aube : l’horizon crème se pose sur le noir du haut de page puis s’aplatit au défilement.
-   Comme les effets liés au défilement de motion.css, elle n’est créée qu’une fois l’intro passée. */
+   Active dès le chargement, intro comprise : rien d’autre n’anime ce calque, et l’attendre la fin de
+   l’intro faisait sauter la courbe (pleine pendant l’intro, aplatie d’un coup à sa fin). */
 .pt-principe::before { content: ''; position: absolute; left: 0; right: 0; bottom: calc(100% - 1px); height: clamp(28px, 4.2vw, 64px); border-radius: 50% 50% 0 0 / 100% 100% 0 0; background: var(--pt-cream); transform-origin: 50% 100%; pointer-events: none; }
 @supports (animation-timeline: view()) {
-  html.pt-motion:not(.has-intro:not(.intro-skip, .intro-done)) .pt-principe::before { animation: ptb-dawn linear both; animation-timeline: view(); animation-range: entry 0% entry 70%; }
+  html.pt-motion .pt-principe::before { animation: ptb-dawn linear both; animation-timeline: view(); animation-range: entry 0% entry 70%; }
 }
 @keyframes ptb-dawn { from { scale: 1 1; } to { scale: 1 .2; } }
 .pt-principe__head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 400px); gap: 28px 48px; margin-bottom: clamp(64px, 9vw, 140px); }
