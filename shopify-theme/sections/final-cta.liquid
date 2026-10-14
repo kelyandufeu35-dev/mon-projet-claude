@@ -1,44 +1,83 @@
-<section class="section final">
-  <div class="final__paws" aria-hidden="true">
-    {%- for i in (1..6) -%}<span style="--i: {{ i }}">{% render 'icon', name: 'paw' %}</span>{%- endfor -%}
-  </div>
-  <div class="wrap final__inner">
-    <div class="final__text">
-      {%- if section.settings.title != blank -%}<h2 class="final__title">{{ section.settings.title | escape }}</h2>{%- endif -%}
-      {%- if section.settings.button_label != blank -%}
-        <a href="{{ section.settings.button_link | default: '#contenu' }}" class="btn btn--ink btn--lg" data-scroll-buy>{{ section.settings.button_label | escape }}</a>
-      {%- endif -%}
+{%- comment -%}
+  Clôture (v9 Cinéma) : la nuit retombe en cercle depuis la patte (iris au
+  défilement, écho de l’intro), le faisceau s’allume, la patte se dessine et la
+  balle retombe à sa place de coussinet. Styles : assets/sections-v9.css.
+{%- endcomment -%}
+{%- liquid
+  assign title_id = 'pt-fin-title-' | append: section.id
+  assign link = section.settings.button_link | default: '#acheter'
+-%}
+<section class="pt-fin pt-dark" data-scroll="iris" data-sticky-stop aria-labelledby="{{ title_id }}" style="--pt-iris-y:22%">
+  <span class="pt-fin__beam" data-reveal="none" aria-hidden="true"></span>
+  <div class="pt-wrap pt-fin__inner">
+    <div class="pt-fin__mark" data-reveal="none" aria-hidden="true">
+      <span class="pt-fin__halo"></span>
+      <svg viewBox="-330 -260 660 620" focusable="false">
+        <g class="pt-fin__toes">
+          <ellipse pathLength="1" style="--pt-k:0" cx="-250" cy="-30" rx="70" ry="90" transform="rotate(-28 -250 -30)"/>
+          <ellipse pathLength="1" style="--pt-k:1" cx="-100" cy="-150" rx="74" ry="98" transform="rotate(-9 -100 -150)"/>
+          <ellipse pathLength="1" style="--pt-k:2" cx="100" cy="-150" rx="74" ry="98" transform="rotate(9 100 -150)"/>
+          <ellipse pathLength="1" style="--pt-k:3" cx="250" cy="-30" rx="70" ry="90" transform="rotate(28 250 -30)"/>
+        </g>
+      </svg>
+      <span class="pt-fin__ripple"></span>
+      <div class="pt-fin__ball"><img src="{{ 'pt-balle-3d.webp' | asset_url }}" alt="" width="236" height="236" loading="lazy" decoding="async"></div>
     </div>
-    <div class="final__art">{% render 'toy-scene', scene: 'party' %}</div>
+    {%- if section.settings.title != blank -%}
+      <h2 class="pt-h2 pt-fin__title" id="{{ title_id }}" data-reveal="mask" style="--pt-d:1; --pt-hl-color: var(--pt-sun)">{% render 'pt-split', text: section.settings.title, hl: section.settings.highlight %}</h2>
+    {%- endif -%}
+    {%- if section.settings.button_label != blank -%}
+      <a class="pt-btn pt-btn--sun pt-btn--xl pt-fin__btn" href="{{ link }}" data-reveal="up" style="--pt-d:3" data-magnetic>
+        {{- section.settings.button_label | escape -}}
+        <span class="pt-btn__arrow" aria-hidden="true">{% render 'icon', name: 'arrow' %}</span>
+      </a>
+    {%- endif -%}
+    {%- if section.settings.note != blank -%}
+      <p class="pt-fin__note" data-reveal="up" style="--pt-d:4">{{ section.settings.note | escape }}</p>
+    {%- endif -%}
   </div>
 </section>
 
 {% schema %}
 {
-  "name": "Appel à l’action",
+  "name": "Clôture",
+  "class": "section-fin",
   "settings": [
     {
       "type": "text",
       "id": "title",
       "label": "Titre",
-      "default": "Une balle, une poignée de croquettes, et le salon redevient calme."
+      "default": "Une balle, quelques croquettes, et le salon redevient calme."
+    },
+    {
+      "type": "text",
+      "id": "highlight",
+      "label": "Mots en jaune",
+      "default": "calme.",
+      "info": "Doivent apparaître tels quels dans le titre."
     },
     {
       "type": "text",
       "id": "button_label",
       "label": "Texte du bouton",
-      "default": "Choisir ma couleur"
+      "default": "Je commande ma balle"
     },
     {
       "type": "url",
       "id": "button_link",
       "label": "Lien du bouton",
-      "info": "Vide = remonte vers le bouton d’achat."
+      "info": "Vide = descend vers la zone d’achat (#acheter)."
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Petite ligne sous le bouton",
+      "default": "Livraison offerte · 14 jours pour changer d’avis"
     }
   ],
   "presets": [
     {
-      "name": "Appel à l’action"
+      "name": "Clôture"
     }
   ]
 }

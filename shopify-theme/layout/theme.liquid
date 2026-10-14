@@ -3,10 +3,38 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="theme-color" content="{{ settings.color_accent }}">
+    {%- comment -%}
+      Mouvement, avant toute feuille de style pour éviter tout flash :
+      - html.pt-motion : états cachés des révélations (jamais avec « réduire les animations ») ;
+        filet de sécurité : retiré si motion.js n’a pas démarré (html.pt-js) 4 s après ;
+      - html.has-intro : intro d’arrivée, accueil seulement, une fois par visite (sessionStorage),
+        jamais dans l’éditeur de thème ni si le réglage « Intro animée » est décoché.
+      Si le stockage est bloqué, l’exception tombe après pt-motion : pas d’intro, mais des révélations.
+    {%- endcomment -%}
+    {%- liquid
+      assign pt_intro = false
+      if settings.intro_enable and request.page_type == 'index'
+        unless request.design_mode
+          assign pt_intro = true
+        endunless
+      endif
+    -%}
+    <script>
+      (function (h) {
+        try {
+          if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+          h.classList.add('pt-motion');
+          setTimeout(function () { if (!h.classList.contains('pt-js')) h.classList.remove('pt-motion'); }, 4000);
+          {%- if pt_intro %}
+          if (!sessionStorage.getItem('pt-intro')) { sessionStorage.setItem('pt-intro', '1'); h.classList.add('has-intro'); }
+          {%- endif %}
+        } catch (e) {}
+      })(document.documentElement);
+    </script>
+    <meta name="theme-color" content="{{ settings.color_ink }}">
     <link rel="canonical" href="{{ canonical_url }}">
     {%- if settings.favicon == blank -%}
-      <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%232338e8'/%3E%3Cg fill='%23ffc23a'%3E%3Cellipse cx='32' cy='42' rx='12' ry='10'/%3E%3Ccircle cx='17' cy='29' r='6'/%3E%3Ccircle cx='26' cy='20' r='6'/%3E%3Ccircle cx='38' cy='20' r='6'/%3E%3Ccircle cx='47' cy='29' r='6'/%3E%3C/g%3E%3C/svg%3E">
+      <link rel="icon" type="image/svg+xml" href="{{ 'pt-favicon.svg' | asset_url }}">
     {%- endif -%}
     {%- if settings.favicon != blank -%}
       <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 64, height: 64 }}">
@@ -37,6 +65,9 @@
 
     {{ 'bricolage-latin.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
     {{ 'figtree-latin.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+    {%- if pt_intro %}
+      {{ 'pt-balle-3d.webp' | asset_url | preload_tag: as: 'image', type: 'image/webp' }}
+    {%- endif %}
     <style>
       @font-face {
         font-family: 'Bricolage Grotesque';
@@ -78,15 +109,21 @@
         --cobalt: {{ settings.color_accent }};
         --sun: {{ settings.color_button }};
         --bubble: {{ settings.color_pop }};
+        --red: {{ settings.color_ball }};
       }
     </style>
     {{ 'theme.css' | asset_url | stylesheet_tag }}
+    {{ 'motion.css' | asset_url | stylesheet_tag }}
+    {{ 'sections-v9.css' | asset_url | stylesheet_tag }}
     <script src="{{ 'theme.js' | asset_url }}" defer></script>
+    <script src="{{ 'motion.js' | asset_url }}" defer></script>
 
     {{ content_for_header }}
   </head>
 
   <body class="template-{{ template.name }}">
+    {%- if pt_intro -%}{% render 'pt-intro' %}{%- endif -%}
+    <span class="pt-hd-sentinel" data-hd-sentinel aria-hidden="true"></span>
     <a class="skip" href="#contenu">{{ 'general.skip' | t }}</a>
     {% sections 'header-group' %}
     <main id="contenu" tabindex="-1">
@@ -102,7 +139,8 @@
           cartChange: {{ routes.cart_change_url | append: '.js' | json }},
           cart: {{ routes.cart_url | json }}
         },
-        processingDays: {{ settings.processing_days | default: 0 | json }}
+        processingDays: {{ settings.processing_days | default: 0 | json }},
+        ballSrc: {{ 'pt-balle-3d.webp' | asset_url | json }}
       };
     </script>
   </body>

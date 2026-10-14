@@ -1,13 +1,18 @@
+{%- comment -%}
+  Zone d’achat de l’accueil (v9 Cinéma) : la balle, ses offres et le bouton.
+  Révélations au défilement sur la galerie et le titre seulement ; le prix, les
+  offres, le bouton et les garanties sont toujours visibles. Voir snippets/product-buy.liquid.
+{%- endcomment -%}
 {%- assign featured = section.settings.product -%}
-<section class="hero" id="acheter" aria-label="Produit">
-  <div class="wrap">
+<section class="pt-achat" id="{{ section.settings.anchor | default: 'acheter' | escape }}" aria-labelledby="pt-buy-title-{{ section.id }}">
+  <div class="pt-wrap">
     {%- if featured != blank -%}
-      {% render 'product-buy', product: featured, section: section %}
+      {% render 'product-buy', product: featured, section: section, reveal: true %}
     {%- else -%}
-      <div class="placeholder-box">
-        <p class="eyebrow">À configurer</p>
-        <h1 class="h2">Choisis ton produit</h1>
-        <p class="lead">Dans l’éditeur de thème, clique sur cette section puis sélectionne le produit à mettre en avant.</p>
+      <div class="pt-achat__empty">
+        <p class="pt-eyebrow pt-eyebrow--red">À configurer</p>
+        <h2 class="pt-h2" id="pt-buy-title-{{ section.id }}">Choisis ton produit</h2>
+        <p class="pt-lead">Dans l’éditeur de thème, clique sur cette section puis sélectionne le produit à mettre en avant.</p>
       </div>
     {%- endif -%}
   </div>
@@ -15,8 +20,8 @@
 
 {% schema %}
 {
-  "name": "Produit vedette",
-  "class": "section-product",
+  "name": "Zone d’achat",
+  "class": "section-achat",
   "settings": [
     {
       "type": "product",
@@ -28,26 +33,21 @@
       "id": "title_as_h1",
       "label": "Titre principal de la page (H1)",
       "default": true,
-      "info": "À laisser coché sur la page d’accueil."
+      "info": "À décocher sur l’accueil, où l’accroche du haut de page est déjà le titre principal."
     },
     {
       "type": "text",
-      "id": "pets",
-      "label": "Pour quels animaux (séparés par des virgules)",
-      "default": "Chien, Chat"
+      "id": "eyebrow",
+      "label": "Petit texte au-dessus du titre",
+      "default": "Chiens et chats"
     },
     {
-      "type": "text",
-      "id": "subtitle",
-      "label": "Phrase d’accroche",
-      "default": "Le jouet qui occupe ton chien ou ton chat pendant que tu n’es pas là."
+      "type": "header",
+      "content": "Offres groupées"
     },
     {
-      "type": "text",
-      "id": "sticker",
-      "label": "Texte de l’autocollant tournant",
-      "info": "Affiché en cercle à côté de la photo. Vide = pas d’autocollant.",
-      "default": "LIVRAISON OFFERTE • CHATS & CHIENS • "
+      "type": "paragraph",
+      "content": "Les prix et remises se règlent dans Paramètres du thème → Livraison et remises."
     },
     {
       "type": "range",
@@ -59,68 +59,92 @@
       "default": 2
     },
     {
-      "type": "checkbox",
-      "id": "show_description",
-      "label": "Afficher la description Shopify du produit",
-      "default": true
+      "type": "text",
+      "id": "offers_legend",
+      "label": "Question au-dessus des offres",
+      "default": "Combien de balles ?"
+    },
+    {
+      "type": "text",
+      "id": "unit_singular",
+      "label": "Unité au singulier",
+      "default": "balle"
+    },
+    {
+      "type": "text",
+      "id": "unit_plural",
+      "label": "Unité au pluriel",
+      "default": "balles"
+    },
+    {
+      "type": "header",
+      "content": "Garanties sous le bouton"
+    },
+    {
+      "type": "text",
+      "id": "trust_1",
+      "label": "Garantie 1 (camion)",
+      "default": "Colis suivi",
+      "info": "« Livraison offerte » figure déjà à côté du prix."
+    },
+    {
+      "type": "text",
+      "id": "trust_2",
+      "label": "Garantie 2 (retour)",
+      "default": "14 jours pour changer d’avis"
+    },
+    {
+      "type": "text",
+      "id": "trust_3",
+      "label": "Garantie 3 (cadenas)",
+      "default": "Paiement sécurisé"
+    },
+    {
+      "type": "header",
+      "content": "Volets d’information"
     },
     {
       "type": "textarea",
       "id": "inbox",
       "label": "Ce que tu reçois (une ligne par élément)",
-      "default": "1 balle à friandises de 8 cm, en caoutchouc souple (TPE)\nUne ouverture pour glisser les croquettes sèches\nExpédiée dans un colis suivi, numéro envoyé par e-mail"
+      "default": "1 balle à friandises de 8 cm, en caoutchouc souple (TPE)\nUne ouverture pour glisser les croquettes sèches\nUn colis suivi, numéro envoyé par e-mail"
     },
     {
       "type": "checkbox",
       "id": "size_guide",
-      "label": "Afficher le guide des tailles",
+      "label": "Volet « Quelle taille pour mon animal ? »",
       "default": true
-    }
-  ],
-  "blocks": [
+    },
     {
-      "type": "highlight",
-      "name": "Point fort",
-      "limit": 6,
-      "settings": [
-        {
-          "type": "text",
-          "id": "text",
-          "label": "Texte",
-          "default": "Distribue les croquettes en roulant"
-        }
-      ]
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Volet avec la description Shopify du produit",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Barre d’achat mobile"
+    },
+    {
+      "type": "text",
+      "id": "sticky_label",
+      "label": "Nom affiché dans la barre",
+      "default": "Balle Pattoune"
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Ancre de la zone d’achat (sans #)",
+      "default": "acheter",
+      "info": "Les boutons « Je commande » pointent vers « acheter »."
     }
   ],
   "presets": [
     {
-      "name": "Produit vedette",
-      "blocks": [
-        {
-          "type": "highlight",
-          "settings": {
-            "text": "Distribue les croquettes en roulant"
-          }
-        },
-        {
-          "type": "highlight",
-          "settings": {
-            "text": "Difficulté réglable"
-          }
-        },
-        {
-          "type": "highlight",
-          "settings": {
-            "text": "Se démonte et passe sous l’eau"
-          }
-        },
-        {
-          "type": "highlight",
-          "settings": {
-            "text": "Convient aux chiens et aux chats"
-          }
-        }
-      ]
+      "name": "Zone d’achat",
+      "settings": {
+        "title_as_h1": false
+      }
     }
   ]
 }

@@ -64,8 +64,8 @@
       {
         "type": "color",
         "id": "color_paper",
-        "label": "Fond de page",
-        "default": "#f5f6fb"
+        "label": "Fond clair (crème)",
+        "default": "#f4ece2"
       },
       {
         "type": "color",
@@ -90,6 +90,24 @@
         "id": "color_pop",
         "label": "Couleur d’accent (rose)",
         "default": "#ff7aa8"
+      },
+      {
+        "type": "color",
+        "id": "color_ball",
+        "label": "Rouge de la balle (accents)",
+        "default": "#c4140f"
+      }
+    ]
+  },
+  {
+    "name": "Animation",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "intro_enable",
+        "label": "Intro animée à l’arrivée sur l’accueil",
+        "default": true,
+        "info": "Jouée une fois par visite. Jamais dans l’éditeur de thème ni quand le visiteur a choisi « réduire les animations »."
       }
     ]
   },

@@ -1,0 +1,16 @@
+{%- comment -%} Logo : 4 doigts (currentColor) + coussinet balle à facettes. id : suffixe unique (« hd », « ft »…). {%- endcomment -%}
+{%- assign k = id | default: 'mk' -%}
+<svg class="pt-logo__mark" viewBox="-330 -260 660 620" aria-hidden="true" focusable="false">
+  <defs>
+    <clipPath id="pt-mk-c-{{ k }}"><circle cx="0" cy="175" r="165"/></clipPath>
+    <radialGradient id="pt-mk-s-{{ k }}" cx="38%" cy="30%" r="80%"><stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#3a0000" stop-opacity=".55"/></radialGradient>
+    <pattern id="pt-mk-d-{{ k }}" width="70" height="70" patternUnits="userSpaceOnUse" x="-35" y="-35"><rect width="70" height="70" fill="#c4140f"/><path d="M35 0 70 35 35 70 0 35Z" fill="#d92a20"/><path d="M35 0 70 35H35Z" fill="#ef5a4a"/><path d="M0 35h35V0Z" fill="#e5463a"/><path d="M35 35h35L35 70Z" fill="#a80f0b"/></pattern>
+  </defs>
+  <g fill="currentColor">
+    <ellipse cx="-250" cy="-30" rx="70" ry="90" transform="rotate(-28 -250 -30)"/>
+    <ellipse cx="-100" cy="-150" rx="74" ry="98" transform="rotate(-9 -100 -150)"/>
+    <ellipse cx="100" cy="-150" rx="74" ry="98" transform="rotate(9 100 -150)"/>
+    <ellipse cx="250" cy="-30" rx="70" ry="90" transform="rotate(28 250 -30)"/>
+  </g>
+  <g clip-path="url(#pt-mk-c-{{ k }})"><rect x="-200" y="-20" width="400" height="400" fill="url(#pt-mk-d-{{ k }})" transform="rotate(8 0 175)"/><circle cx="0" cy="175" r="165" fill="url(#pt-mk-s-{{ k }})"/></g>
+</svg>

@@ -1,5 +1,5 @@
 {%- comment -%}
-  Icône en ligne. Paramètre : name ('paw', 'bag', 'truck', 'return', 'lock', 'nose', 'clock', 'spark', 'drop', 'check', 'close', 'minus', 'plus', 'arrow', 'mail', 'star').
+  Icône en ligne. Paramètre : name ('paw', 'bag', 'truck', 'return', 'lock', 'nose', 'clock', 'spark', 'drop', 'check', 'close', 'minus', 'plus', 'arrow', 'arrow-down', 'alert', 'pause', 'play', 'mail', 'star', 'sound').
 {%- endcomment -%}
 {%- case name -%}
   {%- when 'sound' -%}
@@ -24,6 +24,10 @@
         {%- when 'minus' -%}<path d="M6 12h12"/>
         {%- when 'plus' -%}<path d="M12 6v12M6 12h12"/>
         {%- when 'arrow' -%}<path d="M5 12h14M13 6l6 6-6 6"/>
+        {%- when 'arrow-down' -%}<path d="M12 5v14M6 13l6 6 6-6"/>
+        {%- when 'alert' -%}<circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/>
+        {%- when 'pause' -%}<path d="M9 6v12M15 6v12"/>
+        {%- when 'play' -%}<path d="M8 5.5v13l10.5-6.5Z"/>
         {%- when 'mail' -%}<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/>
       {%- endcase -%}
     </svg>

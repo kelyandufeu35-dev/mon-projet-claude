@@ -1,0 +1,6 @@
+Boucle vidéo du haut de page (hero-loop.mp4 : 540 × 720, 8 s, sans son, 418 Ko).
+Elle est déjà fournie avec le thème : rien à faire pour qu’elle s’affiche.
+Pour la remplacer : Contenu → Fichiers → Téléverser, puis choisis hero-loop.mp4 (ou ta propre vidéo MP4 sans son, format 3:4).
+Ensuite : Boutique en ligne → Thèmes → Personnaliser → Haut de page → Vidéo → sélectionne le fichier, puis Enregistrer.
+Pour changer l’image fixe affichée avant la vidéo : même section, réglage « Image fixe ».
+Si la vidéo ne joue pas (économie de données, « réduire les animations »), l’image fixe s’affiche à sa place.

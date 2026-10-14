@@ -1,107 +1,163 @@
-<section class="section" id="{{ section.settings.anchor | default: section.id }}">
-  <div class="wrap split">
-    <div>
-      {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
-      {%- if section.settings.title != blank -%}<h2 class="h2">{{ section.settings.title | escape }}</h2>{%- endif -%}
-      {%- if section.settings.text != blank -%}<p class="lead">{{ section.settings.text | escape }}</p>{%- endif -%}
-    </div>
-    <dl class="specs">
-      {%- for block in section.blocks -%}
-        <div {{ block.shopify_attributes }}>
-          <dt>{{ block.settings.label | escape }}</dt>
-          <dd>{{ block.settings.value | escape }}</dd>
-        </div>
-      {%- endfor -%}
-    </dl>
+{%- comment -%}
+  « La balle » (v9 Cinéma) : fiche visuelle. La photo se pose au centre puis
+  zoome au défilement, un anneau pointillé tourne autour ; les 4 points se
+  tracent vers la balle. Un libellé qui commence par un nombre (« 8 cm ») est
+  animé en compteur (data-count-to, motion.js). Styles : assets/sections-v9.css.
+{%- endcomment -%}
+{%- liquid
+  assign anchor = section.settings.anchor | default: 'objet'
+  assign title_id = 'pt-objet-title-' | append: section.id
+-%}
+<section class="pt-objet" id="{{ anchor | escape }}" aria-labelledby="{{ title_id }}">
+  <div class="pt-wrap pt-objet__head">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="pt-eyebrow pt-eyebrow--red" data-reveal="up">{{ section.settings.eyebrow | escape }}</p>
+    {%- endif -%}
+    <h2 class="pt-h2" id="{{ title_id }}" data-reveal="mask" style="--pt-d:1">{% render 'pt-split', text: section.settings.title %}</h2>
   </div>
+
+  <div class="pt-wrap pt-objet__grid">
+    {%- capture photo -%}
+      <figure class="pt-objet__photo" data-reveal="scale">
+        <span class="pt-objet__glow" aria-hidden="true"></span>
+        <span class="pt-objet__zoom" data-scroll="zoom">
+          {%- if section.settings.image != blank -%}
+            {%- assign photo_alt = section.settings.image.alt | default: section.settings.title -%}
+            {{ section.settings.image | image_url: width: 1040 | image_tag: loading: 'lazy', widths: '360, 520, 720, 1040', sizes: '(min-width: 900px) 520px, 92vw', alt: photo_alt, class: 'pt-objet__img' }}
+          {%- else -%}
+            <img class="pt-objet__img pt-objet__img--3d" src="{{ 'pt-balle-3d.webp' | asset_url }}" alt="{{ section.settings.title | escape }}" width="236" height="236" loading="lazy" decoding="async">
+          {%- endif -%}
+        </span>
+        <span class="pt-objet__ring" data-scroll="spin" aria-hidden="true"></span>
+      </figure>
+    {%- endcapture -%}
+
+    {%- comment -%} Points 1-2 à gauche de la balle, 3-4 à droite. {%- endcomment -%}
+    <ul class="pt-objet__specs pt-objet__specs--left" data-reveal-group>
+      {%- for block in section.blocks -%}
+        {%- if forloop.index == 3 -%}
+          </ul>
+          {{ photo }}
+          <ul class="pt-objet__specs pt-objet__specs--right" data-reveal-group>
+        {%- endif -%}
+        {%- liquid
+          comment
+            Libellé qui commence par un entier (« 8 cm ») : le nombre devient un compteur.
+          endcomment
+          assign lbl = block.settings.label | escape
+          assign num_s = ''
+          assign chars = lbl | split: ''
+          for ch in chars
+            if '0123456789' contains ch
+              assign num_s = num_s | append: ch
+            else
+              break
+            endif
+          endfor
+        -%}
+        <li class="pt-spec" data-reveal="up" style="--pt-d:{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+          {%- if num_s != blank -%}<strong><span class="pt-spec__num" data-count-to="{{ num_s }}">{{ num_s }}</span>{{ lbl | remove_first: num_s }}</strong>{%- else -%}<strong>{{ lbl }}</strong>{%- endif -%}
+          {%- if block.settings.value != blank -%}<span>{{ block.settings.value | escape }}</span>{%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+    {%- if section.blocks.size < 3 -%}{{ photo }}{%- endif -%}
+  </div>
+
+  {%- if section.settings.warning != blank -%}
+    <p class="pt-wrap pt-objet__warn" data-reveal="up">{% render 'icon', name: 'alert' %}<span>{{ section.settings.warning | escape }}</span></p>
+  {%- endif -%}
 </section>
 
 {% schema %}
 {
-  "name": "Fiche technique",
+  "name": "La balle",
+  "class": "section-objet",
   "settings": [
     {
       "type": "text",
       "id": "eyebrow",
       "label": "Petit titre",
-      "default": "Fiche technique"
+      "default": "La balle"
     },
     {
       "type": "text",
       "id": "title",
       "label": "Titre",
-      "default": "Tout ce qu’il faut savoir avant de commander."
+      "default": "Petite, souple, faite pour rouler."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Photo de la balle",
+      "info": "Format carré, balle centrée sur fond clair. Sinon, la balle 3D du thème."
     },
     {
       "type": "text",
-      "id": "text",
-      "label": "Texte",
-      "default": "Une question qui n’est pas ici ? Écris-nous, on répond sous 48 h ouvrées."
+      "id": "warning",
+      "label": "Avertissement",
+      "default": "Pas pour les grands chiens, qui pourraient l’avaler."
     },
     {
       "type": "text",
       "id": "anchor",
       "label": "Ancre de lien (sans #)",
-      "default": "le-jouet"
+      "default": "objet",
+      "info": "Le menu de l’en-tête pointe vers « objet »."
     }
   ],
   "blocks": [
     {
       "type": "spec",
-      "name": "Caractéristique",
+      "name": "Point",
+      "limit": 4,
       "settings": [
         {
           "type": "text",
           "id": "label",
-          "label": "Nom",
-          "default": "Caractéristique"
+          "label": "Libellé",
+          "default": "8 cm",
+          "info": "S’il commence par un nombre, celui-ci compte à l’apparition."
         },
         {
           "type": "text",
           "id": "value",
-          "label": "Valeur",
-          "default": "Valeur"
+          "label": "Précision",
+          "default": "De diamètre : parfaite pour les chats et les petits chiens."
         }
       ]
     }
   ],
   "presets": [
     {
-      "name": "Fiche technique",
+      "name": "La balle",
       "blocks": [
         {
           "type": "spec",
           "settings": {
-            "label": "Diamètre",
-            "value": "À compléter"
+            "label": "8 cm",
+            "value": "De diamètre : parfaite pour les chats et les petits chiens."
           }
         },
         {
           "type": "spec",
           "settings": {
-            "label": "Matière",
-            "value": "À compléter avec la fiche du fournisseur"
+            "label": "Caoutchouc souple",
+            "value": "Thermoplastique (TPE), agréable sous la patte."
           }
         },
         {
           "type": "spec",
           "settings": {
-            "label": "Poids",
-            "value": "À compléter"
+            "label": "Une ouverture",
+            "value": "Pour glisser les croquettes sèches."
           }
         },
         {
           "type": "spec",
           "settings": {
-            "label": "Entretien",
-            "value": "Démontable, lavage à l’eau tiède"
-          }
-        },
-        {
-          "type": "spec",
-          "settings": {
-            "label": "Pour",
-            "value": "Chien et chat"
+            "label": "Se rince à l’eau",
+            "value": "Eau tiède et un peu de liquide vaisselle, puis séchage."
           }
         }
       ]

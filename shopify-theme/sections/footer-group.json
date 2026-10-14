@@ -5,9 +5,12 @@
     "footer": {
       "type": "footer",
       "settings": {
-        "tagline": "Des jouets qui occupent vraiment."
+        "tagline": "Des jouets qui occupent vraiment.",
+        "show_wordmark": true
       }
     }
   },
-  "order": ["footer"]
+  "order": [
+    "footer"
+  ]
 }

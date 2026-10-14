@@ -1,0 +1,124 @@
+{%- comment -%}
+  Intro d’arrivée « Cinéma » (2 000 ms), rendue par layout/theme.liquid seulement si :
+  accueil, réglage « Intro animée » coché, hors éditeur de thème. Elle ne s’affiche que sous
+  html.has-intro (1re page vue de la visite, sans « réduire les animations »).
+  - Calque décoratif (aria-hidden) posé AU-DESSUS du contenu, qui est rendu dessous dès le départ :
+    le H1 et l’image du haut de page restent dans le HTML initial (LCP intact).
+  - Fin garantie en CSS, même sans JS : à 2 000 ms le calque passe en visibility: hidden.
+  - Passable au clic, au toucher, au clavier, à la molette et au défilement (script ci-dessous,
+    autonome) : fondu de 260 ms, et la chorégraphie du haut de page démarre aussitôt (--pt-t0).
+  Storyboard : 60 ms rai de lumière · 200 ms contour du coussinet · 240 ms doigts tracés puis remplis ·
+  640 ms la balle tombe · 820 ms « PATTOUNE » · 1 060 ms impact (écrasement, onde, doigts qui sautent) ·
+  1 300 ms ouverture en cercle depuis la balle · 2 000 ms fin.
+{%- endcomment -%}
+<style>
+  @property --pt-iris { syntax: '<length>'; inherits: true; initial-value: 0px; }
+  .pt-intro { display: none; }
+  html.has-intro .pt-intro {
+    --pt-io: var(--pt-e-out, cubic-bezier(.16, 1, .3, 1));
+    --pt-iio: var(--pt-e-inout, cubic-bezier(.76, 0, .24, 1));
+    display: block; position: fixed; inset: 0; z-index: 200; overflow: hidden; pointer-events: auto;
+    background: radial-gradient(120% 70% at 50% -10%, #20244a 0%, var(--pt-ink-deep, #0b0c18) 58%);
+    -webkit-mask: radial-gradient(circle at 50% 50%, transparent var(--pt-iris), #000 calc(var(--pt-iris) + 1px));
+            mask: radial-gradient(circle at 50% 50%, transparent var(--pt-iris), #000 calc(var(--pt-iris) + 1px));
+    animation: pt-iris 700ms var(--pt-iio) 1300ms both, pt-intro-end 1ms linear 2000ms forwards;
+  }
+  /* Liseré de lumière jaune sur le bord de l’ouverture */
+  html.has-intro .pt-intro::after {
+    content: ''; position: absolute; inset: 0; opacity: 0;
+    background: radial-gradient(circle at 50% 50%, transparent var(--pt-iris), rgb(255 194 58 / .9) calc(var(--pt-iris) + 1px), rgb(255 194 58 / 0) calc(var(--pt-iris) + 22px));
+    animation: pt-ring 700ms linear 1300ms both;
+  }
+  @keyframes pt-iris { from { --pt-iris: 0px; } to { --pt-iris: 150vmax; } }
+  @keyframes pt-ring { 0% { opacity: 0; } 12% { opacity: 1; } 70% { opacity: .8; } 100% { opacity: 0; } }
+  @keyframes pt-intro-end { to { visibility: hidden; pointer-events: none; } }
+  html.intro-skip .pt-intro { animation: pt-intro-out 260ms ease-out forwards !important; }
+  @keyframes pt-intro-out { to { opacity: 0; visibility: hidden; pointer-events: none; } }
+
+  /* Rai de lumière qui s’allume en clignotant */
+  .pt-intro__beam {
+    position: absolute; left: 50%; top: 0; width: min(64vw, 560px); height: 54%;
+    transform: translateX(-50%); transform-origin: 50% 0;
+    background: linear-gradient(to bottom, rgb(255 238 214 / .3), rgb(255 238 214 / .08) 70%, rgb(255 238 214 / 0));
+    clip-path: polygon(41% 0, 59% 0, 86% 100%, 14% 100%);
+    -webkit-mask: linear-gradient(90deg, transparent 8%, #000 38%, #000 62%, transparent 92%);
+            mask: linear-gradient(90deg, transparent 8%, #000 38%, #000 62%, transparent 92%);
+    animation: pt-beam-on 680ms linear 60ms both;
+  }
+  .pt-intro__pool { position: absolute; left: 50%; top: 50%; width: min(70vw, 520px); aspect-ratio: 3 / 1; transform: translate(-50%, 10%); background: radial-gradient(closest-side, rgb(255 238 214 / .16), transparent); animation: pt-fade-in 500ms ease-out 300ms both; }
+  @keyframes pt-beam-on {
+    0% { opacity: 0; transform: translateX(-50%) scaleY(.35); }
+    22% { opacity: .55; }
+    30% { opacity: .12; }
+    44% { opacity: .8; }
+    52% { opacity: .35; }
+    100% { opacity: 1; transform: translateX(-50%) scaleY(1); }
+  }
+  @keyframes pt-fade-in { from { opacity: 0; } }
+
+  /* Patte : contour du coussinet, 4 doigts tracés puis remplis */
+  .pt-intro__logo { position: absolute; left: 50%; top: 50%; width: clamp(200px, 34vmin, 320px); aspect-ratio: 660 / 620; transform: translate(-50%, -70.16%); }
+  .pt-intro__paw { display: block; width: 100%; height: 100%; overflow: visible; }
+  .pt-intro__toes { transform-box: fill-box; transform-origin: 50% 100%; animation: pt-toes-hop 260ms var(--pt-io) 1060ms both; }
+  .pt-intro__toes ellipse {
+    fill: var(--pt-cream, #f4ece2); fill-opacity: 0; stroke: var(--pt-cream, #f4ece2); stroke-width: 7;
+    stroke-dasharray: 1; stroke-dashoffset: 1;
+    animation: pt-draw 520ms var(--pt-iio) calc(240ms + var(--k) * 70ms) both, pt-fill 320ms ease-out calc(620ms + var(--k) * 50ms) both;
+  }
+  .pt-intro__ghost { fill: none; stroke: rgb(244 236 226 / .5); stroke-width: 4; stroke-dasharray: 1; stroke-dashoffset: 1; animation: pt-draw 600ms var(--pt-iio) 200ms both, pt-ghost-out 300ms ease-out 1060ms both; }
+  @keyframes pt-draw { to { stroke-dashoffset: 0; } }
+  @keyframes pt-fill { to { fill-opacity: 1; } }
+  @keyframes pt-toes-hop { 0% { transform: translateY(0); } 40% { transform: translateY(-14px); } 100% { transform: translateY(0); } }
+  @keyframes pt-ghost-out { to { opacity: 0; stroke: var(--pt-sun, #ffc23a); } }
+
+  /* La balle tombe et devient le coussinet : chute, écrasement, onde jaune */
+  .pt-intro__ball { position: absolute; left: 50%; top: 70.16%; width: 53.03%; aspect-ratio: 1; transform: translate(-50%, -50%); animation: pt-drop 420ms var(--pt-e-in, cubic-bezier(.55, 0, 1, .45)) 640ms both; }
+  .pt-intro__ball img { display: block; width: 100%; height: 100%; transform-origin: 50% 100%; animation: pt-squash 300ms var(--pt-io) 1060ms both; filter: drop-shadow(0 14px 18px rgb(0 0 0 / .45)); }
+  @keyframes pt-drop { from { transform: translate(-50%, calc(-50% - 62vh)) rotate(-220deg); } to { transform: translate(-50%, -50%) rotate(0deg); } }
+  @keyframes pt-squash { 0% { transform: scale(1.16, .8); } 45% { transform: scale(.95, 1.06); } 100% { transform: scale(1); } }
+  .pt-intro__dust { position: absolute; left: 50%; top: calc(70.16% + 26%); width: 90%; aspect-ratio: 4 / 1; border-radius: 50%; transform: translate(-50%, -50%) scale(.4); border: 2px solid rgb(255 194 58 / .55); opacity: 0; animation: pt-dust 520ms var(--pt-io) 1060ms forwards; }
+  @keyframes pt-dust { 0% { opacity: .9; transform: translate(-50%, -50%) scale(.4); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(1.7); } }
+
+  /* Mot-symbole : l’approche se resserre (exception validée : letter-spacing, calque isolé) */
+  .pt-intro__word { position: absolute; left: 50%; top: calc(50% + clamp(76px, 13vmin, 124px)); margin: 0; transform: translateX(-50%); font-family: var(--pt-display, sans-serif); font-weight: 700; font-stretch: 90%; font-size: 16px; line-height: 1; letter-spacing: .5em; text-indent: .5em; text-transform: uppercase; color: var(--pt-cream, #f4ece2); white-space: nowrap; animation: pt-word-in 600ms var(--pt-io) 820ms both; }
+  @keyframes pt-word-in { from { opacity: 0; transform: translate(-50%, 10px); letter-spacing: .9em; } }
+
+  @media (prefers-reduced-motion: reduce) { .pt-intro { display: none !important; } }
+</style>
+<div class="pt-intro" id="pt-intro" aria-hidden="true">
+  <div class="pt-intro__beam"></div>
+  <div class="pt-intro__pool"></div>
+  <div class="pt-intro__logo">
+    <svg class="pt-intro__paw" viewBox="-330 -260 660 620" focusable="false">
+      <circle class="pt-intro__ghost" cx="0" cy="175" r="172" pathLength="1"/>
+      <g class="pt-intro__toes">
+        <ellipse pathLength="1" style="--k:0" cx="-250" cy="-30" rx="70" ry="90" transform="rotate(-28 -250 -30)"/>
+        <ellipse pathLength="1" style="--k:1" cx="-100" cy="-150" rx="74" ry="98" transform="rotate(-9 -100 -150)"/>
+        <ellipse pathLength="1" style="--k:2" cx="100" cy="-150" rx="74" ry="98" transform="rotate(9 100 -150)"/>
+        <ellipse pathLength="1" style="--k:3" cx="250" cy="-30" rx="70" ry="90" transform="rotate(28 250 -30)"/>
+      </g>
+    </svg>
+    <span class="pt-intro__dust"></span>
+    <div class="pt-intro__ball"><img src="{{ 'pt-balle-3d.webp' | asset_url }}" alt="" width="236" height="236" decoding="async"></div>
+  </div>
+  <p class="pt-intro__word">{{ settings.brand_name | default: shop.name | escape }}</p>
+</div>
+<script>
+  (function () {
+    var h = document.documentElement, el = document.getElementById('pt-intro');
+    if (!el) return;
+    if (!h.classList.contains('has-intro')) { el.remove(); return; }
+    var t = performance.now(), done = false, evs = ['pointerdown', 'keydown', 'wheel', 'touchstart', 'scroll'];
+    function off() { evs.forEach(function (e) { removeEventListener(e, skip, true); }); }
+    function finish() { if (done) return; done = true; off(); h.classList.add('intro-done'); el.remove(); }
+    function skip() {
+      if (h.classList.contains('intro-skip')) return;
+      var dt = performance.now() - t;
+      if (dt < 1300) h.style.setProperty('--pt-t0', Math.round(dt + 60) + 'ms');
+      h.classList.add('intro-skip'); off(); setTimeout(finish, 300);
+    }
+    evs.forEach(function (e) { addEventListener(e, skip, { capture: true, passive: true }); });
+    el.addEventListener('animationend', function (e) { if (e.animationName === 'pt-intro-end') finish(); });
+    setTimeout(finish, 2300);
+  })();
+</script>

@@ -1,33 +1,62 @@
-{%- assign brand = settings.brand_name | default: shop.name -%}
-<header class="header">
-  <div class="header__inner wrap">
-    <a href="{{ routes.root_url }}" class="logo">
+{%- comment -%}
+  En-tête « pastille » (v9 Cinéma). Fixe, transparent au-dessus du haut de page de l’accueil,
+  il devient une pastille floutée dès que la sentinelle [data-hd-sentinel] sort de l’écran
+  (classe .is-scrolled posée par motion.js, sans écouteur de défilement). Ailleurs, il est
+  d’emblée en pastille (.is-solid). Le bouton « Je commande » n’apparaît qu’en pastille.
+{%- endcomment -%}
+{%- liquid
+  assign brand = settings.brand_name | default: shop.name
+  assign on_home = false
+  if template.name == 'index'
+    assign on_home = true
+  endif
+  assign anchor_base = ''
+  unless template.name == 'index' or template.name == 'product'
+    assign anchor_base = routes.root_url
+  endunless
+  assign show_cta = false
+  if section.settings.show_cta and section.settings.cta_label != blank
+    if template.name == 'index' or template.name == 'product'
+      assign show_cta = true
+    endif
+  endif
+-%}
+<header class="pt-hd{% unless on_home %} is-solid{% endunless %}" data-hd>
+  <div class="pt-hd__bar">
+    <a class="pt-logo" href="{{ routes.root_url }}" aria-label="{{ brand | escape }}, accueil">
       {%- if settings.logo != blank -%}
         {%- assign logo_style = 'width: ' | append: settings.logo_width | append: 'px' -%}
-        {{ settings.logo | image_url: width: 480 | image_tag: alt: brand, class: 'logo__img', style: logo_style, widths: '160, 240, 320, 480', sizes: '240px' }}
+        {{ settings.logo | image_url: width: 480 | image_tag: alt: '', class: 'pt-logo__img', style: logo_style, widths: '160, 240, 320, 480', sizes: '240px' }}
       {%- else -%}
-        <span class="logo__mark">{% render 'icon', name: 'paw' %}</span>
-        <span class="logo__name">{{ brand }}</span>
+        {% render 'pt-logo-mark', id: 'hd' %}
+        <span class="pt-logo__name">{{ brand | escape }}</span>
       {%- endif -%}
     </a>
 
-    <nav class="header__nav" aria-label="Navigation principale">
+    <nav class="pt-hd__nav" aria-label="Navigation principale">
       {%- if section.settings.menu != blank -%}
         {%- for link in section.settings.menu.links -%}
           <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
         {%- endfor -%}
       {%- else -%}
-        {%- comment -%} Liens par défaut tant qu'aucun menu n'est choisi. {%- endcomment -%}
-        <a href="{{ routes.root_url }}#en-action">Le jouet</a>
-        <a href="{{ routes.root_url }}#comment">Comment ça marche</a>
-        <a href="{{ routes.root_url }}#faq">Questions</a>
+        {%- comment -%} Liens par défaut tant qu’aucun menu n’est choisi : les ancres des sections. {%- endcomment -%}
+        <a href="{{ anchor_base }}#principe">Le principe</a>
+        <a href="{{ anchor_base }}#objet">La balle</a>
+        <a href="{{ anchor_base }}#faq">Questions</a>
       {%- endif -%}
     </nav>
 
-    <a href="{{ routes.cart_url }}" class="cart-btn" data-cart-open aria-label="Panier, {{ cart.item_count }} article{% if cart.item_count > 1 %}s{% endif %}">
+    {%- if show_cta -%}
+      <a class="pt-hd__cta pt-btn pt-btn--sun" href="#acheter">
+        {{- section.settings.cta_label | escape -}}
+        <span class="pt-btn__arrow" aria-hidden="true">{% render 'icon', name: 'arrow' %}</span>
+      </a>
+    {%- endif -%}
+
+    <a class="pt-hd__cart" href="{{ routes.cart_url }}" data-cart-open aria-label="Panier, {{ cart.item_count }} article{% if cart.item_count > 1 %}s{% endif %}">
       {% render 'icon', name: 'bag' %}
-      <span class="cart-btn__label">Panier</span>
-      <span class="cart-btn__count" data-cart-count{% if cart.item_count == 0 %} data-empty{% endif %}>{{ cart.item_count }}</span>
+      <span class="pt-hd__cart-label">Panier</span>
+      <span class="pt-hd__count" data-cart-count{% if cart.item_count == 0 %} data-empty{% endif %}>{{ cart.item_count }}</span>
     </a>
   </div>
 </header>
@@ -42,7 +71,20 @@
       "type": "link_list",
       "id": "menu",
       "label": "Menu",
-      "info": "Crée un menu dans Contenu → Menus (ex. « Le jouet », « Comment ça marche », « Questions », « Livraison »)."
+      "info": "Vide = « Le principe », « La balle » et « Questions », qui mènent aux sections de l’accueil."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "label": "Bouton Je commande quand on fait défiler",
+      "default": true,
+      "info": "Sur l’accueil et la page produit, sur ordinateur. Il mène à la zone d’achat."
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Texte du bouton",
+      "default": "Je commande"
     }
   ]
 }

@@ -1,5 +1,6 @@
 /* Thème Pattoune : panier latéral, choix des options, offres groupées,
-   galerie, estimation de livraison, barre d’achat mobile. Sans dépendance. */
+   galerie, estimation de livraison, barre d’achat mobile. Sans dépendance.
+   Le mouvement (révélations, balle vers le panier, en-tête…) est dans assets/motion.js. */
 (() => {
   const routes = () => (window.theme && window.theme.routes) || { cartAdd: '/cart/add.js', cartChange: '/cart/change.js', cart: '/cart' };
   const drawer = () => document.getElementById('cart-drawer');
@@ -138,7 +139,8 @@
     const compareEl = root.querySelector('[data-compare]');
     const stickyPrice = document.querySelector('[data-sticky-price]');
     const addText = addLabel ? addLabel.textContent.trim() : 'Ajouter au panier';
-    const money = (c) => formatMoney(c, data.money);
+    // Espace insécable entre le montant et « € » (jamais de « € » seul en début de ligne).
+    const money = (c) => formatMoney(c, data.money).replace(/ /g, '\u00a0');
 
     let variant = data.variants.find((v) => String(v.id) === variantInput.value) || data.variants[0];
 
@@ -157,7 +159,7 @@
         // l'inférieur unité par unité (comme Shopify).
         const unitOff = input.dataset.unitOff ? Number(input.dataset.unitOff) : Math.floor((variant.price * discount) / 100);
         const total = full - unitOff * qty;
-        const card = input.closest('.offer');
+        const card = input.closest('[data-offer-card], .offer');
         const totalEl = card.querySelector('[data-offer-total]');
         const fullEl = card.querySelector('[data-offer-full]');
         const unitEl = card.querySelector('[data-offer-unit]');
@@ -235,8 +237,9 @@
         }
         renderSections(json.sections);
         await refreshCount();
-        burst(addBtn);
-        openDrawer();
+        // motion.js fait voler la balle jusqu’au panier (650 ms), puis le panier s’ouvre.
+        document.dispatchEvent(new CustomEvent('pattoune:cart-added', { detail: { button: addBtn, quantity: Number(qtyInput.value) } }));
+        setTimeout(openDrawer, calm() ? 0 : 650);
         if (addLabel) {
           addLabel.textContent = 'Ajouté au panier';
           addBtn.setAttribute('data-added', '');
@@ -280,112 +283,32 @@
   }
 
   /* --------------------------------------------- Sticky buy (mobile) */
+  // Visible une fois le haut de page (ou le bloc d’achat de la page produit) dépassé, cachée
+  // sur la zone d’achat, la clôture et le pied de page. Sans écouteur de défilement.
   function initSticky() {
     const bar = document.querySelector('[data-sticky-buy]');
-    const button = document.querySelector('[data-add-button]');
-    if (!bar || !button || !('IntersectionObserver' in window)) return;
-    const footer = document.querySelector('.footer');
-    let past = false;
-    let atFooter = false;
+    if (!bar || bar.ptSticky || !('IntersectionObserver' in window)) return;
+    const start = document.querySelector('[data-sticky-start]') || document.querySelector('[data-product-root]');
+    const zone = document.querySelector('[data-product-root]');
+    if (!start) return;
+    bar.ptSticky = true;
+    const stops = new Set();
+    let past = false, inZone = false;
     const link = bar.querySelector('a');
     const update = () => {
-      const show = past && !atFooter;
+      const show = past && !inZone && stops.size === 0;
       bar.toggleAttribute('data-show', show);
       bar.setAttribute('aria-hidden', String(!show));
       if (link) link.tabIndex = show ? 0 : -1;
     };
-    new IntersectionObserver(([e]) => {
-      past = !e.isIntersecting && e.boundingClientRect.top < 0;
-      update();
-    }).observe(button);
-    if (footer)
-      new IntersectionObserver(([e]) => {
-        atFooter = e.isIntersecting;
-        update();
-      }).observe(footer);
+    new IntersectionObserver(([e]) => { past = !e.isIntersecting && e.boundingClientRect.top < 0; update(); }).observe(start);
+    if (zone && zone !== start) new IntersectionObserver(([e]) => { inZone = e.isIntersecting; update(); }).observe(zone);
+    const so = new IntersectionObserver((es) => { es.forEach((e) => (e.isIntersecting ? stops.add(e.target) : stops.delete(e.target))); update(); });
+    document.querySelectorAll('[data-sticky-stop], [data-footer], .footer').forEach((s) => so.observe(s));
   }
 
-  /* ------------------------------------------------- Fun: animations */
+  /* ---------------------------------------------- Réduire les animations */
   const calm = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // Petite explosion de croquettes depuis le bouton d'ajout au panier.
-  function burst(from) {
-    if (calm() || !from || !Element.prototype.animate) return;
-    const r = from.getBoundingClientRect();
-    const x = r.left + r.width / 2;
-    const y = r.top + r.height / 2;
-    for (let i = 0; i < 14; i++) {
-      const k = document.createElement('span');
-      k.className = 'kibble-burst';
-      k.style.left = `${x}px`;
-      k.style.top = `${y}px`;
-      document.body.appendChild(k);
-      const angle = Math.PI + (Math.PI * i) / 13 + (Math.random() - 0.5) * 0.3;
-      const dist = 70 + Math.random() * 90;
-      const dx = Math.cos(angle) * dist;
-      const dy = Math.sin(angle) * dist;
-      k.animate(
-        [
-          { transform: 'translate(-50%, -50%) scale(0.4)', opacity: 1 },
-          { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) rotate(${dx * 3}deg)`, opacity: 1, offset: 0.55 },
-          { transform: `translate(calc(-50% + ${dx * 1.15}px), calc(-50% + ${dy + 140}px)) rotate(${dx * 5}deg)`, opacity: 0 },
-        ],
-        { duration: 900 + Math.random() * 300, easing: 'cubic-bezier(0.2, 0.7, 0.4, 1)' },
-      ).onfinish = () => k.remove();
-    }
-  }
-
-  // Les blocs apparaissent en glissant quand on les atteint en faisant défiler.
-  const REVEAL = '.section .eyebrow, .section .h2, .trust-bar__item, .benefit, .step, .specs, .table-scroll, .promise__grid li, .faq details, .final__text, .final__art, .review, .showcase__phone, .showcase__list li, .pet-card';
-  function initReveal() {
-    if (calm() || !('IntersectionObserver' in window)) return;
-    const io = new IntersectionObserver(
-      (entries) =>
-        entries.forEach((e) => {
-          if (!e.isIntersecting) return;
-          e.target.classList.add('is-in');
-          io.unobserve(e.target);
-        }),
-      { rootMargin: '0px 0px -8% 0px' },
-    );
-    document.querySelectorAll(REVEAL).forEach((el) => {
-      if (el.hasAttribute('data-reveal')) return;
-      // Ce qui est déjà visible au chargement reste affiché (pas de clignotement).
-      if (el.getBoundingClientRect().top < window.innerHeight) return;
-      const siblings = [...el.parentElement.children].filter((c) => c.matches(REVEAL));
-      el.style.setProperty('--d', Math.max(0, siblings.indexOf(el)));
-      el.setAttribute('data-reveal', '');
-      io.observe(el);
-    });
-    document.documentElement.classList.add('reveal-on');
-  }
-
-  /* ------------------------------------- En-tête compact et parallaxe */
-  // Un seul écouteur de défilement, calculs regroupés dans requestAnimationFrame.
-  function initScrollFx() {
-    if (initScrollFx.done) return; // l'éditeur de thème relance init() : un seul écouteur
-    initScrollFx.done = true;
-    const header = document.querySelector('.header');
-    const layers = calm() ? [] : [...document.querySelectorAll('[data-parallax]')];
-    let ticking = false;
-    const update = () => {
-      ticking = false;
-      if (header) header.classList.toggle('is-scrolled', window.scrollY > 24);
-      for (const el of layers) {
-        const r = el.getBoundingClientRect();
-        // -1 quand l'élément entre par le bas, 0 au centre, 1 quand il sort par le haut.
-        const p = Math.max(-1, Math.min(1, (window.innerHeight / 2 - (r.top + r.height / 2)) / window.innerHeight));
-        el.style.transform = `translateY(${(p * -36).toFixed(1)}px) scale(${(1 + 0.05 * Math.max(0, p)).toFixed(3)})`;
-      }
-    };
-    window.addEventListener('scroll', () => {
-      if (!ticking) {
-        ticking = true;
-        requestAnimationFrame(update);
-      }
-    }, { passive: true });
-    update();
-  }
 
   /* --------------------------------------------------- Son des vidéos */
   function setSound(video, on) {
@@ -423,8 +346,6 @@
     initDelivery();
     initSticky();
     initCountrySelects();
-    initReveal();
-    initScrollFx();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();

@@ -1,53 +1,129 @@
-<section class="section section--cobalt" id="{{ section.settings.anchor | default: section.id }}">
-  <div class="wrap">
-    {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
-    {%- if section.settings.title != blank -%}<h2 class="h2">{{ section.settings.title | escape }}</h2>{%- endif -%}
-    <ol class="steps">
-      {%- for block in section.blocks -%}
-        <li class="step" {{ block.shopify_attributes }}>
-          {%- liquid
-            case forloop.index
-              when 1
-                assign scene = 'fill'
-              when 2
-                assign scene = 'drop'
-              when 3
-                assign scene = 'roll'
-              else
-                assign scene = 'party'
-            endcase
-          -%}
-          <div class="step__art">{% render 'toy-scene', scene: scene %}</div>
-          <span class="step__num" aria-hidden="true">{{ forloop.index }}</span>
-          <h3>{{ block.settings.title | escape }}</h3>
-          <p>{{ block.settings.text | escape }}</p>
-        </li>
-      {%- endfor -%}
-    </ol>
+{%- comment -%}
+  « Le principe » (v9 Cinéma) : énoncé qui s’allume ligne par ligne, puis récit
+  en étapes. Sur ordinateur, un cadre collant fait défiler les photos en volet
+  pendant que les étapes passent (data-story, géré par motion.js) ; sur mobile,
+  chaque étape a sa propre photo. Styles : assets/sections-v9.css.
+{%- endcomment -%}
+{%- liquid
+  assign anchor = section.settings.anchor | default: 'principe'
+  assign n = section.blocks.size
+  assign title_id = 'pt-principe-title-' | append: section.id
+-%}
+<section class="pt-principe" id="{{ anchor | escape }}" aria-labelledby="{{ title_id }}">
+  <div class="pt-wrap pt-principe__head">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="pt-eyebrow pt-eyebrow--red" data-reveal="up">{{ section.settings.eyebrow | escape }}</p>
+    {%- endif -%}
+    <h2 class="pt-display pt-statement" id="{{ title_id }}">
+      {%- if section.settings.line_1 != blank -%}
+        <span class="pt-statement__line" data-reveal="lit">{% render 'pt-split', text: section.settings.line_1 %}</span>
+      {%- endif %}
+      {% if section.settings.line_2 != blank -%}
+        <span class="pt-statement__line" data-reveal="lit">
+          {%- render 'pt-split', text: section.settings.line_2 -%}
+          {%- if section.settings.show_ball -%}
+            {%- comment -%} « Elle roule. » : la balle arrive en roulant et se pose au bout de la ligne (décoratif). {%- endcomment -%}
+            <span class="pt-principe__roll" data-reveal="none" aria-hidden="true"><span class="pt-principe__slide"><span class="pt-principe__ball"><img src="{{ 'pt-balle-3d.webp' | asset_url }}" alt="" width="236" height="236" loading="lazy" decoding="async"></span></span></span>
+          {%- endif -%}
+        </span>
+      {%- endif %}
+      {% if section.settings.line_3 != blank -%}
+        <span class="pt-statement__line pt-statement__line--red" data-reveal="lit">{% render 'pt-split', text: section.settings.line_3 %}</span>
+      {%- endif -%}
+    </h2>
+    {%- if section.settings.text != blank -%}
+      <p class="pt-lead" data-reveal="up" style="--pt-d:1">{{ section.settings.text | escape }}</p>
+    {%- endif -%}
   </div>
+
+  {%- if n > 0 -%}
+    <div class="pt-wrap pt-story" data-story style="--pt-n:{{ n }}">
+      {%- comment -%} Cadre collant (ordinateur) : décoratif, les étapes portent le texte. {%- endcomment -%}
+      <div class="pt-story__frame" aria-hidden="true" data-reveal="clip">
+        {%- for block in section.blocks -%}
+          <div class="pt-story__media{% if forloop.first %} is-on is-current{% endif %}" data-story-media="{{ forloop.index0 }}">
+            {%- if block.settings.image != blank -%}
+              {{ block.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1200', sizes: '(min-width: 900px) 46vw, 0px', alt: '' }}
+            {%- else -%}
+              <img class="pt-story__ph" src="{{ 'pt-balle-3d.webp' | asset_url }}" alt="" width="236" height="236" loading="lazy" decoding="async">
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+        <p class="pt-story__count"><b data-story-count>01</b><span>/&nbsp;0{{ n }}</span></p>
+        <span class="pt-story__rail"><i></i></span>
+      </div>
+
+      <ol class="pt-story__steps">
+        {%- for block in section.blocks -%}
+          <li class="pt-step{% if forloop.first %} is-active{% endif %}" data-story-step="{{ forloop.index0 }}" data-reveal-group {{ block.shopify_attributes }}>
+            {%- if block.settings.image != blank -%}
+              {%- assign step_alt = block.settings.image.alt | default: block.settings.title -%}
+              <figure class="pt-step__img" data-reveal="clip">
+                {{ block.settings.image | image_url: width: 960 | image_tag: loading: 'lazy', widths: '360, 540, 720, 960', sizes: '(min-width: 900px) 0px, 92vw', alt: step_alt }}
+              </figure>
+            {%- endif -%}
+            <p class="pt-step__num" data-reveal="up"><b>0{{ forloop.index }}</b>{{ block.settings.label | escape }}</p>
+            {%- if block.settings.title != blank -%}
+              <h3 class="pt-h3" data-reveal="mask">{% render 'pt-split', text: block.settings.title %}</h3>
+            {%- endif -%}
+            {%- if block.settings.text != blank -%}
+              <p class="pt-step__text" data-reveal="up">{{ block.settings.text | escape }}</p>
+            {%- endif -%}
+            <span class="pt-step__bar" aria-hidden="true"></span>
+          </li>
+        {%- endfor -%}
+      </ol>
+    </div>
+  {%- endif -%}
 </section>
 
 {% schema %}
 {
-  "name": "Étapes",
+  "name": "Le principe",
+  "class": "section-principe",
   "settings": [
     {
       "type": "text",
       "id": "eyebrow",
       "label": "Petit titre",
-      "default": "Comment ça marche"
+      "default": "Le principe"
     },
     {
       "type": "text",
-      "id": "title",
-      "label": "Titre",
-      "default": "Prêt en trente secondes."
+      "id": "line_1",
+      "label": "Ligne 1",
+      "default": "Il pousse."
+    },
+    {
+      "type": "text",
+      "id": "line_2",
+      "label": "Ligne 2",
+      "default": "Elle roule."
+    },
+    {
+      "type": "text",
+      "id": "line_3",
+      "label": "Ligne 3 (en rouge)",
+      "default": "Il mange."
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Texte sous l’énoncé",
+      "default": "Une balle à facettes qui libère ses croquettes une à une. Ton animal cherche, s’occupe et mange plus lentement."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_ball",
+      "label": "Balle qui roule à côté de l’énoncé",
+      "default": true
     },
     {
       "type": "text",
       "id": "anchor",
       "label": "Ancre de lien (sans #)",
-      "default": "comment"
+      "default": "principe",
+      "info": "Le menu de l’en-tête pointe vers « principe »."
     }
   ],
   "blocks": [
@@ -58,42 +134,57 @@
       "settings": [
         {
           "type": "text",
+          "id": "label",
+          "label": "Petit titre de l’étape",
+          "default": "Étape"
+        },
+        {
+          "type": "text",
           "id": "title",
           "label": "Titre",
-          "default": "Étape"
+          "default": "Glisse quelques croquettes dedans."
         },
         {
           "type": "textarea",
           "id": "text",
           "label": "Texte",
-          "default": "Décris l’étape."
+          "default": "De petites croquettes sèches, par l’ouverture de la balle."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo",
+          "info": "Format carré conseillé. Sur ordinateur, les photos défilent dans un cadre fixe."
         }
       ]
     }
   ],
   "presets": [
     {
-      "name": "Étapes",
+      "name": "Le principe",
       "blocks": [
         {
           "type": "step",
           "settings": {
-            "title": "Remplis",
-            "text": "Dévisse la balle et verse une poignée de croquettes sèches."
+            "label": "Remplis",
+            "title": "Glisse quelques croquettes dedans.",
+            "text": "De petites croquettes sèches, par l’ouverture de la balle. Ses croquettes habituelles font l’affaire si elles passent."
           }
         },
         {
           "type": "step",
           "settings": {
-            "title": "Règle",
-            "text": "Tourne la molette : ouverture large pour débuter, étroite pour les experts."
+            "label": "Donne",
+            "title": "Pose-la devant lui. Il renifle, il pousse.",
+            "text": "Du bout du nez ou de la patte : son flair se met au travail au lieu d’attendre devant la porte."
           }
         },
         {
           "type": "step",
           "settings": {
-            "title": "Laisse jouer",
-            "text": "Pose la balle au sol. Elle roule, tourne et libère les croquettes au hasard."
+            "label": "Laisse jouer",
+            "title": "Elle roule, les croquettes tombent une à une.",
+            "text": "Chaque croquette se mérite : le repas dure plus longtemps et l’ennui recule quand il reste seul."
           }
         }
       ]

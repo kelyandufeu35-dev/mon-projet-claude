@@ -1,70 +1,93 @@
+{%- comment -%}
+  Pied de page (v9 Cinéma). Aucune adresse e-mail : le contact passe par la page
+  Contact (« Écris-nous »), même si le réglage contact_email est rempli.
+  Colonnes en cascade, puis grand « Pattoune » en contour gravé qui monte lettre
+  par lettre (décoratif, aria-hidden). Styles : assets/sections-v9.css.
+{%- endcomment -%}
 {%- liquid
   assign brand = settings.brand_name | default: shop.name
-  assign contact = settings.contact_email
+  assign menu = section.settings.menu
+  assign has_social = false
+  if settings.social_instagram != blank or settings.social_tiktok != blank or settings.social_facebook != blank
+    assign has_social = true
+  endif
 -%}
-<footer class="footer">
-  <div class="wrap footer__grid">
-    <div class="footer__brand">
-      <a href="{{ routes.root_url }}" class="logo logo--light">
-        <span class="logo__mark">{% render 'icon', name: 'paw' %}</span>
-        <span class="logo__name">{{ brand }}</span>
-      </a>
-      {%- if section.settings.tagline != blank -%}<p>{{ section.settings.tagline | escape }}</p>{%- endif -%}
-      {%- if contact != blank -%}
-        <p class="footer__mail">
-          Une question ? <a href="mailto:{{ contact }}">{{ contact }}</a>
-          {%- if settings.response_time != blank %}<br>Réponse {{ settings.response_time | escape }}.{% endif %}
+<footer class="pt-footer pt-dark{% if has_social %} pt-footer--social{% endif %}" data-footer data-sticky-stop>
+  <div class="pt-wrap">
+    <div class="pt-footer__grid" data-reveal-group>
+      <div class="pt-footer__brand" data-reveal="up">
+        <a class="pt-footer__logo" href="{{ routes.root_url }}" aria-label="{{ brand | escape }}, accueil">
+          {%- render 'pt-logo-mark', id: 'ft' -%}
+          <span aria-hidden="true">{{ brand | escape }}</span>
+        </a>
+        <p>
+          {{- section.settings.tagline | escape -}}
+          {%- if pages.contact != empty %} Une question&#8239;? <a href="{{ pages.contact.url }}">Écris-nous</a>, on te répond vite.{%- endif -%}
         </p>
-      {%- endif -%}
-      {%- if contact == blank and pages.contact != empty -%}
-        <p class="footer__mail">Une question ? <a href="{{ pages.contact.url }}">Écris-nous</a>, on te répond vite.</p>
-      {%- endif -%}
-    </div>
+      </div>
 
-    {%- if section.settings.menu != blank -%}
-      {%- assign menu_title = section.settings.menu.title | default: 'Liens' -%}
-      <nav aria-label="{{ menu_title | escape }}">
-        <h2>{{ menu_title | escape }}</h2>
+      <nav class="pt-footer__col" aria-label="Aide" data-reveal="up">
+        <h2>Aide</h2>
         <ul>
-          {%- for link in section.settings.menu.links -%}
-            <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
+          {%- if menu.links.size > 0 -%}
+            {%- for link in menu.links -%}
+              <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
+            {%- endfor -%}
+          {%- else -%}
+            <li><a href="{{ routes.root_url }}#faq">Questions fréquentes</a></li>
+            {%- if pages.contact != empty -%}<li><a href="{{ pages.contact.url }}">Nous écrire</a></li>{%- endif -%}
+          {%- endif -%}
+        </ul>
+      </nav>
+
+      <nav class="pt-footer__col" aria-label="Informations légales" data-reveal="up">
+        <h2>Légal</h2>
+        <ul>
+          {%- for policy in shop.policies -%}
+            {%- if policy != blank -%}
+              <li><a href="{{ policy.url }}">{{ policy.title | escape }}</a></li>
+            {%- endif -%}
           {%- endfor -%}
         </ul>
       </nav>
-    {%- endif -%}
 
-    <nav aria-label="Informations légales">
-      <h2>Légal</h2>
-      <ul>
-        {%- for policy in shop.policies -%}
-          {%- if policy != blank -%}
-            <li><a href="{{ policy.url }}">{{ policy.title | escape }}</a></li>
-          {%- endif -%}
-        {%- endfor -%}
-      </ul>
-    </nav>
+      {%- if has_social -%}
+        <nav class="pt-footer__col" aria-label="Réseaux sociaux" data-reveal="up">
+          <h2>Suivre</h2>
+          <ul>
+            {%- if settings.social_instagram != blank -%}<li><a href="{{ settings.social_instagram }}" target="_blank" rel="noopener">Instagram</a></li>{%- endif -%}
+            {%- if settings.social_tiktok != blank -%}<li><a href="{{ settings.social_tiktok }}" target="_blank" rel="noopener">TikTok</a></li>{%- endif -%}
+            {%- if settings.social_facebook != blank -%}<li><a href="{{ settings.social_facebook }}" target="_blank" rel="noopener">Facebook</a></li>{%- endif -%}
+          </ul>
+        </nav>
+      {%- endif -%}
+    </div>
 
-    {%- if settings.social_instagram != blank or settings.social_tiktok != blank or settings.social_facebook != blank -%}
-      <nav aria-label="Réseaux sociaux">
-        <h2>Suivre</h2>
-        <ul>
-          {%- if settings.social_instagram != blank -%}<li><a href="{{ settings.social_instagram }}" target="_blank" rel="noopener">Instagram</a></li>{%- endif -%}
-          {%- if settings.social_tiktok != blank -%}<li><a href="{{ settings.social_tiktok }}" target="_blank" rel="noopener">TikTok</a></li>{%- endif -%}
-          {%- if settings.social_facebook != blank -%}<li><a href="{{ settings.social_facebook }}" target="_blank" rel="noopener">Facebook</a></li>{%- endif -%}
+    <div class="pt-footer__bottom">
+      <span>&copy; {{ 'now' | date: '%Y' }} {{ brand | escape }}</span>
+      {%- if shop.enabled_payment_types.size > 0 -%}
+        <ul class="pt-footer__pay" aria-label="Moyens de paiement">
+          {%- for type in shop.enabled_payment_types -%}
+            <li>{{ type | payment_type_svg_tag: class: 'pt-footer__pay-icon' }}</li>
+          {%- endfor -%}
         </ul>
-      </nav>
-    {%- endif -%}
+      {%- endif -%}
+    </div>
   </div>
-  <div class="wrap footer__bottom">
-    <span>&copy; {{ 'now' | date: '%Y' }} {{ brand }}</span>
-    {%- if shop.enabled_payment_types.size > 0 -%}
-      <ul class="payments" aria-label="Moyens de paiement">
-        {%- for type in shop.enabled_payment_types -%}
-          <li>{{ type | payment_type_svg_tag: class: 'payment-icon' }}</li>
-        {%- endfor -%}
-      </ul>
-    {%- endif -%}
-  </div>
+
+  {%- if section.settings.show_wordmark -%}
+    {%- comment -%} Une lettre par masque (--pt-wi = index) : elles montent une à une. {%- endcomment -%}
+    <p class="pt-footer__word" data-reveal="mask" aria-hidden="true">
+      {%- assign letters = brand | split: '' -%}
+      {%- for letter in letters -%}
+        {%- if letter == ' ' -%}
+          <span class="pt-footer__gap"> </span>
+        {%- else -%}
+          <span class="pt-w" style="--pt-wi:{{ forloop.index0 }}"><span>{{ letter | escape }}</span></span>
+        {%- endif -%}
+      {%- endfor -%}
+    </p>
+  {%- endif -%}
 </footer>
 
 {% schema %}
@@ -74,7 +97,8 @@
   "enabled_on": { "groups": ["footer"] },
   "settings": [
     { "type": "text", "id": "tagline", "label": "Slogan", "default": "Des jouets qui occupent vraiment." },
-    { "type": "link_list", "id": "menu", "label": "Menu « Aide »", "default": "footer", "info": "Les pages légales (CGV, remboursement, confidentialité…) s’ajoutent automatiquement depuis Paramètres → Politiques." }
+    { "type": "link_list", "id": "menu", "label": "Menu « Aide »", "default": "footer", "info": "Vide : « Questions fréquentes » et « Nous écrire » (page Contact). Les pages légales s’ajoutent seules depuis Paramètres → Politiques." },
+    { "type": "checkbox", "id": "show_wordmark", "label": "Grand logo en bas de page", "default": true }
   ]
 }
 {% endschema %}
