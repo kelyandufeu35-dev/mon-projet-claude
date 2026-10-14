@@ -23,7 +23,9 @@
     <script>
       (function (h) {
         var seen = '1';
+        {%- unless request.design_mode %}
         try { seen = sessionStorage.getItem('pt-intro'); sessionStorage.setItem('pt-intro', '1'); } catch (e) { seen = '1'; }
+        {%- endunless %}
         try {
           addEventListener('pagereveal', function (e) { if (e.viewTransition) h.classList.add('pt-vt'); });
           if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
