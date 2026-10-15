@@ -23,7 +23,7 @@
     "quantity": "Quantité",
     "shipping_note": "Frais de port calculés à l’étape suivante.",
     "taxes_included": "TVA incluse.",
-    "discover": "Découvrir la balle"
+    "discover": "Voir les jouets"
   },
   "product": {
     "add": "Ajouter au panier",
@@ -79,8 +79,8 @@
     },
     "main_404": {
       "title": "Oups, cette page a roulé sous le canapé.",
-      "text": "Elle n’existe pas ou a été déplacée. La balle, elle, est toujours là.",
-      "button": "Voir la balle à friandises"
+      "text": "Elle n’existe pas ou a été déplacée. Les jouets, eux, sont toujours là.",
+      "button": "Voir les jouets"
     },
     "comparison": {
       "criterion": "Critère",

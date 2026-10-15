@@ -13,7 +13,7 @@
       <div class="drawer__empty">
         <span class="drawer__empty-icon" aria-hidden="true">{% render 'icon', name: 'paw' %}</span>
         <p>{{ 'cart.empty' | t }}</p>
-        <a href="{{ routes.root_url }}#contenu" class="btn btn--sun" data-cart-close>{{ 'cart.discover' | t }}</a>
+        <a href="{{ routes.all_products_collection_url }}" class="btn btn--sun" data-cart-close>{{ 'cart.discover' | t }}</a>
       </div>
     {%- else -%}
       {% render 'cart-summary', compact: true %}

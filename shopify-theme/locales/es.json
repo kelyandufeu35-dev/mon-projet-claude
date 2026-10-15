@@ -23,7 +23,7 @@
     "quantity": "Cantidad",
     "shipping_note": "Gastos de envío calculados en el siguiente paso.",
     "taxes_included": "IVA incluido.",
-    "discover": "Descubrir la pelota"
+    "discover": "Ver los juguetes"
   },
   "product": {
     "add": "Añadir al carrito",
@@ -78,8 +78,8 @@
     },
     "main_404": {
       "title": "Vaya, esta página ha rodado debajo del sofá.",
-      "text": "No existe o se ha movido. La pelota, en cambio, sigue aquí.",
-      "button": "Ver la pelota dispensadora"
+      "text": "No existe o se ha movido. Los juguetes, en cambio, siguen aquí.",
+      "button": "Ver los juguetes"
     },
     "comparison": {
       "criterion": "Criterio",

@@ -1,0 +1,87 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "title_as_h1": true,
+        "scene_first": false,
+        "eyebrow": "Pour les chats",
+        "trust_1": "Colis suivi",
+        "trust_2": "Retour sous 14\u00a0jours (droit légal)",
+        "trust_3": "Paiement sécurisé",
+        "inbox": "1 canne à plumes avec clochette, tige souple sur ventouse\nUn colis suivi, numéro envoyé par e-mail",
+        "size_guide": false,
+        "show_description": true,
+        "sticky_label": "Canne Pattoune",
+        "anchor": "acheter",
+        "show_offers": false
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "Comment jouer avec\u202f?",
+            "answer": "<p>Fixe la ventouse sur une surface lisse (sol, vitre, carrelage) et fais bouger la tige\u00a0: la plume oscille, la clochette tinte, ton chat guette et bondit. Quelques minutes, plusieurs fois par jour.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "Peut-il jouer sans surveillance\u202f?",
+            "answer": "<p>Non\u00a0: reste avec lui pendant qu’il joue et range la canne après chaque séance. Il pourrait mâchouiller ou avaler la plume. Remplace-la dès qu’elle est abîmée\u00a0: aucun jouet n’est indestructible.</p>"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "Noir ou rose\u202f?",
+            "answer": "<p>Les deux se jouent de la même façon. Choisis la couleur qui va le mieux chez toi.</p>"
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "question": "Livraison et retours\u202f?",
+            "answer": "<p>La livraison est offerte et suivie, en [delai_livraison], en [zone_livraison]. Tu disposes de 14\u00a0jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4"
+      ],
+      "settings": {
+        "eyebrow": "Questions",
+        "title": "Avant de te décider.",
+        "aside": "Une autre question\u202f?",
+        "link_label": "Écris-nous",
+        "aside_after": ", une vraie personne te répond en français.",
+        "anchor": "faq"
+      }
+    },
+    "final": {
+      "type": "final-cta",
+      "settings": {
+        "title": "Une plume qui danse, un chat qui chasse, et le salon redevient calme.",
+        "highlight": "calme.",
+        "button_label": "Je commande ma canne",
+        "note": "Livraison offerte · Retour sous 14\u00a0jours (droit légal)"
+      }
+    },
+    "recos": {
+      "type": "product-recos",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "faq",
+    "recos",
+    "final"
+  ]
+}

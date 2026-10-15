@@ -23,7 +23,7 @@
     "quantity": "Quantity",
     "shipping_note": "Shipping calculated at the next step.",
     "taxes_included": "Tax included.",
-    "discover": "Discover the ball"
+    "discover": "See the toys"
   },
   "product": {
     "add": "Add to cart",
@@ -78,8 +78,8 @@
     },
     "main_404": {
       "title": "Oops, this page rolled under the sofa.",
-      "text": "It doesn’t exist or has moved. The ball, though, is still right here.",
-      "button": "See the treat ball"
+      "text": "It doesn’t exist or has moved. The toys, though, are still right here.",
+      "button": "See the toys"
     },
     "comparison": {
       "criterion": "Criterion",

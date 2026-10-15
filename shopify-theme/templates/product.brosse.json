@@ -1,0 +1,87 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "title_as_h1": true,
+        "scene_first": false,
+        "eyebrow": "Pour chats et chiens",
+        "trust_1": "Colis suivi",
+        "trust_2": "Retour sous 14\u00a0jours (droit légal)",
+        "trust_3": "Paiement sécurisé",
+        "inbox": "1 brosse autonettoyante, picots en acier inoxydable\nUn bouton pour retirer les poils d’un geste\nUn colis suivi, numéro envoyé par e-mail",
+        "size_guide": false,
+        "show_description": true,
+        "sticky_label": "Brosse Pattoune",
+        "anchor": "acheter",
+        "show_offers": false
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "Comment l’utiliser\u202f?",
+            "answer": "<p>Brosse dans le sens du poil, sans appuyer. Quand la brosse est pleine, appuie sur le bouton\u00a0: les picots se rétractent et les poils se retirent d’un geste.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "Pour quels poils\u202f?",
+            "answer": "<p>Pour les chats et les chiens à poils courts, mi-longs ou longs. Va doucement sur les zones sensibles (ventre, pattes) et arrête si ton animal n’est pas à l’aise.</p>"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "À quelle fréquence\u202f?",
+            "answer": "<p>Quelques minutes, une à plusieurs fois par semaine, plus souvent pendant la mue. Garde des séances courtes et calmes, à son rythme.</p>"
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "question": "Livraison et retours\u202f?",
+            "answer": "<p>La livraison est offerte et suivie, en [delai_livraison], en [zone_livraison]. Tu disposes de 14\u00a0jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4"
+      ],
+      "settings": {
+        "eyebrow": "Questions",
+        "title": "Avant de te décider.",
+        "aside": "Une autre question\u202f?",
+        "link_label": "Écris-nous",
+        "aside_after": ", une vraie personne te répond en français.",
+        "anchor": "faq"
+      }
+    },
+    "final": {
+      "type": "final-cta",
+      "settings": {
+        "title": "Quelques minutes de brossage, et moins de poils sur le canapé.",
+        "highlight": "canapé.",
+        "button_label": "Je commande ma brosse",
+        "note": "Livraison offerte · Retour sous 14\u00a0jours (droit légal)"
+      }
+    },
+    "recos": {
+      "type": "product-recos",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "faq",
+    "recos",
+    "final"
+  ]
+}

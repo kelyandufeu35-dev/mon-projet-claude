@@ -23,7 +23,7 @@
     "quantity": "Menge",
     "shipping_note": "Versandkosten werden im nächsten Schritt berechnet.",
     "taxes_included": "Inkl. MwSt.",
-    "discover": "Den Ball entdecken"
+    "discover": "Zu den Spielzeugen"
   },
   "product": {
     "add": "In den Warenkorb",
@@ -78,8 +78,8 @@
     },
     "main_404": {
       "title": "Hoppla, diese Seite ist unters Sofa gerollt.",
-      "text": "Sie existiert nicht oder wurde verschoben. Der Ball ist aber immer noch da.",
-      "button": "Zum Leckerli-Ball"
+      "text": "Sie existiert nicht oder wurde verschoben. Die Spielzeuge sind aber immer noch da.",
+      "button": "Zu den Spielzeugen"
     },
     "comparison": {
       "criterion": "Kriterium",
