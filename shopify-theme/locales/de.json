@@ -45,7 +45,8 @@
       "cart_label": {
         "one": "Warenkorb, {{ count }} Artikel",
         "other": "Warenkorb, {{ count }} Artikel"
-      }
+      },
+      "nav_shop": "Unsere Spielzeuge"
     },
     "footer": {
       "contact_html": "Noch eine Frage? <a href=\"{{ url }}\">Schreib uns</a>, wir antworten dir schnell.",
@@ -120,6 +121,12 @@
       "owner": "Zugang für Shop-Inhaber",
       "password": "Passwort",
       "enter": "Eintreten"
+    },
+    "product_recos": {
+      "eyebrow": "Weitere Spielzeuge",
+      "title": "Für noch mehr Spielspaß.",
+      "view_all": "Alle Spielzeuge ansehen",
+      "free_shipping": "Kostenloser Versand"
     }
   },
   "snippets": {

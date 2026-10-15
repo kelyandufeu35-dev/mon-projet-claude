@@ -45,7 +45,8 @@
       "cart_label": {
         "one": "Cart, {{ count }} item",
         "other": "Cart, {{ count }} items"
-      }
+      },
+      "nav_shop": "Our toys"
     },
     "footer": {
       "contact_html": "Got a question? <a href=\"{{ url }}\">Write to us</a>, we’ll get back to you quickly.",
@@ -120,6 +121,12 @@
       "owner": "Store owner access",
       "password": "Password",
       "enter": "Enter"
+    },
+    "product_recos": {
+      "eyebrow": "More toys",
+      "title": "Round out their playtime.",
+      "view_all": "See all toys",
+      "free_shipping": "Free shipping"
     }
   },
   "snippets": {

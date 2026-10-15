@@ -1,0 +1,56 @@
+{%- comment -%}
+  « Les autres jouets » : jusqu’à 4 produits de la boutique, hors produit de la
+  page (et hors produit choisi dans le réglage, pour l’accueil). La section ne
+  s’affiche pas s’il n’y a aucun autre produit. Textes : locales sections.product_recos.
+  Styles : assets/sections-v9.css (.pt-recos).
+{%- endcomment -%}
+{%- liquid
+  assign title_id = 'pt-recos-title-' | append: section.id
+  assign skip_a = product.id | default: 0
+  assign skip_b = section.settings.exclude.id | default: 0
+  assign shown = 0
+  capture cards
+    for item in collections.all.products
+      if item.id == skip_a or item.id == skip_b or item.available == false
+        continue
+      endif
+      if shown >= 4
+        break
+      endif
+      assign shown = shown | plus: 1
+      echo '<li data-reveal="up">'
+      render 'pt-reco-card', item: item
+      echo '</li>'
+    endfor
+  endcapture
+-%}
+{%- if shown > 0 -%}
+  <section class="pt-recos" aria-labelledby="{{ title_id }}">
+    <div class="pt-wrap">
+      <div class="pt-recos__head">
+        <p class="pt-eyebrow pt-eyebrow--red" data-reveal="up">{{ 'sections.product_recos.eyebrow' | t }}</p>
+        <h2 class="pt-h2" id="{{ title_id }}" data-reveal="mask" style="--pt-d:1">{%- assign recos_title = 'sections.product_recos.title' | t -%}{% render 'pt-split', text: recos_title %}</h2>
+      </div>
+      <ul class="pt-recos__grid" data-reveal-group>
+        {{- cards -}}
+      </ul>
+      <p class="pt-recos__all"><a href="{{ routes.all_products_collection_url }}">{{ 'sections.product_recos.view_all' | t }}</a></p>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Autres jouets",
+  "class": "section-recos",
+  "settings": [
+    {
+      "type": "product",
+      "id": "exclude",
+      "label": "Produit à ne pas montrer",
+      "info": "Sur l’accueil : choisis la balle pour ne pas la proposer deux fois. Sur une page produit, le produit affiché est déjà exclu."
+    }
+  ],
+  "presets": [{ "name": "Autres jouets" }]
+}
+{% endschema %}

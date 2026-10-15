@@ -45,7 +45,8 @@
       "cart_label": {
         "one": "Carrito, {{ count }} artículo",
         "other": "Carrito, {{ count }} artículos"
-      }
+      },
+      "nav_shop": "Nuestros juguetes"
     },
     "footer": {
       "contact_html": "¿Tienes alguna pregunta? <a href=\"{{ url }}\">Escríbenos</a> y te responderemos enseguida.",
@@ -120,6 +121,12 @@
       "owner": "Acceso del propietario",
       "password": "Contraseña",
       "enter": "Entrar"
+    },
+    "product_recos": {
+      "eyebrow": "Más juguetes",
+      "title": "Completa su rato de juego.",
+      "view_all": "Ver todos los juguetes",
+      "free_shipping": "Envío gratis"
     }
   },
   "snippets": {

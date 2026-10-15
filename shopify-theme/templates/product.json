@@ -167,6 +167,10 @@
         "button_label": "Je commande ma balle",
         "note": "Livraison offerte · Retour sous 14\u00a0jours (droit légal)"
       }
+    },
+    "recos": {
+      "type": "product-recos",
+      "settings": {}
     }
   },
   "order": [
@@ -174,6 +178,7 @@
     "principe",
     "fiche",
     "faq",
+    "recos",
     "final"
   ]
 }

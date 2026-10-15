@@ -46,7 +46,8 @@
         "zero": "Panier, {{ count }} article",
         "one": "Panier, {{ count }} article",
         "other": "Panier, {{ count }} articles"
-      }
+      },
+      "nav_shop": "Nos jouets"
     },
     "footer": {
       "contact_html": "Une question ? <a href=\"{{ url }}\">Écris-nous</a>, on te répond vite.",
@@ -121,6 +122,12 @@
       "owner": "Accès propriétaire",
       "password": "Mot de passe",
       "enter": "Entrer"
+    },
+    "product_recos": {
+      "eyebrow": "Les autres jouets",
+      "title": "Complète sa routine de jeu.",
+      "view_all": "Voir tous les jouets",
+      "free_shipping": "Livraison offerte"
     }
   },
   "snippets": {

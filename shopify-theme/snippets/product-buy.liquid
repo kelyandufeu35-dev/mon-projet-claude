@@ -28,7 +28,12 @@
   # Montants fixes en euros : hors euro (autre marché), on affiche la remise en % équivalente,
   # Shopify convertissant lui-même la remise fixe au paiement (écart < 1 centime par balle).
   assign offer_amounts = '0'
-  if settings.bundle1_qty > 1
+  # Offres groupées désactivables par section (réglage absent = activées, ex. accueil).
+  assign show_offers = true
+  if section.settings.show_offers == false
+    assign show_offers = false
+  endif
+  if show_offers and settings.bundle1_qty > 1
     assign offer_qtys = offer_qtys | append: ',' | append: settings.bundle1_qty
     assign offer_discounts = offer_discounts | append: ',' | append: settings.bundle1_discount
     assign offer_badges = offer_badges | append: '|' | append: settings.bundle1_badge
@@ -38,7 +43,7 @@
     endif
     assign offer_amounts = offer_amounts | append: ',' | append: amount_cents
   endif
-  if settings.bundle2_qty > settings.bundle1_qty
+  if show_offers and settings.bundle2_qty > settings.bundle1_qty
     assign offer_qtys = offer_qtys | append: ',' | append: settings.bundle2_qty
     assign offer_discounts = offer_discounts | append: ',' | append: settings.bundle2_discount
     assign offer_badges = offer_badges | append: '|' | append: settings.bundle2_badge

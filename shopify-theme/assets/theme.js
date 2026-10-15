@@ -210,8 +210,9 @@
       const offer = root.querySelector('[data-offer]:checked');
       const card = offer && offer.closest('[data-offer-card], .offer');
       const total = card && card.querySelector('[data-offer-total]');
-      if (total && addTotal) {
-        const text = total.textContent.trim();
+      // Sans offres groupées (réglage show_offers), le total suit la variante choisie.
+      if ((total || !offer) && addTotal) {
+        const text = total ? total.textContent.trim() : money(variant.price * qty());
         const sr = addTotal.querySelector('.pt-sr');
         if (addTotal.ptOdo == null) addTotal.ptOdo = addTotal.textContent.trim();
         if (sr) sr.textContent = text;

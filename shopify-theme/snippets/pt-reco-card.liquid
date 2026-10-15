@@ -1,0 +1,13 @@
+{%- comment -%} Carte « Les autres jouets ». Paramètre : item (produit). Styles : .pt-reco (sections-v9.css). {%- endcomment -%}
+<a class="pt-reco" href="{{ item.url }}">
+  <span class="pt-reco__img">
+    {%- if item.featured_media -%}
+      {{ item.featured_media | image_url: width: 720 | image_tag: loading: 'lazy', widths: '320, 480, 720', sizes: '(min-width: 900px) 300px, 46vw', alt: '' }}
+    {%- endif -%}
+  </span>
+  <span class="pt-reco__title">{{ item.title | escape }}</span>
+  <span class="pt-reco__meta">
+    <strong>{%- if item.price_varies -%}{{ 'sections.hero.from' | t }} {% endif -%}{% render 'pt-money', cents: item.price %}</strong>
+    <span>{{ 'sections.product_recos.free_shipping' | t }}</span>
+  </span>
+</a>

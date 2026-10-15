@@ -1,0 +1,95 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "title_as_h1": true,
+        "scene_first": false,
+        "eyebrow": "Pour les chats",
+        "trust_1": "Colis suivi",
+        "trust_2": "Retour sous 14\u00a0jours (droit légal)",
+        "trust_3": "Paiement sécurisé",
+        "inbox": "1 puzzle de chasse en feutrine, à monter sans outil\n1 balle de 4\u00a0cm à faire rouler dedans\nUn colis suivi, numéro envoyé par e-mail",
+        "size_guide": false,
+        "show_description": true,
+        "sticky_label": "Puzzle Pattoune",
+        "anchor": "acheter",
+        "show_offers": false
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "Comment ça marche\u202f?",
+            "answer": "<p>Glisse quelques croquettes ou friandises dans les trous, ou laisse la balle à l’intérieur\u00a0: ton chat les fait sortir avec la patte. Montre-lui le jeu les premières fois avec des trous faciles.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "Carré ou rond, lequel choisir\u202f?",
+            "answer": "<p>Les deux se jouent de la même façon. Choisis selon la place que tu as et la couleur qui va le mieux chez toi.</p>"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "Peut-il jouer sans surveillance\u202f?",
+            "answer": "<p>Garde un œil sur lui quand il joue, surtout au début. Range le puzzle s’il commence à mâchouiller la feutrine ou si une pièce est abîmée. Aucun jouet n’est indestructible.</p>"
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "question": "Comment l’entretenir\u202f?",
+            "answer": "<p>Retire les miettes, puis passe un chiffon à peine humide sur la feutrine et laisse sécher. Ne le mets pas à la machine.</p>"
+          }
+        },
+        "q5": {
+          "type": "question",
+          "settings": {
+            "question": "Livraison et retours\u202f?",
+            "answer": "<p>La livraison est offerte et suivie, en [delai_livraison], en [zone_livraison]. Tu disposes de 14\u00a0jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5"
+      ],
+      "settings": {
+        "eyebrow": "Questions",
+        "title": "Avant de te décider.",
+        "aside": "Une autre question\u202f?",
+        "link_label": "Écris-nous",
+        "aside_after": ", une vraie personne te répond en français.",
+        "anchor": "faq"
+      }
+    },
+    "final": {
+      "type": "final-cta",
+      "settings": {
+        "title": "Quelques croquettes, un chat qui chasse, et le salon redevient calme.",
+        "highlight": "calme.",
+        "button_label": "Je commande mon puzzle",
+        "note": "Livraison offerte · Retour sous 14\u00a0jours (droit légal)"
+      }
+    },
+    "recos": {
+      "type": "product-recos",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "faq",
+    "recos",
+    "final"
+  ]
+}
