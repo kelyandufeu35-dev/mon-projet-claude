@@ -3,63 +3,43 @@
     "haut": {
       "type": "hero-banner",
       "settings": {
-        "product": "balle-a-friandises-pattoune-1", "show_video": true,
-        "eyebrow": "Pour chiens et chats", "title": "La balle qui le fait chercher ses croquettes.", "highlight": "chercher",
-        "subtitle": "Il pousse la balle, elle roule et libère ses croquettes une à une. Moins d’ennui, des repas plus lents.",
-        "button_label": "Je commande", "target": "acheter", "link_label": "Voir le principe", "link_target": "principe",
-        "show_proof": true, "proof_1": "Livraison offerte", "proof_2": "Retour sous 14\u00a0jours (droit légal)", "proof_3": "Paiement sécurisé"
+        "show_video": true,
+        "eyebrow": "Jouets d’éveil pour chats et chiens", "title": "Des jouets qui le font chercher, chasser et réfléchir.", "highlight": "chercher",
+        "subtitle": "Balle à friandises, puzzle de chasse… Des jeux simples qui occupent ton animal et ralentissent ses repas. Livraison offerte en France, dans l’UE et en Suisse.",
+        "button_label": "Voir les jouets", "target": "jouets", "link_label": "Comment ça marche", "link_target": "pourquoi",
+        "show_proof": true, "proof_1": "Livraison offerte", "proof_2": "Retour sous 14 jours (droit légal)", "proof_3": "Paiement sécurisé"
       }
     },
-    "principe": {
-      "type": "steps",
-      "blocks": {
-        "s1": { "type": "step", "settings": { "label": "Remplis", "title": "Glisse quelques croquettes dedans.", "text": "De petites croquettes sèches, par l’ouverture de la balle. Ses croquettes habituelles font l’affaire si elles passent.", "image": "shopify://shop_images/balle-pattoune-2-croquettes.jpg" } },
-        "s2": { "type": "step", "settings": { "label": "Donne", "title": "Pose-la devant lui. Il renifle, il pousse.", "text": "Du bout du nez ou de la patte\u00a0: son flair se met au travail au lieu d’attendre devant la porte.", "image": "shopify://shop_images/balle-pattoune-chien.jpg" } },
-        "s3": { "type": "step", "settings": { "label": "Laisse jouer", "title": "Elle roule, les croquettes tombent une à une.", "text": "Chaque croquette se mérite\u00a0: le repas dure plus longtemps et son flair travaille.", "image": "shopify://shop_images/balle-pattoune-chat.jpg", "theme_loop": true } }
-      },
-      "block_order": ["s1", "s2", "s3"],
-      "settings": { "eyebrow": "Le principe", "line_1": "Il pousse.", "line_2": "Elle roule.", "line_3": "Il mange.", "text": "Une balle à facettes qui libère ses croquettes une à une. Ton animal cherche, s’occupe et mange plus lentement.", "anchor": "principe" }
+    "jouets": {
+      "type": "product-grid",
+      "settings": { "limit": 12, "show_type": false, "anchor": "jouets" }
     },
-    "fiche": {
+    "pourquoi": {
       "type": "specs",
       "blocks": {
-        "p1": { "type": "spec", "settings": { "label": "8\u00a0cm", "value": "De diamètre\u00a0: parfaite pour les chats et les petits chiens." } },
-        "p2": { "type": "spec", "settings": { "label": "Caoutchouc souple", "value": "Thermoplastique (TPE), agréable sous la patte." } },
-        "p3": { "type": "spec", "settings": { "label": "Une ouverture", "value": "Pour glisser les croquettes sèches." } },
-        "p4": { "type": "spec", "settings": { "label": "Se rince à l’eau", "value": "Eau tiède et un peu de liquide vaisselle, puis séchage." } }
+        "p1": { "type": "spec", "settings": { "label": "Il cherche", "value": "Il renifle et il fouille : son flair se met au travail." } },
+        "p2": { "type": "spec", "settings": { "label": "Il se dépense", "value": "Il fait rouler, gratte, attrape : de quoi occuper ses pattes et sa tête." } },
+        "p3": { "type": "spec", "settings": { "label": "Il mange plus lentement", "value": "Ses croquettes se gagnent une à une, au lieu d’être avalées d’un coup." } },
+        "p4": { "type": "spec", "settings": { "label": "Tu restes à côté", "value": "Chaque jeu se partage sous ton œil. Un jouet abîmé se retire." } }
       },
       "block_order": ["p1", "p2", "p3", "p4"],
-      "settings": { "eyebrow": "La balle", "title": "Petite, souple, faite pour rouler.", "image": "shopify://shop_images/balle-pattoune-3-taille-8cm.jpg", "warning": "Pas pour les grands chiens, qui pourraient l’avaler.", "anchor": "objet" }
-    },
-    "produit": {
-      "type": "featured-product",
-      "settings": {
-        "product": "balle-a-friandises-pattoune-1", "title_as_h1": false, "eyebrow": "Chiens et chats", "preselect_offer": 2,
-        "offers_legend": "Combien de balles\u202f?", "unit_singular": "balle", "unit_plural": "balles",
-        "trust_1": "Colis suivi", "trust_2": "Retour sous 14\u00a0jours (droit légal)", "trust_3": "Paiement sécurisé",
-        "inbox": "1 balle à friandises de 8\u00a0cm, en caoutchouc souple (TPE)\nUne ouverture pour glisser les croquettes sèches\nUn colis suivi, numéro envoyé par e-mail",
-        "size_guide": true, "show_description": false, "sticky_label": "Balle Pattoune", "anchor": "acheter"
-      }
+      "settings": { "eyebrow": "Pourquoi Pattoune", "title": "Un vrai jeu, pas juste un jouet.", "warning": "Joue avec lui et garde un œil sur lui : aucun jouet n’est indestructible.", "anchor": "pourquoi" }
     },
     "faq": {
       "type": "faq",
       "blocks": {
-        "q1": { "type": "question", "settings": { "question": "Quelle taille fait la balle\u202f?", "answer": "<p>Elle mesure 8\u00a0cm de diamètre. Elle convient aux chats et aux petits chiens\u202f; ne la donne pas à un grand chien, qui pourrait l’avaler.</p>" } },
-        "q2": { "type": "question", "settings": { "question": "Quelles croquettes mettre dedans\u202f?", "answer": "<p>Des croquettes sèches de petite taille, qui passent facilement par l’ouverture.</p>" } },
-        "q3": { "type": "question", "settings": { "question": "Peut-il jouer sans surveillance\u202f?", "answer": "<p>Surveille les premières séances pour voir comment il joue. Retire le jouet s’il commence à le mâchouiller ou s’il est abîmé. Aucun jouet n’est indestructible.</p>" } },
-        "q4": { "type": "question", "settings": { "question": "Livraison et retours\u202f?", "answer": "<p>La livraison est offerte et suivie, en [delai_livraison], en [zone_livraison]. Tu disposes de 14\u00a0jours après réception pour changer d’avis, sans avoir à te justifier.</p>" } }
+        "q1": { "type": "question", "settings": { "question": "Livraison et retours ?", "answer": "<p>La livraison est offerte et suivie, en [delai_livraison], en [zone_livraison]. Tu disposes de 14 jours après réception pour changer d’avis, sans avoir à te justifier.</p>" } },
+        "q2": { "type": "question", "settings": { "question": "Peut-il jouer sans surveillance ?", "answer": "<p>Non : garde toujours un œil sur ton animal pendant qu’il joue, surtout lors des premières séances. Retire le jouet s’il commence à le mâchouiller ou s’il est abîmé. Aucun jouet n’est indestructible.</p>" } },
+        "q3": { "type": "question", "settings": { "question": "Comment choisir ?", "answer": "<p>Chaque jouet a sa page, avec sa taille, ses matières et les animaux à qui il convient. Pour un chat ou un petit chien qui aime renifler, la <a href=\"/products/balle-a-friandises-pattoune-1\">balle à friandises</a> ; pour un chat qui aime chasser, le <a href=\"/products/puzzle-de-chasse-pour-chat\">puzzle de chasse</a>.</p>" } },
+        "q4": { "type": "question", "settings": { "question": "Une question sur ta commande ?", "answer": "<p>Écris-nous depuis la <a href=\"/pages/contact\">page Contact</a> : une vraie personne te répond, en français.</p>" } }
       },
       "block_order": ["q1", "q2", "q3", "q4"],
-      "settings": { "eyebrow": "Questions", "title": "Avant de te décider.", "aside": "Une autre question\u202f?", "link_label": "Écris-nous", "aside_after": ", une vraie personne te répond en français.", "anchor": "faq" }
-    },
-    "recos": {
-      "type": "product-recos",
-      "settings": { "exclude": "balle-a-friandises-pattoune-1" }
+      "settings": { "eyebrow": "Questions", "title": "Avant de te décider.", "aside": "Une autre question ?", "link_label": "Écris-nous", "aside_after": ", une vraie personne te répond en français.", "anchor": "faq" }
     },
     "final": {
       "type": "final-cta",
-      "settings": { "title": "Une balle, quelques croquettes, et le salon redevient calme.", "highlight": "calme.", "button_label": "Je commande ma balle", "note": "Livraison offerte · Retour sous 14\u00a0jours (droit légal)" }
+      "settings": { "title": "Un jouet, quelques croquettes, et le salon redevient calme.", "highlight": "calme.", "button_label": "Voir les jouets", "button_anchor": "jouets", "note": "Livraison offerte · Retour sous 14 jours (droit légal)" }
     }
   },
-  "order": ["haut", "principe", "fiche", "produit", "faq", "recos", "final"]
+  "order": ["haut", "jouets", "pourquoi", "faq", "final"]
 }

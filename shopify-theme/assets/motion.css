@@ -182,6 +182,7 @@ html:is(.pt-js, .pt-motion) .pt-hero__media video { opacity: 0; transition: opac
 .pt-hero__eyebrow { margin-bottom: clamp(20px, 3vh, 32px); }
 .pt-hero__title { margin-bottom: clamp(24px, 3.4vh, 36px); font-size: clamp(3.1rem, min(0.85rem + 8.6vw, 14svh), 8.6rem); line-height: .92; }
 .pt-hero__title .pt-hl { display: block; width: fit-content; }
+.pt-hero--long .pt-hero__title { font-size: clamp(3.1rem, min(0.85rem + 6.8vw, 11svh), 6.8rem); }
 .pt-hero__sub { max-width: 46ch; margin-bottom: clamp(28px, 4vh, 40px); font-size: var(--pt-fs-lead); line-height: 1.55; color: var(--pt-on-dark-2); }
 .pt-hero__cta { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; }
 .pt-hero__proof { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: clamp(28px, 4vh, 40px); font-size: var(--pt-fs-sm); color: var(--pt-on-dark-2); }
@@ -317,6 +318,7 @@ html.pt-motion .pt-eyebrow[data-reveal].is-in::before { animation: pt-sweep 800m
   .pt-hero__copy::before { content: ''; position: absolute; z-index: -1; left: calc(-1 * var(--pt-gutter)); right: calc(-1 * var(--pt-gutter)); top: -140px; bottom: 0; pointer-events: none; background: linear-gradient(to bottom, rgb(20 22 43 / 0), rgb(20 22 43 / .85) 140px, rgb(20 22 43 / .85)); }
   .pt-hero__eyebrow { margin-bottom: 14px; }
   .pt-hero__title { margin-bottom: 16px; font-size: clamp(2.9rem, 1rem + 9.2vw, 4.4rem); }
+  .pt-hero--long .pt-hero__title { font-size: clamp(2.5rem, .8rem + 7.6vw, 3.6rem); }
   .pt-hero__sub { margin-bottom: 22px; font-size: 1rem; }
   .pt-hero__cta .pt-link { display: none; }
   .pt-hero__cta .pt-btn { width: 100%; }

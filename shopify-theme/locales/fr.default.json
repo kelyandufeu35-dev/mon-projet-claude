@@ -38,8 +38,6 @@
     "header": {
       "nav_label": "Navigation principale",
       "language_label": "Choisir la langue",
-      "nav_principle": "Le principe",
-      "nav_ball": "La balle",
       "nav_faq": "Questions",
       "cart": "Panier",
       "cart_label": {
@@ -103,7 +101,10 @@
       "sound_off": "Couper le son"
     },
     "main_collection": {
-      "empty": "Aucun produit dans cette collection."
+      "empty": "Aucun produit dans cette collection.",
+      "pagination": "Pages de la collection",
+      "previous": "Précédent",
+      "next": "Suivant"
     },
     "main_list_collections": {
       "title": "Collections"
@@ -122,6 +123,11 @@
       "owner": "Accès propriétaire",
       "password": "Mot de passe",
       "enter": "Entrer"
+    },
+    "product_grid": {
+      "eyebrow": "Nos jouets",
+      "title": "Choisis son prochain jeu.",
+      "lead": "Des jeux simples à partager avec lui, toujours sous ton œil."
     },
     "product_recos": {
       "eyebrow": "Les autres jouets",

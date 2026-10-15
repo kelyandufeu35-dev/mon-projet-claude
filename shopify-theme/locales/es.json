@@ -38,8 +38,6 @@
     "header": {
       "nav_label": "Navegación principal",
       "language_label": "Elegir idioma",
-      "nav_principle": "Cómo funciona",
-      "nav_ball": "La pelota",
       "nav_faq": "Preguntas",
       "cart": "Carrito",
       "cart_label": {
@@ -102,7 +100,10 @@
       "sound_off": "Silenciar"
     },
     "main_collection": {
-      "empty": "Todavía no hay productos en esta colección."
+      "empty": "Todavía no hay productos en esta colección.",
+      "pagination": "Páginas de la colección",
+      "previous": "Anterior",
+      "next": "Siguiente"
     },
     "main_list_collections": {
       "title": "Colecciones"
@@ -121,6 +122,11 @@
       "owner": "Acceso del propietario",
       "password": "Contraseña",
       "enter": "Entrar"
+    },
+    "product_grid": {
+      "eyebrow": "Nuestros juguetes",
+      "title": "Elige su próximo juego.",
+      "lead": "Juegos sencillos para compartir con él, siempre bajo tu supervisión."
     },
     "product_recos": {
       "eyebrow": "Más juguetes",

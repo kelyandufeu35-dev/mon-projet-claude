@@ -21,13 +21,13 @@
         "type": "text",
         "id": "home_title",
         "label": "Titre de la page d’accueil (Google, onglet)",
-        "default": "Pattoune · La balle à friandises qui occupe chiens et chats"
+        "default": "Pattoune · Jouets d’éveil pour chats et chiens"
       },
       {
         "type": "textarea",
         "id": "home_description",
         "label": "Description de la page d’accueil (Google)",
-        "default": "La balle à friandises Pattoune libère les croquettes en roulant : ton chien ou ton chat cherche, s’occupe et mange plus lentement. Livraison offerte."
+        "default": "Balle à friandises, puzzle de chasse… Des jouets d’éveil qui font chercher, chasser et réfléchir ton chat ou ton chien. Livraison offerte en France, dans l’UE et en Suisse."
       }
     ]
   },

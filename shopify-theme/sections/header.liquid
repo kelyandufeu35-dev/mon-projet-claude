@@ -2,7 +2,8 @@
   En-tête « pastille » (v9 Cinéma). Fixe, transparent au-dessus du haut de page de l’accueil,
   il devient une pastille floutée dès que la sentinelle [data-hd-sentinel] sort de l’écran
   (classe .is-scrolled posée par motion.js, sans écouteur de défilement). Ailleurs, il est
-  d’emblée en pastille (.is-solid). Le bouton « Je commande » n’apparaît qu’en pastille.
+  d’emblée en pastille (.is-solid). Le bouton « Je commande » n’apparaît qu’en pastille : il mène
+  à la vitrine « Nos jouets » (#jouets) sur l’accueil et à la zone d’achat (#acheter) sur une page produit.
 {%- endcomment -%}
 {%- liquid
   assign brand = settings.brand_name | default: shop.name
@@ -14,9 +15,17 @@
   unless template.name == 'index' or template.name == 'product'
     assign anchor_base = routes.root_url
   endunless
+  assign shop_url = routes.all_products_collection_url
+  if on_home
+    assign shop_url = '#jouets'
+  endif
   assign show_cta = false
+  assign cta_href = '#acheter'
   if section.settings.show_cta and section.settings.cta_label != blank
-    if template.name == 'index' or template.name == 'product'
+    if on_home
+      assign show_cta = true
+      assign cta_href = '#jouets'
+    elsif template.name == 'product'
       assign show_cta = true
     endif
   endif
@@ -39,16 +48,17 @@
           <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
         {%- endfor -%}
       {%- else -%}
-        {%- comment -%} Liens par défaut tant qu’aucun menu n’est choisi : les ancres des sections. {%- endcomment -%}
-        <a href="{{ anchor_base }}#principe">{{ 'sections.header.nav_principle' | t }}</a>
-        <a href="{{ anchor_base }}#objet">{{ 'sections.header.nav_ball' | t }}</a>
+        {%- comment -%}
+          Liens par défaut tant qu’aucun menu n’est choisi : « Nos jouets » (vitrine #jouets sur l’accueil,
+          page « Tous les jouets » ailleurs) et « Questions » (#faq de l’accueil ou de la page produit).
+        {%- endcomment -%}
+        <a href="{{ shop_url }}">{{ 'sections.header.nav_shop' | t }}</a>
         <a href="{{ anchor_base }}#faq">{{ 'sections.header.nav_faq' | t }}</a>
-        <a href="{{ routes.all_products_collection_url }}">{{ 'sections.header.nav_shop' | t }}</a>
       {%- endif -%}
     </nav>
 
     {%- if show_cta -%}
-      <a class="pt-hd__cta pt-btn pt-btn--sun" href="#acheter">
+      <a class="pt-hd__cta pt-btn pt-btn--sun" href="{{ cta_href }}">
         {{- section.settings.cta_label | escape -}}
         <span class="pt-btn__arrow" aria-hidden="true">{% render 'icon', name: 'arrow' %}</span>
       </a>
@@ -89,14 +99,14 @@
       "type": "link_list",
       "id": "menu",
       "label": "Menu",
-      "info": "Vide = « Le principe », « La balle » et « Questions », qui mènent aux sections de l’accueil."
+      "info": "Vide = « Nos jouets » (la vitrine de l’accueil, sinon la page de tous les jouets) et « Questions »."
     },
     {
       "type": "checkbox",
       "id": "show_cta",
       "label": "Bouton Je commande quand on fait défiler",
       "default": true,
-      "info": "Sur l’accueil et la page produit, sur ordinateur. Il mène à la zone d’achat."
+      "info": "Sur l’accueil et la page produit, sur ordinateur. Il mène à « Nos jouets » sur l’accueil et à la zone d’achat sur une page produit."
     },
     {
       "type": "text",

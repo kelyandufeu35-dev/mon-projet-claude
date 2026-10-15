@@ -38,8 +38,6 @@
     "header": {
       "nav_label": "Main navigation",
       "language_label": "Choose language",
-      "nav_principle": "How it works",
-      "nav_ball": "The ball",
       "nav_faq": "FAQ",
       "cart": "Cart",
       "cart_label": {
@@ -102,7 +100,10 @@
       "sound_off": "Mute"
     },
     "main_collection": {
-      "empty": "No products in this collection yet."
+      "empty": "No products in this collection yet.",
+      "pagination": "Collection pages",
+      "previous": "Previous",
+      "next": "Next"
     },
     "main_list_collections": {
       "title": "Collections"
@@ -121,6 +122,11 @@
       "owner": "Store owner access",
       "password": "Password",
       "enter": "Enter"
+    },
+    "product_grid": {
+      "eyebrow": "Our toys",
+      "title": "Pick their next game.",
+      "lead": "Simple games to share with your pet, always with you close by."
     },
     "product_recos": {
       "eyebrow": "More toys",

@@ -6,13 +6,28 @@
     les animations sont permises, l’intro finie, en vue et pas en pause, puis elle apparaît en fondu
     au-dessus du poster (.is-playing). Boucle et poster du thème : 1 080 × 1 440 (3:4).
   - Médias : réglage « Vidéo » sinon boucle du thème ; réglage « Image fixe » sinon poster du thème.
+  - Deux modes : « produit » (réglage Produit rempli : son prix s’ajoute au bouton, ancres par défaut
+    #acheter / #principe) et « marque » (Produit vide : aucun prix, ancres par défaut #jouets /
+    #pourquoi). La balle de la vidéo reste la mascotte de la marque dans les deux cas.
+  - Accroche longue (plus de 46 signes, selon la langue) : .pt-hero--long réduit le corps du titre pour
+    garder le bouton dans le premier écran.
 {%- endcomment -%}
 {%- liquid
   assign featured = section.settings.product
   assign title_id = 'pt-hero-title-' | append: section.id
-  assign target = section.settings.target | default: 'acheter'
+  if featured != blank
+    assign target = section.settings.target | default: 'acheter'
+    assign link_target = section.settings.link_target | default: 'principe'
+  else
+    assign target = section.settings.target | default: 'jouets'
+    assign link_target = section.settings.link_target | default: 'pourquoi'
+  endif
+  assign hero_class = ''
+  if section.settings.title.size > 46
+    assign hero_class = ' pt-hero--long'
+  endif
 -%}
-<section class="pt-hero pt-dark" data-hero data-sticky-start data-pointer-scene aria-labelledby="{{ title_id }}">
+<section class="pt-hero pt-dark{{ hero_class }}" data-hero data-sticky-start data-pointer-scene aria-labelledby="{{ title_id }}">
   <div class="pt-hero__bg" aria-hidden="true"></div>
 
   <div class="pt-hero__stage" aria-hidden="true">
@@ -72,7 +87,7 @@
           <span class="pt-btn__arrow" aria-hidden="true">{% render 'icon', name: 'arrow' %}</span>
         </a>
         {%- if section.settings.link_label != blank -%}
-          <a class="pt-link" href="#{{ section.settings.link_target | default: 'principe' | escape }}" style="--pt-d:1">
+          <a class="pt-link" href="#{{ link_target | escape }}" style="--pt-d:1">
             <span class="pt-link__icon" aria-hidden="true">{% render 'icon', name: 'arrow-down' %}</span>
             <span class="pt-link__label">{{ section.settings.link_label | escape }}</span>
           </a>
@@ -105,18 +120,18 @@
   "name": "Haut de page",
   "enabled_on": { "templates": ["index"] },
   "settings": [
-    { "type": "product", "id": "product", "label": "Produit", "info": "Son prix s’affiche dans le bouton." },
+    { "type": "product", "id": "product", "label": "Produit (facultatif)", "info": "Son prix s’affiche dans le bouton. Vide = haut de page de la marque, sans prix (accueil multi-jouets)." },
     { "type": "checkbox", "id": "show_video", "label": "Vidéo en boucle", "default": true },
     { "type": "video", "id": "video", "label": "Vidéo (facultatif)", "info": "Remplace la boucle fournie avec le thème : MP4 sans son, format 3:4." },
     { "type": "image_picker", "id": "image", "label": "Image fixe (facultatif)", "info": "Affichée avant la vidéo et si elle ne joue pas. Sinon, celle du thème." },
-    { "type": "text", "id": "eyebrow", "label": "Petit texte au-dessus", "default": "Pour chiens et chats" },
-    { "type": "text", "id": "title", "label": "Accroche", "default": "La balle qui le fait chercher ses croquettes." },
+    { "type": "text", "id": "eyebrow", "label": "Petit texte au-dessus", "default": "Jouets d’éveil pour chats et chiens" },
+    { "type": "text", "id": "title", "label": "Accroche", "default": "Des jouets qui le font chercher, chasser et réfléchir." },
     { "type": "text", "id": "highlight", "label": "Mots en jaune (sur leur propre ligne)", "info": "Doivent apparaître tels quels dans l’accroche.", "default": "chercher" },
-    { "type": "text", "id": "subtitle", "label": "Phrase sous l’accroche", "default": "Il pousse la balle, elle roule et libère ses croquettes une à une. Moins d’ennui, des repas plus lents." },
-    { "type": "text", "id": "button_label", "label": "Texte du bouton", "info": "Le prix est ajouté automatiquement.", "default": "Je commande" },
-    { "type": "text", "id": "target", "label": "Ancre du bouton (sans #)", "default": "acheter" },
-    { "type": "text", "id": "link_label", "label": "Lien secondaire", "default": "Voir le principe" },
-    { "type": "text", "id": "link_target", "label": "Ancre du lien secondaire (sans #)", "default": "principe" },
+    { "type": "text", "id": "subtitle", "label": "Phrase sous l’accroche", "default": "Balle à friandises, puzzle de chasse… Des jeux simples qui occupent ton animal et ralentissent ses repas. Livraison offerte en France, dans l’UE et en Suisse." },
+    { "type": "text", "id": "button_label", "label": "Texte du bouton", "info": "Avec un produit choisi, son prix est ajouté automatiquement.", "default": "Voir les jouets" },
+    { "type": "text", "id": "target", "label": "Ancre du bouton (sans #)", "info": "Vide = « acheter » avec un produit, « jouets » sans.", "default": "jouets" },
+    { "type": "text", "id": "link_label", "label": "Lien secondaire", "default": "Comment ça marche" },
+    { "type": "text", "id": "link_target", "label": "Ancre du lien secondaire (sans #)", "info": "Vide = « principe » avec un produit, « pourquoi » sans.", "default": "pourquoi" },
     { "type": "checkbox", "id": "show_proof", "label": "Ligne des garanties", "default": true },
     { "type": "text", "id": "proof_1", "label": "Garantie 1 (camion)", "default": "Livraison offerte" },
     { "type": "text", "id": "proof_2", "label": "Garantie 2 (retour)", "default": "Retour sous 14 jours (droit légal)" },

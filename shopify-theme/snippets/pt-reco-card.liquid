@@ -1,13 +1,27 @@
-{%- comment -%} Carte « Les autres jouets ». Paramètre : item (produit). Styles : .pt-reco (sections-v9.css). {%- endcomment -%}
+{%- comment -%}
+  Carte produit v9 : « Les autres jouets », « Nos jouets » et pages collection. Styles : .pt-reco (sections-v9.css).
+  Paramètres : item (produit, obligatoire) · eyebrow (petit texte au-dessus du titre, facultatif)
+  sizes (attribut sizes de l’image, facultatif). Prix « dès » si les déclinaisons n’ont pas le même prix,
+  « Épuisé » à la place de « Livraison offerte » pour un produit indisponible (pages collection) ;
+  jamais d’offre groupée ici (elles ne valent que pour la balle, sur sa page).
+{%- endcomment -%}
+{%- assign card_sizes = sizes | default: '(min-width: 900px) 300px, 46vw' -%}
 <a class="pt-reco" href="{{ item.url }}">
   <span class="pt-reco__img">
     {%- if item.featured_media -%}
-      {{ item.featured_media | image_url: width: 720 | image_tag: loading: 'lazy', widths: '320, 480, 720', sizes: '(min-width: 900px) 300px, 46vw', alt: '' }}
+      {{ item.featured_media | image_url: width: 720 | image_tag: loading: 'lazy', widths: '320, 480, 720', sizes: card_sizes, alt: '' }}
     {%- endif -%}
   </span>
+  {%- if eyebrow != blank -%}
+    <span class="pt-reco__type">{{ eyebrow | escape }}</span>
+  {%- endif -%}
   <span class="pt-reco__title">{{ item.title | escape }}</span>
   <span class="pt-reco__meta">
     <strong>{%- if item.price_varies -%}{{ 'sections.hero.from' | t }} {% endif -%}{% render 'pt-money', cents: item.price %}</strong>
-    <span>{{ 'sections.product_recos.free_shipping' | t }}</span>
+    {%- if item.available == false -%}
+      <span>{{ 'product.sold_out' | t }}</span>
+    {%- else -%}
+      <span>{{ 'sections.product_recos.free_shipping' | t }}</span>
+    {%- endif -%}
   </span>
 </a>

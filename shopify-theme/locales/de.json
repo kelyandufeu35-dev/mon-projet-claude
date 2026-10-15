@@ -38,8 +38,6 @@
     "header": {
       "nav_label": "Hauptnavigation",
       "language_label": "Sprache wählen",
-      "nav_principle": "So funktioniert’s",
-      "nav_ball": "Der Ball",
       "nav_faq": "Fragen",
       "cart": "Warenkorb",
       "cart_label": {
@@ -102,7 +100,10 @@
       "sound_off": "Ton ausschalten"
     },
     "main_collection": {
-      "empty": "In dieser Kollektion gibt es noch keine Produkte."
+      "empty": "In dieser Kollektion gibt es noch keine Produkte.",
+      "pagination": "Seiten der Kollektion",
+      "previous": "Zurück",
+      "next": "Weiter"
     },
     "main_list_collections": {
       "title": "Kollektionen"
@@ -121,6 +122,11 @@
       "owner": "Zugang für Shop-Inhaber",
       "password": "Passwort",
       "enter": "Eintreten"
+    },
+    "product_grid": {
+      "eyebrow": "Unsere Spielzeuge",
+      "title": "Such sein nächstes Spiel aus.",
+      "lead": "Einfache Spiele, die du mit ihm teilst, immer unter deiner Aufsicht."
     },
     "product_recos": {
       "eyebrow": "Weitere Spielzeuge",
