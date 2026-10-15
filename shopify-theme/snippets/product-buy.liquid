@@ -336,16 +336,16 @@
           "shippingDetails": {
             "@type": "OfferShippingDetails",
             "shippingRate": { "@type": "MonetaryAmount", "value": 0, "currency": {{ cart.currency.iso_code | json }} },
-            "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "FR" },
+            "shippingDestination": { "@type": "DefinedRegion", "addressCountry": ["FR","BE","LU","DE","AT","NL","IT","ES","PT","IE","DK","SE","FI","EE","LV","LT","PL","CZ","SK","SI","HR","HU","RO","BG","GR","CY","MT","CH"] },
             "deliveryTime": {
               "@type": "ShippingDeliveryTime",
               "handlingTime": { "@type": "QuantitativeValue", "minValue": 1, "maxValue": 3, "unitCode": "DAY" },
-              "transitTime": { "@type": "QuantitativeValue", "minValue": 10, "maxValue": 16, "unitCode": "DAY" }
+              "transitTime": { "@type": "QuantitativeValue", "minValue": 7, "maxValue": 22, "unitCode": "DAY" }
             }
           },
           "hasMerchantReturnPolicy": {
             "@type": "MerchantReturnPolicy",
-            "applicableCountry": "FR",
+            "applicableCountry": ["FR","BE","LU","DE","AT","NL","IT","ES","PT","IE","DK","SE","FI","EE","LV","LT","PL","CZ","SK","SI","HR","HU","RO","BG","GR","CY","MT","CH"],
             "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
             "merchantReturnDays": 14,
             "returnMethod": "https://schema.org/ReturnByMail",

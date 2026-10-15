@@ -6,8 +6,8 @@
     "home_label": "{{ brand }}, inicio",
     "page": "página {{ number }}",
     "shipping": {
-      "delivery_time": "12 a 18 días",
-      "area": "Francia metropolitana"
+      "delivery_time": "8 a 25 días",
+      "area": "Francia, la UE y Suiza"
     }
   },
   "date_formats": {

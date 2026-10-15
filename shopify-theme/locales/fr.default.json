@@ -6,8 +6,8 @@
     "home_label": "{{ brand }}, accueil",
     "page": "page {{ number }}",
     "shipping": {
-      "delivery_time": "12 à 18 jours",
-      "area": "France métropolitaine"
+      "delivery_time": "8 à 25 jours",
+      "area": "France, Union européenne et Suisse"
     }
   },
   "date_formats": {
