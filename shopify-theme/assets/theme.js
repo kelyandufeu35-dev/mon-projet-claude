@@ -409,3 +409,12 @@
   // Theme editor: re-run when a section is reloaded.
   document.addEventListener('shopify:section:load', init);
 })();
+
+// Sélecteur de langue : se referme au clic à l’extérieur ou avec Échap.
+document.addEventListener('click', (e) => {
+  document.querySelectorAll('[data-lang][open]').forEach((d) => { if (!d.contains(e.target)) d.removeAttribute('open'); });
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape') return;
+  document.querySelectorAll('[data-lang][open]').forEach((d) => { d.removeAttribute('open'); d.querySelector('summary')?.focus(); });
+});

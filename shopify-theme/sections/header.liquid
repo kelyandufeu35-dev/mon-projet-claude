@@ -53,6 +53,23 @@
       </a>
     {%- endif -%}
 
+    {%- comment -%} Sélecteur de langue : n’apparaît que si plusieurs langues sont publiées. {%- endcomment -%}
+    {%- if localization.available_languages.size > 1 -%}
+      <details class="pt-lang" data-lang>
+        <summary class="pt-lang__btn" aria-label="{{ 'sections.header.language_label' | t }}">
+          {% render 'icon', name: 'globe' %}
+          <span>{{ localization.language.iso_code | upcase }}</span>
+        </summary>
+        {%- form 'localization', class: 'pt-lang__menu' -%}
+          {%- for language in localization.available_languages -%}
+            <button type="submit" name="locale_code" value="{{ language.iso_code }}" lang="{{ language.iso_code }}"{% if language.iso_code == localization.language.iso_code %} aria-current="true"{% endif %}>
+              {{- language.endonym_name | capitalize -}}
+            </button>
+          {%- endfor -%}
+        {%- endform -%}
+      </details>
+    {%- endif -%}
+
     <a class="pt-hd__cart" href="{{ routes.cart_url }}" data-cart-open aria-label="{{ 'sections.header.cart_label' | t: count: cart.item_count }}">
       {% render 'icon', name: 'bag' %}
       <span class="pt-hd__cart-label">{{ 'sections.header.cart' | t }}</span>

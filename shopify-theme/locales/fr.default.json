@@ -37,6 +37,7 @@
     },
     "header": {
       "nav_label": "Navigation principale",
+      "language_label": "Choisir la langue",
       "nav_principle": "Le principe",
       "nav_ball": "La balle",
       "nav_faq": "Questions",

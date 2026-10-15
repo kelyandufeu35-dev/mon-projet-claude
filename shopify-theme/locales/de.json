@@ -37,6 +37,7 @@
     },
     "header": {
       "nav_label": "Hauptnavigation",
+      "language_label": "Sprache wählen",
       "nav_principle": "So funktioniert’s",
       "nav_ball": "Der Ball",
       "nav_faq": "Fragen",

@@ -37,6 +37,7 @@
     },
     "header": {
       "nav_label": "Navegación principal",
+      "language_label": "Elegir idioma",
       "nav_principle": "Cómo funciona",
       "nav_ball": "La pelota",
       "nav_faq": "Preguntas",

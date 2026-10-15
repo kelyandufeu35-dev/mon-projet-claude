@@ -37,6 +37,7 @@
     },
     "header": {
       "nav_label": "Main navigation",
+      "language_label": "Choose language",
       "nav_principle": "How it works",
       "nav_ball": "The ball",
       "nav_faq": "FAQ",
