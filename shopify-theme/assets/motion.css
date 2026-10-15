@@ -307,7 +307,7 @@ html.pt-motion .pt-eyebrow[data-reveal].is-in::before { animation: pt-sweep 800m
   .pt-hero__sub { margin-bottom: 22px; font-size: 1rem; }
   .pt-hero__cta .pt-link { display: none; }
   .pt-hero__cta .pt-btn { width: 100%; }
-  .pt-hero__proof { margin-top: 16px; gap: 6px 16px; font-size: .75rem; }
+  .pt-hero__proof { margin-top: 16px; gap: 6px 16px; font-size: .8125rem; }
   .pt-hero__proof svg { width: 16px; height: 16px; }
   .pt-hero__pause { top: calc(var(--pt-hd-h) + 8px); bottom: auto; right: var(--pt-gutter); }
 }

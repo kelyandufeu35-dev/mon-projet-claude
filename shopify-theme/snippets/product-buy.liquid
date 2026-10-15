@@ -25,12 +25,17 @@
   assign offer_qtys = '1'
   assign offer_discounts = '0'
   assign offer_badges = ''
+  # Montants fixes en euros : hors euro (autre marché), on affiche la remise en % équivalente,
+  # Shopify convertissant lui-même la remise fixe au paiement (écart < 1 centime par balle).
   assign offer_amounts = '0'
   if settings.bundle1_qty > 1
     assign offer_qtys = offer_qtys | append: ',' | append: settings.bundle1_qty
     assign offer_discounts = offer_discounts | append: ',' | append: settings.bundle1_discount
     assign offer_badges = offer_badges | append: '|' | append: settings.bundle1_badge
     assign amount_cents = settings.bundle1_amount | replace: ',', '.' | times: 100 | round
+    if cart.currency.iso_code != shop.currency
+      assign amount_cents = 0
+    endif
     assign offer_amounts = offer_amounts | append: ',' | append: amount_cents
   endif
   if settings.bundle2_qty > settings.bundle1_qty
@@ -38,6 +43,9 @@
     assign offer_discounts = offer_discounts | append: ',' | append: settings.bundle2_discount
     assign offer_badges = offer_badges | append: '|' | append: settings.bundle2_badge
     assign amount_cents = settings.bundle2_amount | replace: ',', '.' | times: 100 | round
+    if cart.currency.iso_code != shop.currency
+      assign amount_cents = 0
+    endif
     assign offer_amounts = offer_amounts | append: ',' | append: amount_cents
   endif
   assign qtys = offer_qtys | split: ','
@@ -319,10 +327,30 @@
         {
           "@type": "Offer",
           {%- if v.sku != blank -%}"sku": {{ v.sku | json }},{%- endif -%}
-          "availability": "http://schema.org/{% if v.available %}InStock{% else %}OutOfStock{% endif %}",
+          "availability": "https://schema.org/{% if v.available %}InStock{% else %}OutOfStock{% endif %}",
+          "itemCondition": "https://schema.org/NewCondition",
           "price": {{ v.price | divided_by: 100.00 | json }},
           "priceCurrency": {{ cart.currency.iso_code | json }},
-          "url": {{ request.origin | append: v.url | json }}
+          "url": {{ request.origin | append: v.url | json }},
+          "seller": { "@type": "Organization", "name": {{ shop.name | json }} },
+          "shippingDetails": {
+            "@type": "OfferShippingDetails",
+            "shippingRate": { "@type": "MonetaryAmount", "value": 0, "currency": {{ cart.currency.iso_code | json }} },
+            "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "FR" },
+            "deliveryTime": {
+              "@type": "ShippingDeliveryTime",
+              "handlingTime": { "@type": "QuantitativeValue", "minValue": 1, "maxValue": 3, "unitCode": "DAY" },
+              "transitTime": { "@type": "QuantitativeValue", "minValue": 10, "maxValue": 16, "unitCode": "DAY" }
+            }
+          },
+          "hasMerchantReturnPolicy": {
+            "@type": "MerchantReturnPolicy",
+            "applicableCountry": "FR",
+            "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+            "merchantReturnDays": 14,
+            "returnMethod": "https://schema.org/ReturnByMail",
+            "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility"
+          }
         }{% unless forloop.last %},{% endunless %}
       {%- endfor -%}
     ]

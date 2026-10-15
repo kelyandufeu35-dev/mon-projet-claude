@@ -66,7 +66,7 @@
           {{- section.settings.button_label | escape -}}
           {%- if featured != blank -%}
             <span class="pt-btn__sep" aria-hidden="true"></span>
-            {%- if featured.price_varies or settings.bundle1_qty > 1 -%}{{ 'sections.hero.from' | t }}&nbsp;{%- endif -%}
+            {%- if featured.price_varies -%}{{ 'sections.hero.from' | t }}&nbsp;{%- endif -%}
             {%- render 'pt-money', cents: featured.price -%}
           {%- endif -%}
           <span class="pt-btn__arrow" aria-hidden="true">{% render 'icon', name: 'arrow' %}</span>
@@ -110,8 +110,8 @@
     { "type": "video", "id": "video", "label": "Vidéo (facultatif)", "info": "Remplace la boucle fournie avec le thème : MP4 sans son, format 3:4." },
     { "type": "image_picker", "id": "image", "label": "Image fixe (facultatif)", "info": "Affichée avant la vidéo et si elle ne joue pas. Sinon, celle du thème." },
     { "type": "text", "id": "eyebrow", "label": "Petit texte au-dessus", "default": "Pour chiens et chats" },
-    { "type": "text", "id": "title", "label": "Accroche", "default": "Le jouet qui l’occupe quand tu pars." },
-    { "type": "text", "id": "highlight", "label": "Mots en jaune (sur leur propre ligne)", "info": "Doivent apparaître tels quels dans l’accroche.", "default": "l’occupe" },
+    { "type": "text", "id": "title", "label": "Accroche", "default": "La balle qui le fait chercher ses croquettes." },
+    { "type": "text", "id": "highlight", "label": "Mots en jaune (sur leur propre ligne)", "info": "Doivent apparaître tels quels dans l’accroche.", "default": "chercher" },
     { "type": "text", "id": "subtitle", "label": "Phrase sous l’accroche", "default": "Il pousse la balle, elle roule et libère ses croquettes une à une. Moins d’ennui, des repas plus lents." },
     { "type": "text", "id": "button_label", "label": "Texte du bouton", "info": "Le prix est ajouté automatiquement.", "default": "Je commande" },
     { "type": "text", "id": "target", "label": "Ancre du bouton (sans #)", "default": "acheter" },

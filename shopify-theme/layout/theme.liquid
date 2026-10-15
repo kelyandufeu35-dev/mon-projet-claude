@@ -32,7 +32,8 @@
           h.classList.add('pt-motion');
           setTimeout(function () { if (!h.classList.contains('pt-js')) h.classList.remove('pt-motion'); }, 4000);
           {%- if pt_intro %}
-          if (!seen && !location.hash && document.visibilityState === 'visible' && !document.prerendering) {
+          // Pas d’intro pour un visiteur venu d’une pub ou d’un lien suivi : il voit le produit tout de suite.
+          if (!seen && !location.hash && !/[?&](utm_|fbclid|ttclid|gclid|gbraid|wbraid|srsltid)/.test(location.search) && document.visibilityState === 'visible' && !document.prerendering) {
             h.classList.add('has-intro');
             var l = document.createElement('link');
             l.rel = 'preload'; l.as = 'image'; l.type = 'image/webp'; l.href = {{ 'pt-balle-3d.webp' | asset_url | json }};

@@ -4,7 +4,7 @@
       "type": "hero-banner",
       "settings": {
         "product": "balle-a-friandises-pattoune-1", "show_video": true,
-        "eyebrow": "Pour chiens et chats", "title": "Le jouet qui l’occupe quand tu pars.", "highlight": "l’occupe",
+        "eyebrow": "Pour chiens et chats", "title": "La balle qui le fait chercher ses croquettes.", "highlight": "chercher",
         "subtitle": "Il pousse la balle, elle roule et libère ses croquettes une à une. Moins d’ennui, des repas plus lents.",
         "button_label": "Je commande", "target": "acheter", "link_label": "Voir le principe", "link_target": "principe",
         "show_proof": true, "proof_1": "Livraison offerte", "proof_2": "Retour sous 14\u00a0jours (droit légal)", "proof_3": "Paiement sécurisé"
@@ -15,7 +15,7 @@
       "blocks": {
         "s1": { "type": "step", "settings": { "label": "Remplis", "title": "Glisse quelques croquettes dedans.", "text": "De petites croquettes sèches, par l’ouverture de la balle. Ses croquettes habituelles font l’affaire si elles passent.", "image": "shopify://shop_images/balle-pattoune-2-croquettes.jpg" } },
         "s2": { "type": "step", "settings": { "label": "Donne", "title": "Pose-la devant lui. Il renifle, il pousse.", "text": "Du bout du nez ou de la patte\u00a0: son flair se met au travail au lieu d’attendre devant la porte.", "image": "shopify://shop_images/balle-pattoune-chien.jpg" } },
-        "s3": { "type": "step", "settings": { "label": "Laisse jouer", "title": "Elle roule, les croquettes tombent une à une.", "text": "Chaque croquette se mérite\u00a0: le repas dure plus longtemps et l’ennui recule quand il reste seul.", "image": "shopify://shop_images/balle-pattoune-chat.jpg", "theme_loop": true } }
+        "s3": { "type": "step", "settings": { "label": "Laisse jouer", "title": "Elle roule, les croquettes tombent une à une.", "text": "Chaque croquette se mérite\u00a0: le repas dure plus longtemps et son flair travaille.", "image": "shopify://shop_images/balle-pattoune-chat.jpg", "theme_loop": true } }
       },
       "block_order": ["s1", "s2", "s3"],
       "settings": { "eyebrow": "Le principe", "line_1": "Il pousse.", "line_2": "Elle roule.", "line_3": "Il mange.", "text": "Une balle à facettes qui libère ses croquettes une à une. Ton animal cherche, s’occupe et mange plus lentement.", "anchor": "principe" }

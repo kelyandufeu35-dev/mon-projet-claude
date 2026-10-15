@@ -27,7 +27,7 @@
         "type": "textarea",
         "id": "home_description",
         "label": "Description de la page d’accueil (Google)",
-        "default": "La balle à friandises Pattoune libère les croquettes en roulant : elle occupe ton chien ou ton chat quand tu pars et ralentit les repas. Livraison offerte."
+        "default": "La balle à friandises Pattoune libère les croquettes en roulant : ton chien ou ton chat cherche, s’occupe et mange plus lentement. Livraison offerte."
       }
     ]
   },

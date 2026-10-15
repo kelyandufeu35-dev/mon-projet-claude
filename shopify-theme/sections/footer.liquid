@@ -30,8 +30,11 @@
         <h2>{{ 'sections.footer.help_title' | t }}</h2>
         <ul>
           {%- if menu.links.size > 0 -%}
+            {%- comment -%} Les pages légales sont listées dans la colonne « Légal » : pas de doublon ici. {%- endcomment -%}
             {%- for link in menu.links -%}
-              <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
+              {%- unless link.type == 'policy_link' -%}
+                <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
+              {%- endunless -%}
             {%- endfor -%}
           {%- else -%}
             <li><a href="{{ routes.root_url }}#faq">{{ 'sections.footer.faq_link' | t }}</a></li>
