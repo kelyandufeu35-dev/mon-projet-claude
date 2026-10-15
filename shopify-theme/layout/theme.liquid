@@ -64,7 +64,7 @@
       {%- else -%}
         {{ page_title }}
         {%- if current_tags %} &ndash; {{ current_tags | join: ', ' }}{% endif -%}
-        {%- if current_page != 1 %} &ndash; page {{ current_page }}{% endif -%}
+        {%- if current_page != 1 %} &ndash; {{ 'general.page' | t: number: current_page }}{% endif -%}
         {%- unless page_title contains brand %} &ndash; {{ brand }}{% endunless -%}
       {%- endif -%}
     </title>
@@ -140,6 +140,18 @@
     {% sections 'footer-group' %}
     {% section 'cart-drawer' %}
 
+    {%- liquid
+      comment
+        Prix hors euro dans assets/theme.js : sample = format natif Shopify de la devise (1 234 567,89),
+        sinon Intl.NumberFormat avec la langue + le pays du visiteur (« en-GB », « de-CH »…).
+      endcomment
+      assign pt_locale = request.locale.iso_code
+      unless pt_locale contains '-'
+        if localization.country.iso_code != blank
+          assign pt_locale = pt_locale | append: '-' | append: localization.country.iso_code
+        endif
+      endunless
+    %}
     <script>
       window.theme = {
         routes: {
@@ -148,7 +160,22 @@
           cart: {{ routes.cart_url | json }}
         },
         processingDays: {{ settings.processing_days | default: 0 | json }},
-        ballSrc: {{ 'pt-balle-3d.webp' | asset_url | json }}
+        ballSrc: {{ 'pt-balle-3d.webp' | asset_url | json }},
+        money: { currency: {{ cart.currency.iso_code | json }}, locale: {{ pt_locale | json }}, sample: {{ 123456789 | money | strip_html | json }} }
+      };
+      {%- comment -%} Textes générés par assets/theme.js (repli sur le français si absent). {%- endcomment %}
+      window.PattouneStrings = {
+        addToCart: {{ 'product.add' | t | json }},
+        added: {{ 'product.added' | t | json }},
+        soldOut: {{ 'product.sold_out' | t | json }},
+        unavailable: {{ 'product.unavailable' | t | json }},
+        addError: {{ 'scripts.add_error' | t | json }},
+        networkError: {{ 'scripts.network_error' | t | json }},
+        delivery: {{ 'scripts.delivery_html' | t: start: '[start]', end: '[end]' | json }},
+        soundOn: {{ 'sections.video_showcase.sound_on' | t | json }},
+        soundOff: {{ 'sections.video_showcase.sound_off' | t | json }},
+        cartLabelOne: {{ 'scripts.cart_label_one' | t: number: '[count]' | json }},
+        cartLabelOther: {{ 'scripts.cart_label_other' | t: number: '[count]' | json }}
       };
     </script>
   </body>

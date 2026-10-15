@@ -66,7 +66,7 @@
           {{- section.settings.button_label | escape -}}
           {%- if featured != blank -%}
             <span class="pt-btn__sep" aria-hidden="true"></span>
-            {%- if featured.price_varies or settings.bundle1_qty > 1 -%}dès&nbsp;{%- endif -%}
+            {%- if featured.price_varies or settings.bundle1_qty > 1 -%}{{ 'sections.hero.from' | t }}&nbsp;{%- endif -%}
             {%- render 'pt-money', cents: featured.price -%}
           {%- endif -%}
           <span class="pt-btn__arrow" aria-hidden="true">{% render 'icon', name: 'arrow' %}</span>
@@ -94,7 +94,7 @@
     </div>
   </div>
 
-  <button type="button" class="pt-hero__pause" data-hero-pause aria-pressed="false" aria-label="Mettre l’animation en pause">
+  <button type="button" class="pt-hero__pause" data-hero-pause aria-pressed="false" aria-label="{{ 'sections.hero.pause' | t }}">
     <span class="pt-hero__pause-i pt-hero__pause-i--pause">{% render 'icon', name: 'pause' %}</span>
     <span class="pt-hero__pause-i pt-hero__pause-i--play">{% render 'icon', name: 'play' %}</span>
   </button>

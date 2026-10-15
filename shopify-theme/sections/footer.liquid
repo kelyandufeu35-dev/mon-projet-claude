@@ -16,32 +16,32 @@
   <div class="pt-wrap">
     <div class="pt-footer__grid" data-reveal-group>
       <div class="pt-footer__brand" data-reveal="up">
-        <a class="pt-footer__logo" href="{{ routes.root_url }}" aria-label="{{ brand | escape }}, accueil">
+        <a class="pt-footer__logo" href="{{ routes.root_url }}" aria-label="{{ 'general.home_label' | t: brand: brand }}">
           {%- render 'pt-logo-mark', id: 'ft' -%}
           <span aria-hidden="true">{{ brand | escape }}</span>
         </a>
         <p>
           {{- section.settings.tagline | escape -}}
-          {%- if pages.contact != empty %} Une question&#8239;? <a href="{{ pages.contact.url }}">Écris-nous</a>, on te répond vite.{%- endif -%}
+          {%- if pages.contact != empty %} {{ 'sections.footer.contact_html' | t: url: pages.contact.url }}{%- endif -%}
         </p>
       </div>
 
-      <nav class="pt-footer__col" aria-label="Aide" data-reveal="up">
-        <h2>Aide</h2>
+      <nav class="pt-footer__col" aria-label="{{ 'sections.footer.help_label' | t }}" data-reveal="up">
+        <h2>{{ 'sections.footer.help_title' | t }}</h2>
         <ul>
           {%- if menu.links.size > 0 -%}
             {%- for link in menu.links -%}
               <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
             {%- endfor -%}
           {%- else -%}
-            <li><a href="{{ routes.root_url }}#faq">Questions fréquentes</a></li>
-            {%- if pages.contact != empty -%}<li><a href="{{ pages.contact.url }}">Nous écrire</a></li>{%- endif -%}
+            <li><a href="{{ routes.root_url }}#faq">{{ 'sections.footer.faq_link' | t }}</a></li>
+            {%- if pages.contact != empty -%}<li><a href="{{ pages.contact.url }}">{{ 'sections.footer.contact_link' | t }}</a></li>{%- endif -%}
           {%- endif -%}
         </ul>
       </nav>
 
-      <nav class="pt-footer__col" aria-label="Informations légales" data-reveal="up">
-        <h2>Légal</h2>
+      <nav class="pt-footer__col" aria-label="{{ 'sections.footer.legal_label' | t }}" data-reveal="up">
+        <h2>{{ 'sections.footer.legal_title' | t }}</h2>
         <ul>
           {%- for policy in shop.policies -%}
             {%- if policy != blank -%}
@@ -52,8 +52,8 @@
       </nav>
 
       {%- if has_social -%}
-        <nav class="pt-footer__col" aria-label="Réseaux sociaux" data-reveal="up">
-          <h2>Suivre</h2>
+        <nav class="pt-footer__col" aria-label="{{ 'sections.footer.social_label' | t }}" data-reveal="up">
+          <h2>{{ 'sections.footer.social_title' | t }}</h2>
           <ul>
             {%- if settings.social_instagram != blank -%}<li><a href="{{ settings.social_instagram }}" target="_blank" rel="noopener">Instagram</a></li>{%- endif -%}
             {%- if settings.social_tiktok != blank -%}<li><a href="{{ settings.social_tiktok }}" target="_blank" rel="noopener">TikTok</a></li>{%- endif -%}
@@ -66,7 +66,7 @@
     <div class="pt-footer__bottom">
       <span>&copy; {{ 'now' | date: '%Y' }} {{ brand | escape }}</span>
       {%- if shop.enabled_payment_types.size > 0 -%}
-        <ul class="pt-footer__pay" aria-label="Moyens de paiement">
+        <ul class="pt-footer__pay" aria-label="{{ 'sections.footer.payment_label' | t }}">
           {%- for type in shop.enabled_payment_types -%}
             <li>{{ type | payment_type_svg_tag: class: 'pt-footer__pay-icon' }}</li>
           {%- endfor -%}

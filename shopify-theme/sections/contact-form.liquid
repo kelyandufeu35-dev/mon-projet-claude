@@ -3,30 +3,30 @@
   {%- if section.settings.text != blank -%}<p class="lead">{{ section.settings.text | escape }}</p>{%- endif -%}
   {%- form 'contact', class: 'form' -%}
     {%- if form.posted_successfully? -%}
-      <p class="notice notice--ok" role="status">Message envoyé. On te répond {{ settings.response_time | escape }}.</p>
+      <p class="notice notice--ok" role="status">{{ 'sections.contact_form.success' | t: time: settings.response_time }}</p>
     {%- endif -%}
     {%- if form.errors -%}
       <div class="notice" role="alert">{{ form.errors | default_errors }}</div>
     {%- endif -%}
     <div class="form__row">
       <div class="field">
-        <label for="ContactName">Nom</label>
+        <label for="ContactName">{{ 'sections.contact_form.name' | t }}</label>
         <input id="ContactName" type="text" name="contact[name]" autocomplete="name" value="{{ form.name }}" required>
       </div>
       <div class="field">
-        <label for="ContactEmail">E-mail</label>
+        <label for="ContactEmail">{{ 'sections.contact_form.email' | t }}</label>
         <input id="ContactEmail" type="email" name="contact[email]" autocomplete="email" value="{{ form.email }}" required>
       </div>
     </div>
     <div class="field">
-      <label for="ContactOrder">Numéro de commande <span class="field__opt">(si tu en as un)</span></label>
+      <label for="ContactOrder">{{ 'sections.contact_form.order' | t }} <span class="field__opt">{{ 'sections.contact_form.order_optional' | t }}</span></label>
       <input id="ContactOrder" type="text" name="contact[Commande]">
     </div>
     <div class="field">
-      <label for="ContactBody">Message</label>
+      <label for="ContactBody">{{ 'sections.contact_form.message' | t }}</label>
       <textarea id="ContactBody" name="contact[body]" rows="6" required>{{ form.body }}</textarea>
     </div>
-    <button type="submit" class="pt-btn pt-btn--ink pt-btn--xl">Envoyer le message</button>
+    <button type="submit" class="pt-btn pt-btn--ink pt-btn--xl">{{ 'sections.contact_form.submit' | t }}</button>
   {%- endform -%}
 </section>
 

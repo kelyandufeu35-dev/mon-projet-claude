@@ -3,11 +3,15 @@
   qui s’ouvrent en douceur (::details-content). Le lien « Écris-nous » mène à la
   page Contact : aucune adresse e-mail n’est jamais affichée. Questions en police de titre :
   l’espace fine insécable (trop étroite dans Bricolage) devient une espace insécable normale.
+  Réponses : [delai_livraison] et [zone_livraison] sont remplacés par les clés de langue
+  general.shipping.delivery_time et general.shipping.area (délai et zone adaptables par langue).
   Styles : sections-v9.css.
 {%- endcomment -%}
 {%- liquid
   assign anchor = section.settings.anchor | default: 'faq'
   assign title_id = 'pt-faq-title-' | append: section.id
+  assign ship_time = 'general.shipping.delivery_time' | t
+  assign ship_area = 'general.shipping.area' | t
 -%}
 <section class="pt-faq" id="{{ anchor | escape }}" aria-labelledby="{{ title_id }}">
   <div class="pt-wrap">
@@ -30,7 +34,7 @@
         {%- for block in section.blocks -%}
           <details class="pt-faq__item" data-reveal="up" {{ block.shopify_attributes }}>
             <summary><span class="pt-faq__q">{{ block.settings.question | escape | replace: ' ', '&nbsp;' }}</span><span class="pt-plus" aria-hidden="true"></span></summary>
-            <div class="pt-faq__a rte">{{ block.settings.answer }}</div>
+            <div class="pt-faq__a rte">{{ block.settings.answer | replace: '[delai_livraison]', ship_time | replace: '[zone_livraison]', ship_area }}</div>
           </details>
         {%- endfor -%}
       </div>
@@ -48,7 +52,7 @@
           {
             "@type": "Question",
             "name": {{ block.settings.question | json }},
-            "acceptedAnswer": { "@type": "Answer", "text": {{ block.settings.answer | strip_html | json }} }
+            "acceptedAnswer": { "@type": "Answer", "text": {{ block.settings.answer | replace: '[delai_livraison]', ship_time | replace: '[zone_livraison]', ship_area | strip_html | json }} }
           }{% unless forloop.last %},{% endunless %}
         {%- endfor -%}
       ]

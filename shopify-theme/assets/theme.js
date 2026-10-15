@@ -7,30 +7,63 @@
   const DRAWER_SECTION = 'cart-drawer';
 
   /* ------------------------------------------------------------ Money */
-  function formatMoney(cents, format) {
-    const fmt = format || '{{amount_with_comma_separator}} €';
-    const value = (cents / 100).toFixed(2);
-    const [int, dec] = value.split('.');
-    const group = (sep) => int.replace(/\B(?=(\d{3})+(?!\d))/g, sep);
-    return fmt.replace(/\{\{\s*(\w+)\s*\}\}/, (_, key) => {
-      switch (key) {
-        case 'amount':
-          return `${group(',')}.${dec}`;
-        case 'amount_no_decimals':
-          return group(',');
-        case 'amount_with_comma_separator':
-          return `${group('.')},${dec}`;
-        case 'amount_no_decimals_with_comma_separator':
-          return group('.');
-        case 'amount_with_space_separator':
-          return `${group(' ')},${dec}`;
-        case 'amount_with_apostrophe_separator':
-          return `${group("'")}.${dec}`;
-        default:
-          return `${group(' ')},${dec}`;
-      }
-    });
+  // Format natif Shopify de la devise, lu sur un exemple rendu par le filtre money (window.theme.money.sample,
+  // montant 1 234 567,89) : symbole, séparateurs et décimales. null si l'exemple est illisible.
+  function nativeFormat(sample) {
+    const m = typeof sample === 'string' && sample.match(/^([\s\S]*?)(\d[\d.,'\s\u00a0\u202f]*\d)([\s\S]*)$/);
+    if (!m) return null;
+    const [, pre, num, post] = m;
+    const digits = num.replace(/\D/g, '');
+    let decimals = 0, dec = '', int = num;
+    if (digits === '123456789') {
+      const d = num.match(/([.,])\d{2}$/);
+      if (!d) return null;
+      decimals = 2;
+      dec = d[1];
+      int = num.slice(0, -3);
+    } else if (digits !== '1234568') return null;
+    const g = int.match(/^1(\D?)234/);
+    return { pre, post, decimals, dec, group: g ? g[1] : '' };
   }
+  function formatMoney(cents) {
+    // Euro : « 14,99 € » (format français, comme snippets/pt-money.liquid), quelle que soit la langue.
+    // Autre devise : même format que le filtre money de Shopify (snippets/pt-money.liquid), sinon
+    // Intl.NumberFormat avec la langue et le pays du visiteur (window.theme.money, layout/theme.liquid).
+    const m = (window.theme && window.theme.money) || {};
+    const currency = m.currency || 'EUR';
+    const amount = (Number(cents) || 0) / 100;
+    const group = (int, sep) => int.replace(/\B(?=(\d{3})+(?!\d))/g, sep);
+    if (currency !== 'EUR') {
+      const f = nativeFormat(m.sample);
+      if (f) {
+        const [int, frac] = amount.toFixed(f.decimals).split('.');
+        return f.pre + group(int, f.group) + (f.decimals ? f.dec + frac : '') + f.post;
+      }
+      for (const loc of [m.locale, document.documentElement.lang, 'fr']) {
+        try {
+          if (loc) return new Intl.NumberFormat(loc, { style: 'currency', currency }).format(amount);
+        } catch {
+          /* langue ou devise refusée : essai suivant */
+        }
+      }
+    }
+    const [int, dec] = amount.toFixed(2).split('.');
+    return `${group(int, ' ')},${dec} ${currency === 'EUR' ? '€' : currency}`;
+  }
+
+  /* ------------------------------------------------------------ Textes */
+  // Textes traduits exposés par layout/theme.liquid (window.PattouneStrings), repli sur le français.
+  const str = (key, fallback) => {
+    const s = window.PattouneStrings && window.PattouneStrings[key];
+    return typeof s === 'string' && s ? s : fallback;
+  };
+  const plural = (n) => {
+    try {
+      return new Intl.PluralRules(document.documentElement.lang || 'fr').select(n);
+    } catch {
+      return n > 1 ? 'other' : 'one';
+    }
+  };
 
   /* ------------------------------------------------------- Cart drawer */
   function openDrawer() {
@@ -67,7 +100,10 @@
         el.style.animation = '';
       });
       document.querySelectorAll('[data-cart-open]').forEach((el) => {
-        el.setAttribute('aria-label', `Panier, ${cart.item_count} article${cart.item_count > 1 ? 's' : ''}`);
+        const n = cart.item_count;
+        const one = plural(n) === 'one';
+        const tpl = one ? str('cartLabelOne', 'Panier, [count] article') : str('cartLabelOther', 'Panier, [count] articles');
+        el.setAttribute('aria-label', tpl.replace('[count]', n));
       });
     } catch {
       /* the count refreshes on next page load */
@@ -140,9 +176,9 @@
     const priceEl = root.querySelector('[data-price]');
     const compareEl = root.querySelector('[data-compare]');
     const stickyPrice = document.querySelector('[data-sticky-price]');
-    const addText = addLabel ? addLabel.textContent.trim() : 'Ajouter au panier';
+    const addText = addLabel ? addLabel.textContent.trim() : str('addToCart', 'Ajouter au panier');
     // Espace insécable entre le montant et « € » (jamais de « € » seul en début de ligne).
-    const money = (c) => formatMoney(c, data.money).replace(/ /g, '\u00a0');
+    const money = (c) => formatMoney(c).replace(/ /g, '\u00a0');
 
     let variant = data.variants.find((v) => String(v.id) === variantInput.value) || data.variants[0];
 
@@ -205,13 +241,13 @@
       });
       if (!match) {
         addBtn.disabled = true;
-        if (addLabel) addLabel.textContent = 'Indisponible';
+        if (addLabel) addLabel.textContent = str('unavailable', 'Indisponible');
         return;
       }
       variant = match;
       variantInput.value = match.id;
       addBtn.disabled = !match.available;
-      if (addLabel) addLabel.textContent = match.available ? addText : 'Épuisé';
+      if (addLabel) addLabel.textContent = match.available ? addText : str('soldOut', 'Épuisé');
       if (priceEl) priceEl.textContent = money(match.price);
       if (stickyPrice) stickyPrice.textContent = money(match.price);
       if (compareEl) {
@@ -246,7 +282,7 @@
         const res = await fetch(routes().cartAdd, { method: 'POST', body, headers: { Accept: 'application/json' } });
         const json = await res.json();
         if (!res.ok || json.status) {
-          errorEl.textContent = json.description || json.message || 'Impossible d’ajouter ce produit au panier.';
+          errorEl.textContent = json.description || json.message || str('addError', 'Impossible d’ajouter ce produit au panier.');
           errorEl.hidden = false;
           return;
         }
@@ -257,7 +293,7 @@
         setTimeout(refreshCount, calm() ? 0 : 650);
         setTimeout(openDrawer, calm() ? 0 : 650);
         if (addLabel) {
-          addLabel.textContent = 'Ajouté au panier';
+          addLabel.textContent = str('added', 'Ajouté au panier');
           addBtn.setAttribute('data-added', '');
           setTimeout(() => {
             addLabel.textContent = addText;
@@ -265,7 +301,7 @@
           }, 2400);
         }
       } catch {
-        errorEl.textContent = 'La connexion a échoué. Réessaie dans un instant.';
+        errorEl.textContent = str('networkError', 'La connexion a échoué. Réessaie dans un instant.');
         errorEl.hidden = false;
       } finally {
         addBtn.disabled = !variant.available;
@@ -296,7 +332,9 @@
       const max = Number(el.dataset.max);
       if (!min || !max || max < min) return;
       const now = new Date();
-      el.innerHTML = `Livraison estimée entre le <strong>${fmt.format(addBusinessDays(now, min + processing))}</strong> et le <strong>${fmt.format(addBusinessDays(now, max + processing))}</strong>`;
+      el.innerHTML = str('delivery', 'Livraison estimée entre le <strong>[start]</strong> et le <strong>[end]</strong>')
+        .replace('[start]', fmt.format(addBusinessDays(now, min + processing)))
+        .replace('[end]', fmt.format(addBusinessDays(now, max + processing)));
     });
   }
 
@@ -338,7 +376,7 @@
     if (btn) {
       btn.setAttribute('aria-pressed', String(on));
       const label = btn.querySelector('[data-sound-label]');
-      if (label) label.textContent = on ? 'Couper le son' : 'Activer le son';
+      if (label) label.textContent = on ? str('soundOff', 'Couper le son') : str('soundOn', 'Activer le son');
     }
   }
   document.addEventListener('click', (e) => {

@@ -140,7 +140,7 @@
           "type": "question",
           "settings": {
             "question": "Livraison et retours\u202f?",
-            "answer": "<p>La livraison est offerte et suivie, en 12 à 18\u00a0jours, en France métropolitaine. Tu disposes de 14\u00a0jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
+            "answer": "<p>La livraison est offerte et suivie, en [delai_livraison], en [zone_livraison]. Tu disposes de 14\u00a0jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
           }
         }
       },

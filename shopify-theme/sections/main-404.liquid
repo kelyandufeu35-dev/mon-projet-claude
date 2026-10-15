@@ -1,8 +1,8 @@
 <section class="page wrap page--lost">
   <div class="page--lost__art"><img class="pt-lost__ball" src="{{ 'pt-balle-3d.webp' | asset_url }}" alt="" width="236" height="236" decoding="async"></div>
-  <h1 class="h1">Oups, cette page a roulé sous le canapé.</h1>
-  <p class="lead">Elle n’existe pas ou a été déplacée. La balle, elle, est toujours là.</p>
-  <p><a href="{{ routes.root_url }}" class="pt-btn pt-btn--ink pt-btn--xl">Voir la balle à friandises<span class="pt-btn__arrow" aria-hidden="true">{% render 'icon', name: 'arrow' %}</span></a></p>
+  <h1 class="h1">{{ 'sections.main_404.title' | t }}</h1>
+  <p class="lead">{{ 'sections.main_404.text' | t }}</p>
+  <p><a href="{{ routes.root_url }}" class="pt-btn pt-btn--ink pt-btn--xl">{{ 'sections.main_404.button' | t }}<span class="pt-btn__arrow" aria-hidden="true">{% render 'icon', name: 'arrow' %}</span></a></p>
 </section>
 
 {% schema %}

@@ -10,9 +10,9 @@
       {% render 'product-buy', product: featured, section: section, reveal: true %}
     {%- else -%}
       <div class="pt-achat__empty">
-        <p class="pt-eyebrow pt-eyebrow--red">À configurer</p>
-        <h2 class="pt-h2" id="pt-buy-title-{{ section.id }}">Choisis ton produit</h2>
-        <p class="pt-lead">Dans l’éditeur de thème, clique sur cette section puis sélectionne le produit à mettre en avant.</p>
+        <p class="pt-eyebrow pt-eyebrow--red">{{ 'sections.featured_product.empty_eyebrow' | t }}</p>
+        <h2 class="pt-h2" id="pt-buy-title-{{ section.id }}">{{ 'sections.featured_product.empty_title' | t }}</h2>
+        <p class="pt-lead">{{ 'sections.featured_product.empty_text' | t }}</p>
       </div>
     {%- endif -%}
   </div>

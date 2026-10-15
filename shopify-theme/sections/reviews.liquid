@@ -6,7 +6,7 @@
     <div class="reviews">
       {%- for block in section.blocks -%}
         <figure class="review" {{ block.shopify_attributes }}>
-          <p class="review__stars" aria-label="{{ block.settings.rating }} sur 5">
+          <p class="review__stars" aria-label="{{ 'sections.reviews.rating' | t: rating: block.settings.rating }}">
             {%- for i in (1..5) -%}<span class="{% if i <= block.settings.rating %}on{% endif %}">{% render 'icon', name: 'star' %}</span>{%- endfor -%}
           </p>
           <blockquote>{{ block.settings.text | escape }}</blockquote>

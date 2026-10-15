@@ -6,7 +6,7 @@
       {%- for item in collection.products -%}
         <li>{% render 'product-card', item: item %}</li>
       {%- else -%}
-        <li><p>Aucun produit dans cette collection.</p></li>
+        <li><p>{{ 'sections.main_collection.empty' | t }}</p></li>
       {%- endfor -%}
     </ul>
     {%- if paginate.pages > 1 -%}{{ paginate | default_pagination }}{%- endif -%}

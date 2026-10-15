@@ -47,7 +47,7 @@
         "q1": { "type": "question", "settings": { "question": "Quelle taille fait la balle\u202f?", "answer": "<p>Elle mesure 8\u00a0cm de diamètre. Elle convient aux chats et aux petits chiens\u202f; ne la donne pas à un grand chien, qui pourrait l’avaler.</p>" } },
         "q2": { "type": "question", "settings": { "question": "Quelles croquettes mettre dedans\u202f?", "answer": "<p>Des croquettes sèches de petite taille, qui passent facilement par l’ouverture.</p>" } },
         "q3": { "type": "question", "settings": { "question": "Peut-il jouer sans surveillance\u202f?", "answer": "<p>Surveille les premières séances pour voir comment il joue. Retire le jouet s’il commence à le mâchouiller ou s’il est abîmé. Aucun jouet n’est indestructible.</p>" } },
-        "q4": { "type": "question", "settings": { "question": "Livraison et retours\u202f?", "answer": "<p>La livraison est offerte et suivie, en 12 à 18\u00a0jours, en France métropolitaine. Tu disposes de 14\u00a0jours après réception pour changer d’avis, sans avoir à te justifier.</p>" } }
+        "q4": { "type": "question", "settings": { "question": "Livraison et retours\u202f?", "answer": "<p>La livraison est offerte et suivie, en [delai_livraison], en [zone_livraison]. Tu disposes de 14\u00a0jours après réception pour changer d’avis, sans avoir à te justifier.</p>" } }
       },
       "block_order": ["q1", "q2", "q3", "q4"],
       "settings": { "eyebrow": "Questions", "title": "Avant de te décider.", "aside": "Une autre question\u202f?", "link_label": "Écris-nous", "aside_after": ", une vraie personne te répond en français.", "anchor": "faq" }

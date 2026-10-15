@@ -1,5 +1,5 @@
 <article class="page wrap">
-  <p class="eyebrow">{{ article.published_at | date: '%d/%m/%Y' }}</p>
+  <p class="eyebrow">{{ article.published_at | date: format: 'numeric' }}</p>
   <h1 class="h1">{{ article.title | escape }}</h1>
   {%- if article.image -%}{{ article.image | image_url: width: 1200 | image_tag: class: 'article__image', alt: article.title }}{%- endif -%}
   <div class="rte prose">{{ article.content }}</div>

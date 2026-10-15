@@ -23,7 +23,7 @@
 -%}
 <header class="pt-hd{% unless on_home %} is-solid{% endunless %}" data-hd>
   <div class="pt-hd__bar">
-    <a class="pt-logo" href="{{ routes.root_url }}" aria-label="{{ brand | escape }}, accueil">
+    <a class="pt-logo" href="{{ routes.root_url }}" aria-label="{{ 'general.home_label' | t: brand: brand }}">
       {%- if settings.logo != blank -%}
         {%- assign logo_style = 'width: ' | append: settings.logo_width | append: 'px' -%}
         {{ settings.logo | image_url: width: 480 | image_tag: alt: '', class: 'pt-logo__img', style: logo_style, widths: '160, 240, 320, 480', sizes: '240px' }}
@@ -33,16 +33,16 @@
       {%- endif -%}
     </a>
 
-    <nav class="pt-hd__nav" aria-label="Navigation principale">
+    <nav class="pt-hd__nav" aria-label="{{ 'sections.header.nav_label' | t }}">
       {%- if section.settings.menu != blank -%}
         {%- for link in section.settings.menu.links -%}
           <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
         {%- endfor -%}
       {%- else -%}
         {%- comment -%} Liens par défaut tant qu’aucun menu n’est choisi : les ancres des sections. {%- endcomment -%}
-        <a href="{{ anchor_base }}#principe">Le principe</a>
-        <a href="{{ anchor_base }}#objet">La balle</a>
-        <a href="{{ anchor_base }}#faq">Questions</a>
+        <a href="{{ anchor_base }}#principe">{{ 'sections.header.nav_principle' | t }}</a>
+        <a href="{{ anchor_base }}#objet">{{ 'sections.header.nav_ball' | t }}</a>
+        <a href="{{ anchor_base }}#faq">{{ 'sections.header.nav_faq' | t }}</a>
       {%- endif -%}
     </nav>
 
@@ -53,9 +53,9 @@
       </a>
     {%- endif -%}
 
-    <a class="pt-hd__cart" href="{{ routes.cart_url }}" data-cart-open aria-label="Panier, {{ cart.item_count }} article{% if cart.item_count > 1 %}s{% endif %}">
+    <a class="pt-hd__cart" href="{{ routes.cart_url }}" data-cart-open aria-label="{{ 'sections.header.cart_label' | t: count: cart.item_count }}">
       {% render 'icon', name: 'bag' %}
-      <span class="pt-hd__cart-label">Panier</span>
+      <span class="pt-hd__cart-label">{{ 'sections.header.cart' | t }}</span>
       <span class="pt-hd__count" data-cart-count{% if cart.item_count == 0 %} data-empty{% endif %}>{{ cart.item_count }}</span>
     </a>
   </div>

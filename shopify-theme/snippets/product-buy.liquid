@@ -13,8 +13,14 @@
   assign form_id = 'product-form-' | append: section.id
   assign price = current.price
   assign anchor = section.settings.anchor | default: 'acheter'
-  assign unit_singular = section.settings.unit_singular | default: 'balle'
-  assign unit_plural = section.settings.unit_plural | default: 'balles'
+  assign unit_singular = section.settings.unit_singular
+  if unit_singular == blank
+    assign unit_singular = 'snippets.product_buy.unit_singular' | t
+  endif
+  assign unit_plural = section.settings.unit_plural
+  if unit_plural == blank
+    assign unit_plural = 'snippets.product_buy.unit_plural' | t
+  endif
 
   assign offer_qtys = '1'
   assign offer_discounts = '0'
@@ -58,7 +64,7 @@
         <div class="pt-gallery__slide pt-gallery__slide--scene" data-media-id="scene"{% if initial_media_id != 'scene' %} hidden{% endif %}>
           <picture>
             <source type="image/webp" srcset="{{ 'pt-hero-poster-720.webp' | asset_url }} 720w, {{ 'pt-hero-poster.webp' | asset_url }} 1080w" sizes="(min-width: 900px) 52vw, 100vw">
-            <img src="{{ 'pt-hero-poster.jpg' | asset_url }}" width="1080" height="1440" alt="{{ product.title | escape }}, balle rouge à facettes sous un rai de lumière" loading="eager" fetchpriority="high" decoding="async">
+            <img src="{{ 'pt-hero-poster.jpg' | asset_url }}" width="1080" height="1440" alt="{{ 'snippets.product_buy.scene_alt' | t: title: product.title }}" loading="eager" fetchpriority="high" decoding="async">
           </picture>
           <span class="pt-step__vid" data-step-video aria-hidden="true">
             <video muted loop playsinline preload="none" width="1080" height="1440">
@@ -108,15 +114,15 @@
       endif
     -%}
     {%- if thumbs > 1 -%}
-      <div class="pt-gallery__thumbs" role="group" aria-label="Choisir une photo"{% if reveal %} data-reveal-group{% endif %}>
+      <div class="pt-gallery__thumbs" role="group" aria-label="{{ 'snippets.product_buy.gallery_label' | t }}"{% if reveal %} data-reveal-group{% endif %}>
         {%- if scene -%}
-          <button type="button" class="pt-thumb pt-thumb--scene" data-thumb="scene" aria-label="Animation 3D" aria-pressed="{% if initial_media_id == 'scene' %}true{% else %}false{% endif %}">
+          <button type="button" class="pt-thumb pt-thumb--scene" data-thumb="scene" aria-label="{{ 'snippets.product_buy.scene_thumb' | t }}" aria-pressed="{% if initial_media_id == 'scene' %}true{% else %}false{% endif %}">
             <img src="{{ 'pt-hero-poster-720.webp' | asset_url }}" alt="" width="720" height="960" loading="lazy" decoding="async">
             <span class="pt-thumb__play" aria-hidden="true">{% render 'icon', name: 'play' %}</span>
           </button>
         {%- endif -%}
         {%- for media in product.media -%}
-          <button type="button" class="pt-thumb" data-thumb="{{ media.id }}" aria-label="{% if media.media_type == 'video' or media.media_type == 'external_video' %}Vidéo{% else %}Photo{% endif %} {{ forloop.index }}" aria-pressed="{% if media.id == initial_media_id %}true{% else %}false{% endif %}"{% if reveal %} data-reveal="up"{% endif %}>
+          <button type="button" class="pt-thumb" data-thumb="{{ media.id }}" aria-label="{% if media.media_type == 'video' or media.media_type == 'external_video' %}{{ 'snippets.product_buy.thumb_video' | t: number: forloop.index }}{% else %}{{ 'snippets.product_buy.thumb_photo' | t: number: forloop.index }}{% endif %}" aria-pressed="{% if media.id == initial_media_id %}true{% else %}false{% endif %}"{% if reveal %} data-reveal="up"{% endif %}>
             {{ media.preview_image | image_url: width: 160 | image_tag: loading: 'lazy', alt: '' }}
             {%- if media.media_type == 'video' or media.media_type == 'external_video' -%}<span class="pt-thumb__play" aria-hidden="true">{% render 'icon', name: 'play' %}</span>{%- endif -%}
           </button>
@@ -140,7 +146,7 @@
     <p class="pt-buy__price">
       <span class="pt-buy__amount" data-price>{% render 'pt-money', cents: price %}</span>
       <s data-compare{% unless current.compare_at_price > current.price %} hidden{% endunless %}>{% render 'pt-money', cents: current.compare_at_price %}</s>
-      <span class="pt-buy__ttc">TTC · livraison offerte</span>
+      <span class="pt-buy__ttc">{{ 'snippets.product_buy.price_note' | t }}</span>
     </p>
 
     {% form 'product', product, id: form_id, class: 'pt-buy__form', novalidate: 'novalidate', data-product-form: '' %}
@@ -152,7 +158,7 @@
         {%- for option in product.options_with_values -%}
           {%- assign option_index = forloop.index0 -%}
           <fieldset class="pt-field{% if option.values.size == 1 %} pt-field--single{% endif %}" data-option="{{ forloop.index0 }}">
-            <legend>{{ option.name | escape }}&nbsp;: <strong data-option-label>{{ option.selected_value | escape }}</strong></legend>
+            <legend>{{ option.name | escape }}{{ 'snippets.product_buy.option_colon' | t }} <strong data-option-label>{{ option.selected_value | escape }}</strong></legend>
             <div class="pt-swatches">
               {%- for value in option.values -%}
                 <label class="pt-swatch">
@@ -204,18 +210,18 @@
                 {%- if badge != blank %} <span class="pt-badge{% if forloop.last %} pt-badge--sun{% endif %}">{{ badge | escape }}</span>{% endif -%}
               </span>
               <span class="pt-offer__unit">
-                {%- if qn > 1 -%}<span data-offer-unit>{%- assign unit_price = total | divided_by: qn -%}{% render 'pt-money', cents: unit_price %}</span> l’unité{%- else -%}Prix unitaire{%- endif -%}
-                {%- if d > 0 %} · <em>−{{ d }}&nbsp;%</em>{% endif -%}
+                {%- if qn > 1 -%}<span data-offer-unit>{%- assign unit_price = total | divided_by: qn -%}{% render 'pt-money', cents: unit_price %}</span> {{ 'snippets.product_buy.per_unit' | t }}{%- else -%}{{ 'snippets.product_buy.unit_price' | t }}{%- endif -%}
+                {%- if d > 0 %} · <em>{{ 'snippets.product_buy.percent_off' | t: percent: d }}</em>{% endif -%}
               </span>
               <span class="pt-offer__total">
                 <strong data-offer-total>{% render 'pt-money', cents: total %}</strong>
-                {%- if d > 0 %}<span class="pt-sr"> au lieu de </span>{% endif -%}
+                {%- if d > 0 %}<span class="pt-sr"> {{ 'snippets.product_buy.instead_of' | t }} </span>{% endif -%}
                 <s data-offer-full{% if d == 0 %} hidden{% endif %}>{% render 'pt-money', cents: full %}</s>
               </span>
             </label>
           {%- endfor -%}
         </fieldset>
-        <p class="pt-offers__note">Remise appliquée automatiquement dans le panier.</p>
+        <p class="pt-offers__note">{{ 'snippets.product_buy.discount_note' | t }}</p>
       {%- endif -%}
 
       <button type="submit" name="add" class="pt-btn pt-btn--ink pt-btn--xl pt-btn--block pt-add" data-add-button data-magnetic{% unless current.available %} disabled{% endunless %}>
@@ -238,7 +244,7 @@
     <div class="pt-more-group">
       {%- if section.settings.inbox != blank -%}
         <details class="pt-more">
-          <summary><span>Ce que tu reçois</span><span class="pt-plus" aria-hidden="true"></span></summary>
+          <summary><span>{{ 'snippets.product_buy.inbox_title' | t }}</span><span class="pt-plus" aria-hidden="true"></span></summary>
           <ul class="pt-more__body">
             {%- assign inbox_lines = section.settings.inbox | newline_to_br | split: '<br />' -%}
             {%- for line in inbox_lines -%}
@@ -251,18 +257,18 @@
 
       {%- if section.settings.size_guide -%}
         <details class="pt-more">
-          <summary><span>Quelle taille pour mon animal&#8239;?</span><span class="pt-plus" aria-hidden="true"></span></summary>
+          <summary><span>{{ 'snippets.product_buy.size_title' | t }}</span><span class="pt-plus" aria-hidden="true"></span></summary>
           <ul class="pt-more__body">
-            <li><strong>Chats</strong>&nbsp;: parfaite pour la pousser du bout de la patte.</li>
-            <li><strong>Chiots et petits chiens</strong>&nbsp;: idéale pour les occuper.</li>
-            <li><strong>Grands chiens</strong>&nbsp;: trop petite, il pourrait l’avaler.</li>
+            <li>{{ 'snippets.product_buy.size_cats_html' | t }}</li>
+            <li>{{ 'snippets.product_buy.size_small_dogs_html' | t }}</li>
+            <li>{{ 'snippets.product_buy.size_big_dogs_html' | t }}</li>
           </ul>
         </details>
       {%- endif -%}
 
       {%- if section.settings.show_description and product.description != blank -%}
         <details class="pt-more">
-          <summary><span>Description</span><span class="pt-plus" aria-hidden="true"></span></summary>
+          <summary><span>{{ 'snippets.product_buy.description' | t }}</span><span class="pt-plus" aria-hidden="true"></span></summary>
           <div class="pt-more__body rte">{{ product.description }}</div>
         </details>
       {%- endif -%}
@@ -276,7 +282,7 @@
           {"id": {{ v.id }}, "options": {{ v.options | json }}, "price": {{ v.price }}, "compare": {{ v.compare_at_price | default: 0 }}, "available": {{ v.available }}, "media": {{ v.featured_media.id | default: 0 }}}{% unless forloop.last %},{% endunless %}
         {%- endfor -%}
       ],
-      "money": {% if cart.currency.iso_code == 'EUR' %}"{% raw %}{{amount_with_comma_separator}}{% endraw %} €"{% else %}{{ shop.money_format | json }}{% endif %}
+      "currency": {{ cart.currency.iso_code | json }}
     }
   </script>
 </div>
@@ -289,9 +295,9 @@
 <div class="pt-sticky" data-sticky-buy aria-hidden="true">
   <p class="pt-sticky__text">
     <strong>{{ section.settings.sticky_label | default: product.title | escape }}</strong>
-    <span><span data-sticky-price>{% render 'pt-money', cents: price %}</span> · livraison offerte</span>
+    <span><span data-sticky-price>{% render 'pt-money', cents: price %}</span> · {{ 'snippets.product_buy.sticky_shipping' | t }}</span>
   </p>
-  <a class="pt-btn pt-btn--sun pt-sticky__btn" href="#{{ anchor | escape }}" tabindex="-1">Choisir</a>
+  <a class="pt-btn pt-btn--sun pt-sticky__btn" href="#{{ anchor | escape }}" tabindex="-1">{{ 'snippets.product_buy.sticky_button' | t }}</a>
 </div>
 
 {%- liquid

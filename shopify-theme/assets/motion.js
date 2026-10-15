@@ -78,7 +78,12 @@
     const from = parseFloat(el.dataset.countFrom || 0) || 0;
     const dec = Math.max(0, parseInt(el.dataset.countDecimals || 0, 10) || 0);
     const dur = parseFloat(el.dataset.countDuration || 1200) || 1200;
-    const fmt = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+    let fmt;
+    try {
+      fmt = new Intl.NumberFormat(h.lang || 'fr-FR', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+    } catch (e) {
+      fmt = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+    }
     const final = el.textContent;
     const d = host && host !== el ? parseFloat(host.style.getPropertyValue('--pt-d')) || 0 : 0;
     el.textContent = fmt.format(from);

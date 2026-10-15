@@ -1,0 +1,245 @@
+{
+  "general": {
+    "skip": "Zum Inhalt springen",
+    "close": "Schließen",
+    "menu": "Menü",
+    "home_label": "{{ brand }}, Startseite",
+    "page": "Seite {{ number }}",
+    "shipping": {
+      "delivery_time": "12 bis 18 Tage",
+      "area": "Frankreich (Festland)"
+    }
+  },
+  "date_formats": {
+    "numeric": "%d.%m.%Y"
+  },
+  "cart": {
+    "title": "Dein Warenkorb",
+    "empty": "Dein Warenkorb ist noch leer.",
+    "checkout": "Zur Kasse",
+    "subtotal": "Zwischensumme",
+    "total": "Gesamt inkl. MwSt.",
+    "remove": "Entfernen",
+    "quantity": "Menge",
+    "shipping_note": "Versandkosten werden im nächsten Schritt berechnet.",
+    "taxes_included": "Inkl. MwSt.",
+    "discover": "Den Ball entdecken"
+  },
+  "product": {
+    "add": "In den Warenkorb",
+    "added": "Im Warenkorb",
+    "sold_out": "Ausverkauft",
+    "unavailable": "Nicht verfügbar"
+  },
+  "sections": {
+    "announcement_bar": {
+      "label": "Ankündigung"
+    },
+    "header": {
+      "nav_label": "Hauptnavigation",
+      "nav_principle": "So funktioniert’s",
+      "nav_ball": "Der Ball",
+      "nav_faq": "Fragen",
+      "cart": "Warenkorb",
+      "cart_label": {
+        "one": "Warenkorb, {{ count }} Artikel",
+        "other": "Warenkorb, {{ count }} Artikel"
+      }
+    },
+    "footer": {
+      "contact_html": "Noch eine Frage? <a href=\"{{ url }}\">Schreib uns</a>, wir antworten dir schnell.",
+      "help_label": "Hilfe",
+      "help_title": "Hilfe",
+      "faq_link": "Häufige Fragen",
+      "contact_link": "Schreib uns",
+      "legal_label": "Rechtliche Informationen",
+      "legal_title": "Rechtliches",
+      "social_label": "Soziale Netzwerke",
+      "social_title": "Folgen",
+      "payment_label": "Zahlungsarten"
+    },
+    "hero": {
+      "from": "ab",
+      "pause": "Animation pausieren"
+    },
+    "featured_product": {
+      "empty_eyebrow": "Noch einzurichten",
+      "empty_title": "Wähle dein Produkt",
+      "empty_text": "Klicke im Theme-Editor auf diesen Abschnitt und wähle dann das Produkt aus, das du hervorheben möchtest."
+    },
+    "contact_form": {
+      "success": "Nachricht gesendet. Wir antworten dir {{ time }}.",
+      "name": "Name",
+      "email": "E-Mail",
+      "order": "Bestellnummer",
+      "order_optional": "(falls vorhanden)",
+      "message": "Nachricht",
+      "submit": "Nachricht senden"
+    },
+    "main_404": {
+      "title": "Hoppla, diese Seite ist unters Sofa gerollt.",
+      "text": "Sie existiert nicht oder wurde verschoben. Der Ball ist aber immer noch da.",
+      "button": "Zum Leckerli-Ball"
+    },
+    "comparison": {
+      "criterion": "Kriterium",
+      "yes": "Ja",
+      "no": "Nein"
+    },
+    "promise": {
+      "title": "Unsere Versprechen"
+    },
+    "reviews": {
+      "rating": "{{ rating }} von 5"
+    },
+    "trust_bar": {
+      "payments": "Akzeptierte Zahlungsarten"
+    },
+    "video_showcase": {
+      "sound_on": "Ton einschalten",
+      "sound_off": "Ton ausschalten"
+    },
+    "main_collection": {
+      "empty": "In dieser Kollektion gibt es noch keine Produkte."
+    },
+    "main_list_collections": {
+      "title": "Kollektionen"
+    },
+    "main_search": {
+      "title": "Suche",
+      "label": "Suchen",
+      "placeholder": "Suchen…",
+      "submit": "Suchen",
+      "no_results": "Keine Ergebnisse für „{{ terms }}“."
+    },
+    "main_password": {
+      "success": "Danke! Wir sagen dir Bescheid, sobald wir öffnen.",
+      "email_label": "Deine E-Mail, damit wir dir zur Eröffnung Bescheid geben",
+      "submit": "Benachrichtige mich",
+      "owner": "Zugang für Shop-Inhaber",
+      "password": "Passwort",
+      "enter": "Eintreten"
+    }
+  },
+  "snippets": {
+    "cart_summary": {
+      "free_html": "<strong>Gratisversand</strong> für deine Bestellung",
+      "remaining_html": "Nur noch <strong>{{ amount }}</strong> bis zum Gratisversand",
+      "free_reached_html": "<strong>Gratisversand</strong>",
+      "minus_one": "Einen entfernen",
+      "plus_one": "Einen hinzufügen",
+      "upsell_units_html": {
+        "one": "Füge {{ count }} weiteren Ball hinzu und spare <strong>−{{ discount }} %</strong> auf das ganze Set",
+        "other": "Füge {{ count }} weitere Bälle hinzu und spare <strong>−{{ discount }} %</strong> auf das ganze Set"
+      },
+      "upsell_items_html": {
+        "one": "Füge {{ count }} weiteren Artikel hinzu, um <strong>−{{ discount }} %</strong> zu erhalten.",
+        "other": "Füge {{ count }} weitere Artikel hinzu, um <strong>−{{ discount }} %</strong> zu erhalten."
+      },
+      "discounts": "Rabatte",
+      "free_note": "Gratisversand · keine Zusatzkosten beim Bezahlen.",
+      "secure": "Sichere Zahlung über Shopify.",
+      "view_cart": "Ganzen Warenkorb ansehen"
+    },
+    "product_buy": {
+      "scene_alt": "{{ title }}, roter facettierter Ball im Lichtstrahl",
+      "gallery_label": "Foto auswählen",
+      "scene_thumb": "3D-Animation",
+      "thumb_photo": "Foto {{ number }}",
+      "thumb_video": "Video {{ number }}",
+      "price_note": "Inkl. MwSt. · kostenloser Versand",
+      "option_colon": ":",
+      "percent_off": "−{{ percent }} %",
+      "per_unit": "pro Stück",
+      "unit_price": "Einzelpreis",
+      "instead_of": "statt",
+      "discount_note": "Der Rabatt wird im Warenkorb automatisch abgezogen.",
+      "inbox_title": "Das bekommst du",
+      "size_title": "Welche Größe für mein Tier?",
+      "size_cats_html": "<strong>Katzen</strong>: perfekt, um ihn mit der Pfote anzustupsen.",
+      "size_small_dogs_html": "<strong>Welpen und kleine Hunde</strong>: ideal zur Beschäftigung.",
+      "size_big_dogs_html": "<strong>Große Hunde</strong>: zu klein, sie könnten ihn verschlucken.",
+      "description": "Beschreibung",
+      "sticky_shipping": "kostenloser Versand",
+      "sticky_button": "Auswählen",
+      "unit_singular": "Ball",
+      "unit_plural": "Bälle"
+    }
+  },
+  "customer": {
+    "fields": {
+      "first_name": "Vorname",
+      "last_name": "Nachname",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "password_confirm": "Passwort bestätigen",
+      "address1": "Adresse",
+      "zip": "Postleitzahl",
+      "city": "Ort",
+      "country": "Land"
+    },
+    "account": {
+      "title": "Mein Konto",
+      "logout": "Abmelden",
+      "addresses_link": "Meine Adressen ({{ number }})",
+      "orders_title": "Meine Bestellungen",
+      "order": "Bestellung",
+      "date": "Datum",
+      "status": "Status",
+      "total": "Gesamt",
+      "no_orders": "Noch keine Bestellungen.",
+      "back": "← Mein Konto"
+    },
+    "activate": {
+      "title": "Mein Konto aktivieren",
+      "submit": "Aktivieren"
+    },
+    "addresses": {
+      "title": "Meine Adressen",
+      "default": "Standardadresse",
+      "save": "Speichern",
+      "add_title": "Adresse hinzufügen",
+      "add": "Hinzufügen"
+    },
+    "login": {
+      "title": "Anmelden",
+      "submit": "Anmelden",
+      "register": "Konto erstellen",
+      "reset_sent": "Wir haben dir gerade eine E-Mail zum Zurücksetzen deines Passworts geschickt.",
+      "forgot": "Passwort vergessen?",
+      "recover": "Link anfordern"
+    },
+    "order": {
+      "title": "Bestellung {{ name }}",
+      "placed": "Aufgegeben am {{ date }}",
+      "track": "Sendung verfolgen",
+      "subtotal": "Zwischensumme",
+      "shipping": "Versand",
+      "total": "Gesamt"
+    },
+    "register": {
+      "title": "Konto erstellen",
+      "submit": "Mein Konto erstellen"
+    },
+    "reset": {
+      "title": "Neues Passwort",
+      "submit": "Speichern"
+    }
+  },
+  "gift_card": {
+    "page_title": "Geschenkkarte · {{ brand }}",
+    "title": "Deine {{ brand }}-Geschenkkarte",
+    "balance": "Guthaben:",
+    "expired": "(abgelaufen)",
+    "code": "Code:",
+    "wallet": "Zu Apple Wallet hinzufügen",
+    "shop": "Zum Shop"
+  },
+  "scripts": {
+    "add_error": "Dieses Produkt konnte nicht in den Warenkorb gelegt werden.",
+    "network_error": "Verbindung fehlgeschlagen. Versuch es gleich noch einmal.",
+    "delivery_html": "Voraussichtliche Lieferung zwischen dem <strong>{{ start }}</strong> und dem <strong>{{ end }}</strong>",
+    "cart_label_one": "Warenkorb, {{ number }} Artikel",
+    "cart_label_other": "Warenkorb, {{ number }} Artikel"
+  }
+}

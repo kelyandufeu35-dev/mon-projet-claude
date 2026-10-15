@@ -1,20 +1,20 @@
 <section class="page wrap">
-  <p><a href="{{ routes.account_url }}">← Mon compte</a></p>
-  <h1 class="h1">Commande {{ order.name }}</h1>
-  <p>Passée le {{ order.created_at | date: '%d/%m/%Y' }} · {{ order.financial_status_label }} · {{ order.fulfillment_status_label }}</p>
+  <p><a href="{{ routes.account_url }}">{{ 'customer.account.back' | t }}</a></p>
+  <h1 class="h1">{{ 'customer.order.title' | t: name: order.name }}</h1>
+  <p>{%- assign order_date = order.created_at | date: format: 'numeric' -%}{{ 'customer.order.placed' | t: date: order_date }} · {{ order.financial_status_label }} · {{ order.fulfillment_status_label }}</p>
   <ul class="lines">
     {%- for item in order.line_items -%}
       <li class="line line--plain">
         <span>{{ item.title | escape }} × {{ item.quantity }}</span>
         <span>{{ item.final_line_price | money }}</span>
-        {%- if item.fulfillment -%}<a href="{{ item.fulfillment.tracking_url }}">Suivre le colis</a>{%- endif -%}
+        {%- if item.fulfillment -%}<a href="{{ item.fulfillment.tracking_url }}">{{ 'customer.order.track' | t }}</a>{%- endif -%}
       </li>
     {%- endfor -%}
   </ul>
   <dl class="totals">
-    <div><dt>Sous-total</dt><dd>{{ order.line_items_subtotal_price | money }}</dd></div>
-    <div><dt>Livraison</dt><dd>{{ order.shipping_price | money }}</dd></div>
-    <div class="totals__grand"><dt>Total</dt><dd>{{ order.total_price | money_with_currency }}</dd></div>
+    <div><dt>{{ 'customer.order.subtotal' | t }}</dt><dd>{{ order.line_items_subtotal_price | money }}</dd></div>
+    <div><dt>{{ 'customer.order.shipping' | t }}</dt><dd>{{ order.shipping_price | money }}</dd></div>
+    <div class="totals__grand"><dt>{{ 'customer.order.total' | t }}</dt><dd>{{ order.total_price | money_with_currency }}</dd></div>
   </dl>
-  {%- if order.shipping_address -%}<h2 class="h2">Livraison</h2><p>{{ order.shipping_address | format_address }}</p>{%- endif -%}
+  {%- if order.shipping_address -%}<h2 class="h2">{{ 'customer.order.shipping' | t }}</h2><p>{{ order.shipping_address | format_address }}</p>{%- endif -%}
 </section>

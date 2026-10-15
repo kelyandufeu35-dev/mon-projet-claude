@@ -1,7 +1,11 @@
 {%- comment -%}
-  Montant en euros au format français, quel que soit le format monétaire de la boutique
-  (« €14,99 » par défaut sur Shopify) : « 14,99 € », espace insécable avant « € ».
-  cents : montant en centimes (obligatoire). Autre devise que l’euro : filtre money de Shopify.
+  Montant dans la devise du visiteur (cart.currency, devise du marché Shopify).
+  - Euro : format français « 14,99 € » (espace insécable avant « € »), quelle que soit la langue
+    et quel que soit le format monétaire de la boutique (« €14,99 » par défaut sur Shopify).
+  - Autre devise (GBP, USD, CHF…) : format natif de Shopify pour cette devise (filtre money),
+    espaces rendues insécables.
+  Côté JS, assets/theme.js suit la même règle (Intl.NumberFormat hors euro).
+  cents : montant en centimes (obligatoire).
 {%- endcomment -%}
 {%- liquid
   assign pt_c = cents | plus: 0

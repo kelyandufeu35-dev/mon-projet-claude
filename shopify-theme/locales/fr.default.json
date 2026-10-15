@@ -2,7 +2,16 @@
   "general": {
     "skip": "Aller au contenu",
     "close": "Fermer",
-    "menu": "Menu"
+    "menu": "Menu",
+    "home_label": "{{ brand }}, accueil",
+    "page": "page {{ number }}",
+    "shipping": {
+      "delivery_time": "12 à 18 jours",
+      "area": "France métropolitaine"
+    }
+  },
+  "date_formats": {
+    "numeric": "%d/%m/%Y"
   },
   "cart": {
     "title": "Ton panier",
@@ -13,12 +22,225 @@
     "remove": "Retirer",
     "quantity": "Quantité",
     "shipping_note": "Frais de port calculés à l’étape suivante.",
-    "taxes_included": "TVA incluse."
+    "taxes_included": "TVA incluse.",
+    "discover": "Découvrir la balle"
   },
   "product": {
     "add": "Ajouter au panier",
     "added": "Ajouté au panier",
     "sold_out": "Épuisé",
     "unavailable": "Indisponible"
+  },
+  "sections": {
+    "announcement_bar": {
+      "label": "Annonce"
+    },
+    "header": {
+      "nav_label": "Navigation principale",
+      "nav_principle": "Le principe",
+      "nav_ball": "La balle",
+      "nav_faq": "Questions",
+      "cart": "Panier",
+      "cart_label": {
+        "zero": "Panier, {{ count }} article",
+        "one": "Panier, {{ count }} article",
+        "other": "Panier, {{ count }} articles"
+      }
+    },
+    "footer": {
+      "contact_html": "Une question ? <a href=\"{{ url }}\">Écris-nous</a>, on te répond vite.",
+      "help_label": "Aide",
+      "help_title": "Aide",
+      "faq_link": "Questions fréquentes",
+      "contact_link": "Nous écrire",
+      "legal_label": "Informations légales",
+      "legal_title": "Légal",
+      "social_label": "Réseaux sociaux",
+      "social_title": "Suivre",
+      "payment_label": "Moyens de paiement"
+    },
+    "hero": {
+      "from": "dès",
+      "pause": "Mettre l’animation en pause"
+    },
+    "featured_product": {
+      "empty_eyebrow": "À configurer",
+      "empty_title": "Choisis ton produit",
+      "empty_text": "Dans l’éditeur de thème, clique sur cette section puis sélectionne le produit à mettre en avant."
+    },
+    "contact_form": {
+      "success": "Message envoyé. On te répond {{ time }}.",
+      "name": "Nom",
+      "email": "E-mail",
+      "order": "Numéro de commande",
+      "order_optional": "(si tu en as un)",
+      "message": "Message",
+      "submit": "Envoyer le message"
+    },
+    "main_404": {
+      "title": "Oups, cette page a roulé sous le canapé.",
+      "text": "Elle n’existe pas ou a été déplacée. La balle, elle, est toujours là.",
+      "button": "Voir la balle à friandises"
+    },
+    "comparison": {
+      "criterion": "Critère",
+      "yes": "Oui",
+      "no": "Non"
+    },
+    "promise": {
+      "title": "Nos engagements"
+    },
+    "reviews": {
+      "rating": "{{ rating }} sur 5"
+    },
+    "trust_bar": {
+      "payments": "Moyens de paiement acceptés"
+    },
+    "video_showcase": {
+      "sound_on": "Activer le son",
+      "sound_off": "Couper le son"
+    },
+    "main_collection": {
+      "empty": "Aucun produit dans cette collection."
+    },
+    "main_list_collections": {
+      "title": "Collections"
+    },
+    "main_search": {
+      "title": "Recherche",
+      "label": "Rechercher",
+      "placeholder": "Rechercher…",
+      "submit": "Rechercher",
+      "no_results": "Aucun résultat pour « {{ terms }} »."
+    },
+    "main_password": {
+      "success": "Merci, on te prévient dès l’ouverture.",
+      "email_label": "Ton e-mail pour être prévenu·e de l’ouverture",
+      "submit": "Me prévenir",
+      "owner": "Accès propriétaire",
+      "password": "Mot de passe",
+      "enter": "Entrer"
+    }
+  },
+  "snippets": {
+    "cart_summary": {
+      "free_html": "<strong>Livraison offerte</strong> sur ta commande",
+      "remaining_html": "Plus que <strong>{{ amount }}</strong> pour la livraison offerte",
+      "free_reached_html": "<strong>Livraison offerte</strong>",
+      "minus_one": "Retirer un",
+      "plus_one": "Ajouter un",
+      "upsell_units_html": {
+        "one": "Ajoute {{ count }} balle et profite de <strong>−{{ discount }} %</strong> sur tout le lot",
+        "other": "Ajoute {{ count }} balles et profite de <strong>−{{ discount }} %</strong> sur tout le lot"
+      },
+      "upsell_items_html": {
+        "one": "Ajoute {{ count }} article pour profiter de <strong>−{{ discount }} %</strong>.",
+        "other": "Ajoute {{ count }} articles pour profiter de <strong>−{{ discount }} %</strong>."
+      },
+      "discounts": "Remises",
+      "free_note": "Livraison offerte · aucun frais ajouté au paiement.",
+      "secure": "Paiement sécurisé par Shopify.",
+      "view_cart": "Voir le panier complet"
+    },
+    "product_buy": {
+      "scene_alt": "{{ title }}, balle rouge à facettes sous un rai de lumière",
+      "gallery_label": "Choisir une photo",
+      "scene_thumb": "Animation 3D",
+      "thumb_photo": "Photo {{ number }}",
+      "thumb_video": "Vidéo {{ number }}",
+      "price_note": "TTC · livraison offerte",
+      "option_colon": " :",
+      "percent_off": "−{{ percent }} %",
+      "per_unit": "l’unité",
+      "unit_price": "Prix unitaire",
+      "instead_of": "au lieu de",
+      "discount_note": "Remise appliquée automatiquement dans le panier.",
+      "inbox_title": "Ce que tu reçois",
+      "size_title": "Quelle taille pour mon animal ?",
+      "size_cats_html": "<strong>Chats</strong> : parfaite pour la pousser du bout de la patte.",
+      "size_small_dogs_html": "<strong>Chiots et petits chiens</strong> : idéale pour les occuper.",
+      "size_big_dogs_html": "<strong>Grands chiens</strong> : trop petite, il pourrait l’avaler.",
+      "description": "Description",
+      "sticky_shipping": "livraison offerte",
+      "sticky_button": "Choisir",
+      "unit_singular": "balle",
+      "unit_plural": "balles"
+    }
+  },
+  "customer": {
+    "fields": {
+      "first_name": "Prénom",
+      "last_name": "Nom",
+      "email": "E-mail",
+      "password": "Mot de passe",
+      "password_confirm": "Confirmer le mot de passe",
+      "address1": "Adresse",
+      "zip": "Code postal",
+      "city": "Ville",
+      "country": "Pays"
+    },
+    "account": {
+      "title": "Mon compte",
+      "logout": "Se déconnecter",
+      "addresses_link": "Mes adresses ({{ number }})",
+      "orders_title": "Mes commandes",
+      "order": "Commande",
+      "date": "Date",
+      "status": "Statut",
+      "total": "Total",
+      "no_orders": "Aucune commande pour l’instant.",
+      "back": "← Mon compte"
+    },
+    "activate": {
+      "title": "Activer mon compte",
+      "submit": "Activer"
+    },
+    "addresses": {
+      "title": "Mes adresses",
+      "default": "Adresse par défaut",
+      "save": "Enregistrer",
+      "add_title": "Ajouter une adresse",
+      "add": "Ajouter"
+    },
+    "login": {
+      "title": "Connexion",
+      "submit": "Se connecter",
+      "register": "Créer un compte",
+      "reset_sent": "Un e-mail de réinitialisation vient d’être envoyé.",
+      "forgot": "Mot de passe oublié ?",
+      "recover": "Recevoir le lien"
+    },
+    "order": {
+      "title": "Commande {{ name }}",
+      "placed": "Passée le {{ date }}",
+      "track": "Suivre le colis",
+      "subtotal": "Sous-total",
+      "shipping": "Livraison",
+      "total": "Total"
+    },
+    "register": {
+      "title": "Créer un compte",
+      "submit": "Créer mon compte"
+    },
+    "reset": {
+      "title": "Nouveau mot de passe",
+      "submit": "Enregistrer"
+    }
+  },
+  "gift_card": {
+    "page_title": "Carte cadeau · {{ brand }}",
+    "title": "Ta carte cadeau {{ brand }}",
+    "balance": "Solde :",
+    "expired": "(expirée)",
+    "code": "Code :",
+    "wallet": "Ajouter à Apple Wallet",
+    "shop": "Aller à la boutique"
+  },
+  "scripts": {
+    "add_error": "Impossible d’ajouter ce produit au panier.",
+    "network_error": "La connexion a échoué. Réessaie dans un instant.",
+    "delivery_html": "Livraison estimée entre le <strong>{{ start }}</strong> et le <strong>{{ end }}</strong>",
+    "cart_label_one": "Panier, {{ number }} article",
+    "cart_label_other": "Panier, {{ number }} articles"
   }
 }

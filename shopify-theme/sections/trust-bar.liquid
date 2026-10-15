@@ -12,7 +12,7 @@
       {%- endfor -%}
     </ul>
     {%- if section.settings.show_payments and shop.enabled_payment_types.size > 0 -%}
-      <ul class="payments payments--center" aria-label="Moyens de paiement acceptés">
+      <ul class="payments payments--center" aria-label="{{ 'sections.trust_bar.payments' | t }}">
         {%- for type in shop.enabled_payment_types -%}
           <li>{{ type | payment_type_svg_tag: class: 'payment-icon' }}</li>
         {%- endfor -%}

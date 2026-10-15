@@ -6,7 +6,7 @@
       <table class="compare">
         <thead>
           <tr>
-            <th scope="col"><span class="visually-hidden">Critère</span></th>
+            <th scope="col"><span class="visually-hidden">{{ 'sections.comparison.criterion' | t }}</span></th>
             <th scope="col">{{ section.settings.ours | default: settings.brand_name | default: shop.name | escape }}</th>
             <th scope="col">{{ section.settings.other | escape }}</th>
           </tr>
@@ -15,8 +15,8 @@
           {%- for block in section.blocks -%}
             <tr {{ block.shopify_attributes }}>
               <th scope="row">{{ block.settings.label | escape }}</th>
-              <td>{% if block.settings.ours %}<span class="yes">Oui</span>{% else %}<span class="no">Non</span>{% endif %}</td>
-              <td>{% if block.settings.other %}<span class="yes">Oui</span>{% else %}<span class="no">Non</span>{% endif %}</td>
+              <td>{% if block.settings.ours %}<span class="yes">{{ 'sections.comparison.yes' | t }}</span>{% else %}<span class="no">{{ 'sections.comparison.no' | t }}</span>{% endif %}</td>
+              <td>{% if block.settings.other %}<span class="yes">{{ 'sections.comparison.yes' | t }}</span>{% else %}<span class="no">{{ 'sections.comparison.no' | t }}</span>{% endif %}</td>
             </tr>
           {%- endfor -%}
         </tbody>
