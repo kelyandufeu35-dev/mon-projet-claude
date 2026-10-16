@@ -2,7 +2,8 @@
   Carte produit v9 : « Les autres jouets », « Nos jouets » et pages collection. Styles : .pt-reco (sections-v9.css).
   Paramètres : item (produit, obligatoire) · eyebrow (petit texte au-dessus du titre, facultatif)
   sizes (attribut sizes de l’image, facultatif). Prix « dès » si les déclinaisons n’ont pas le même prix,
-  « Épuisé » à la place de « Livraison offerte » pour un produit indisponible (pages collection) ;
+  « Épuisé » à la place de la mention livraison pour un produit indisponible (pages collection) ;
+  « Livraison offerte » dès le seuil du thème, « Livraison offerte dès … » en dessous ;
   jamais d’offre groupée ici (elles ne valent que pour la balle, sur sa page).
 {%- endcomment -%}
 {%- assign card_sizes = sizes | default: '(min-width: 900px) 300px, 46vw' -%}
@@ -21,7 +22,14 @@
     {%- if item.available == false -%}
       <span>{{ 'product.sold_out' | t }}</span>
     {%- else -%}
-      <span>{{ 'sections.product_recos.free_shipping' | t }}</span>
+      {%- assign card_threshold = settings.free_shipping_threshold | default: 0 | times: 100 -%}
+      {%- if card_threshold > 0 and item.price < card_threshold -%}
+        {%- capture card_threshold_money %}{% render 'pt-money', cents: card_threshold %}{% endcapture -%}
+        {%- assign card_threshold_money = card_threshold_money | strip | replace: ',00', '' | replace: '&nbsp;', ' ' -%}
+        <span>{{ 'sections.product_recos.free_shipping_from' | t: amount: card_threshold_money }}</span>
+      {%- else -%}
+        <span>{{ 'sections.product_recos.free_shipping' | t }}</span>
+      {%- endif -%}
     {%- endif -%}
   </span>
 </a>

@@ -5,9 +5,9 @@
       "settings": {
         "show_video": true,
         "eyebrow": "Jouets et accessoires pour chats et chiens", "title": "Des jouets qui le font chercher, chasser et réfléchir.", "highlight": "chercher",
-        "subtitle": "Balle à friandises, puzzle de chasse, canne à plumes… Des jeux simples à partager avec ton animal, sous ton œil. Livraison offerte en France, dans l’UE et en Suisse.",
+        "subtitle": "Balle à friandises, puzzle de chasse, canne à plumes… Des jeux simples à partager avec ton animal, sous ton œil. Livraison offerte dès 25 € en France, dans l’UE et en Suisse.",
         "button_label": "Voir les jouets", "target": "jouets", "link_label": "Comment ça marche", "link_target": "pourquoi",
-        "show_proof": true, "proof_1": "Livraison offerte", "proof_2": "Retour sous 14 jours (droit légal)", "proof_3": "Paiement sécurisé"
+        "show_proof": true, "proof_1": "Livraison offerte dès 25 €", "proof_2": "Retour sous 14 jours (droit légal)", "proof_3": "Paiement sécurisé"
       }
     },
     "jouets": {
@@ -28,7 +28,7 @@
     "faq": {
       "type": "faq",
       "blocks": {
-        "q1": { "type": "question", "settings": { "question": "Livraison et retours ?", "answer": "<p>La livraison est offerte et suivie, en [delai_livraison], en [zone_livraison]. Tu disposes de 14 jours après réception pour changer d’avis, sans avoir à te justifier.</p>" } },
+        "q1": { "type": "question", "settings": { "question": "Livraison et retours ?", "answer": "<p>La livraison est suivie et prend [delai_livraison], en [zone_livraison]. Elle est offerte dès [seuil_livraison] d’achat et coûte [frais_livraison] en dessous. Tu disposes de 14 jours après réception pour changer d’avis, sans avoir à te justifier.</p>" } },
         "q2": { "type": "question", "settings": { "question": "Peut-il jouer sans surveillance ?", "answer": "<p>Non : garde toujours un œil sur ton animal pendant qu’il joue, surtout lors des premières séances. Retire le jouet s’il commence à le mâchouiller ou s’il est abîmé. Aucun jouet n’est indestructible.</p>" } },
         "q3": { "type": "question", "settings": { "question": "Comment choisir ?", "answer": "<p>Chaque jouet a sa page, avec ses matières et les animaux à qui il convient. Pour un chat ou un petit chien qui aime renifler, la <a href=\"/products/balle-a-friandises-pattoune-1\">balle à friandises</a> ; pour un chat chasseur, le <a href=\"/products/puzzle-de-chasse-pour-chat\">puzzle de chasse</a> ou la <a href=\"/products/canne-a-plumes-chat\">canne à plumes</a> ; et pour finir la séance en douceur, la <a href=\"/products/brosse-autonettoyante-chat-chien\">brosse autonettoyante</a>.</p>" } },
         "q4": { "type": "question", "settings": { "question": "Une question sur ta commande ?", "answer": "<p>Écris-nous depuis la <a href=\"/pages/contact\">page Contact</a> : une vraie personne te répond, en français.</p>" } }
@@ -38,7 +38,7 @@
     },
     "final": {
       "type": "final-cta",
-      "settings": { "title": "Un jouet, quelques croquettes, et le salon redevient calme.", "highlight": "calme.", "button_label": "Voir les jouets", "button_anchor": "jouets", "note": "Livraison offerte · Retour sous 14 jours (droit légal)" }
+      "settings": { "title": "Un jouet, quelques croquettes, et le salon redevient calme.", "highlight": "calme.", "button_label": "Voir les jouets", "button_anchor": "jouets", "note": "Livraison offerte dès 25 € · Retour sous 14 jours (droit légal)" }
     }
   },
   "order": ["haut", "jouets", "pourquoi", "faq", "final"]

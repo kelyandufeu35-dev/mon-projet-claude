@@ -132,7 +132,8 @@
       "eyebrow": "Weitere Spielzeuge",
       "title": "Für noch mehr Spielspaß.",
       "view_all": "Alle Spielzeuge ansehen",
-      "free_shipping": "Kostenloser Versand"
+      "free_shipping": "Kostenloser Versand",
+      "free_shipping_from": "Kostenloser Versand ab {{ amount }}"
     }
   },
   "snippets": {
@@ -177,7 +178,9 @@
       "sticky_shipping": "kostenloser Versand",
       "sticky_button": "Auswählen",
       "unit_singular": "Ball",
-      "unit_plural": "Bälle"
+      "unit_plural": "Bälle",
+      "price_note_from": "inkl. MwSt. · kostenloser Versand ab {{ amount }}",
+      "sticky_shipping_from": "kostenloser Versand ab {{ amount }}"
     }
   },
   "customer": {

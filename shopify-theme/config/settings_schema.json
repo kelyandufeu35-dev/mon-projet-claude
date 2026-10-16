@@ -122,8 +122,15 @@
         "type": "number",
         "id": "free_shipping_threshold",
         "label": "Livraison offerte dès (€)",
-        "default": 0,
-        "info": "0 = livraison offerte sans minimum (pas de jauge). La boutique offre la livraison dès 1 balle."
+        "default": 25,
+        "info": "0 = livraison offerte sans minimum (pas de jauge). Garde la même valeur que la condition de prix des tarifs Shopify."
+      },
+      {
+        "type": "text",
+        "id": "shipping_fee",
+        "label": "Frais de livraison sous le seuil (€)",
+        "default": "3.99",
+        "info": "Avec un point, par exemple 3.99. Affiché dans les questions et les données Google : garde le même montant que le tarif Shopify."
       },
       {
         "type": "text",

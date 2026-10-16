@@ -132,7 +132,8 @@
       "eyebrow": "Más juguetes",
       "title": "Completa su rato de juego.",
       "view_all": "Ver todos los juguetes",
-      "free_shipping": "Envío gratis"
+      "free_shipping": "Envío gratis",
+      "free_shipping_from": "Envío gratis desde {{ amount }}"
     }
   },
   "snippets": {
@@ -177,7 +178,9 @@
       "sticky_shipping": "envío gratis",
       "sticky_button": "Elegir",
       "unit_singular": "pelota",
-      "unit_plural": "pelotas"
+      "unit_plural": "pelotas",
+      "price_note_from": "IVA incl. · envío gratis desde {{ amount }}",
+      "sticky_shipping_from": "envío gratis desde {{ amount }}"
     }
   },
   "customer": {

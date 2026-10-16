@@ -45,7 +45,7 @@
           "type": "question",
           "settings": {
             "question": "Livraison et retours\u202f?",
-            "answer": "<p>La livraison est offerte et suivie, en [delai_livraison], en [zone_livraison]. Tu disposes de 14\u00a0jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
+            "answer": "<p>La livraison est suivie et prend [delai_livraison], en [zone_livraison]. Elle est offerte dès [seuil_livraison] d’achat et coûte [frais_livraison] en dessous. Tu disposes de 14\u00a0jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
           }
         }
       },
@@ -70,7 +70,7 @@
         "title": "Quelques minutes de brossage, et moins de poils sur le canapé.",
         "highlight": "canapé.",
         "button_label": "Je commande ma brosse",
-        "note": "Livraison offerte · Retour sous 14\u00a0jours (droit légal)"
+        "note": "Livraison offerte dès 25\u00a0€ · Retour sous 14\u00a0jours (droit légal)"
       }
     },
     "recos": {

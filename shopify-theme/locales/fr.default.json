@@ -133,7 +133,8 @@
       "eyebrow": "Les autres jouets",
       "title": "Complète sa routine de jeu.",
       "view_all": "Voir tous les jouets",
-      "free_shipping": "Livraison offerte"
+      "free_shipping": "Livraison offerte",
+      "free_shipping_from": "Livraison offerte dès {{ amount }}"
     }
   },
   "snippets": {
@@ -178,7 +179,9 @@
       "sticky_shipping": "livraison offerte",
       "sticky_button": "Choisir",
       "unit_singular": "balle",
-      "unit_plural": "balles"
+      "unit_plural": "balles",
+      "price_note_from": "TTC · livraison offerte dès {{ amount }}",
+      "sticky_shipping_from": "livraison offerte dès {{ amount }}"
     }
   },
   "customer": {

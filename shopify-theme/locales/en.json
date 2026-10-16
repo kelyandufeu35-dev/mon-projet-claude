@@ -132,7 +132,8 @@
       "eyebrow": "More toys",
       "title": "Round out their playtime.",
       "view_all": "See all toys",
-      "free_shipping": "Free shipping"
+      "free_shipping": "Free shipping",
+      "free_shipping_from": "Free shipping from {{ amount }}"
     }
   },
   "snippets": {
@@ -177,7 +178,9 @@
       "sticky_shipping": "free shipping",
       "sticky_button": "Choose",
       "unit_singular": "ball",
-      "unit_plural": "balls"
+      "unit_plural": "balls",
+      "price_note_from": "incl. VAT · free shipping from {{ amount }}",
+      "sticky_shipping_from": "free shipping from {{ amount }}"
     }
   },
   "customer": {

@@ -67,6 +67,14 @@
     assign initial_media_id = 'scene'
   endif
   assign selected_total = price
+
+  # Livraison : offerte dès le seuil (Paramètres du thème → Livraison et remises), payante en dessous.
+  assign ship_threshold = settings.free_shipping_threshold | default: 0 | times: 100
+  assign ship_fee = settings.shipping_fee | default: 0
+  capture ship_threshold_money
+    render 'pt-money', cents: ship_threshold
+  endcapture
+  assign ship_threshold_money = ship_threshold_money | strip | replace: ',00', '' | replace: '&nbsp;', ' '
 -%}
 
 <div class="pt-buy-grid" data-product-root data-section="{{ section.id }}">
@@ -159,7 +167,7 @@
     <p class="pt-buy__price">
       <span class="pt-buy__amount" data-price>{% render 'pt-money', cents: price %}</span>
       <s data-compare{% unless current.compare_at_price > current.price %} hidden{% endunless %}>{% render 'pt-money', cents: current.compare_at_price %}</s>
-      <span class="pt-buy__ttc">{{ 'snippets.product_buy.price_note' | t }}</span>
+      <span class="pt-buy__ttc">{% if ship_threshold > 0 and price < ship_threshold %}{{ 'snippets.product_buy.price_note_from' | t: amount: ship_threshold_money }}{% else %}{{ 'snippets.product_buy.price_note' | t }}{% endif %}</span>
     </p>
 
     {% form 'product', product, id: form_id, class: 'pt-buy__form', novalidate: 'novalidate', data-product-form: '' %}
@@ -308,7 +316,7 @@
 <div class="pt-sticky" data-sticky-buy aria-hidden="true">
   <p class="pt-sticky__text">
     <strong>{{ section.settings.sticky_label | default: product.title | escape }}</strong>
-    <span><span data-sticky-price>{% render 'pt-money', cents: price %}</span> · {{ 'snippets.product_buy.sticky_shipping' | t }}</span>
+    <span><span data-sticky-price>{% render 'pt-money', cents: price %}</span> · {% if ship_threshold > 0 and price < ship_threshold %}{{ 'snippets.product_buy.sticky_shipping_from' | t: amount: ship_threshold_money }}{% else %}{{ 'snippets.product_buy.sticky_shipping' | t }}{% endif %}</span>
   </p>
   <a class="pt-btn pt-btn--sun pt-sticky__btn" href="#{{ anchor | escape }}" tabindex="-1">{{ 'snippets.product_buy.sticky_button' | t }}</a>
 </div>
@@ -340,7 +348,7 @@
           "seller": { "@type": "Organization", "name": {{ shop.name | json }} },
           "shippingDetails": {
             "@type": "OfferShippingDetails",
-            "shippingRate": { "@type": "MonetaryAmount", "value": 0, "currency": {{ cart.currency.iso_code | json }} },
+            "shippingRate": { "@type": "MonetaryAmount", "value": {% if ship_threshold > 0 and v.price < ship_threshold %}{{ ship_fee | plus: 0 | json }}{% else %}0{% endif %}, "currency": {{ cart.currency.iso_code | json }} },
             "shippingDestination": { "@type": "DefinedRegion", "addressCountry": ["FR","BE","LU","DE","AT","NL","IT","ES","PT","IE","DK","SE","FI","EE","LV","LT","PL","CZ","SK","SI","HR","HU","RO","BG","GR","CY","MT","CH"] },
             "deliveryTime": {
               "@type": "ShippingDeliveryTime",
