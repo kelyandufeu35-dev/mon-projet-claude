@@ -1,6 +1,6 @@
 # Reels Pattoune
 
-## pattoune-reel-boutique.mp4 — présentation de la boutique (19 s, 1080 × 1920)
+## pattoune-reel-boutique.mp4 — présentation de la boutique (14 s, 1080 × 1920)
 
 Pour Instagram Reels, TikTok et YouTube Shorts. Pas de musique : ajoute un son
 tendance depuis l'app au moment de publier.
@@ -24,6 +24,6 @@ Description : Puzzle de chasse, canne à plumes, peluche à l'herbe à chat et p
 
 ### Sources
 
-`source/videos.js` (montage) et `source/fetch.sh` (photos produits), avec le moteur
+`source/videos.js` (montage), `source/fetch.sh` (photos produits) et `source/logo-pattoune.jpg` (image de fin, à copier en `img/shop.jpg`), avec le moteur
 de `../tiktok/source/engine.js`. Les photos du puzzle et de la gamelle sont recadrées
 pour retirer le texte en anglais du fournisseur.
