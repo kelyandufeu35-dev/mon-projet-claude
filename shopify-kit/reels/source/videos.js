@@ -14,7 +14,7 @@ const PRODUCTS = [
   ['kit', 'Kit empreinte de patte', 'dès 6,99 €'],
 ];
 const BG = [C.cobalt, C.pink, C.mint, C.sun, C.cobalt, C.pink, C.mint, C.sun, C.cobalt];
-const HOOK = 1.8;
+const HOOK = 2.0;
 const SHOT = 1.0;
 const END = HOOK + PRODUCTS.length * SHOT;
 const IMG = {};
@@ -48,7 +48,7 @@ function shopImage(p) {
 
 const VIDEOS = {
   boutique: {
-    duration: END + 3.0,
+    duration: END + 3.5,
     draw(t) {
       if (t < HOOK) {
         fill(C.sun);
