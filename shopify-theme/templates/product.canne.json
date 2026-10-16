@@ -37,7 +37,7 @@
         "q3": {
           "type": "question",
           "settings": {
-            "question": "Noir ou rose\u202f?",
+            "question": "Rose, ou blanc et noir\u202f?",
             "answer": "<p>Les deux se jouent de la même façon. Choisis la couleur qui va le mieux chez toi.</p>"
           }
         },
