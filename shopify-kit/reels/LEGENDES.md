@@ -37,3 +37,17 @@ Description : Puzzle de chasse, canne à plumes, peluche à l'herbe à chat et p
 `source/videos.js` (montage), `source/fetch.sh` (photos produits) et `source/logo-pattoune.jpg` (image de fin, à copier en `img/shop.jpg`), `source/audio/spec.json` (musique, générée par `music.py`), avec le moteur
 de `../tiktok/source/engine.js`. Les photos du puzzle et de la gamelle sont recadrées
 pour retirer le texte en anglais du fournisseur.
+
+## pattoune-motion-design.mp4 — motion design de la boutique (12 s, 1080 × 1920, musique)
+
+**À cocher en publiant :** « Contenu généré par l'IA » (le logo et la photo du chat
+avec la balle à friandises sont générés par IA).
+
+### Description TikTok
+
+Jouets et accessoires pour chats et chiens, c'est chez Pattoune 🐾
+Chasser, mordiller, chercher… et en prendre soin.
+Ton compagnon, il est plutôt team plumes ou team balle ? 👇
+Livraison offerte dès 25 € · lien en bio
+
+#chat #chien #jouetchat #jouetchien #pattoune
