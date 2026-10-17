@@ -11,7 +11,7 @@
       <ul class="grid">
         {%- for item in search.results -%}
           {%- if item.object_type == 'product' -%}
-            <li>{% render 'product-card', item: item %}</li>
+            <li>{% render 'pt-reco-card', item: item, sizes: '(min-width: 1000px) 25vw, 50vw' %}</li>
           {%- else -%}
             <li><a href="{{ item.url }}" class="card"><span class="card__title">{{ item.title | escape }}</span></a></li>
           {%- endif -%}

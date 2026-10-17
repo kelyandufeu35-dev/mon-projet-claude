@@ -23,7 +23,7 @@
     "quantity": "Quantity",
     "shipping_note": "Shipping calculated at the next step.",
     "taxes_included": "Tax included.",
-    "discover": "See the toys"
+    "discover": "Visit the shop"
   },
   "product": {
     "add": "Add to cart",
@@ -44,7 +44,7 @@
         "one": "Cart, {{ count }} item",
         "other": "Cart, {{ count }} items"
       },
-      "nav_shop": "Our toys"
+      "nav_shop": "Shop"
     },
     "footer": {
       "contact_html": "Got a question? <a href=\"{{ url }}\">Write to us</a>, we’ll get back to you quickly.",
@@ -56,7 +56,8 @@
       "legal_title": "Legal",
       "social_label": "Social media",
       "social_title": "Follow us",
-      "payment_label": "Payment methods"
+      "payment_label": "Payment methods",
+      "legal_notice": "Legal notice"
     },
     "hero": {
       "from": "from",
@@ -79,7 +80,7 @@
     "main_404": {
       "title": "Oops, this page rolled under the sofa.",
       "text": "It doesn’t exist or has moved. The toys, though, are still right here.",
-      "button": "See the toys"
+      "button": "Visit the shop"
     },
     "comparison": {
       "criterion": "Criterion",
@@ -103,10 +104,15 @@
       "empty": "No products in this collection yet.",
       "pagination": "Collection pages",
       "previous": "Previous",
-      "next": "Next"
+      "next": "Next",
+      "eyebrow": "The shop"
     },
     "main_list_collections": {
-      "title": "Collections"
+      "title": "Collections",
+      "count": {
+        "one": "{{ count }} product",
+        "other": "{{ count }} products"
+      }
     },
     "main_search": {
       "title": "Search",
@@ -124,14 +130,16 @@
       "enter": "Enter"
     },
     "product_grid": {
-      "eyebrow": "Our toys",
-      "title": "Pick their next game.",
-      "lead": "Simple games to share with your pet, always with you close by."
+      "eyebrow": "The shop",
+      "title": "Their games, their care, their keepsakes.",
+      "lead": "Simple games to share with your pet, always with you close by, and accessories for everyday life.",
+      "chips_label": "Browse by category",
+      "chips_all": "See all"
     },
     "product_recos": {
-      "eyebrow": "More toys",
+      "eyebrow": "You might also like",
       "title": "Round out their playtime.",
-      "view_all": "See all toys",
+      "view_all": "See all products",
       "free_shipping": "Free shipping",
       "free_shipping_from": "Free shipping from {{ amount }}"
     }

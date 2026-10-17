@@ -6,9 +6,12 @@
       "type": "header",
       "settings": {
         "show_cta": true,
-        "cta_label": "Je commande"
+        "cta_label": "Je commande",
+        "menu": "main-menu"
       }
     }
   },
-  "order": ["header"]
+  "order": [
+    "header"
+  ]
 }

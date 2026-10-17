@@ -57,6 +57,46 @@
       {%- endif -%}
     </nav>
 
+    {%- comment -%}
+      Menu mobile et tablette (< 1100 px, où les liens ci-dessus sont masqués) : liens du menu choisi,
+      puis la page Contact. Se referme au clic à l’extérieur ou avec Échap (petit script ci-dessous).
+    {%- endcomment -%}
+    {%- if section.settings.menu != blank and section.settings.menu.links.size > 0 -%}
+      <details class="pt-mnav" data-mnav>
+        <summary class="pt-mnav__btn" aria-label="{{ 'general.menu' | t }}">
+          {% render 'icon', name: 'menu' %}
+          <span>{{ 'general.menu' | t }}</span>
+        </summary>
+        <nav class="pt-mnav__panel" aria-label="{{ 'sections.header.nav_label' | t }}">
+          {%- for link in section.settings.menu.links -%}
+            <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+          {%- endfor -%}
+          {%- if pages.contact != empty -%}
+            <a href="{{ pages.contact.url }}">{{ 'sections.footer.contact_link' | t }}</a>
+          {%- endif -%}
+          {%- comment -%} Langues : ici seulement sur petit écran (le sélecteur de l’en-tête y est masqué). {%- endcomment -%}
+          {%- if localization.available_languages.size > 1 -%}
+            {%- form 'localization', class: 'pt-mnav__lang' -%}
+              {%- for language in localization.available_languages -%}
+                <button type="submit" name="locale_code" value="{{ language.iso_code }}" lang="{{ language.iso_code }}"{% if language.iso_code == localization.language.iso_code %} aria-current="true"{% endif %}>
+                  {{- language.endonym_name | capitalize -}}
+                </button>
+              {%- endfor -%}
+            {%- endform -%}
+          {%- endif -%}
+        </nav>
+      </details>
+      <script>
+        (() => {
+          const m = document.querySelector('[data-mnav]');
+          if (!m || m.ptMnav) return;
+          m.ptMnav = true;
+          document.addEventListener('click', (e) => { if (m.open && !m.contains(e.target)) m.removeAttribute('open'); });
+          document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && m.open) { m.removeAttribute('open'); m.querySelector('summary').focus(); } });
+        })();
+      </script>
+    {%- endif -%}
+
     {%- if show_cta -%}
       <a class="pt-hd__cta pt-btn pt-btn--sun" href="{{ cta_href }}">
         {{- section.settings.cta_label | escape -}}

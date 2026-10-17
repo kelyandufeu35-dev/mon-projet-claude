@@ -7,6 +7,8 @@
   jamais d’offre groupée ici (elles ne valent que pour la balle, sur sa page).
 {%- endcomment -%}
 {%- assign card_sizes = sizes | default: '(min-width: 900px) 300px, 46vw' -%}
+{%- comment -%} Titre sans le suffixe « – Pattoune » (déjà dans le logo et les titres SEO). {%- endcomment -%}
+{%- assign card_title = item.title | split: ' – ' | first -%}
 <a class="pt-reco" href="{{ item.url }}">
   <span class="pt-reco__img">
     {%- if item.featured_media -%}
@@ -16,7 +18,7 @@
   {%- if eyebrow != blank -%}
     <span class="pt-reco__type">{{ eyebrow | escape }}</span>
   {%- endif -%}
-  <span class="pt-reco__title">{{ item.title | escape }}</span>
+  <span class="pt-reco__title">{{ card_title | escape }}</span>
   <span class="pt-reco__meta">
     <strong>{%- if item.price_varies -%}{{ 'sections.hero.from' | t }} {% endif -%}{% render 'pt-money', cents: item.price %}</strong>
     {%- if item.available == false -%}

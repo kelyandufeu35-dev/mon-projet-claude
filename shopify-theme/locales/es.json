@@ -23,7 +23,7 @@
     "quantity": "Cantidad",
     "shipping_note": "Gastos de envío calculados en el siguiente paso.",
     "taxes_included": "IVA incluido.",
-    "discover": "Ver los juguetes"
+    "discover": "Ver la tienda"
   },
   "product": {
     "add": "Añadir al carrito",
@@ -44,7 +44,7 @@
         "one": "Carrito, {{ count }} artículo",
         "other": "Carrito, {{ count }} artículos"
       },
-      "nav_shop": "Nuestros juguetes"
+      "nav_shop": "Tienda"
     },
     "footer": {
       "contact_html": "¿Tienes alguna pregunta? <a href=\"{{ url }}\">Escríbenos</a> y te responderemos enseguida.",
@@ -56,7 +56,8 @@
       "legal_title": "Legal",
       "social_label": "Redes sociales",
       "social_title": "Síguenos",
-      "payment_label": "Métodos de pago"
+      "payment_label": "Métodos de pago",
+      "legal_notice": "Aviso legal"
     },
     "hero": {
       "from": "desde",
@@ -79,7 +80,7 @@
     "main_404": {
       "title": "Vaya, esta página ha rodado debajo del sofá.",
       "text": "No existe o se ha movido. Los juguetes, en cambio, siguen aquí.",
-      "button": "Ver los juguetes"
+      "button": "Ver la tienda"
     },
     "comparison": {
       "criterion": "Criterio",
@@ -103,10 +104,15 @@
       "empty": "Todavía no hay productos en esta colección.",
       "pagination": "Páginas de la colección",
       "previous": "Anterior",
-      "next": "Siguiente"
+      "next": "Siguiente",
+      "eyebrow": "La tienda"
     },
     "main_list_collections": {
-      "title": "Colecciones"
+      "title": "Colecciones",
+      "count": {
+        "one": "{{ count }} producto",
+        "other": "{{ count }} productos"
+      }
     },
     "main_search": {
       "title": "Búsqueda",
@@ -124,14 +130,16 @@
       "enter": "Entrar"
     },
     "product_grid": {
-      "eyebrow": "Nuestros juguetes",
-      "title": "Elige su próximo juego.",
-      "lead": "Juegos sencillos para compartir con él, siempre bajo tu supervisión."
+      "eyebrow": "La tienda",
+      "title": "Sus juegos, sus cuidados, sus recuerdos.",
+      "lead": "Juegos sencillos para compartir con él, siempre bajo tu supervisión, y accesorios para su día a día.",
+      "chips_label": "Elegir una categoría",
+      "chips_all": "Ver todo"
     },
     "product_recos": {
-      "eyebrow": "Más juguetes",
+      "eyebrow": "También te puede gustar",
       "title": "Completa su rato de juego.",
-      "view_all": "Ver todos los juguetes",
+      "view_all": "Ver todos los productos",
       "free_shipping": "Envío gratis",
       "free_shipping_from": "Envío gratis desde {{ amount }}"
     }

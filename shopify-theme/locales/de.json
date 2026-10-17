@@ -23,7 +23,7 @@
     "quantity": "Menge",
     "shipping_note": "Versandkosten werden im nächsten Schritt berechnet.",
     "taxes_included": "Inkl. MwSt.",
-    "discover": "Zu den Spielzeugen"
+    "discover": "Zum Shop"
   },
   "product": {
     "add": "In den Warenkorb",
@@ -44,7 +44,7 @@
         "one": "Warenkorb, {{ count }} Artikel",
         "other": "Warenkorb, {{ count }} Artikel"
       },
-      "nav_shop": "Unsere Spielzeuge"
+      "nav_shop": "Shop"
     },
     "footer": {
       "contact_html": "Noch eine Frage? <a href=\"{{ url }}\">Schreib uns</a>, wir antworten dir schnell.",
@@ -56,7 +56,8 @@
       "legal_title": "Rechtliches",
       "social_label": "Soziale Netzwerke",
       "social_title": "Folgen",
-      "payment_label": "Zahlungsarten"
+      "payment_label": "Zahlungsarten",
+      "legal_notice": "Impressum"
     },
     "hero": {
       "from": "ab",
@@ -79,7 +80,7 @@
     "main_404": {
       "title": "Hoppla, diese Seite ist unters Sofa gerollt.",
       "text": "Sie existiert nicht oder wurde verschoben. Die Spielzeuge sind aber immer noch da.",
-      "button": "Zu den Spielzeugen"
+      "button": "Zum Shop"
     },
     "comparison": {
       "criterion": "Kriterium",
@@ -103,10 +104,15 @@
       "empty": "In dieser Kollektion gibt es noch keine Produkte.",
       "pagination": "Seiten der Kollektion",
       "previous": "Zurück",
-      "next": "Weiter"
+      "next": "Weiter",
+      "eyebrow": "Der Shop"
     },
     "main_list_collections": {
-      "title": "Kollektionen"
+      "title": "Kollektionen",
+      "count": {
+        "one": "{{ count }} Produkt",
+        "other": "{{ count }} Produkte"
+      }
     },
     "main_search": {
       "title": "Suche",
@@ -124,14 +130,16 @@
       "enter": "Eintreten"
     },
     "product_grid": {
-      "eyebrow": "Unsere Spielzeuge",
-      "title": "Such sein nächstes Spiel aus.",
-      "lead": "Einfache Spiele, die du mit ihm teilst, immer unter deiner Aufsicht."
+      "eyebrow": "Der Shop",
+      "title": "Seine Spiele, seine Pflege, seine Erinnerungen.",
+      "lead": "Einfache Spiele, die du mit ihm teilst, immer unter deiner Aufsicht, und Zubehör für seinen Alltag.",
+      "chips_label": "Nach Kategorie stöbern",
+      "chips_all": "Alle ansehen"
     },
     "product_recos": {
-      "eyebrow": "Weitere Spielzeuge",
+      "eyebrow": "Das könnte dir auch gefallen",
       "title": "Für noch mehr Spielspaß.",
-      "view_all": "Alle Spielzeuge ansehen",
+      "view_all": "Alle Produkte ansehen",
       "free_shipping": "Kostenloser Versand",
       "free_shipping_from": "Kostenloser Versand ab {{ amount }}"
     }

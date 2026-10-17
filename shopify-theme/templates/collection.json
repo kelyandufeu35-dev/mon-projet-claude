@@ -2,7 +2,14 @@
   "sections": {
     "main": {
       "type": "main-collection",
-      "settings": {}
+      "settings": {
+        "chips": [
+          "pour-les-chats",
+          "pour-les-chiens",
+          "jouets",
+          "soin-et-accessoires"
+        ]
+      }
     }
   },
   "order": [

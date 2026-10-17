@@ -9,6 +9,10 @@
   Styles : assets/sections-v9.css (préfixe pt-).
 {%- endcomment -%}
 {%- liquid
+  comment
+    Titre affiché sans le suffixe « – Pattoune » (gardé dans les données produit, le SEO et le JSON-LD).
+  endcomment
+  assign buy_title = product.title | split: ' – ' | first
   assign current = product.selected_or_first_available_variant
   assign form_id = 'product-form-' | append: section.id
   assign price = current.price
@@ -159,9 +163,9 @@
     {%- endif -%}
 
     {%- if section.settings.title_as_h1 -%}
-      <h1 class="pt-buy__title" id="pt-buy-title-{{ section.id }}"{% if reveal %} data-reveal="mask" style="--pt-d:1"{% endif %}>{% render 'pt-split', text: product.title %}</h1>
+      <h1 class="pt-buy__title" id="pt-buy-title-{{ section.id }}"{% if reveal %} data-reveal="mask" style="--pt-d:1"{% endif %}>{% render 'pt-split', text: buy_title %}</h1>
     {%- else -%}
-      <h2 class="pt-buy__title" id="pt-buy-title-{{ section.id }}"{% if reveal %} data-reveal="mask" style="--pt-d:1"{% endif %}>{% render 'pt-split', text: product.title %}</h2>
+      <h2 class="pt-buy__title" id="pt-buy-title-{{ section.id }}"{% if reveal %} data-reveal="mask" style="--pt-d:1"{% endif %}>{% render 'pt-split', text: buy_title %}</h2>
     {%- endif -%}
 
     <p class="pt-buy__price">
@@ -315,7 +319,7 @@
 {%- endcomment -%}
 <div class="pt-sticky" data-sticky-buy aria-hidden="true">
   <p class="pt-sticky__text">
-    <strong>{{ section.settings.sticky_label | default: product.title | escape }}</strong>
+    <strong>{{ section.settings.sticky_label | default: buy_title | escape }}</strong>
     <span><span data-sticky-price>{% render 'pt-money', cents: price %}</span> · {% if ship_threshold > 0 and price < ship_threshold %}{{ 'snippets.product_buy.sticky_shipping_from' | t: amount: ship_threshold_money }}{% else %}{{ 'snippets.product_buy.sticky_shipping' | t }}{% endif %}</span>
   </p>
   <a class="pt-btn pt-btn--sun pt-sticky__btn" href="#{{ anchor | escape }}" tabindex="-1">{{ 'snippets.product_buy.sticky_button' | t }}</a>

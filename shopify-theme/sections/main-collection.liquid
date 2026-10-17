@@ -23,13 +23,14 @@
         assign cols_md = cols | at_most: 3
       -%}
       <div class="pt-recos__head pt-shop__head">
-        <p class="pt-eyebrow pt-eyebrow--red" data-reveal="up">{{ 'sections.product_grid.eyebrow' | t }}</p>
+        <p class="pt-eyebrow pt-eyebrow--red" data-reveal="up">{{ 'sections.main_collection.eyebrow' | t }}</p>
         <h1 class="pt-h2" id="{{ title_id }}" data-reveal="mask" style="--pt-d:1">{% render 'pt-split', text: col_title %}</h1>
         {%- if collection.description != blank -%}
           <div class="pt-lead rte" data-reveal="up" style="--pt-d:2">{{ collection.description }}</div>
         {%- elsif col_lead != blank -%}
           <p class="pt-lead" data-reveal="up" style="--pt-d:2">{{ col_lead }}</p>
         {%- endif -%}
+        {%- render 'pt-chips', list: section.settings.chips, current: collection -%}
       </div>
 
       {%- if shown > 0 -%}
@@ -69,6 +70,14 @@
 {
   "name": "Collection",
   "class": "section-collection",
-  "settings": []
+  "settings": [
+    {
+      "type": "collection_list",
+      "id": "chips",
+      "label": "Boutons de catégorie",
+      "limit": 6,
+      "info": "Pastilles « Tout voir » + ces collections, sous le titre. Les collections vides sont masquées."
+    }
+  ]
 }
 {% endschema %}

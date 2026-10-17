@@ -1,5 +1,18 @@
 {
-  "current": "Default",
+  "current": {
+    "free_shipping_threshold": 25,
+    "shipping_fee": "3.99",
+    "delivery_text": "8 à 25 jours",
+    "processing_days": 2,
+    "delivery_min_days": 6,
+    "delivery_max_days": 23,
+    "bundle1_qty": 2,
+    "bundle1_discount": 15,
+    "bundle1_badge": "Duo",
+    "bundle2_qty": 3,
+    "bundle2_discount": 20,
+    "bundle2_badge": "Meilleur prix"
+  },
   "presets": {
     "Default": {}
   }

@@ -23,7 +23,7 @@
     "quantity": "Quantité",
     "shipping_note": "Frais de port calculés à l’étape suivante.",
     "taxes_included": "TVA incluse.",
-    "discover": "Voir les jouets"
+    "discover": "Voir la boutique"
   },
   "product": {
     "add": "Ajouter au panier",
@@ -45,7 +45,7 @@
         "one": "Panier, {{ count }} article",
         "other": "Panier, {{ count }} articles"
       },
-      "nav_shop": "Nos jouets"
+      "nav_shop": "La boutique"
     },
     "footer": {
       "contact_html": "Une question ? <a href=\"{{ url }}\">Écris-nous</a>, on te répond vite.",
@@ -57,7 +57,8 @@
       "legal_title": "Légal",
       "social_label": "Réseaux sociaux",
       "social_title": "Suivre",
-      "payment_label": "Moyens de paiement"
+      "payment_label": "Moyens de paiement",
+      "legal_notice": "Mentions légales"
     },
     "hero": {
       "from": "dès",
@@ -80,7 +81,7 @@
     "main_404": {
       "title": "Oups, cette page a roulé sous le canapé.",
       "text": "Elle n’existe pas ou a été déplacée. Les jouets, eux, sont toujours là.",
-      "button": "Voir les jouets"
+      "button": "Voir la boutique"
     },
     "comparison": {
       "criterion": "Critère",
@@ -104,10 +105,15 @@
       "empty": "Aucun produit dans cette collection.",
       "pagination": "Pages de la collection",
       "previous": "Précédent",
-      "next": "Suivant"
+      "next": "Suivant",
+      "eyebrow": "La boutique"
     },
     "main_list_collections": {
-      "title": "Collections"
+      "title": "Collections",
+      "count": {
+        "one": "{{ count }} produit",
+        "other": "{{ count }} produits"
+      }
     },
     "main_search": {
       "title": "Recherche",
@@ -125,14 +131,16 @@
       "enter": "Entrer"
     },
     "product_grid": {
-      "eyebrow": "Nos jouets",
-      "title": "Choisis son prochain jeu.",
-      "lead": "Des jeux simples à partager avec lui, toujours sous ton œil."
+      "eyebrow": "La boutique",
+      "title": "Ses jeux, ses soins, ses souvenirs.",
+      "lead": "Des jeux simples à partager avec lui, toujours sous ton œil, et des accessoires pour son quotidien.",
+      "chips_label": "Choisir une catégorie",
+      "chips_all": "Tout voir"
     },
     "product_recos": {
-      "eyebrow": "Les autres jouets",
+      "eyebrow": "À découvrir aussi",
       "title": "Complète sa routine de jeu.",
-      "view_all": "Voir tous les jouets",
+      "view_all": "Voir tous les produits",
       "free_shipping": "Livraison offerte",
       "free_shipping_from": "Livraison offerte dès {{ amount }}"
     }

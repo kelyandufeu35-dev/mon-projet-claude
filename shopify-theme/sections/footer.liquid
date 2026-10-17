@@ -46,11 +46,20 @@
       <nav class="pt-footer__col" aria-label="{{ 'sections.footer.legal_label' | t }}" data-reveal="up">
         <h2>{{ 'sections.footer.legal_title' | t }}</h2>
         <ul>
+          {%- comment -%}
+            Politiques de Paramètres → Politiques. Les mentions légales (obligatoires en France) sont
+            ajoutées à la fin si shop.policies ne les liste pas.
+          {%- endcomment -%}
+          {%- assign has_legal = false -%}
           {%- for policy in shop.policies -%}
             {%- if policy != blank -%}
+              {%- if policy.url contains 'legal-notice' -%}{%- assign has_legal = true -%}{%- endif -%}
               <li><a href="{{ policy.url }}">{{ policy.title | escape }}</a></li>
             {%- endif -%}
           {%- endfor -%}
+          {%- unless has_legal -%}
+            <li><a href="{{ routes.root_url | append: '/policies/legal-notice' | replace: '//', '/' }}">{{ 'sections.footer.legal_notice' | t }}</a></li>
+          {%- endunless -%}
         </ul>
       </nav>
 
