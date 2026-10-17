@@ -1,0 +1,142 @@
+{%- comment -%}
+  Page produit (v9 Cinéma) : la zone d’achat arrive tout de suite, sans intro ni
+  révélation (reveal: false). Le titre du produit est le H1. Premier média : la balle 3D de la
+  pub sur scène sombre (réglage « Animation 3D en premier »). Voir snippets/product-buy.liquid.
+{%- endcomment -%}
+<section class="pt-achat pt-achat--page" id="{{ section.settings.anchor | default: 'acheter' | escape }}" aria-labelledby="pt-buy-title-{{ section.id }}">
+  <div class="pt-wrap">
+    {% render 'product-buy', product: product, section: section, reveal: false, scene: section.settings.scene_first %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Produit",
+  "class": "section-achat",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "title_as_h1",
+      "label": "Titre principal de la page (H1)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "scene_first",
+      "label": "Animation 3D en premier dans la galerie",
+      "default": true,
+      "info": "La balle de la publicité, sur scène sombre, avant les photos. Idéal pour les visiteurs qui arrivent d’une pub."
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Petit texte au-dessus du titre",
+      "default": "Chiens et chats"
+    },
+    {
+      "type": "header",
+      "content": "Offres groupées"
+    },
+    {
+      "type": "paragraph",
+      "content": "Les prix et remises se règlent dans Paramètres du thème → Livraison et remises."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_offers",
+      "label": "Afficher les offres groupées",
+      "default": true,
+      "info": "Décoche pour un produit sans remise de lot : les remises automatiques ne valent que pour la balle."
+    },
+    {
+      "type": "range",
+      "id": "preselect_offer",
+      "label": "Offre cochée par défaut",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "text",
+      "id": "offers_legend",
+      "label": "Question au-dessus des offres",
+      "default": "Combien de balles ?"
+    },
+    {
+      "type": "text",
+      "id": "unit_singular",
+      "label": "Unité au singulier",
+      "default": "balle"
+    },
+    {
+      "type": "text",
+      "id": "unit_plural",
+      "label": "Unité au pluriel",
+      "default": "balles"
+    },
+    {
+      "type": "header",
+      "content": "Garanties sous le bouton"
+    },
+    {
+      "type": "text",
+      "id": "trust_1",
+      "label": "Garantie 1 (camion)",
+      "default": "Colis suivi",
+      "info": "« Livraison offerte » figure déjà à côté du prix."
+    },
+    {
+      "type": "text",
+      "id": "trust_2",
+      "label": "Garantie 2 (retour)",
+      "default": "Retour sous 14 jours (droit légal)"
+    },
+    {
+      "type": "text",
+      "id": "trust_3",
+      "label": "Garantie 3 (cadenas)",
+      "default": "Paiement sécurisé"
+    },
+    {
+      "type": "header",
+      "content": "Volets d’information"
+    },
+    {
+      "type": "textarea",
+      "id": "inbox",
+      "label": "Ce que tu reçois (une ligne par élément)",
+      "default": "1 balle à friandises de 8 cm, en caoutchouc souple (TPE)\nUne ouverture pour glisser les croquettes sèches\nUn colis suivi, numéro envoyé par e-mail"
+    },
+    {
+      "type": "checkbox",
+      "id": "size_guide",
+      "label": "Volet « Quelle taille pour mon animal ? »",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Volet avec la description Shopify du produit",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Barre d’achat mobile"
+    },
+    {
+      "type": "text",
+      "id": "sticky_label",
+      "label": "Nom affiché dans la barre",
+      "default": "Balle Pattoune"
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Ancre de la zone d’achat (sans #)",
+      "default": "acheter",
+      "info": "Les boutons « Je commande » pointent vers « acheter »."
+    }
+  ]
+}
+{% endschema %}

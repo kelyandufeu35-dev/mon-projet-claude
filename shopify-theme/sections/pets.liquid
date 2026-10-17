@@ -1,0 +1,47 @@
+<section class="section pets" id="{{ section.settings.anchor | default: section.id }}">
+  <div class="wrap">
+    {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+    {%- if section.settings.title != blank -%}<h2 class="h2">{{ section.settings.title | escape }}</h2>{%- endif -%}
+    <div class="pets__grid">
+      {%- for block in section.blocks -%}
+        <figure class="pet-card" {{ block.shopify_attributes }}>
+          <div class="pet-card__img">
+            {%- if block.settings.image != blank -%}
+              {{ block.settings.image | image_url: width: 900 | image_tag: widths: '450, 700, 900', sizes: '(min-width: 800px) 45vw, 90vw', loading: 'lazy', alt: block.settings.image.alt | default: block.settings.title }}
+            {%- else -%}
+              <div class="toy-sketch" aria-hidden="true"><span class="toy-sketch__ball"></span></div>
+            {%- endif -%}
+          </div>
+          <figcaption>
+            <span class="pet-card__tag">{{ block.settings.title | escape }}</span>
+            <p>{{ block.settings.text | escape }}</p>
+          </figcaption>
+        </figure>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Chiens et chats",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Petit titre", "default": "Pour qui ?" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Chiens et chats l’adorent." },
+    { "type": "text", "id": "anchor", "label": "Ancre de lien (sans #)", "default": "pour-qui" }
+  ],
+  "blocks": [
+    {
+      "type": "pet",
+      "name": "Animal",
+      "limit": 3,
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Photo" },
+        { "type": "text", "id": "title", "label": "Titre", "default": "Pour les chiens" },
+        { "type": "text", "id": "text", "label": "Texte" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Chiens et chats" }]
+}
+{% endschema %}

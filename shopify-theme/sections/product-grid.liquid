@@ -1,0 +1,103 @@
+{%- comment -%}
+  « Nos jouets » (vitrine de l’accueil) : les produits disponibles d’une collection (vide = toute la
+  boutique), dans la limite du réglage. Cartes : snippets/pt-reco-card.liquid, sans offre groupée
+  (réservées à la balle, sur sa page). Colonnes selon le nombre de jouets : 2 sur mobile, jusqu’à 3
+  sur tablette et 4 sur ordinateur (--pt-cols). Textes : locales sections.product_grid.
+  Styles : assets/sections-v9.css (.pt-recos, .pt-shop).
+{%- endcomment -%}
+{%- liquid
+  assign anchor = section.settings.anchor | default: 'jouets'
+  assign title_id = 'pt-shop-title-' | append: section.id
+  assign source = section.settings.collection
+  if source == blank
+    assign source = collections.all
+  endif
+  assign max_items = section.settings.limit | default: 12
+  assign shown = 0
+  capture cards
+    for item in source.products
+      if item.available == false
+        continue
+      endif
+      if shown >= max_items
+        break
+      endif
+      assign shown = shown | plus: 1
+      assign card_type = ''
+      if section.settings.show_type
+        assign card_type = item.type
+      endif
+      echo '<li data-reveal="up">'
+      render 'pt-reco-card', item: item, eyebrow: card_type, sizes: '(min-width: 900px) 25vw, (min-width: 600px) 30vw, 46vw'
+      echo '</li>'
+    endfor
+  endcapture
+  assign cols = shown | at_least: 2 | at_most: 4
+  assign cols_md = cols | at_most: 3
+-%}
+<section class="pt-recos pt-shop" id="{{ anchor | escape }}" aria-labelledby="{{ title_id }}">
+  <div class="pt-wrap">
+    <div class="pt-recos__head pt-shop__head">
+      <p class="pt-eyebrow pt-eyebrow--red" data-reveal="up">{{ 'sections.product_grid.eyebrow' | t }}</p>
+      <h2 class="pt-h2" id="{{ title_id }}" data-reveal="mask" style="--pt-d:1">{%- assign grid_title = 'sections.product_grid.title' | t -%}{% render 'pt-split', text: grid_title %}</h2>
+      <p class="pt-lead" data-reveal="up" style="--pt-d:2">{{ 'sections.product_grid.lead' | t }}</p>
+      {%- render 'pt-chips', list: section.settings.chips -%}
+    </div>
+    {%- if shown > 0 -%}
+      <ul class="pt-recos__grid pt-shop__grid" style="--pt-cols:{{ cols }}; --pt-cols-md:{{ cols_md }}" data-reveal-group>
+        {{- cards -}}
+      </ul>
+      {%- if source.products_count > shown -%}
+        <p class="pt-recos__all"><a href="{{ source.url | default: routes.all_products_collection_url }}">{{ 'sections.product_recos.view_all' | t }}</a></p>
+      {%- endif -%}
+    {%- else -%}
+      <p class="pt-shop__empty">{{ 'sections.main_collection.empty' | t }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "La boutique",
+  "class": "section-shop",
+  "settings": [
+    {
+      "type": "collection_list",
+      "id": "chips",
+      "label": "Boutons de catégorie",
+      "limit": 6,
+      "info": "Pastilles « Tout voir » + ces collections, sous le titre. Les collections vides sont masquées."
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection",
+      "info": "Vide = tous les jouets de la boutique. Les jouets épuisés ne s’affichent pas."
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Nombre maximum de jouets",
+      "min": 2,
+      "max": 24,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "checkbox",
+      "id": "show_type",
+      "label": "Afficher le type de produit au-dessus du nom",
+      "default": false,
+      "info": "Le « Type » renseigné sur la fiche de chaque produit (par exemple « Pour chats »)."
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Ancre de lien (sans #)",
+      "default": "jouets",
+      "info": "Les boutons « Voir les jouets » et le menu de l’en-tête pointent vers « jouets »."
+    }
+  ],
+  "presets": [{ "name": "Nos jouets" }]
+}
+{% endschema %}

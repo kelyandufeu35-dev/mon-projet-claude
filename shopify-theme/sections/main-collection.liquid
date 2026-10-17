@@ -1,0 +1,83 @@
+{%- comment -%}
+  Page collection (v9 Cinéma), dont « Tous les jouets » (/collections/all, lien « Nos jouets » de
+  l’en-tête) : mêmes cartes et même grille que la section « Nos jouets » de l’accueil
+  (snippets/pt-reco-card.liquid, .pt-shop), 24 produits par page. Pagination maison (précédent,
+  numéros, suivant) : la sortie de default_pagination porte la classe « page », déjà prise par le thème.
+  Styles : assets/sections-v9.css (.pt-recos, .pt-shop).
+{%- endcomment -%}
+{%- liquid
+  assign title_id = 'pt-col-title-' | append: section.id
+  assign col_title = collection.title
+  assign col_lead = ''
+  if collection.handle == 'all'
+    assign col_title = 'sections.product_grid.title' | t
+    assign col_lead = 'sections.product_grid.lead' | t
+  endif
+-%}
+<section class="pt-recos pt-shop pt-shop--page" aria-labelledby="{{ title_id }}">
+  <div class="pt-wrap">
+    {%- paginate collection.products by 24 -%}
+      {%- liquid
+        assign shown = collection.products.size
+        assign cols = shown | at_least: 2 | at_most: 4
+        assign cols_md = cols | at_most: 3
+      -%}
+      <div class="pt-recos__head pt-shop__head">
+        <p class="pt-eyebrow pt-eyebrow--red" data-reveal="up">{{ 'sections.main_collection.eyebrow' | t }}</p>
+        <h1 class="pt-h2" id="{{ title_id }}" data-reveal="mask" style="--pt-d:1">{% render 'pt-split', text: col_title %}</h1>
+        {%- if collection.description != blank -%}
+          <div class="pt-lead rte" data-reveal="up" style="--pt-d:2">{{ collection.description }}</div>
+        {%- elsif col_lead != blank -%}
+          <p class="pt-lead" data-reveal="up" style="--pt-d:2">{{ col_lead }}</p>
+        {%- endif -%}
+        {%- render 'pt-chips', list: section.settings.chips, current: collection -%}
+      </div>
+
+      {%- if shown > 0 -%}
+        <ul class="pt-recos__grid pt-shop__grid" style="--pt-cols:{{ cols }}; --pt-cols-md:{{ cols_md }}" data-reveal-group>
+          {%- for item in collection.products -%}
+            <li data-reveal="up">{% render 'pt-reco-card', item: item, sizes: '(min-width: 900px) 25vw, (min-width: 600px) 30vw, 46vw' %}</li>
+          {%- endfor -%}
+        </ul>
+      {%- else -%}
+        <p class="pt-shop__empty">{{ 'sections.main_collection.empty' | t }}</p>
+      {%- endif -%}
+
+      {%- if paginate.pages > 1 -%}
+        <nav class="pt-pages" aria-label="{{ 'sections.main_collection.pagination' | t }}">
+          {%- if paginate.previous -%}
+            <a class="pt-pages__step" href="{{ paginate.previous.url }}" rel="prev">{{ 'sections.main_collection.previous' | t }}</a>
+          {%- endif -%}
+          {%- for part in paginate.parts -%}
+            {%- if part.is_link -%}
+              <a class="pt-pages__num" href="{{ part.url }}">{{ part.title }}</a>
+            {%- elsif part.title == '&hellip;' -%}
+              <span class="pt-pages__gap" aria-hidden="true">{{ part.title }}</span>
+            {%- else -%}
+              <span class="pt-pages__num" aria-current="page">{{ part.title }}</span>
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if paginate.next -%}
+            <a class="pt-pages__step" href="{{ paginate.next.url }}" rel="next">{{ 'sections.main_collection.next' | t }}</a>
+          {%- endif -%}
+        </nav>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection",
+  "class": "section-collection",
+  "settings": [
+    {
+      "type": "collection_list",
+      "id": "chips",
+      "label": "Boutons de catégorie",
+      "limit": 6,
+      "info": "Pastilles « Tout voir » + ces collections, sous le titre. Les collections vides sont masquées."
+    }
+  ]
+}
+{% endschema %}

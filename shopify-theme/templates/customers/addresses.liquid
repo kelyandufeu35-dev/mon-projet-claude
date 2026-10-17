@@ -1,0 +1,40 @@
+<section class="page wrap">
+  <p><a href="{{ routes.account_url }}">{{ 'customer.account.back' | t }}</a></p>
+  <h1 class="h1">{{ 'customer.addresses.title' | t }}</h1>
+  {%- paginate customer.addresses by 10 -%}
+    {%- for address in customer.addresses -%}
+      <div class="address">
+        <p>{{ address | format_address }}</p>
+        {%- if address == customer.default_address -%}<p class="chip">{{ 'customer.addresses.default' | t }}</p>{%- endif -%}
+        {%- form 'customer_address', address, class: 'form' -%}
+          <div class="form__row">
+            <div class="field"><label for="AddrFirst{{ address.id }}">{{ 'customer.fields.first_name' | t }}</label><input id="AddrFirst{{ address.id }}" name="address[first_name]" value="{{ form.first_name }}" autocomplete="given-name"></div>
+            <div class="field"><label for="AddrLast{{ address.id }}">{{ 'customer.fields.last_name' | t }}</label><input id="AddrLast{{ address.id }}" name="address[last_name]" value="{{ form.last_name }}" autocomplete="family-name"></div>
+          </div>
+          <div class="field"><label for="AddrA1{{ address.id }}">{{ 'customer.fields.address1' | t }}</label><input id="AddrA1{{ address.id }}" name="address[address1]" value="{{ form.address1 }}" autocomplete="address-line1"></div>
+          <div class="form__row">
+            <div class="field"><label for="AddrZip{{ address.id }}">{{ 'customer.fields.zip' | t }}</label><input id="AddrZip{{ address.id }}" name="address[zip]" value="{{ form.zip }}" autocomplete="postal-code"></div>
+            <div class="field"><label for="AddrCity{{ address.id }}">{{ 'customer.fields.city' | t }}</label><input id="AddrCity{{ address.id }}" name="address[city]" value="{{ form.city }}" autocomplete="address-level2"></div>
+          </div>
+          <div class="field"><label for="AddrCountry{{ address.id }}">{{ 'customer.fields.country' | t }}</label><select id="AddrCountry{{ address.id }}" name="address[country]" data-default="{{ form.country }}">{{ all_country_option_tags }}</select></div>
+          <button type="submit" class="btn btn--ink btn--sm">{{ 'customer.addresses.save' | t }}</button>
+        {%- endform -%}
+      </div>
+    {%- endfor -%}
+    {%- if paginate.pages > 1 -%}{{ paginate | default_pagination }}{%- endif -%}
+  {%- endpaginate -%}
+  <h2 class="h2">{{ 'customer.addresses.add_title' | t }}</h2>
+  {%- form 'customer_address', customer.new_address, class: 'form' -%}
+    <div class="form__row">
+      <div class="field"><label for="NewFirst">{{ 'customer.fields.first_name' | t }}</label><input id="NewFirst" name="address[first_name]" autocomplete="given-name"></div>
+      <div class="field"><label for="NewLast">{{ 'customer.fields.last_name' | t }}</label><input id="NewLast" name="address[last_name]" autocomplete="family-name"></div>
+    </div>
+    <div class="field"><label for="NewA1">{{ 'customer.fields.address1' | t }}</label><input id="NewA1" name="address[address1]" autocomplete="address-line1"></div>
+    <div class="form__row">
+      <div class="field"><label for="NewZip">{{ 'customer.fields.zip' | t }}</label><input id="NewZip" name="address[zip]" autocomplete="postal-code"></div>
+      <div class="field"><label for="NewCity">{{ 'customer.fields.city' | t }}</label><input id="NewCity" name="address[city]" autocomplete="address-level2"></div>
+    </div>
+    <div class="field"><label for="NewCountry">{{ 'customer.fields.country' | t }}</label><select id="NewCountry" name="address[country]" data-default="France">{{ all_country_option_tags }}</select></div>
+    <button type="submit" class="btn btn--ink">{{ 'customer.addresses.add' | t }}</button>
+  {%- endform -%}
+</section>

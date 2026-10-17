@@ -1,0 +1,173 @@
+{%- comment -%}
+  Questions (v9 Cinéma) : filet qui se trace, titre masqué, questions en cascade
+  qui s’ouvrent en douceur (::details-content). Le lien « Écris-nous » mène à la
+  page Contact : aucune adresse e-mail n’est jamais affichée. Questions en police de titre :
+  l’espace fine insécable (trop étroite dans Bricolage) devient une espace insécable normale.
+  Réponses : [seuil_livraison] et [frais_livraison] deviennent les montants des Paramètres du thème
+  (Livraison et remises) ; [delai_livraison] et [zone_livraison] sont remplacés par les clés de langue
+  general.shipping.delivery_time et general.shipping.area (délai et zone adaptables par langue).
+  Styles : sections-v9.css.
+{%- endcomment -%}
+{%- liquid
+  assign anchor = section.settings.anchor | default: 'faq'
+  assign title_id = 'pt-faq-title-' | append: section.id
+  assign ship_time = 'general.shipping.delivery_time' | t
+  assign ship_area = 'general.shipping.area' | t
+  assign ship_threshold_cents = settings.free_shipping_threshold | default: 0 | times: 100
+  assign ship_fee_cents = settings.shipping_fee | default: 0 | times: 100 | round
+  capture ship_threshold
+    render 'pt-money', cents: ship_threshold_cents
+  endcapture
+  capture ship_fee
+    render 'pt-money', cents: ship_fee_cents
+  endcapture
+  assign ship_threshold = ship_threshold | strip | replace: ',00', ''
+  assign ship_fee = ship_fee | strip
+-%}
+<section class="pt-faq" id="{{ anchor | escape }}" aria-labelledby="{{ title_id }}">
+  <div class="pt-wrap">
+    <span class="pt-faq__rule" data-reveal="line" aria-hidden="true"></span>
+    <div class="pt-faq__grid">
+      <div class="pt-faq__head">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="pt-eyebrow pt-eyebrow--red" data-reveal="up">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        <h2 class="pt-h2" id="{{ title_id }}" data-reveal="mask" style="--pt-d:1">{% render 'pt-split', text: section.settings.title %}</h2>
+        {%- if section.settings.aside != blank -%}
+          <p class="pt-faq__aside" data-reveal="up" style="--pt-d:2">
+            {{- section.settings.aside | escape -}}
+            {%- if pages.contact != empty and section.settings.link_label != blank %} <a href="{{ pages.contact.url }}">{{ section.settings.link_label | escape }}</a>{{ section.settings.aside_after | escape }}{%- endif -%}
+          </p>
+        {%- endif -%}
+      </div>
+
+      <div class="pt-faq__list" data-reveal-group>
+        {%- for block in section.blocks -%}
+          <details class="pt-faq__item" data-reveal="up" {{ block.shopify_attributes }}>
+            <summary><span class="pt-faq__q">{{ block.settings.question | escape | replace: ' ', '&nbsp;' }}</span><span class="pt-plus" aria-hidden="true"></span></summary>
+            <div class="pt-faq__a rte">{{ block.settings.answer | replace: '[delai_livraison]', ship_time | replace: '[zone_livraison]', ship_area | replace: '[seuil_livraison]', ship_threshold | replace: '[frais_livraison]', ship_fee }}</div>
+          </details>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{%- if section.blocks.size > 0 -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {%- for block in section.blocks -%}
+          {
+            "@type": "Question",
+            "name": {{ block.settings.question | json }},
+            "acceptedAnswer": { "@type": "Answer", "text": {{ block.settings.answer | replace: '[delai_livraison]', ship_time | replace: '[zone_livraison]', ship_area | replace: '[seuil_livraison]', ship_threshold | replace: '[frais_livraison]', ship_fee | strip_html | json }} }
+          }{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ]
+    }
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Questions",
+  "class": "section-faq",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Petit titre",
+      "default": "Questions"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre",
+      "default": "Avant de te décider."
+    },
+    {
+      "type": "text",
+      "id": "aside",
+      "label": "Phrase sous le titre",
+      "default": "Une autre question ?"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Texte du lien vers la page Contact",
+      "default": "Écris-nous",
+      "info": "Le lien n’apparaît que si la page Contact existe. Aucune adresse e-mail n’est affichée."
+    },
+    {
+      "type": "text",
+      "id": "aside_after",
+      "label": "Suite de la phrase après le lien",
+      "default": ", une vraie personne te répond en français."
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Ancre de lien (sans #)",
+      "default": "faq"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Une question ?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Réponse",
+          "default": "<p>La réponse.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Questions",
+      "blocks": [
+        {
+          "type": "question",
+          "settings": {
+            "question": "Quelle taille fait la balle ?",
+            "answer": "<p>Elle mesure 8 cm de diamètre. Elle convient aux chats et aux petits chiens ; ne la donne pas à un grand chien, qui pourrait l’avaler.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Quelles croquettes mettre dedans ?",
+            "answer": "<p>Des croquettes sèches de petite taille, qui passent facilement par l’ouverture.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Peut-il jouer sans surveillance ?",
+            "answer": "<p>Surveille les premières séances pour voir comment il joue. Retire le jouet s’il commence à le mâchouiller ou s’il est abîmé. Aucun jouet n’est indestructible.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Livraison et retours ?",
+            "answer": "<p>La livraison est offerte et suivie, en 12 à 18 jours, en France métropolitaine. Tu disposes de 14 jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

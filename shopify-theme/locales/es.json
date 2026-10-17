@@ -1,0 +1,270 @@
+{
+  "general": {
+    "skip": "Ir al contenido",
+    "close": "Cerrar",
+    "menu": "Menú",
+    "home_label": "{{ brand }}, inicio",
+    "page": "página {{ number }}",
+    "shipping": {
+      "delivery_time": "8 a 25 días",
+      "area": "Francia, la UE y Suiza"
+    }
+  },
+  "date_formats": {
+    "numeric": "%d/%m/%Y"
+  },
+  "cart": {
+    "title": "Tu carrito",
+    "empty": "Tu carrito está vacío por ahora.",
+    "checkout": "Finalizar pedido",
+    "subtotal": "Subtotal",
+    "total": "Total (IVA incl.)",
+    "remove": "Eliminar",
+    "quantity": "Cantidad",
+    "shipping_note": "Gastos de envío calculados en el siguiente paso.",
+    "taxes_included": "IVA incluido.",
+    "discover": "Ver la tienda"
+  },
+  "product": {
+    "add": "Añadir al carrito",
+    "added": "Añadido al carrito",
+    "sold_out": "Agotado",
+    "unavailable": "No disponible"
+  },
+  "sections": {
+    "announcement_bar": {
+      "label": "Anuncio"
+    },
+    "header": {
+      "nav_label": "Navegación principal",
+      "language_label": "Elegir idioma",
+      "nav_faq": "Preguntas",
+      "cart": "Carrito",
+      "cart_label": {
+        "one": "Carrito, {{ count }} artículo",
+        "other": "Carrito, {{ count }} artículos"
+      },
+      "nav_shop": "Tienda"
+    },
+    "footer": {
+      "contact_html": "¿Tienes alguna pregunta? <a href=\"{{ url }}\">Escríbenos</a> y te responderemos enseguida.",
+      "help_label": "Ayuda",
+      "help_title": "Ayuda",
+      "faq_link": "Preguntas frecuentes",
+      "contact_link": "Escríbenos",
+      "legal_label": "Información legal",
+      "legal_title": "Legal",
+      "social_label": "Redes sociales",
+      "social_title": "Síguenos",
+      "payment_label": "Métodos de pago",
+      "legal_notice": "Aviso legal"
+    },
+    "hero": {
+      "from": "desde",
+      "pause": "Pausar la animación"
+    },
+    "featured_product": {
+      "empty_eyebrow": "Por configurar",
+      "empty_title": "Elige tu producto",
+      "empty_text": "En el editor de temas, haz clic en esta sección y selecciona el producto que quieres destacar."
+    },
+    "contact_form": {
+      "success": "Mensaje enviado. Te responderemos {{ time }}.",
+      "name": "Nombre",
+      "email": "Correo electrónico",
+      "order": "Número de pedido",
+      "order_optional": "(si tienes uno)",
+      "message": "Mensaje",
+      "submit": "Enviar el mensaje"
+    },
+    "main_404": {
+      "title": "Vaya, esta página ha rodado debajo del sofá.",
+      "text": "No existe o se ha movido. Los juguetes, en cambio, siguen aquí.",
+      "button": "Ver la tienda"
+    },
+    "comparison": {
+      "criterion": "Criterio",
+      "yes": "Sí",
+      "no": "No"
+    },
+    "promise": {
+      "title": "Nuestros compromisos"
+    },
+    "reviews": {
+      "rating": "{{ rating }} de 5"
+    },
+    "trust_bar": {
+      "payments": "Métodos de pago aceptados"
+    },
+    "video_showcase": {
+      "sound_on": "Activar el sonido",
+      "sound_off": "Silenciar"
+    },
+    "main_collection": {
+      "empty": "Todavía no hay productos en esta colección.",
+      "pagination": "Páginas de la colección",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "eyebrow": "La tienda"
+    },
+    "main_list_collections": {
+      "title": "Colecciones",
+      "count": {
+        "one": "{{ count }} producto",
+        "other": "{{ count }} productos"
+      }
+    },
+    "main_search": {
+      "title": "Búsqueda",
+      "label": "Buscar",
+      "placeholder": "Buscar…",
+      "submit": "Buscar",
+      "no_results": "No hay resultados para «{{ terms }}»."
+    },
+    "main_password": {
+      "success": "¡Gracias! Te avisaremos en cuanto abramos.",
+      "email_label": "Tu correo para que te avisemos cuando abramos",
+      "submit": "Avísame",
+      "owner": "Acceso del propietario",
+      "password": "Contraseña",
+      "enter": "Entrar"
+    },
+    "product_grid": {
+      "eyebrow": "La tienda",
+      "title": "Sus juegos, sus cuidados, sus recuerdos.",
+      "lead": "Juegos sencillos para compartir con él, siempre bajo tu supervisión, y accesorios para su día a día.",
+      "chips_label": "Elegir una categoría",
+      "chips_all": "Ver todo"
+    },
+    "product_recos": {
+      "eyebrow": "También te puede gustar",
+      "title": "Completa su rato de juego.",
+      "view_all": "Ver todos los productos",
+      "free_shipping": "Envío gratis",
+      "free_shipping_from": "Envío gratis desde {{ amount }}"
+    }
+  },
+  "snippets": {
+    "cart_summary": {
+      "free_html": "<strong>Envío gratis</strong> en tu pedido",
+      "remaining_html": "Solo te faltan <strong>{{ amount }}</strong> para el envío gratis",
+      "free_reached_html": "<strong>Envío gratis</strong>",
+      "minus_one": "Quitar uno",
+      "plus_one": "Añadir uno",
+      "upsell_units_html": {
+        "one": "Añade {{ count }} pelota más y consigue <strong>−{{ discount }} %</strong> en todo el lote",
+        "other": "Añade {{ count }} pelotas más y consigue <strong>−{{ discount }} %</strong> en todo el lote"
+      },
+      "upsell_items_html": {
+        "one": "Añade {{ count }} artículo más para conseguir <strong>−{{ discount }} %</strong>.",
+        "other": "Añade {{ count }} artículos más para conseguir <strong>−{{ discount }} %</strong>."
+      },
+      "discounts": "Descuentos",
+      "free_note": "Envío gratis · sin gastos adicionales al pagar.",
+      "secure": "Pago seguro con Shopify.",
+      "view_cart": "Ver el carrito completo"
+    },
+    "product_buy": {
+      "scene_alt": "{{ title }}, pelota roja facetada bajo un haz de luz",
+      "gallery_label": "Elegir una foto",
+      "scene_thumb": "Animación 3D",
+      "thumb_photo": "Foto {{ number }}",
+      "thumb_video": "Vídeo {{ number }}",
+      "price_note": "IVA incl. · envío gratis",
+      "option_colon": ":",
+      "percent_off": "−{{ percent }} %",
+      "per_unit": "la unidad",
+      "unit_price": "Precio unitario",
+      "instead_of": "en lugar de",
+      "discount_note": "Descuento aplicado automáticamente en el carrito.",
+      "inbox_title": "Qué recibes",
+      "size_title": "¿Qué tamaño para mi mascota?",
+      "size_cats_html": "<strong>Gatos</strong>: perfecta para empujarla con la pata.",
+      "size_small_dogs_html": "<strong>Cachorros y perros pequeños</strong>: ideal para mantenerlos ocupados.",
+      "size_big_dogs_html": "<strong>Perros grandes</strong>: demasiado pequeña, podrían tragársela.",
+      "description": "Descripción",
+      "sticky_shipping": "envío gratis",
+      "sticky_button": "Elegir",
+      "unit_singular": "pelota",
+      "unit_plural": "pelotas",
+      "price_note_from": "IVA incl. · envío gratis desde {{ amount }}",
+      "sticky_shipping_from": "envío gratis desde {{ amount }}"
+    }
+  },
+  "customer": {
+    "fields": {
+      "first_name": "Nombre",
+      "last_name": "Apellidos",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "password_confirm": "Confirmar la contraseña",
+      "address1": "Dirección",
+      "zip": "Código postal",
+      "city": "Ciudad",
+      "country": "País"
+    },
+    "account": {
+      "title": "Mi cuenta",
+      "logout": "Cerrar sesión",
+      "addresses_link": "Mis direcciones ({{ number }})",
+      "orders_title": "Mis pedidos",
+      "order": "Pedido",
+      "date": "Fecha",
+      "status": "Estado",
+      "total": "Total",
+      "no_orders": "Todavía no tienes pedidos.",
+      "back": "← Mi cuenta"
+    },
+    "activate": {
+      "title": "Activar mi cuenta",
+      "submit": "Activar"
+    },
+    "addresses": {
+      "title": "Mis direcciones",
+      "default": "Dirección predeterminada",
+      "save": "Guardar",
+      "add_title": "Añadir una dirección",
+      "add": "Añadir"
+    },
+    "login": {
+      "title": "Iniciar sesión",
+      "submit": "Iniciar sesión",
+      "register": "Crear una cuenta",
+      "reset_sent": "Te acabamos de enviar un correo para restablecer tu contraseña.",
+      "forgot": "¿Has olvidado tu contraseña?",
+      "recover": "Recibir el enlace"
+    },
+    "order": {
+      "title": "Pedido {{ name }}",
+      "placed": "Realizado el {{ date }}",
+      "track": "Seguir el paquete",
+      "subtotal": "Subtotal",
+      "shipping": "Envío",
+      "total": "Total"
+    },
+    "register": {
+      "title": "Crear una cuenta",
+      "submit": "Crear mi cuenta"
+    },
+    "reset": {
+      "title": "Nueva contraseña",
+      "submit": "Guardar"
+    }
+  },
+  "gift_card": {
+    "page_title": "Tarjeta regalo · {{ brand }}",
+    "title": "Tu tarjeta regalo {{ brand }}",
+    "balance": "Saldo:",
+    "expired": "(caducada)",
+    "code": "Código:",
+    "wallet": "Añadir a Apple Wallet",
+    "shop": "Ir a la tienda"
+  },
+  "scripts": {
+    "add_error": "No hemos podido añadir este producto al carrito.",
+    "network_error": "La conexión ha fallado. Inténtalo de nuevo en un momento.",
+    "delivery_html": "Entrega estimada entre el <strong>{{ start }}</strong> y el <strong>{{ end }}</strong>",
+    "cart_label_one": "Carrito, {{ number }} artículo",
+    "cart_label_other": "Carrito, {{ number }} artículos"
+  }
+}

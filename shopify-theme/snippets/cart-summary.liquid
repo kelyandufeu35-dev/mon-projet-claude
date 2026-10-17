@@ -1,0 +1,123 @@
+{%- comment -%}
+  Contenu du panier : jauge de livraison offerte, articles, offre suivante,
+  totaux et bouton de paiement. Utilisé par le panier latéral et la page panier.
+  Paramètre : compact (booléen) — version panier latéral.
+{%- endcomment -%}
+{%- liquid
+  assign threshold = settings.free_shipping_threshold | default: 0 | times: 100
+  assign remaining = threshold | minus: cart.total_price
+  if threshold > 0
+    assign pct = cart.total_price | times: 100 | divided_by: threshold
+    if pct > 100
+      assign pct = 100
+    endif
+  else
+    assign pct = 100
+  endif
+
+  assign next_qty = 0
+  assign next_discount = 0
+  if settings.bundle1_qty > cart.item_count and settings.bundle1_discount > 0
+    assign next_qty = settings.bundle1_qty
+    assign next_discount = settings.bundle1_discount
+  elsif settings.bundle2_qty > cart.item_count and settings.bundle2_discount > 0
+    assign next_qty = settings.bundle2_qty
+    assign next_discount = settings.bundle2_discount
+  endif
+-%}
+
+{%- if threshold == 0 -%}
+  <p class="ship-free">{% render 'icon', name: 'truck' %} {{ 'snippets.cart_summary.free_html' | t }}</p>
+{%- else -%}
+  <div class="ship-meter">
+    <p>
+      {% render 'icon', name: 'truck' %}
+      {%- if remaining > 0 -%}
+        {%- capture remaining_money %}{% render 'pt-money', cents: remaining %}{% endcapture -%}
+        {{ 'snippets.cart_summary.remaining_html' | t: amount: remaining_money }}
+      {%- else -%}
+        {{ 'snippets.cart_summary.free_reached_html' | t }}
+      {%- endif -%}
+    </p>
+    <span class="ship-meter__bar" aria-hidden="true"><span style="width: {{ pct }}%"></span></span>
+  </div>
+{%- endif -%}
+
+<ul class="lines">
+  {%- for item in cart.items -%}
+    <li class="line">
+      <a href="{{ item.url }}" class="line__thumb">
+        {%- if item.image -%}
+          {{ item.image | image_url: width: 160 | image_tag: alt: item.product.title, loading: 'lazy', width: 72, height: 72 }}
+        {%- endif -%}
+      </a>
+      <div class="line__info">
+        <a href="{{ item.url }}" class="line__name">{{ item.product.title | escape }}</a>
+        {%- unless item.product.has_only_default_variant -%}
+          <p class="line__variant">{{ item.variant.title | escape }}</p>
+        {%- endunless -%}
+        {%- for allocation in item.line_level_discount_allocations -%}
+          <p class="line__discount">{{ allocation.discount_application.title | escape }} (−{% render 'pt-money', cents: allocation.amount %})</p>
+        {%- endfor -%}
+        <div class="stepper" role="group" aria-label="{{ 'cart.quantity' | t }}, {{ item.product.title | escape }}">
+          <button type="button" data-line="{{ forloop.index }}" data-qty="{{ item.quantity | minus: 1 }}" aria-label="{{ 'snippets.cart_summary.minus_one' | t }}">{% render 'icon', name: 'minus' %}</button>
+          <span>{{ item.quantity }}</span>
+          <button type="button" data-line="{{ forloop.index }}" data-qty="{{ item.quantity | plus: 1 }}" aria-label="{{ 'snippets.cart_summary.plus_one' | t }}">{% render 'icon', name: 'plus' %}</button>
+        </div>
+      </div>
+      <div class="line__side">
+        <p class="line__price">
+          {%- if item.original_line_price > item.final_line_price -%}
+            <s>{% render 'pt-money', cents: item.original_line_price %}</s>
+          {%- endif -%}
+          {% render 'pt-money', cents: item.final_line_price %}
+        </p>
+        <button type="button" class="link-btn" data-line="{{ forloop.index }}" data-qty="0">{{ 'cart.remove' | t }}</button>
+      </div>
+    </li>
+  {%- endfor -%}
+</ul>
+
+{%- if next_qty > 0 and cart.items.size == 1 -%}
+  {%- assign missing = next_qty | minus: cart.item_count -%}
+  {%- comment -%} Un clic ajoute ce qu'il manque pour atteindre l'offre suivante. {%- endcomment -%}
+  <button type="button" class="upsell" data-line="1" data-qty="{{ next_qty }}">
+    <span class="upsell__plus">{% render 'icon', name: 'plus' %}</span>
+    <span>{{ 'snippets.cart_summary.upsell_units_html' | t: count: missing, discount: next_discount }}</span>
+  </button>
+{%- elsif next_qty > 0 -%}
+  {%- assign missing = next_qty | minus: cart.item_count -%}
+  <p class="upsell upsell--note">
+    {{ 'snippets.cart_summary.upsell_items_html' | t: count: missing, discount: next_discount }}
+  </p>
+{%- endif -%}
+
+<dl class="totals">
+  <div>
+    <dt>{{ 'cart.subtotal' | t }}</dt>
+    <dd>{% render 'pt-money', cents: cart.original_total_price %}</dd>
+  </div>
+  {%- if cart.total_discount > 0 -%}
+    <div class="totals__discount">
+      <dt>{{ 'snippets.cart_summary.discounts' | t }}</dt>
+      <dd>−{% render 'pt-money', cents: cart.total_discount %}</dd>
+    </div>
+  {%- endif -%}
+  <div class="totals__grand">
+    <dt>{{ 'cart.total' | t }}</dt>
+    <dd>{% render 'pt-money', cents: cart.total_price %}</dd>
+  </div>
+</dl>
+<p class="drawer__fine">
+  {%- if threshold == 0 -%}{{ 'snippets.cart_summary.free_note' | t }}{%- else -%}{{ 'cart.shipping_note' | t }}{%- endif -%}
+</p>
+
+<form action="{{ routes.cart_url }}" method="post" class="drawer__checkout">
+  <button type="submit" name="checkout" class="btn btn--sun btn--block btn--lg">
+    {{ 'cart.checkout' | t }} {% render 'icon', name: 'arrow' %}
+  </button>
+</form>
+<p class="drawer__fine">{% render 'icon', name: 'lock' %} <span>{{ 'snippets.cart_summary.secure' | t }}</span></p>
+{%- if compact -%}
+  <a href="{{ routes.cart_url }}" class="drawer__link">{{ 'snippets.cart_summary.view_cart' | t }}</a>
+{%- endif -%}

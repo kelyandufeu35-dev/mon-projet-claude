@@ -1,0 +1,27 @@
+<section class="page wrap">
+  <h1 class="h1">{{ 'customer.account.title' | t }}</h1>
+  <p><a href="{{ routes.account_logout_url }}">{{ 'customer.account.logout' | t }}</a> · <a href="{{ routes.account_addresses_url }}">{{ 'customer.account.addresses_link' | t: number: customer.addresses_count }}</a></p>
+  <h2 class="h2">{{ 'customer.account.orders_title' | t }}</h2>
+  {%- paginate customer.orders by 20 -%}
+    {%- if customer.orders.size > 0 -%}
+      <div class="table-scroll">
+        <table class="compare">
+          <thead><tr><th scope="col">{{ 'customer.account.order' | t }}</th><th scope="col">{{ 'customer.account.date' | t }}</th><th scope="col">{{ 'customer.account.status' | t }}</th><th scope="col">{{ 'customer.account.total' | t }}</th></tr></thead>
+          <tbody>
+            {%- for order in customer.orders -%}
+              <tr>
+                <th scope="row"><a href="{{ order.customer_url }}">{{ order.name }}</a></th>
+                <td>{{ order.created_at | date: format: 'numeric' }}</td>
+                <td>{{ order.fulfillment_status_label }}</td>
+                <td>{{ order.total_price | money }}</td>
+              </tr>
+            {%- endfor -%}
+          </tbody>
+        </table>
+      </div>
+    {%- else -%}
+      <p>{{ 'customer.account.no_orders' | t }}</p>
+    {%- endif -%}
+    {%- if paginate.pages > 1 -%}{{ paginate | default_pagination }}{%- endif -%}
+  {%- endpaginate -%}
+</section>

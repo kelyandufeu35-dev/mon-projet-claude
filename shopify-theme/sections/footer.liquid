@@ -1,0 +1,116 @@
+{%- comment -%}
+  Pied de page (v9 Cinéma). Aucune adresse e-mail : le contact passe par la page
+  Contact (« Écris-nous »), même si le réglage contact_email est rempli.
+  Colonnes en cascade, puis grand « Pattoune » en contour gravé qui monte lettre
+  par lettre (décoratif, aria-hidden). Styles : assets/sections-v9.css.
+{%- endcomment -%}
+{%- liquid
+  assign brand = settings.brand_name | default: shop.name
+  assign menu = section.settings.menu
+  assign has_social = false
+  if settings.social_instagram != blank or settings.social_tiktok != blank or settings.social_facebook != blank
+    assign has_social = true
+  endif
+-%}
+<footer class="pt-footer pt-dark{% if has_social %} pt-footer--social{% endif %}" data-footer data-sticky-stop>
+  <div class="pt-wrap">
+    <div class="pt-footer__grid" data-reveal-group>
+      <div class="pt-footer__brand" data-reveal="up">
+        <a class="pt-footer__logo" href="{{ routes.root_url }}" aria-label="{{ 'general.home_label' | t: brand: brand }}">
+          {%- render 'pt-logo-mark', id: 'ft' -%}
+          <span aria-hidden="true">{{ brand | escape }}</span>
+        </a>
+        <p>
+          {{- section.settings.tagline | escape -}}
+          {%- if pages.contact != empty %} {{ 'sections.footer.contact_html' | t: url: pages.contact.url }}{%- endif -%}
+        </p>
+      </div>
+
+      <nav class="pt-footer__col" aria-label="{{ 'sections.footer.help_label' | t }}" data-reveal="up">
+        <h2>{{ 'sections.footer.help_title' | t }}</h2>
+        <ul>
+          {%- if menu.links.size > 0 -%}
+            {%- comment -%} Les pages légales sont listées dans la colonne « Légal » : pas de doublon ici. {%- endcomment -%}
+            {%- for link in menu.links -%}
+              {%- unless link.type == 'policy_link' -%}
+                <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
+              {%- endunless -%}
+            {%- endfor -%}
+          {%- else -%}
+            <li><a href="{{ routes.root_url }}#faq">{{ 'sections.footer.faq_link' | t }}</a></li>
+            {%- if pages.contact != empty -%}<li><a href="{{ pages.contact.url }}">{{ 'sections.footer.contact_link' | t }}</a></li>{%- endif -%}
+          {%- endif -%}
+        </ul>
+      </nav>
+
+      <nav class="pt-footer__col" aria-label="{{ 'sections.footer.legal_label' | t }}" data-reveal="up">
+        <h2>{{ 'sections.footer.legal_title' | t }}</h2>
+        <ul>
+          {%- comment -%}
+            Politiques de Paramètres → Politiques. Les mentions légales (obligatoires en France) sont
+            ajoutées à la fin si shop.policies ne les liste pas.
+          {%- endcomment -%}
+          {%- assign has_legal = false -%}
+          {%- for policy in shop.policies -%}
+            {%- if policy != blank -%}
+              {%- if policy.url contains 'legal-notice' -%}{%- assign has_legal = true -%}{%- endif -%}
+              <li><a href="{{ policy.url }}">{{ policy.title | escape }}</a></li>
+            {%- endif -%}
+          {%- endfor -%}
+          {%- unless has_legal -%}
+            <li><a href="{{ routes.root_url | append: '/policies/legal-notice' | replace: '//', '/' }}">{{ 'sections.footer.legal_notice' | t }}</a></li>
+          {%- endunless -%}
+        </ul>
+      </nav>
+
+      {%- if has_social -%}
+        <nav class="pt-footer__col" aria-label="{{ 'sections.footer.social_label' | t }}" data-reveal="up">
+          <h2>{{ 'sections.footer.social_title' | t }}</h2>
+          <ul>
+            {%- if settings.social_instagram != blank -%}<li><a href="{{ settings.social_instagram }}" target="_blank" rel="noopener">Instagram</a></li>{%- endif -%}
+            {%- if settings.social_tiktok != blank -%}<li><a href="{{ settings.social_tiktok }}" target="_blank" rel="noopener">TikTok</a></li>{%- endif -%}
+            {%- if settings.social_facebook != blank -%}<li><a href="{{ settings.social_facebook }}" target="_blank" rel="noopener">Facebook</a></li>{%- endif -%}
+          </ul>
+        </nav>
+      {%- endif -%}
+    </div>
+
+    <div class="pt-footer__bottom">
+      <span>&copy; {{ 'now' | date: '%Y' }} {{ brand | escape }}</span>
+      {%- if shop.enabled_payment_types.size > 0 -%}
+        <ul class="pt-footer__pay" aria-label="{{ 'sections.footer.payment_label' | t }}">
+          {%- for type in shop.enabled_payment_types -%}
+            <li>{{ type | payment_type_svg_tag: class: 'pt-footer__pay-icon' }}</li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- if section.settings.show_wordmark -%}
+    {%- comment -%} Une lettre par masque (--pt-wi = index) : elles montent une à une. {%- endcomment -%}
+    <p class="pt-footer__word" data-reveal="mask" aria-hidden="true">
+      {%- assign letters = brand | split: '' -%}
+      {%- for letter in letters -%}
+        {%- if letter == ' ' -%}
+          <span class="pt-footer__gap"> </span>
+        {%- else -%}
+          <span class="pt-w" style="--pt-wi:{{ forloop.index0 }}"><span data-t="{{ letter | escape }}">{{ letter | escape }}</span></span>
+        {%- endif -%}
+      {%- endfor -%}
+    </p>
+  {%- endif -%}
+</footer>
+
+{% schema %}
+{
+  "name": "Pied de page",
+  "class": "section-footer",
+  "enabled_on": { "groups": ["footer"] },
+  "settings": [
+    { "type": "text", "id": "tagline", "label": "Slogan", "default": "Des jouets qui occupent vraiment." },
+    { "type": "link_list", "id": "menu", "label": "Menu « Aide »", "default": "footer", "info": "Vide : « Questions fréquentes » et « Nous écrire » (page Contact). Les pages légales s’ajoutent seules depuis Paramètres → Politiques." },
+    { "type": "checkbox", "id": "show_wordmark", "label": "Grand logo en bas de page", "default": true }
+  ]
+}
+{% endschema %}

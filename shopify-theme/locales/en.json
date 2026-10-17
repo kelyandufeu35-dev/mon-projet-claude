@@ -1,0 +1,270 @@
+{
+  "general": {
+    "skip": "Skip to content",
+    "close": "Close",
+    "menu": "Menu",
+    "home_label": "{{ brand }}, home",
+    "page": "page {{ number }}",
+    "shipping": {
+      "delivery_time": "8 to 25 days",
+      "area": "France, the EU and Switzerland"
+    }
+  },
+  "date_formats": {
+    "numeric": "%d/%m/%Y"
+  },
+  "cart": {
+    "title": "Your cart",
+    "empty": "Your cart is empty for now.",
+    "checkout": "Check out",
+    "subtotal": "Subtotal",
+    "total": "Total incl. tax",
+    "remove": "Remove",
+    "quantity": "Quantity",
+    "shipping_note": "Shipping calculated at the next step.",
+    "taxes_included": "Tax included.",
+    "discover": "Visit the shop"
+  },
+  "product": {
+    "add": "Add to cart",
+    "added": "Added to cart",
+    "sold_out": "Sold out",
+    "unavailable": "Unavailable"
+  },
+  "sections": {
+    "announcement_bar": {
+      "label": "Announcement"
+    },
+    "header": {
+      "nav_label": "Main navigation",
+      "language_label": "Choose language",
+      "nav_faq": "FAQ",
+      "cart": "Cart",
+      "cart_label": {
+        "one": "Cart, {{ count }} item",
+        "other": "Cart, {{ count }} items"
+      },
+      "nav_shop": "Shop"
+    },
+    "footer": {
+      "contact_html": "Got a question? <a href=\"{{ url }}\">Write to us</a>, we’ll get back to you quickly.",
+      "help_label": "Help",
+      "help_title": "Help",
+      "faq_link": "FAQ",
+      "contact_link": "Contact us",
+      "legal_label": "Legal information",
+      "legal_title": "Legal",
+      "social_label": "Social media",
+      "social_title": "Follow us",
+      "payment_label": "Payment methods",
+      "legal_notice": "Legal notice"
+    },
+    "hero": {
+      "from": "from",
+      "pause": "Pause the animation"
+    },
+    "featured_product": {
+      "empty_eyebrow": "To set up",
+      "empty_title": "Choose your product",
+      "empty_text": "In the theme editor, click this section, then select the product you want to feature."
+    },
+    "contact_form": {
+      "success": "Message sent. We’ll reply {{ time }}.",
+      "name": "Name",
+      "email": "Email",
+      "order": "Order number",
+      "order_optional": "(if you have one)",
+      "message": "Message",
+      "submit": "Send message"
+    },
+    "main_404": {
+      "title": "Oops, this page rolled under the sofa.",
+      "text": "It doesn’t exist or has moved. The toys, though, are still right here.",
+      "button": "Visit the shop"
+    },
+    "comparison": {
+      "criterion": "Criterion",
+      "yes": "Yes",
+      "no": "No"
+    },
+    "promise": {
+      "title": "Our commitments"
+    },
+    "reviews": {
+      "rating": "{{ rating }} out of 5"
+    },
+    "trust_bar": {
+      "payments": "Accepted payment methods"
+    },
+    "video_showcase": {
+      "sound_on": "Turn sound on",
+      "sound_off": "Mute"
+    },
+    "main_collection": {
+      "empty": "No products in this collection yet.",
+      "pagination": "Collection pages",
+      "previous": "Previous",
+      "next": "Next",
+      "eyebrow": "The shop"
+    },
+    "main_list_collections": {
+      "title": "Collections",
+      "count": {
+        "one": "{{ count }} product",
+        "other": "{{ count }} products"
+      }
+    },
+    "main_search": {
+      "title": "Search",
+      "label": "Search",
+      "placeholder": "Search…",
+      "submit": "Search",
+      "no_results": "No results for “{{ terms }}”."
+    },
+    "main_password": {
+      "success": "Thanks! We’ll let you know as soon as we open.",
+      "email_label": "Your email, so we can tell you when we open",
+      "submit": "Notify me",
+      "owner": "Store owner access",
+      "password": "Password",
+      "enter": "Enter"
+    },
+    "product_grid": {
+      "eyebrow": "The shop",
+      "title": "Their games, their care, their keepsakes.",
+      "lead": "Simple games to share with your pet, always with you close by, and accessories for everyday life.",
+      "chips_label": "Browse by category",
+      "chips_all": "See all"
+    },
+    "product_recos": {
+      "eyebrow": "You might also like",
+      "title": "Round out their playtime.",
+      "view_all": "See all products",
+      "free_shipping": "Free shipping",
+      "free_shipping_from": "Free shipping from {{ amount }}"
+    }
+  },
+  "snippets": {
+    "cart_summary": {
+      "free_html": "<strong>Free shipping</strong> on your order",
+      "remaining_html": "Only <strong>{{ amount }}</strong> away from free shipping",
+      "free_reached_html": "<strong>Free shipping</strong>",
+      "minus_one": "Remove one",
+      "plus_one": "Add one",
+      "upsell_units_html": {
+        "one": "Add {{ count }} more ball and get <strong>−{{ discount }}%</strong> off the whole bundle",
+        "other": "Add {{ count }} more balls and get <strong>−{{ discount }}%</strong> off the whole bundle"
+      },
+      "upsell_items_html": {
+        "one": "Add {{ count }} more item to get <strong>−{{ discount }}%</strong>.",
+        "other": "Add {{ count }} more items to get <strong>−{{ discount }}%</strong>."
+      },
+      "discounts": "Discounts",
+      "free_note": "Free shipping · no extra fees at checkout.",
+      "secure": "Secure checkout powered by Shopify.",
+      "view_cart": "View full cart"
+    },
+    "product_buy": {
+      "scene_alt": "{{ title }}, faceted red ball under a beam of light",
+      "gallery_label": "Choose a photo",
+      "scene_thumb": "3D animation",
+      "thumb_photo": "Photo {{ number }}",
+      "thumb_video": "Video {{ number }}",
+      "price_note": "Tax incl. · free shipping",
+      "option_colon": ":",
+      "percent_off": "−{{ percent }}%",
+      "per_unit": "each",
+      "unit_price": "Unit price",
+      "instead_of": "instead of",
+      "discount_note": "Discount applied automatically in your cart.",
+      "inbox_title": "What’s in the box",
+      "size_title": "Which size for my pet?",
+      "size_cats_html": "<strong>Cats</strong>: perfect for nudging along with a paw.",
+      "size_small_dogs_html": "<strong>Puppies and small dogs</strong>: ideal for keeping them busy.",
+      "size_big_dogs_html": "<strong>Large dogs</strong>: too small, they could swallow it.",
+      "description": "Description",
+      "sticky_shipping": "free shipping",
+      "sticky_button": "Choose",
+      "unit_singular": "ball",
+      "unit_plural": "balls",
+      "price_note_from": "incl. VAT · free shipping from {{ amount }}",
+      "sticky_shipping_from": "free shipping from {{ amount }}"
+    }
+  },
+  "customer": {
+    "fields": {
+      "first_name": "First name",
+      "last_name": "Last name",
+      "email": "Email",
+      "password": "Password",
+      "password_confirm": "Confirm password",
+      "address1": "Address",
+      "zip": "Postal code",
+      "city": "City",
+      "country": "Country"
+    },
+    "account": {
+      "title": "My account",
+      "logout": "Log out",
+      "addresses_link": "My addresses ({{ number }})",
+      "orders_title": "My orders",
+      "order": "Order",
+      "date": "Date",
+      "status": "Status",
+      "total": "Total",
+      "no_orders": "No orders yet.",
+      "back": "← My account"
+    },
+    "activate": {
+      "title": "Activate my account",
+      "submit": "Activate"
+    },
+    "addresses": {
+      "title": "My addresses",
+      "default": "Default address",
+      "save": "Save",
+      "add_title": "Add an address",
+      "add": "Add"
+    },
+    "login": {
+      "title": "Log in",
+      "submit": "Log in",
+      "register": "Create an account",
+      "reset_sent": "We’ve just sent you an email to reset your password.",
+      "forgot": "Forgot your password?",
+      "recover": "Send me the link"
+    },
+    "order": {
+      "title": "Order {{ name }}",
+      "placed": "Placed on {{ date }}",
+      "track": "Track your parcel",
+      "subtotal": "Subtotal",
+      "shipping": "Shipping",
+      "total": "Total"
+    },
+    "register": {
+      "title": "Create an account",
+      "submit": "Create my account"
+    },
+    "reset": {
+      "title": "New password",
+      "submit": "Save"
+    }
+  },
+  "gift_card": {
+    "page_title": "Gift card · {{ brand }}",
+    "title": "Your {{ brand }} gift card",
+    "balance": "Balance:",
+    "expired": "(expired)",
+    "code": "Code:",
+    "wallet": "Add to Apple Wallet",
+    "shop": "Go to the store"
+  },
+  "scripts": {
+    "add_error": "We couldn’t add this product to your cart.",
+    "network_error": "Connection failed. Please try again in a moment.",
+    "delivery_html": "Estimated delivery between <strong>{{ start }}</strong> and <strong>{{ end }}</strong>",
+    "cart_label_one": "Cart, {{ number }} item",
+    "cart_label_other": "Cart, {{ number }} items"
+  }
+}

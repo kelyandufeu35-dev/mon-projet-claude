@@ -1,0 +1,45 @@
+{
+  "sections": {
+    "haut": {
+      "type": "hero-banner",
+      "settings": {
+        "show_video": true,
+        "eyebrow": "Jouets et accessoires pour chats et chiens", "title": "Des jouets qui le font chercher, chasser et réfléchir.", "highlight": "chercher",
+        "subtitle": "Balle à friandises, puzzle de chasse, canne à plumes… Des jeux simples à partager avec ton animal, sous ton œil. Livraison offerte dès 25 € en France, dans l’UE et en Suisse.",
+        "button_label": "Voir la boutique", "target": "jouets", "link_label": "Comment ça marche", "link_target": "pourquoi",
+        "show_proof": true, "proof_1": "Livraison offerte dès 25 €", "proof_2": "Retour sous 14 jours (droit légal)", "proof_3": "Paiement sécurisé"
+      }
+    },
+    "jouets": {
+      "type": "product-grid",
+      "settings": { "chips": ["pour-les-chats", "pour-les-chiens", "jouets", "soin-et-accessoires"], "limit": 12, "show_type": false, "anchor": "jouets" }
+    },
+    "pourquoi": {
+      "type": "specs",
+      "blocks": {
+        "p1": { "type": "spec", "settings": { "label": "Il cherche", "value": "Il renifle et il fouille : son flair se met au travail." } },
+        "p2": { "type": "spec", "settings": { "label": "Il se dépense", "value": "Il fait rouler, gratte, attrape : de quoi occuper ses pattes et sa tête." } },
+        "p3": { "type": "spec", "settings": { "label": "Il mange plus lentement", "value": "Ses croquettes se gagnent une à une, au lieu d’être avalées d’un coup." } },
+        "p4": { "type": "spec", "settings": { "label": "Tu restes à côté", "value": "Chaque jeu se partage sous ton œil. Un jouet abîmé se retire." } }
+      },
+      "block_order": ["p1", "p2", "p3", "p4"],
+      "settings": { "eyebrow": "Pourquoi Pattoune", "title": "Un vrai jeu, pas juste un jouet.", "warning": "Joue avec lui et garde un œil sur lui : aucun jouet n’est indestructible.", "anchor": "pourquoi" }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q1": { "type": "question", "settings": { "question": "Livraison et retours ?", "answer": "<p>La livraison est suivie et prend [delai_livraison], en [zone_livraison]. Elle est offerte dès [seuil_livraison] d’achat et coûte [frais_livraison] en dessous. Tu disposes de 14 jours après réception pour changer d’avis, sans avoir à te justifier.</p>" } },
+        "q2": { "type": "question", "settings": { "question": "Peut-il jouer sans surveillance ?", "answer": "<p>Non : garde toujours un œil sur ton animal pendant qu’il joue, surtout lors des premières séances. Retire le jouet s’il commence à le mâchouiller ou s’il est abîmé. Aucun jouet n’est indestructible.</p>" } },
+        "q3": { "type": "question", "settings": { "question": "Comment choisir ?", "answer": "<p>Chaque produit a sa page, avec ses matières et les animaux à qui il convient. Pour un chat ou un petit chien qui aime renifler, la <a href=\"/products/balle-a-friandises-pattoune-1\">balle à friandises</a> ; pour un chat chasseur, le <a href=\"/products/puzzle-de-chasse-pour-chat\">puzzle de chasse</a> ou la <a href=\"/products/canne-a-plumes-chat\">canne à plumes</a> ; pour un chat qui aime mordiller, la <a href=\"/products/peluche-herbe-a-chat\">peluche à l’herbe à chat</a> ; pour un chien qui aime chercher, la <a href=\"/products/balle-a-garnir-caoutchouc-chien\">balle à garnir</a>. Côté soin : la <a href=\"/products/brosse-autonettoyante-chat-chien\">brosse autonettoyante</a> et le <a href=\"/products/peigne-demeloir-chat-chien\">peigne démêloir</a> pour son pelage, la <a href=\"/products/gamelle-inclinee-inox-chat\">gamelle inclinée</a> pour ses repas, et le <a href=\"/products/kit-empreinte-patte-sans-encre\">kit empreinte</a> pour garder un souvenir de sa patte.</p>" } },
+        "q4": { "type": "question", "settings": { "question": "Une question sur ta commande ?", "answer": "<p>Écris-nous depuis la <a href=\"/pages/contact\">page Contact</a> : une vraie personne te répond, en français.</p>" } }
+      },
+      "block_order": ["q1", "q2", "q3", "q4"],
+      "settings": { "eyebrow": "Questions", "title": "Avant de te décider.", "aside": "Une autre question ?", "link_label": "Écris-nous", "aside_after": ", une vraie personne te répond en français.", "anchor": "faq" }
+    },
+    "final": {
+      "type": "final-cta",
+      "settings": { "title": "Un jouet, quelques croquettes, et le salon redevient calme.", "highlight": "calme.", "button_label": "Voir la boutique", "button_anchor": "jouets", "note": "Livraison offerte dès 25 € · Retour sous 14 jours (droit légal)" }
+    }
+  },
+  "order": ["haut", "jouets", "pourquoi", "faq", "final"]
+}

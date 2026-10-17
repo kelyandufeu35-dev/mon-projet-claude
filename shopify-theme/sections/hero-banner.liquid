@@ -1,0 +1,142 @@
+{%- comment -%}
+  Haut de page « Cinéma » : scène sombre, rai de lumière, balle sur son socle en boucle vidéo.
+  - Le H1 et l’image fixe (poster) sont dans le HTML initial (LCP) : aucun état caché en dehors
+    de la chorégraphie d’entrée, qui ne joue que sous html.pt-motion (voir assets/motion.css § 5).
+  - La vidéo n’a ni autoplay ni préchargement (preload="none") : motion.js la charge et la lance si
+    les animations sont permises, l’intro finie, en vue et pas en pause, puis elle apparaît en fondu
+    au-dessus du poster (.is-playing). Boucle et poster du thème : 1 080 × 1 440 (3:4).
+  - Médias : réglage « Vidéo » sinon boucle du thème ; réglage « Image fixe » sinon poster du thème.
+  - Deux modes : « produit » (réglage Produit rempli : son prix s’ajoute au bouton, ancres par défaut
+    #acheter / #principe) et « marque » (Produit vide : aucun prix, ancres par défaut #jouets /
+    #pourquoi). La balle de la vidéo reste la mascotte de la marque dans les deux cas.
+  - Accroche longue (plus de 46 signes, selon la langue) : .pt-hero--long réduit le corps du titre pour
+    garder le bouton dans le premier écran.
+{%- endcomment -%}
+{%- liquid
+  assign featured = section.settings.product
+  assign title_id = 'pt-hero-title-' | append: section.id
+  if featured != blank
+    assign target = section.settings.target | default: 'acheter'
+    assign link_target = section.settings.link_target | default: 'principe'
+  else
+    assign target = section.settings.target | default: 'jouets'
+    assign link_target = section.settings.link_target | default: 'pourquoi'
+  endif
+  assign hero_class = ''
+  if section.settings.title.size > 46
+    assign hero_class = ' pt-hero--long'
+  endif
+-%}
+<section class="pt-hero pt-dark{{ hero_class }}" data-hero data-sticky-start data-pointer-scene aria-labelledby="{{ title_id }}">
+  <div class="pt-hero__bg" aria-hidden="true"></div>
+
+  <div class="pt-hero__stage" aria-hidden="true">
+    <div class="pt-hero__beam"></div>
+    <div class="pt-hero__media">
+      {%- if section.settings.image != blank -%}
+        {{ section.settings.image | image_url: width: 1080 | image_tag: loading: 'eager', fetchpriority: 'high', preload: true, widths: '540, 720, 1080', sizes: '(min-width: 900px) 40vw, 100vw', class: 'pt-hero__poster', alt: '' }}
+      {%- else -%}
+        <picture>
+          <source type="image/webp" srcset="{{ 'pt-hero-poster-720.webp' | asset_url }} 720w, {{ 'pt-hero-poster.webp' | asset_url }} 1080w" sizes="(min-width: 900px) min(72svh, 675px), 100vw">
+          <img class="pt-hero__poster" src="{{ 'pt-hero-poster.jpg' | asset_url }}" width="1080" height="1440" alt="" loading="eager" fetchpriority="high" decoding="async">
+        </picture>
+      {%- endif -%}
+      {%- if section.settings.show_video -%}
+        {%- if section.settings.video != blank -%}
+          {{ section.settings.video | video_tag: muted: true, loop: true, playsinline: true, preload: 'none' }}
+        {%- else -%}
+          <video muted loop playsinline preload="none" width="1080" height="1440">
+            <source src="{{ 'pt-hero-loop.webm' | asset_url }}" type="video/webm">
+            <source src="{{ 'pt-hero-loop.mp4' | asset_url }}" type="video/mp4">
+          </video>
+        {%- endif -%}
+      {%- endif -%}
+      <div class="pt-hero__curtain"></div>
+    </div>
+    <div class="pt-hero__motes">
+      <i style="--x:12%;--y:62%;--dur:11s;--dl:0s;--dx:18px"></i>
+      <i style="--x:38%;--y:80%;--dur:9s;--dl:1.2s;--dx:-10px;--s:2px"></i>
+      <i style="--x:58%;--y:70%;--dur:13s;--dl:.4s;--dx:14px"></i>
+      <i style="--x:72%;--y:88%;--dur:10s;--dl:2.6s;--dx:-16px;--s:2px"></i>
+      <i style="--x:26%;--y:94%;--dur:12s;--dl:3.4s;--dx:8px;--s:4px"></i>
+      <i style="--x:86%;--y:60%;--dur:14s;--dl:1.8s;--dx:-6px;--s:2px"></i>
+      <i style="--x:48%;--y:98%;--dur:10s;--dl:4.4s;--dx:20px"></i>
+    </div>
+  </div>
+  <div class="pt-hero__grain" aria-hidden="true"></div>
+
+  <div class="pt-wrap">
+    <div class="pt-hero__copy">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="pt-eyebrow pt-eyebrow--sun pt-hero__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      <h1 class="pt-display pt-hero__title" id="{{ title_id }}">
+        {%- render 'pt-split', text: section.settings.title, hl: section.settings.highlight -%}
+      </h1>
+      {%- if section.settings.subtitle != blank -%}
+        <p class="pt-hero__sub">{{ section.settings.subtitle | escape }}</p>
+      {%- endif -%}
+      <div class="pt-hero__cta">
+        <a class="pt-btn pt-btn--sun pt-btn--xl" href="#{{ target | escape }}" data-magnetic style="--pt-d:0">
+          {{- section.settings.button_label | escape -}}
+          {%- if featured != blank -%}
+            <span class="pt-btn__sep" aria-hidden="true"></span>
+            {%- if featured.price_varies -%}{{ 'sections.hero.from' | t }}&nbsp;{%- endif -%}
+            {%- render 'pt-money', cents: featured.price -%}
+          {%- endif -%}
+          <span class="pt-btn__arrow" aria-hidden="true">{% render 'icon', name: 'arrow' %}</span>
+        </a>
+        {%- if section.settings.link_label != blank -%}
+          <a class="pt-link" href="#{{ link_target | escape }}" style="--pt-d:1">
+            <span class="pt-link__icon" aria-hidden="true">{% render 'icon', name: 'arrow-down' %}</span>
+            <span class="pt-link__label">{{ section.settings.link_label | escape }}</span>
+          </a>
+        {%- endif -%}
+      </div>
+      {%- if section.settings.show_proof -%}
+        <ul class="pt-hero__proof">
+          {%- if section.settings.proof_1 != blank -%}
+            <li style="--pt-d:0">{% render 'icon', name: 'truck' %}<span>{{ section.settings.proof_1 | escape }}</span></li>
+          {%- endif -%}
+          {%- if section.settings.proof_2 != blank -%}
+            <li style="--pt-d:1">{% render 'icon', name: 'return' %}<span>{{ section.settings.proof_2 | escape }}</span></li>
+          {%- endif -%}
+          {%- if section.settings.proof_3 != blank -%}
+            <li style="--pt-d:2">{% render 'icon', name: 'lock' %}<span>{{ section.settings.proof_3 | escape }}</span></li>
+          {%- endif -%}
+        </ul>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <button type="button" class="pt-hero__pause" data-hero-pause aria-pressed="false" aria-label="{{ 'sections.hero.pause' | t }}">
+    <span class="pt-hero__pause-i pt-hero__pause-i--pause">{% render 'icon', name: 'pause' %}</span>
+    <span class="pt-hero__pause-i pt-hero__pause-i--play">{% render 'icon', name: 'play' %}</span>
+  </button>
+</section>
+
+{% schema %}
+{
+  "name": "Haut de page",
+  "enabled_on": { "templates": ["index"] },
+  "settings": [
+    { "type": "product", "id": "product", "label": "Produit (facultatif)", "info": "Son prix s’affiche dans le bouton. Vide = haut de page de la marque, sans prix (accueil multi-jouets)." },
+    { "type": "checkbox", "id": "show_video", "label": "Vidéo en boucle", "default": true },
+    { "type": "video", "id": "video", "label": "Vidéo (facultatif)", "info": "Remplace la boucle fournie avec le thème : MP4 sans son, format 3:4." },
+    { "type": "image_picker", "id": "image", "label": "Image fixe (facultatif)", "info": "Affichée avant la vidéo et si elle ne joue pas. Sinon, celle du thème." },
+    { "type": "text", "id": "eyebrow", "label": "Petit texte au-dessus", "default": "Jouets d’éveil pour chats et chiens" },
+    { "type": "text", "id": "title", "label": "Accroche", "default": "Des jouets qui le font chercher, chasser et réfléchir." },
+    { "type": "text", "id": "highlight", "label": "Mots en jaune (sur leur propre ligne)", "info": "Doivent apparaître tels quels dans l’accroche.", "default": "chercher" },
+    { "type": "text", "id": "subtitle", "label": "Phrase sous l’accroche", "default": "Balle à friandises, puzzle de chasse… Des jeux simples qui occupent ton animal et ralentissent ses repas. Livraison offerte en France, dans l’UE et en Suisse." },
+    { "type": "text", "id": "button_label", "label": "Texte du bouton", "info": "Avec un produit choisi, son prix est ajouté automatiquement.", "default": "Voir les jouets" },
+    { "type": "text", "id": "target", "label": "Ancre du bouton (sans #)", "info": "Vide = « acheter » avec un produit, « jouets » sans.", "default": "jouets" },
+    { "type": "text", "id": "link_label", "label": "Lien secondaire", "default": "Comment ça marche" },
+    { "type": "text", "id": "link_target", "label": "Ancre du lien secondaire (sans #)", "info": "Vide = « principe » avec un produit, « pourquoi » sans.", "default": "pourquoi" },
+    { "type": "checkbox", "id": "show_proof", "label": "Ligne des garanties", "default": true },
+    { "type": "text", "id": "proof_1", "label": "Garantie 1 (camion)", "default": "Livraison offerte" },
+    { "type": "text", "id": "proof_2", "label": "Garantie 2 (retour)", "default": "Retour sous 14 jours (droit légal)" },
+    { "type": "text", "id": "proof_3", "label": "Garantie 3 (cadenas)", "default": "Paiement sécurisé" }
+  ],
+  "presets": [{ "name": "Haut de page" }]
+}
+{% endschema %}

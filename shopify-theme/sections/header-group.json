@@ -1,0 +1,17 @@
+{
+  "type": "header",
+  "name": "Groupe en-tête",
+  "sections": {
+    "header": {
+      "type": "header",
+      "settings": {
+        "show_cta": true,
+        "cta_label": "Je commande",
+        "menu": "main-menu"
+      }
+    }
+  },
+  "order": [
+    "header"
+  ]
+}

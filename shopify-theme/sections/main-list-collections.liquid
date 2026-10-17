@@ -1,0 +1,43 @@
+{%- comment -%}
+  Liste des collections (/collections) : mêmes cartes et même grille que la boutique (.pt-reco, .pt-shop).
+  Les collections vides (dont « Page d’accueil ») sont masquées. Image : celle de la collection, sinon
+  la première photo de son premier produit. Styles : assets/sections-v9.css.
+{%- endcomment -%}
+{%- assign title_id = 'pt-cols-title-' | append: section.id -%}
+<section class="pt-recos pt-shop pt-shop--page" aria-labelledby="{{ title_id }}">
+  <div class="pt-wrap">
+    <div class="pt-recos__head pt-shop__head">
+      <p class="pt-eyebrow pt-eyebrow--red" data-reveal="up">{{ 'sections.main_collection.eyebrow' | t }}</p>
+      <h1 class="pt-h2" id="{{ title_id }}" data-reveal="mask" style="--pt-d:1">{%- assign cols_title = 'sections.main_list_collections.title' | t -%}{% render 'pt-split', text: cols_title %}</h1>
+    </div>
+    <ul class="pt-recos__grid pt-shop__grid" style="--pt-cols:4; --pt-cols-md:2" data-reveal-group>
+      {%- for c in collections -%}
+        {%- if c.products_count == 0 -%}{%- continue -%}{%- endif -%}
+        {%- liquid
+          assign c_img = c.featured_image
+          if c_img == blank
+            assign c_img = c.products.first.featured_media
+          endif
+        -%}
+        <li data-reveal="up">
+          <a class="pt-reco" href="{{ c.url }}">
+            <span class="pt-reco__img">
+              {%- if c_img -%}
+                {{ c_img | image_url: width: 720 | image_tag: loading: 'lazy', widths: '320, 480, 720', sizes: '(min-width: 900px) 25vw, 46vw', alt: '' }}
+              {%- endif -%}
+            </span>
+            <span class="pt-reco__title">{{ c.title | escape }}</span>
+            <span class="pt-reco__meta"><span>{{ 'sections.main_list_collections.count' | t: count: c.products_count }}</span></span>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Liste des collections",
+  "settings": []
+}
+{% endschema %}

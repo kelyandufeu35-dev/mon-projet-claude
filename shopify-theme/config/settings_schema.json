@@ -1,0 +1,257 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Pattoune",
+    "theme_version": "1.0.0",
+    "theme_author": "Pattoune",
+    "theme_documentation_url": "https://help.shopify.com/fr/manual/online-store/themes",
+    "theme_support_url": "https://help.shopify.com/fr"
+  },
+  {
+    "name": "Marque et référencement",
+    "settings": [
+      {
+        "type": "text",
+        "id": "brand_name",
+        "label": "Nom de la marque",
+        "default": "Pattoune",
+        "info": "Affiché dans l’en-tête, le pied de page, l’onglet du navigateur et les aperçus de partage. Vide = nom de la boutique."
+      },
+      {
+        "type": "text",
+        "id": "home_title",
+        "label": "Titre de la page d’accueil (Google, onglet)",
+        "default": "Pattoune · Jouets d’éveil pour chats et chiens"
+      },
+      {
+        "type": "textarea",
+        "id": "home_description",
+        "label": "Description de la page d’accueil (Google)",
+        "default": "Balle à friandises, puzzle de chasse… Des jouets d’éveil qui font chercher, chasser et réfléchir ton chat ou ton chien. Livraison offerte en France, dans l’UE et en Suisse."
+      }
+    ]
+  },
+  {
+    "name": "Logo et icône",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo",
+        "info": "Laisse vide pour afficher le nom de la boutique avec l’icône patte."
+      },
+      {
+        "type": "range",
+        "id": "logo_width",
+        "label": "Largeur du logo",
+        "min": 60,
+        "max": 240,
+        "step": 10,
+        "unit": "px",
+        "default": 140
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Icône d’onglet (favicon)",
+        "info": "Image carrée, 64 × 64 px minimum."
+      }
+    ]
+  },
+  {
+    "name": "Couleurs",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_paper",
+        "label": "Fond clair (crème)",
+        "default": "#f4ece2"
+      },
+      {
+        "type": "color",
+        "id": "color_ink",
+        "label": "Texte",
+        "default": "#14162b"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Couleur principale (bleu)",
+        "default": "#2338e8"
+      },
+      {
+        "type": "color",
+        "id": "color_button",
+        "label": "Bouton d’achat (jaune)",
+        "default": "#ffc23a"
+      },
+      {
+        "type": "color",
+        "id": "color_pop",
+        "label": "Couleur d’accent (rose)",
+        "default": "#ff7aa8"
+      },
+      {
+        "type": "color",
+        "id": "color_ball",
+        "label": "Rouge de la balle (accents)",
+        "default": "#c4140f"
+      }
+    ]
+  },
+  {
+    "name": "Animation",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "intro_enable",
+        "label": "Intro animée à l’arrivée sur l’accueil",
+        "default": true,
+        "info": "Jouée une fois par visite. Jamais dans l’éditeur de thème ni quand le visiteur a choisi « réduire les animations »."
+      }
+    ]
+  },
+  {
+    "name": "Livraison et remises",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Ces valeurs servent seulement à l’affichage. Les vrais frais de port et remises se règlent dans Shopify (Paramètres → Expédition, et Réductions). Garde les mêmes chiffres des deux côtés."
+      },
+      {
+        "type": "number",
+        "id": "free_shipping_threshold",
+        "label": "Livraison offerte dès (€)",
+        "default": 25,
+        "info": "0 = livraison offerte sans minimum (pas de jauge). Garde la même valeur que la condition de prix des tarifs Shopify."
+      },
+      {
+        "type": "text",
+        "id": "shipping_fee",
+        "label": "Frais de livraison sous le seuil (€)",
+        "default": "3.99",
+        "info": "Avec un point, par exemple 3.99. Affiché dans les questions et les données Google : garde le même montant que le tarif Shopify."
+      },
+      {
+        "type": "text",
+        "id": "delivery_text",
+        "label": "Délai de livraison affiché",
+        "default": "7 à 14 jours ouvrés",
+        "info": "Indique le vrai délai de ton fournisseur."
+      },
+      {
+        "type": "number",
+        "id": "processing_days",
+        "label": "Jours de préparation avant expédition",
+        "default": 2
+      },
+      {
+        "type": "number",
+        "id": "delivery_min_days",
+        "label": "Délai minimum (jours ouvrés)",
+        "default": 7
+      },
+      {
+        "type": "number",
+        "id": "delivery_max_days",
+        "label": "Délai maximum (jours ouvrés)",
+        "default": 14
+      },
+      {
+        "type": "header",
+        "content": "Offres groupées"
+      },
+      {
+        "type": "paragraph",
+        "content": "Crée les mêmes remises dans Shopify : Réductions → Créer → Réduction automatique, « Montant de réduction sur les produits », quantité minimale d’articles. Si la remise Shopify est un montant fixe par article, indique ce montant ci-dessous : le site affichera exactement le prix payé, sans écart d’arrondi."
+      },
+      {
+        "type": "number",
+        "id": "bundle1_qty",
+        "label": "Offre 2 : nombre d’articles",
+        "default": 2
+      },
+      {
+        "type": "number",
+        "id": "bundle1_discount",
+        "label": "Offre 2 : remise (%)",
+        "default": 15
+      },
+      {
+        "type": "text",
+        "id": "bundle1_amount",
+        "label": "Offre 2 : montant fixe retiré par article (€)",
+        "info": "Ex. 2,25. Vide = la remise en % ci-dessus s’applique.",
+        "default": "2,25"
+      },
+      {
+        "type": "text",
+        "id": "bundle1_badge",
+        "label": "Offre 2 : badge",
+        "default": "Duo"
+      },
+      {
+        "type": "number",
+        "id": "bundle2_qty",
+        "label": "Offre 3 : nombre d’articles",
+        "default": 3
+      },
+      {
+        "type": "number",
+        "id": "bundle2_discount",
+        "label": "Offre 3 : remise (%)",
+        "default": 20
+      },
+      {
+        "type": "text",
+        "id": "bundle2_amount",
+        "label": "Offre 3 : montant fixe retiré par article (€)",
+        "info": "Ex. 2,25. Vide = la remise en % ci-dessus s’applique.",
+        "default": "3,00"
+      },
+      {
+        "type": "text",
+        "id": "bundle2_badge",
+        "label": "Offre 3 : badge",
+        "default": "Meilleur prix"
+      }
+    ]
+  },
+  {
+    "name": "Contact",
+    "settings": [
+      {
+        "type": "text",
+        "id": "contact_email",
+        "label": "E-mail de contact (jamais affiché sur le site)",
+        "info": "Ce réglage n’est plus utilisé : aucune adresse n’apparaît sur la boutique. Le contact passe par la page Contact."
+      },
+      {
+        "type": "text",
+        "id": "response_time",
+        "label": "Délai de réponse",
+        "default": "sous 48 h ouvrées"
+      }
+    ]
+  },
+  {
+    "name": "Réseaux sociaux",
+    "settings": [
+      {
+        "type": "url",
+        "id": "social_instagram",
+        "label": "Instagram"
+      },
+      {
+        "type": "url",
+        "id": "social_tiktok",
+        "label": "TikTok"
+      },
+      {
+        "type": "url",
+        "id": "social_facebook",
+        "label": "Facebook"
+      }
+    ]
+  }
+]

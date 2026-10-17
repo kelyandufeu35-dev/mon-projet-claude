@@ -1,0 +1,96 @@
+{%- comment -%}
+  Clôture (v9 Cinéma) : la nuit retombe en cercle depuis la patte (iris au
+  défilement, écho de l’intro), le faisceau s’allume, la patte se dessine et la
+  balle retombe à sa place de coussinet. Styles : assets/sections-v9.css.
+  Bouton : le réglage « Lien du bouton » s’il est rempli, sinon l’ancre de la page (« acheter » par
+  défaut, « jouets » sur l’accueil) : une ancre reste valable quelle que soit la langue (/en/…).
+{%- endcomment -%}
+{%- liquid
+  assign title_id = 'pt-fin-title-' | append: section.id
+  assign link = section.settings.button_link
+  if link == blank
+    assign link = section.settings.button_anchor | default: 'acheter' | prepend: '#'
+  endif
+-%}
+<section class="pt-fin pt-dark" data-scroll="iris" data-sticky-stop aria-labelledby="{{ title_id }}" style="--pt-iris-y: calc(clamp(120px, 14vw, 220px) + 60px)">
+  <span class="pt-fin__beam" data-reveal="none" aria-hidden="true"></span>
+  <div class="pt-wrap pt-fin__inner">
+    <div class="pt-fin__mark" data-reveal="none" aria-hidden="true">
+      <span class="pt-fin__halo"></span>
+      <svg viewBox="-330 -260 660 620" focusable="false">
+        <g class="pt-fin__toes">
+          <ellipse pathLength="1" style="--pt-k:0" cx="-250" cy="-30" rx="70" ry="90" transform="rotate(-28 -250 -30)"/>
+          <ellipse pathLength="1" style="--pt-k:1" cx="-100" cy="-150" rx="74" ry="98" transform="rotate(-9 -100 -150)"/>
+          <ellipse pathLength="1" style="--pt-k:2" cx="100" cy="-150" rx="74" ry="98" transform="rotate(9 100 -150)"/>
+          <ellipse pathLength="1" style="--pt-k:3" cx="250" cy="-30" rx="70" ry="90" transform="rotate(28 250 -30)"/>
+        </g>
+      </svg>
+      <span class="pt-fin__ripple"></span>
+      <div class="pt-fin__ball"><img src="{{ 'pt-balle-3d.webp' | asset_url }}" alt="" width="236" height="236" loading="lazy" decoding="async"></div>
+    </div>
+    {%- if section.settings.title != blank -%}
+      <h2 class="pt-h2 pt-fin__title" id="{{ title_id }}" data-reveal="mask" style="--pt-d:1; --pt-hl-color: var(--pt-sun)">{% render 'pt-split', text: section.settings.title, hl: section.settings.highlight %}</h2>
+    {%- endif -%}
+    {%- if section.settings.button_label != blank -%}
+      <a class="pt-btn pt-btn--sun pt-btn--xl pt-fin__btn" href="{{ link }}" data-reveal="up" style="--pt-d:3" data-magnetic>
+        {{- section.settings.button_label | escape -}}
+        <span class="pt-btn__arrow" aria-hidden="true">{% render 'icon', name: 'arrow' %}</span>
+      </a>
+    {%- endif -%}
+    {%- if section.settings.note != blank -%}
+      <p class="pt-fin__note" data-reveal="up" style="--pt-d:4">{{ section.settings.note | escape }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Clôture",
+  "class": "section-fin",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre",
+      "default": "Une balle, quelques croquettes, et le salon redevient calme."
+    },
+    {
+      "type": "text",
+      "id": "highlight",
+      "label": "Mots en jaune",
+      "default": "calme.",
+      "info": "Doivent apparaître tels quels dans le titre."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texte du bouton",
+      "default": "Je commande ma balle"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Lien du bouton",
+      "info": "Vide = descend vers l’ancre ci-dessous."
+    },
+    {
+      "type": "text",
+      "id": "button_anchor",
+      "label": "Ancre du bouton (sans #)",
+      "default": "acheter",
+      "info": "Utilisée si aucun lien n’est choisi : « acheter » (zone d’achat d’une page produit) ou « jouets » (vitrine de l’accueil)."
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Petite ligne sous le bouton",
+      "default": "Livraison offerte · Retour sous 14 jours (droit légal)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Clôture"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,18 @@
+<section class="page wrap">
+  <h1 class="h1">{{ 'cart.title' | t }}</h1>
+  {%- if cart.item_count == 0 -%}
+    <p class="lead">{{ 'cart.empty' | t }}</p>
+    <p><a href="{{ routes.all_products_collection_url }}" class="btn btn--sun">{{ 'cart.discover' | t }}</a></p>
+  {%- else -%}
+    <div class="cart-page" data-cart-page>
+      {% render 'cart-summary', compact: false %}
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Panier",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    {%- comment -%}
+      Mouvement, avant toute feuille de style (aucun flash) :
+      - html.pt-motion : états cachés des révélations (jamais avec « réduire les animations »),
+        retirés si motion.js n’a pas démarré (html.pt-js) 4 s après ;
+      - html.has-intro : intro d’arrivée, seulement si l’accueil est la 1re page vue de la visite
+        (drapeau sessionStorage posé sur toutes les pages), page visible et non pré-rendue, sans
+        ancre (#faq…), hors éditeur de thème et si le réglage « Intro animée » est coché ;
+      - html.pt-vt : arrivée par transition de page (l’en-tête reste fixe, sans entrée).
+    {%- endcomment -%}
+    {%- liquid
+      assign pt_intro = false
+      if settings.intro_enable and request.page_type == 'index'
+        unless request.design_mode
+          assign pt_intro = true
+        endunless
+      endif
+    -%}
+    <script>
+      (function (h) {
+        var seen = '1';
+        {%- unless request.design_mode %}
+        try { seen = sessionStorage.getItem('pt-intro'); sessionStorage.setItem('pt-intro', '1'); } catch (e) { seen = '1'; }
+        {%- endunless %}
+        try {
+          addEventListener('pagereveal', function (e) { if (e.viewTransition) h.classList.add('pt-vt'); });
+          if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+          h.classList.add('pt-motion');
+          setTimeout(function () { if (!h.classList.contains('pt-js')) h.classList.remove('pt-motion'); }, 4000);
+          {%- if pt_intro %}
+          // Pas d’intro pour un visiteur venu d’une pub ou d’un lien suivi : il voit le produit tout de suite.
+          if (!seen && !location.hash && !/[?&](utm_|fbclid|ttclid|gclid|gbraid|wbraid|srsltid)/.test(location.search) && document.visibilityState === 'visible' && !document.prerendering) {
+            h.classList.add('has-intro');
+            var l = document.createElement('link');
+            l.rel = 'preload'; l.as = 'image'; l.type = 'image/webp'; l.href = {{ 'pt-balle-3d.webp' | asset_url | json }};
+            document.head.appendChild(l);
+          }
+          {%- endif %}
+        } catch (e) {}
+      })(document.documentElement);
+    </script>
+    <meta name="theme-color" content="{{ settings.color_ink }}">
+    <link rel="canonical" href="{{ canonical_url }}">
+    {%- if settings.favicon == blank -%}
+      <link rel="icon" type="image/svg+xml" href="{{ 'pt-favicon.svg' | asset_url }}">
+    {%- endif -%}
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 64, height: 64 }}">
+    {%- endif -%}
+
+    {%- liquid
+      assign brand = settings.brand_name | default: shop.name
+      assign meta_description = page_description
+      if request.page_type == 'index' and settings.home_description != blank
+        assign meta_description = settings.home_description
+      endif
+    -%}
+    <title>
+      {%- if request.page_type == 'index' and settings.home_title != blank -%}
+        {{ settings.home_title }}
+      {%- else -%}
+        {{ page_title }}
+        {%- if current_tags %} &ndash; {{ current_tags | join: ', ' }}{% endif -%}
+        {%- if current_page != 1 %} &ndash; {{ 'general.page' | t: number: current_page }}{% endif -%}
+        {%- unless page_title contains brand %} &ndash; {{ brand }}{% endunless -%}
+      {%- endif -%}
+    </title>
+    {%- if meta_description != blank -%}
+      <meta name="description" content="{{ meta_description | strip_html | escape }}">
+    {%- endif -%}
+
+    {% render 'meta-tags' %}
+
+    {{ 'bricolage-latin.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+    {{ 'figtree-latin.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+    <style>
+      @font-face {
+        font-family: 'Bricolage Grotesque';
+        font-style: normal;
+        font-display: swap;
+        font-weight: 200 800;
+        font-stretch: 75% 100%;
+        src: url({{ 'bricolage-latin.woff2' | asset_url }}) format('woff2-variations');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: 'Bricolage Grotesque';
+        font-style: normal;
+        font-display: swap;
+        font-weight: 200 800;
+        font-stretch: 75% 100%;
+        src: url({{ 'bricolage-latin-ext.woff2' | asset_url }}) format('woff2-variations');
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      @font-face {
+        font-family: 'Figtree';
+        font-style: normal;
+        font-display: swap;
+        font-weight: 300 900;
+        src: url({{ 'figtree-latin.woff2' | asset_url }}) format('woff2-variations');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: 'Figtree';
+        font-style: normal;
+        font-display: swap;
+        font-weight: 300 900;
+        src: url({{ 'figtree-latin-ext.woff2' | asset_url }}) format('woff2-variations');
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      :root {
+        --paper: {{ settings.color_paper }};
+        --ink: {{ settings.color_ink }};
+        --cobalt: {{ settings.color_accent }};
+        --sun: {{ settings.color_button }};
+        --bubble: {{ settings.color_pop }};
+        --red: {{ settings.color_ball }};
+      }
+    </style>
+    {{ 'theme.css' | asset_url | stylesheet_tag }}
+    {{ 'motion.css' | asset_url | stylesheet_tag }}
+    {{ 'sections-v9.css' | asset_url | stylesheet_tag }}
+    {{ 'pt-v15.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'theme.js' | asset_url }}" defer></script>
+    <script src="{{ 'motion.js' | asset_url }}" defer></script>
+
+    {{ content_for_header }}
+  </head>
+
+  <body class="template-{{ template.name }}">
+    {%- if pt_intro -%}{% render 'pt-intro' %}{%- endif -%}
+    <span class="pt-hd-sentinel" data-hd-sentinel aria-hidden="true"></span>
+    <a class="skip" href="#contenu">{{ 'general.skip' | t }}</a>
+    {% sections 'header-group' %}
+    <main id="contenu" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+    {% sections 'footer-group' %}
+    {% section 'cart-drawer' %}
+
+    {%- liquid
+      comment
+        Prix hors euro dans assets/theme.js : sample = format natif Shopify de la devise (1 234 567,89),
+        sinon Intl.NumberFormat avec la langue + le pays du visiteur (« en-GB », « de-CH »…).
+      endcomment
+      assign pt_locale = request.locale.iso_code
+      unless pt_locale contains '-'
+        if localization.country.iso_code != blank
+          assign pt_locale = pt_locale | append: '-' | append: localization.country.iso_code
+        endif
+      endunless
+    %}
+    <script>
+      window.theme = {
+        routes: {
+          cartAdd: {{ routes.cart_add_url | append: '.js' | json }},
+          cartChange: {{ routes.cart_change_url | append: '.js' | json }},
+          cart: {{ routes.cart_url | json }}
+        },
+        processingDays: {{ settings.processing_days | default: 0 | json }},
+        ballSrc: {{ 'pt-balle-3d.webp' | asset_url | json }},
+        money: { currency: {{ cart.currency.iso_code | json }}, locale: {{ pt_locale | json }}, sample: {{ 123456789 | money | strip_html | json }} }
+      };
+      {%- comment -%} Textes générés par assets/theme.js (repli sur le français si absent). {%- endcomment %}
+      window.PattouneStrings = {
+        addToCart: {{ 'product.add' | t | json }},
+        added: {{ 'product.added' | t | json }},
+        soldOut: {{ 'product.sold_out' | t | json }},
+        unavailable: {{ 'product.unavailable' | t | json }},
+        addError: {{ 'scripts.add_error' | t | json }},
+        networkError: {{ 'scripts.network_error' | t | json }},
+        delivery: {{ 'scripts.delivery_html' | t: start: '[start]', end: '[end]' | json }},
+        soundOn: {{ 'sections.video_showcase.sound_on' | t | json }},
+        soundOff: {{ 'sections.video_showcase.sound_off' | t | json }},
+        cartLabelOne: {{ 'scripts.cart_label_one' | t: number: '[count]' | json }},
+        cartLabelOther: {{ 'scripts.cart_label_other' | t: number: '[count]' | json }}
+      };
+    </script>
+  </body>
+</html>

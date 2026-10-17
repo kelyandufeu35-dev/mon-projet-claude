@@ -1,0 +1,20 @@
+MENTIONS LÉGALES
+(À coller dans Shopify : Paramètres → Politiques → Mentions légales)
+Remplace tout ce qui est entre crochets.
+
+Éditeur du site
+[Nom ou raison sociale], [Micro-entreprise / SASU / EURL…]
+[Adresse postale complète]
+SIRET : [numéro]
+[TVA intracommunautaire, ou « TVA non applicable, art. 293 B du CGI »]
+E-mail : [ton e-mail]
+Directeur ou directrice de la publication : [Prénom Nom]
+
+Hébergement
+Shopify International Limited, Victoria Buildings, 2e étage, 1-2 Haddington Road, Dublin 4, D04 XN32, Irlande.
+
+Propriété intellectuelle
+Les textes, visuels et éléments graphiques de ce site appartiennent à [Nom] ou sont utilisés avec autorisation. Toute reproduction sans accord écrit est interdite.
+
+Médiation
+En cas de litige non résolu avec notre service client, tu peux saisir gratuitement le médiateur de la consommation : [nom du médiateur et adresse de son site].

@@ -1,0 +1,81 @@
+{%- liquid
+  assign brand = settings.brand_name | default: shop.name
+  assign og_title = page_title | default: brand
+  if request.page_type == 'index' and settings.home_title != blank
+    assign og_title = settings.home_title
+  endif
+  assign og_url = canonical_url | default: request.origin
+  assign og_type = 'website'
+  assign og_description = page_description | default: shop.description | default: brand
+  if request.page_type == 'index' and settings.home_description != blank
+    assign og_description = settings.home_description
+  endif
+  if request.page_type == 'product'
+    assign og_type = 'product'
+  endif
+-%}
+<meta property="og:site_name" content="{{ brand | escape }}">
+<meta property="og:url" content="{{ og_url }}">
+<meta property="og:title" content="{{ og_title | escape }}">
+<meta property="og:type" content="{{ og_type }}">
+<meta property="og:description" content="{{ og_description | escape }}">
+{%- liquid
+  assign share_image = page_image
+  if share_image == blank
+    assign share_image = collections.all.products.first.featured_image
+  endif
+-%}
+{%- if share_image -%}
+  <meta property="og:image" content="https:{{ share_image | image_url: width: 1200 }}">
+  <meta name="twitter:image" content="https:{{ share_image | image_url: width: 1200 }}">
+  <meta property="og:image:secure_url" content="https:{{ share_image | image_url: width: 1200 }}">
+{%- endif -%}
+{%- if request.page_type == 'product' -%}
+  <meta property="og:price:amount" content="{{ product.price | money_without_currency | strip_html | escape }}">
+  <meta property="og:price:currency" content="{{ cart.currency.iso_code }}">
+{%- endif -%}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ og_title | escape }}">
+<meta name="twitter:description" content="{{ og_description | escape }}">
+{%- comment -%} Données structurées du site : marque, site, fil d’Ariane. {%- endcomment -%}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": {{ request.origin | append: '/#organization' | json }},
+        "name": {{ brand | json }},
+        "url": {{ request.origin | append: '/' | json }}
+        {%- if settings.logo != blank -%},
+          "logo": {{ settings.logo | image_url: width: 512 | prepend: 'https:' | json }}
+        {%- endif %}
+      },
+      {
+        "@type": "WebSite",
+        "@id": {{ request.origin | append: '/#website' | json }},
+        "name": {{ brand | json }},
+        "url": {{ request.origin | append: '/' | json }},
+        "inLanguage": {{ request.locale.iso_code | json }},
+        "publisher": { "@id": {{ request.origin | append: '/#organization' | json }} }
+      }
+      {%- if request.page_type == 'product' or request.page_type == 'page' or request.page_type == 'article' or request.page_type == 'blog' -%},
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": {{ brand | json }}, "item": {{ request.origin | append: '/' | json }} }
+          {%- if request.page_type == 'article' -%},
+            { "@type": "ListItem", "position": 2, "name": {{ blog.title | json }}, "item": {{ request.origin | append: blog.url | json }} },
+            { "@type": "ListItem", "position": 3, "name": {{ article.title | json }}, "item": {{ request.origin | append: article.url | json }} }
+          {%- else -%},
+            { "@type": "ListItem", "position": 2, "name": {{ page_title | json }}, "item": {{ canonical_url | json }} }
+          {%- endif %}
+        ]
+      }
+      {%- endif %}
+    ]
+  }
+</script>
+{%- if request.page_type == 'collection' and collection.handle == 'frontpage' -%}
+  <meta name="robots" content="noindex">
+{%- endif -%}

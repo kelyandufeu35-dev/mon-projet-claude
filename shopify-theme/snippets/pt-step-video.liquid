@@ -1,0 +1,18 @@
+{%- comment -%}
+  Boucle vidéo d’une étape du principe, posée par-dessus sa photo (qui sert d’affiche).
+  block : bloc « step ». Vidéo choisie dans l’éditeur, sinon animation du thème si cochée.
+  Ni lecture automatique ni préchargement : motion.js la charge et la lit quand l’étape est
+  à l’écran (étape en cours sur ordinateur), la met en pause sinon, jamais en mouvement réduit.
+{%- endcomment -%}
+{%- if block.settings.video != blank -%}
+  <span class="pt-step__vid" data-step-video aria-hidden="true">
+    {{- block.settings.video | video_tag: muted: true, loop: true, playsinline: true, preload: 'none' -}}
+  </span>
+{%- elsif block.settings.theme_loop -%}
+  <span class="pt-step__vid" data-step-video aria-hidden="true">
+    <video muted loop playsinline preload="none" width="720" height="960">
+      <source src="{{ 'pt-roule.webm' | asset_url }}" type="video/webm">
+      <source src="{{ 'pt-roule.mp4' | asset_url }}" type="video/mp4">
+    </video>
+  </span>
+{%- endif -%}

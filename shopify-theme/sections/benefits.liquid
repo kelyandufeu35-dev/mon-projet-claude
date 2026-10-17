@@ -1,0 +1,136 @@
+<section class="section" id="{{ section.settings.anchor | default: section.id }}">
+  <div class="wrap">
+    {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+    {%- if section.settings.title != blank -%}<h2 class="h2">{{ section.settings.title | escape }}</h2>{%- endif -%}
+    <div class="benefits">
+      {%- for block in section.blocks -%}
+        <article class="benefit" {{ block.shopify_attributes }}>
+          <span class="benefit__icon">{% render 'icon', name: block.settings.icon %}</span>
+          <h3>{{ block.settings.title | escape }}</h3>
+          <p>{{ block.settings.text | escape }}</p>
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Avantages",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Petit titre",
+      "default": "Pourquoi ça marche"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre",
+      "default": "La gamelle se vide en dix secondes. La balle, elle, se mérite."
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Ancre de lien (sans #)",
+      "default": "avantages"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Avantage",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icône",
+          "options": [
+            {
+              "value": "nose",
+              "label": "Nez / flair"
+            },
+            {
+              "value": "clock",
+              "label": "Horloge"
+            },
+            {
+              "value": "spark",
+              "label": "Étincelle"
+            },
+            {
+              "value": "drop",
+              "label": "Goutte d’eau"
+            },
+            {
+              "value": "paw",
+              "label": "Patte"
+            },
+            {
+              "value": "truck",
+              "label": "Camion"
+            },
+            {
+              "value": "check",
+              "label": "Coche"
+            }
+          ],
+          "default": "paw"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titre",
+          "default": "Un avantage"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Texte",
+          "default": "Explique en une ou deux phrases."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Avantages",
+      "blocks": [
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "nose",
+            "title": "Il cherche, il renifle, il gagne",
+            "text": "Chaque croquette se mérite. Ton animal utilise son flair et ses pattes au lieu d’attendre devant la porte."
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "clock",
+            "title": "Des repas moins pressés",
+            "text": "Les croquettes tombent une à une : idéal pour les gloutons qui vident leur gamelle en dix secondes."
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "spark",
+            "title": "Moins d’ennui",
+            "text": "Un animal occupé s’ennuie moins. Glisse une séance de jeu dans sa routine, sous ton œil."
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "drop",
+            "title": "Simple à laver",
+            "text": "Les deux moitiés se dévissent et se rincent à l’eau tiède. Pas de recoin impossible à nettoyer."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
