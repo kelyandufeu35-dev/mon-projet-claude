@@ -51,3 +51,17 @@ Ton compagnon, il est plutôt team plumes ou team balle ? 👇
 Livraison offerte dès 25 € · lien en bio
 
 #chat #chien #jouetchat #jouetchien #pattoune
+
+## Carrousel photo TikTok (7 photos, dossier photos-presentation/tiktok)
+
+**Titre :** 7 trouvailles pour ton chat et ton chien 🐾
+
+**Description :**
+
+Lequel tu prends pour ton compagnon ? Dis-moi en commentaire 👇
+Jouets pour chasser, mordiller, chercher… et accessoires pour en prendre soin.
+Livraison offerte dès 25 € · lien en bio
+
+#chat #chien #jouetchat #jouetchien #pattoune
+
+**À cocher :** « Contenu généré par l'IA » si les photos 01 ou 05 sont incluses.
