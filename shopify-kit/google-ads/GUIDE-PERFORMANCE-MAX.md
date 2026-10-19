@@ -79,7 +79,7 @@ Google limite à 20 images par groupe d'assets : il y en a 19.
 
 Photos fournisseur déjà utilisées sur les fiches produits, recadrées. La balle à friandises est le rendu 3D du site. Aucune image générée par IA.
 
-**Vidéo** : si tu n'en ajoutes pas, Google en fabrique une automatiquement avec tes images (souvent moche). Tu peux importer sur YouTube (en non répertoriée) une des vidéos de `reels/` et l'ajouter.
+**Vidéo** : si tu n'en ajoutes pas, Google en fabrique une automatiquement avec tes images (souvent moche). Les vidéos de `reels/` ne conviennent pas pour la pub : elles parlent de « 9 trouvailles » (il y a 22 produits), disent « lien en bio » et contiennent des images générées par IA. Il faut une vidéo dédiée.
 
 ---
 
