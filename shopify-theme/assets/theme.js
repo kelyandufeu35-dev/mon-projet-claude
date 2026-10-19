@@ -230,7 +230,31 @@
           if (slide.hidden) { v.pause(); v.muted = true; } else if (!calm()) v.play().catch(() => {});
         });
       });
-      root.querySelectorAll('[data-thumb]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.thumb === String(id))));
+      root.querySelectorAll('[data-thumb]').forEach((b) => {
+        const on = b.dataset.thumb === String(id);
+        b.setAttribute('aria-pressed', String(on));
+        // Vignette active ramenée dans la bande défilante (mobile), sans faire bouger la page.
+        if (on && b.parentElement.scrollWidth > b.parentElement.clientWidth) {
+          const strip = b.parentElement;
+          strip.scrollTo({ left: b.offsetLeft - (strip.clientWidth - b.offsetWidth) / 2, behavior: calm() ? 'auto' : 'smooth' });
+        }
+      });
+      const ids = mediaIds();
+      const index = root.querySelector('[data-gallery-index]');
+      if (index && ids.includes(String(id))) index.textContent = ids.indexOf(String(id)) + 1;
+    }
+
+    // Carrousel : ordre des vignettes, flèches, glisser au doigt, flèches du clavier.
+    function mediaIds() {
+      return [...root.querySelectorAll('[data-thumb]')].map((b) => b.dataset.thumb);
+    }
+    function step(dir) {
+      const ids = mediaIds();
+      if (ids.length < 2) return;
+      const current = root.querySelector('[data-thumb][aria-pressed="true"]');
+      const i = current ? ids.indexOf(current.dataset.thumb) : 0;
+      root.querySelector('[data-gallery]')?.classList.add('is-touched');
+      showMedia(ids[(i + dir + ids.length) % ids.length]);
     }
 
     function updateVariant() {
@@ -270,6 +294,36 @@
     });
 
     root.querySelectorAll('[data-thumb]').forEach((b) => b.addEventListener('click', () => showMedia(b.dataset.thumb)));
+    root.querySelector('[data-gallery-prev]')?.addEventListener('click', () => step(-1));
+    root.querySelector('[data-gallery-next]')?.addEventListener('click', () => step(1));
+    const startThumb = root.querySelector('[data-thumb][aria-pressed="true"]');
+    const startIndex = root.querySelector('[data-gallery-index]');
+    if (startThumb && startIndex) startIndex.textContent = mediaIds().indexOf(startThumb.dataset.thumb) + 1;
+    const galleryMain = root.querySelector('[data-gallery-main]');
+    if (galleryMain) {
+      let x0 = null;
+      let y0 = 0;
+      galleryMain.addEventListener('pointerdown', (e) => {
+        if (e.pointerType === 'mouse' || e.target.closest('video, model-viewer, button')) return;
+        x0 = e.clientX;
+        y0 = e.clientY;
+      });
+      galleryMain.addEventListener('pointerup', (e) => {
+        if (x0 == null) return;
+        const dx = e.clientX - x0;
+        const dy = e.clientY - y0;
+        x0 = null;
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.2) step(dx < 0 ? 1 : -1);
+      });
+      galleryMain.addEventListener('pointercancel', () => { x0 = null; });
+      root.querySelector('[data-gallery]').addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+        if (!e.target.closest('[data-thumb], [data-gallery-prev], [data-gallery-next]')) return;
+        e.preventDefault();
+        step(e.key === 'ArrowRight' ? 1 : -1);
+        root.querySelector('[data-thumb][aria-pressed="true"]')?.focus({ preventScroll: true });
+      });
+    }
 
     form.addEventListener('submit', async (e) => {
       if (!drawer()) return; // no drawer: normal form post to /cart/add

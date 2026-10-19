@@ -167,6 +167,8 @@
     "product_buy": {
       "scene_alt": "{{ title }}, roter facettierter Ball im Lichtstrahl",
       "gallery_label": "Foto auswählen",
+      "gallery_prev": "Vorheriges Foto",
+      "gallery_next": "Nächstes Foto",
       "scene_thumb": "3D-Animation",
       "thumb_photo": "Foto {{ number }}",
       "thumb_video": "Video {{ number }}",

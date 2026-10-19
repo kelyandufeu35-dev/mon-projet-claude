@@ -168,6 +168,8 @@
     "product_buy": {
       "scene_alt": "{{ title }}, balle rouge à facettes sous un rai de lumière",
       "gallery_label": "Choisir une photo",
+      "gallery_prev": "Photo précédente",
+      "gallery_next": "Photo suivante",
       "scene_thumb": "Animation 3D",
       "thumb_photo": "Photo {{ number }}",
       "thumb_video": "Vidéo {{ number }}",

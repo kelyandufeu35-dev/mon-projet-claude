@@ -83,8 +83,14 @@
 
 <div class="pt-buy-grid" data-product-root data-section="{{ section.id }}">
   {%- comment -%} Galerie : volet à l’entrée (accueil), fondu doux au changement de photo. {%- endcomment -%}
+  {%- liquid
+    assign thumbs = product.media.size
+    if scene
+      assign thumbs = thumbs | plus: 1
+    endif
+  -%}
   <div class="pt-gallery" data-gallery>
-    <div class="pt-gallery__main"{% if reveal %} data-reveal="clip"{% endif %}>
+    <div class="pt-gallery__main"{% if reveal %} data-reveal="clip"{% endif %}{% if thumbs > 1 %} data-gallery-main{% endif %}>
       {%- if scene -%}
         <div class="pt-gallery__slide pt-gallery__slide--scene" data-media-id="scene"{% if initial_media_id != 'scene' %} hidden{% endif %}>
           <picture>
@@ -131,13 +137,13 @@
           <img src="{{ 'pt-balle-3d.webp' | asset_url }}" alt="{{ product.title | escape }}" width="236" height="236" loading="eager" decoding="async">
         </div>
       {%- endif -%}
+      {%- comment -%} Carrousel : flèches, compteur (glisser au doigt et flèches du clavier dans theme.js). {%- endcomment -%}
+      {%- if thumbs > 1 -%}
+        <button type="button" class="pt-gallery__nav pt-gallery__nav--prev" data-gallery-prev aria-label="{{ 'snippets.product_buy.gallery_prev' | t }}">{% render 'icon', name: 'arrow' %}</button>
+        <button type="button" class="pt-gallery__nav pt-gallery__nav--next" data-gallery-next aria-label="{{ 'snippets.product_buy.gallery_next' | t }}">{% render 'icon', name: 'arrow' %}</button>
+        <span class="pt-gallery__count" aria-hidden="true"><span data-gallery-index>1</span> / {{ thumbs }}</span>
+      {%- endif -%}
     </div>
-    {%- liquid
-      assign thumbs = product.media.size
-      if scene
-        assign thumbs = thumbs | plus: 1
-      endif
-    -%}
     {%- if thumbs > 1 -%}
       <div class="pt-gallery__thumbs" role="group" aria-label="{{ 'snippets.product_buy.gallery_label' | t }}"{% if reveal %} data-reveal-group{% endif %}>
         {%- if scene -%}

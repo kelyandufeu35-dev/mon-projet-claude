@@ -105,6 +105,17 @@ html.pt-motion .pt-gallery:is(.is-touched, :focus-within) .pt-gallery__slide { t
 @starting-style {
   html.pt-motion .pt-gallery:is(.is-touched, :focus-within) .pt-gallery__slide { opacity: 0; scale: 1.04; }
 }
+.pt-gallery__main[data-gallery-main] { touch-action: pan-y; }
+.pt-gallery__nav { position: absolute; top: 50%; z-index: 2; display: grid; place-items: center; width: 48px; height: 48px; padding: 0; border: 0; border-radius: 50%; background: rgb(255 255 255 / .9); color: var(--pt-ink); box-shadow: 0 8px 24px -10px rgb(20 22 43 / .45); translate: 0 -50%; cursor: pointer; transition: scale var(--pt-d-micro) var(--pt-e-ui), background-color var(--pt-d-ui) var(--pt-e-ui); }
+.pt-gallery__nav svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.pt-gallery__nav--prev { left: 14px; }
+.pt-gallery__nav--prev svg { rotate: 180deg; }
+.pt-gallery__nav--next { right: 14px; }
+.pt-gallery__nav:active { scale: .92; }
+@media (hover: hover) {
+  .pt-gallery__nav:hover { background: #fff; scale: 1.06; }
+}
+.pt-gallery__count { position: absolute; right: 14px; bottom: 14px; z-index: 2; padding: 6px 12px; border-radius: 999px; background: rgb(20 22 43 / .72); color: #fff; font-size: var(--pt-fs-sm); font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1.2; pointer-events: none; }
 .pt-gallery__thumbs { display: flex; flex-wrap: wrap; gap: 10px; padding: 4px; margin: -4px; }
 .pt-thumb { position: relative; flex: none; width: 72px; height: 72px; padding: 0; border: 0; border-radius: 16px; overflow: hidden; background: var(--pt-sand); box-shadow: 0 0 0 2px var(--pt-cream), 0 0 0 3.5px transparent; transition: translate var(--pt-d-micro) var(--pt-e-ui), box-shadow var(--pt-d-ui) var(--pt-e-ui); }
 .pt-thumb img { width: 100%; height: 100%; aspect-ratio: 1; object-fit: cover; transition: opacity var(--pt-d-ui) var(--pt-e-ui); }
@@ -340,6 +351,9 @@ html.pt-motion .pt-footer__word[data-reveal='mask'].is-in .pt-w > span::after { 
   .pt-gallery { position: static; }
   .pt-gallery__thumbs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
   .pt-thumb { width: 60px; height: 60px; border-radius: 14px; }
+  .pt-gallery__nav { width: 40px; height: 40px; }
+  .pt-gallery__nav--prev { left: 10px; }
+  .pt-gallery__nav--next { right: 10px; }
   .pt-trust { grid-template-columns: 1fr; gap: 0; }
   .pt-trust li { grid-template-columns: auto 1fr; align-items: center; gap: 12px; padding: 6px 0; background: none; box-shadow: none; font-size: var(--pt-fs-sm); }
   .pt-trust svg { width: 20px; height: 20px; }

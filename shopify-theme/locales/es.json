@@ -167,6 +167,8 @@
     "product_buy": {
       "scene_alt": "{{ title }}, pelota roja facetada bajo un haz de luz",
       "gallery_label": "Elegir una foto",
+      "gallery_prev": "Foto anterior",
+      "gallery_next": "Foto siguiente",
       "scene_thumb": "Animación 3D",
       "thumb_photo": "Foto {{ number }}",
       "thumb_video": "Vídeo {{ number }}",

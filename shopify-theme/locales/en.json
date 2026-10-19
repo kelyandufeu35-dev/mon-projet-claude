@@ -167,6 +167,8 @@
     "product_buy": {
       "scene_alt": "{{ title }}, faceted red ball under a beam of light",
       "gallery_label": "Choose a photo",
+      "gallery_prev": "Previous photo",
+      "gallery_next": "Next photo",
       "scene_thumb": "3D animation",
       "thumb_photo": "Photo {{ number }}",
       "thumb_video": "Video {{ number }}",
