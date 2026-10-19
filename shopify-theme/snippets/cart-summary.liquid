@@ -15,14 +15,34 @@
     assign pct = 100
   endif
 
+  comment
+    Offres groupées : elles ne valent que pour le produit choisi dans les réglages du thème
+    (la balle à friandises), comme les remises automatiques Shopify. On ne compte donc que
+    ses unités, et on ne propose rien si le panier n’en contient pas.
+  endcomment
+  assign bundle_qty = 0
+  assign bundle_line = 0
+  assign bundle_line_qty = 0
+  if settings.bundle_product != blank
+    for item in cart.items
+      if item.product_id == settings.bundle_product.id
+        assign bundle_qty = bundle_qty | plus: item.quantity
+        assign bundle_line = forloop.index
+        assign bundle_line_qty = item.quantity
+      endif
+    endfor
+  endif
+
   assign next_qty = 0
   assign next_discount = 0
-  if settings.bundle1_qty > cart.item_count and settings.bundle1_discount > 0
-    assign next_qty = settings.bundle1_qty
-    assign next_discount = settings.bundle1_discount
-  elsif settings.bundle2_qty > cart.item_count and settings.bundle2_discount > 0
-    assign next_qty = settings.bundle2_qty
-    assign next_discount = settings.bundle2_discount
+  if bundle_qty > 0
+    if settings.bundle1_qty > bundle_qty and settings.bundle1_discount > 0
+      assign next_qty = settings.bundle1_qty
+      assign next_discount = settings.bundle1_discount
+    elsif settings.bundle2_qty > bundle_qty and settings.bundle2_discount > 0
+      assign next_qty = settings.bundle2_qty
+      assign next_discount = settings.bundle2_discount
+    endif
   endif
 -%}
 
@@ -78,18 +98,16 @@
   {%- endfor -%}
 </ul>
 
-{%- if next_qty > 0 and cart.items.size == 1 -%}
-  {%- assign missing = next_qty | minus: cart.item_count -%}
-  {%- comment -%} Un clic ajoute ce qu'il manque pour atteindre l'offre suivante. {%- endcomment -%}
-  <button type="button" class="upsell" data-line="1" data-qty="{{ next_qty }}">
+{%- if next_qty > 0 -%}
+  {%- liquid
+    assign missing = next_qty | minus: bundle_qty
+    assign target_qty = bundle_line_qty | plus: missing
+  -%}
+  {%- comment -%} Un clic ajoute les balles qui manquent pour atteindre l'offre suivante. {%- endcomment -%}
+  <button type="button" class="upsell" data-line="{{ bundle_line }}" data-qty="{{ target_qty }}">
     <span class="upsell__plus">{% render 'icon', name: 'plus' %}</span>
     <span>{{ 'snippets.cart_summary.upsell_units_html' | t: count: missing, discount: next_discount }}</span>
   </button>
-{%- elsif next_qty > 0 -%}
-  {%- assign missing = next_qty | minus: cart.item_count -%}
-  <p class="upsell upsell--note">
-    {{ 'snippets.cart_summary.upsell_items_html' | t: count: missing, discount: next_discount }}
-  </p>
 {%- endif -%}
 
 <dl class="totals">

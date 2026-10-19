@@ -166,6 +166,12 @@
         "content": "Crée les mêmes remises dans Shopify : Réductions → Créer → Réduction automatique, « Montant de réduction sur les produits », quantité minimale d’articles. Si la remise Shopify est un montant fixe par article, indique ce montant ci-dessous : le site affichera exactement le prix payé, sans écart d’arrondi."
       },
       {
+        "type": "product",
+        "id": "bundle_product",
+        "label": "Produit concerné par les offres groupées",
+        "info": "Le produit de tes remises automatiques Shopify (la balle à friandises). Le panier ne propose l’offre que s’il contient ce produit. Vide = aucune proposition dans le panier."
+      },
+      {
         "type": "number",
         "id": "bundle1_qty",
         "label": "Offre 2 : nombre d’articles",
