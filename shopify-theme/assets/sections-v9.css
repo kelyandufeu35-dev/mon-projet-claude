@@ -420,3 +420,26 @@ html.pt-motion .pt-footer__word[data-reveal='mask'].is-in .pt-w > span::after { 
   .pt-shop__head { grid-template-columns: 1fr; }
   .pt-shop__head .pt-lead { grid-column: 1; grid-row: auto; justify-self: start; }
 }
+/* Nos rayons : tuiles photo de l’accueil (sections/collection-tiles.liquid), sur le fond crème de la boutique. */
+.pt-rayons__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(14px, 2vw, 28px); margin: 0; padding: 0; list-style: none; }
+@media (min-width: 600px) { .pt-rayons__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.pt-rayon, .pt-rayon:hover { position: relative; display: grid; grid-template-rows: auto 1fr; height: 100%; overflow: hidden; border-radius: var(--pt-r-md); background: #fff; color: var(--pt-ink); text-decoration: none; isolation: isolate; }
+.pt-rayon__img { display: block; aspect-ratio: 4 / 3; overflow: hidden; background: var(--pt-sand); }
+.pt-rayon__img img { width: 100%; height: 100%; object-fit: cover; transition: scale var(--pt-d-ui) var(--pt-e-out); }
+.pt-rayon__body { display: grid; align-content: start; gap: 4px; padding: clamp(14px, 1.6vw, 22px) clamp(14px, 1.6vw, 22px) clamp(16px, 1.8vw, 24px); padding-right: 64px; }
+.pt-rayon__title { font-family: var(--pt-display); font-size: clamp(1.125rem, 1rem + .6vw, 1.625rem); font-weight: 800; font-stretch: 80%; line-height: 1.1; }
+.pt-rayon__text { font-size: var(--pt-fs-sm); line-height: 1.45; color: var(--pt-on-light-2); }
+.pt-rayon__go { position: absolute; right: clamp(12px, 1.4vw, 18px); bottom: clamp(14px, 1.6vw, 22px); display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--pt-sun); color: var(--pt-ink); transition: translate var(--pt-d-ui) var(--pt-e-out); }
+.pt-rayon__go svg { width: 18px; height: 18px; }
+.pt-rayon:focus-visible { outline: 2px solid var(--pt-red); outline-offset: 4px; }
+@media (hover: hover) {
+  .pt-rayon:hover .pt-rayon__img img { scale: 1.04; }
+  .pt-rayon:hover .pt-rayon__go { translate: 4px 0; }
+}
+@media (max-width: 599px) {
+  .pt-rayon, .pt-rayon:hover { grid-template-rows: auto 1fr auto; }
+  .pt-rayon__body { padding: 12px 12px 6px; }
+  .pt-rayon__text { display: none; }
+  .pt-rayon__go { position: static; width: 32px; height: 32px; margin: 0 12px 12px auto; }
+  .pt-rayon__go svg { width: 15px; height: 15px; }
+}

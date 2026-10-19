@@ -21,13 +21,13 @@
         "type": "text",
         "id": "home_title",
         "label": "Titre de la page d’accueil (Google, onglet)",
-        "default": "Pattoune · Jouets d’éveil pour chats et chiens"
+        "default": "Pattoune · Jouets et accessoires pour chats et chiens"
       },
       {
         "type": "textarea",
         "id": "home_description",
         "label": "Description de la page d’accueil (Google)",
-        "default": "Balle à friandises, puzzle de chasse… Des jouets d’éveil qui font chercher, chasser et réfléchir ton chat ou ton chien. Livraison offerte en France, dans l’UE et en Suisse."
+        "default": "Jouets, paniers, harnais, gamelles, soins : tout pour le quotidien de ton chat ou de ton chien. Livraison offerte dès 25 € en France, dans l’UE et en Suisse."
       }
     ]
   },
