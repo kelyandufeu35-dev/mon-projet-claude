@@ -79,7 +79,13 @@ Google limite à 20 images par groupe d'assets : il y en a 19.
 
 Photos fournisseur déjà utilisées sur les fiches produits, recadrées. La balle à friandises est le rendu 3D du site. Aucune image générée par IA.
 
-**Vidéo** : si tu n'en ajoutes pas, Google en fabrique une automatiquement avec tes images (souvent moche). Les vidéos de `reels/` ne conviennent pas pour la pub : elles parlent de « 9 trouvailles » (il y a 22 produits), disent « lien en bio » et contiennent des images générées par IA. Il faut une vidéo dédiée.
+**Vidéo** : dossier `video/`, 18 s, même montage en 3 formats : `vertical` (1080 × 1920), `carre` (1080 × 1080), `paysage` (1920 × 1080). Photos produits réelles, musique originale (synthèse, `video/source/music_gads.py`), pas de voix, aucune image IA. Plans : intro « Tout pour ton chat et ton chien » · Jouets · Couchage · Promenade · Repas et propreté · fin « Livraison offerte dès 25 € ». Les vidéos de `reels/` ne conviennent pas pour la pub (« 9 trouvailles », « lien en bio », images IA).
+
+Mise en ligne : YouTube Studio › Créer › Importer des vidéos, les 3 fichiers, visibilité **Non répertoriée**, « Contenu modifié ou synthétique » : **Non**, « conçue pour les enfants » : **Non**.
+- Titre : `Pattoune · Tout pour ton chat et ton chien`
+- Description : `Jouets, paniers, harnais, gamelles et soins pour chat et chien. Livraison offerte dès 25 € en France, dans l'UE et en Suisse. https://pattounejouets.myshopify.com`
+
+Puis Google Ads › groupe de composants › Vidéos › + Vidéos › coller le lien de chacune.
 
 ---
 
