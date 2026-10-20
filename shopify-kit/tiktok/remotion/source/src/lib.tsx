@@ -71,10 +71,10 @@ export const Caption: React.FC<{ words: string[]; hl?: number[]; delay?: number;
 };
 
 /** Petite étiquette (étape, détail) sous le sous-titre. */
-export const Pill: React.FC<{ children: React.ReactNode; top: number; delay?: number; bg?: string }> = ({ children, top, delay = 14, bg = C.paper }) => {
+export const Pill: React.FC<{ children: React.ReactNode; top: number; delay?: number; bg?: string; exact?: boolean }> = ({ children, top, delay = 14, bg = C.paper, exact = false }) => {
   const frame = useCurrentFrame();
   return (
-    <AbsoluteFill style={{ top, height: "auto", display: "flex", justifyContent: "center", alignItems: "center" }}>
+    <AbsoluteFill style={{ top, height: "auto", display: "flex", justifyContent: exact ? "flex-start" : "center", alignItems: "center" }}>
       <Interactive.Div
         name="Étiquette"
         style={{
@@ -119,6 +119,36 @@ export const Photo: React.FC<{ src: string; x?: number; y?: number; from?: numbe
         }}
       />
       <Shade />
+      {children}
+    </AbsoluteFill>
+  );
+};
+
+/**
+ * Photo entière (pas recadrée) posée sur un fond flou de la même image : plus nette et moins
+ * « de près » qu'un plein écran. `maxH` = hauteur maximale du cadre.
+ */
+export const Framed: React.FC<{ src: string; maxH?: number; children?: React.ReactNode }> = ({ src, maxH = 1100, children }) => {
+  const frame = useCurrentFrame();
+  const { durationInFrames } = useVideoConfig();
+  return (
+    <AbsoluteFill style={{ backgroundColor: C.ink }}>
+      <Img src={staticFile(src)} style={{ width: "100%", height: "100%", objectFit: "cover", filter: "blur(46px) brightness(.5) saturate(1.2)", scale: 1.2 }} />
+      <AbsoluteFill style={{ top: 620, bottom: 160, height: "auto", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
+        <Img
+          name="Photo"
+          src={staticFile(src)}
+          style={{
+            maxWidth: 960,
+            maxHeight: maxH,
+            objectFit: "contain",
+            borderRadius: 40,
+            boxShadow: "0 40px 90px rgba(0,0,0,.45)",
+            scale: interpolate(frame, [0, durationInFrames], [1, 1.04], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
+            opacity: interpolate(frame, [0, 8], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
+          }}
+        />
+      </AbsoluteFill>
       {children}
     </AbsoluteFill>
   );

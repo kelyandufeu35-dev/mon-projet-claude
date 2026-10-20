@@ -3,7 +3,7 @@ import { fade } from "@remotion/transitions/fade";
 import { slide } from "@remotion/transitions/slide";
 import React from "react";
 import { Sequence } from "remotion";
-import { C, Caption, Clip, Colors, EndCard, Photo, Pill, ProductCard } from "./lib";
+import { C, Caption, Clip, Colors, EndCard, Framed, Photo, Pill, ProductCard } from "./lib";
 
 const T = 10; // durée d'une transition (images)
 const up = () => <TransitionSeries.Transition presentation={slide({ direction: "from-bottom" })} timing={springTiming({ config: { damping: 200 }, durationInFrames: T })} />;
@@ -102,22 +102,23 @@ export const HARNAIS_DURATION = 90 + 75 + 75 + 90 + 75 + 90 - 5 * T;
 export const Harnais: React.FC = () => (
   <TransitionSeries>
     <TransitionSeries.Sequence name="Accroche" durationInFrames={90}>
-      <Photo src="h-noir.jpg" y={40}>
-        <Caption words={["Le", "harnais", "des", "balades", "du", "soir"]} hl={[4, 5]} top={280} size={108} />
-        <Pill top={720} delay={22} bg={C.sun}>Bandes réfléchissantes</Pill>
-      </Photo>
+      <Framed src="hw-noir.jpg">
+        <Caption words={["Le", "harnais", "des", "balades", "du", "soir"]} hl={[4, 5]} top={250} size={104} />
+        <Pill top={540} delay={22} bg={C.sun} exact>Bandes réfléchissantes</Pill>
+      </Framed>
     </TransitionSeries.Sequence>
     {up()}
     <TransitionSeries.Sequence name="Réglage" durationInFrames={75}>
-      <Photo src="h-golden.jpg" y={45}>
+      <Framed src="hw-golden.jpg">
         <Caption words={["4", "points", "de", "réglage"]} hl={[0]} />
-      </Photo>
+        <Pill top={450} exact>Il s'ajuste à sa morphologie</Pill>
+      </Framed>
     </TransitionSeries.Sequence>
     {up()}
     <TransitionSeries.Sequence name="Poignée" durationInFrames={75}>
-      <Photo src="h-poignee.jpg" y={50}>
+      <Framed src="hw-poignee.jpg">
         <Caption words={["Une", "poignée", "sur", "le", "dos"]} hl={[1]} />
-      </Photo>
+      </Framed>
     </TransitionSeries.Sequence>
     {up()}
     <TransitionSeries.Sequence name="Couleurs" durationInFrames={90}>
@@ -139,10 +140,10 @@ export const Harnais: React.FC = () => (
     </TransitionSeries.Sequence>
     {up()}
     <TransitionSeries.Sequence name="Tailles" durationInFrames={75}>
-      <Photo src="h-labrador.jpg" y={40}>
+      <Framed src="h-labrador.jpg" maxH={960}>
         <Caption words={["Du", "S", "au", "XL"]} hl={[1, 3]} />
-        <Pill top={640} bg={C.sun}>De 4 à 50 kg environ</Pill>
-      </Photo>
+        <Pill top={450} bg={C.sun} exact>De 4 à 50 kg environ</Pill>
+      </Framed>
     </TransitionSeries.Sequence>
     {fadeT()}
     <TransitionSeries.Sequence name="Fin" durationInFrames={90}>
