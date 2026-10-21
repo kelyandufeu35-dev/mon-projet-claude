@@ -1,0 +1,39 @@
+/* Haut de page en mode « Photos » (sections/hero-banner.liquid, réglage show_photos) :
+   la scène vidéo laisse la place à une mosaïque de 4 photos réelles à côté du texte.
+   Chargé seulement quand le mode est actif ; s'appuie sur les jetons de motion.css. */
+.pt-hero--photos { min-height: 0; align-items: center; padding-block: calc(var(--pt-hd-h) + clamp(32px, 6svh, 72px)) clamp(56px, 9svh, 112px); }
+.pt-hero--photos .pt-wrap { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); align-items: center; gap: clamp(40px, 5vw, 88px); }
+.pt-hero--photos .pt-hero__copy { max-width: none; padding-block: 0; }
+.pt-hero--photos .pt-hero__title { font-size: clamp(3rem, 0.9rem + 4.4vw, 6rem); line-height: .9; }
+.pt-hero--photos .pt-hero__sub { max-width: 42ch; }
+
+.pt-hero__photos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(10px, 1.2vw, 16px); margin: 0; padding: 0; list-style: none; }
+.pt-hero__photo { position: relative; overflow: hidden; aspect-ratio: 1; border-radius: var(--pt-r-md); background: var(--pt-ink-2); box-shadow: 0 2px 6px rgb(0 0 0 / .18), 0 24px 48px -28px rgb(0 0 0 / .6); }
+/* Colonne de droite décalée : la mosaïque respire au lieu d'un damier strict. */
+.pt-hero__photo:nth-child(even) { translate: 0 clamp(18px, 2.4vw, 36px); }
+.pt-hero__photo img { display: block; width: 100%; height: 100%; object-fit: cover; transition: scale 900ms var(--pt-e-out); }
+.pt-hero__photo-link { display: block; height: 100%; border-radius: inherit; }
+.pt-hero__photo-link:focus-visible { outline-offset: -3px; }
+@media (hover: hover) { .pt-hero__photo-link:hover img { scale: 1.04; } }
+
+html.pt-motion .pt-hero__photo { animation: pt-fade-up 1100ms var(--pt-e-out) calc(var(--pt-t0) + 220ms + var(--pt-d, 0) * 90ms) backwards; }
+
+@media (max-width: 899px) {
+  .pt-hero--photos { padding-block: calc(var(--pt-hd-h) + 20px) 40px; }
+  .pt-hero--photos .pt-wrap { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .pt-hero--photos .pt-hero__copy::before { content: none; }
+  .pt-hero--photos .pt-hero__title,
+  .pt-hero--photos.pt-hero--long .pt-hero__title { margin-bottom: 14px; font-size: clamp(2.35rem, 1.1rem + 5.6vw, 3.4rem); line-height: .94; }
+  .pt-hero--photos .pt-hero__sub { margin-bottom: 20px; font-size: 1rem; line-height: 1.5; }
+  /* Une seule promesse au téléphone : la livraison est déjà dans la phrase d'accroche. */
+  .pt-hero--photos .pt-hero__proof { display: none; }
+  .pt-hero__photos { gap: 8px; }
+  .pt-hero__photo { border-radius: var(--pt-r-sm); }
+  .pt-hero__photo:nth-child(even) { translate: none; }
+}
+@media (min-width: 600px) and (max-width: 899px) {
+  .pt-hero__photos { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pt-hero__photo, .pt-hero__photo img { animation: none !important; transition: none; }
+}

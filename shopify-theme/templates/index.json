@@ -3,7 +3,7 @@
     "haut": {
       "type": "hero-banner",
       "settings": {
-        "show_video": true,
+        "show_video": false,
         "eyebrow": "Jouets et accessoires pour chats et chiens",
         "title": "Tout pour son quotidien, du jeu à la sieste.",
         "highlight": "du jeu à la sieste.",
@@ -15,7 +15,12 @@
         "show_proof": true,
         "proof_1": "Livraison offerte dès 25 €",
         "proof_2": "Retour sous 14 jours (droit légal)",
-        "proof_3": "Paiement sécurisé"
+        "proof_3": "Paiement sécurisé",
+        "show_photos": true,
+        "photo_link_1": "shopify://collections/couchage",
+        "photo_link_2": "shopify://collections/promenade",
+        "photo_link_3": "shopify://collections/jouets",
+        "photo_link_4": "shopify://collections/jouets"
       }
     },
     "rayons": {

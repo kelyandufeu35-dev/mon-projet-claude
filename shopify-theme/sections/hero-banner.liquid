@@ -11,6 +11,9 @@
     #pourquoi). La balle de la vidéo reste la mascotte de la marque dans les deux cas.
   - Accroche longue (plus de 46 signes, selon la langue) : .pt-hero--long réduit le corps du titre pour
     garder le bouton dans le premier écran.
+  - Mode « Photos » (réglage coché) : la scène vidéo est remplacée par 4 photos réelles en mosaïque
+    (réglages Photo 1 à 4, sinon celles du thème), sans petit texte au-dessus ni bouton pause.
+    Styles dans assets/pt-hero-photos.css.
 {%- endcomment -%}
 {%- liquid
   assign featured = section.settings.product
@@ -26,10 +29,16 @@
   if section.settings.title.size > 46
     assign hero_class = ' pt-hero--long'
   endif
+  assign photos = section.settings.show_photos
+  if photos
+    assign hero_class = hero_class | append: ' pt-hero--photos'
+  endif
 -%}
+{%- if photos -%}{{ 'pt-hero-photos.css' | asset_url | stylesheet_tag }}{%- endif -%}
 <section class="pt-hero pt-dark{{ hero_class }}" data-hero data-sticky-start data-pointer-scene aria-labelledby="{{ title_id }}">
   <div class="pt-hero__bg" aria-hidden="true"></div>
 
+  {%- unless photos -%}
   <div class="pt-hero__stage" aria-hidden="true">
     <div class="pt-hero__beam"></div>
     <div class="pt-hero__media">
@@ -64,17 +73,18 @@
     </div>
   </div>
   <div class="pt-hero__grain" aria-hidden="true"></div>
+  {%- endunless -%}
 
   <div class="pt-wrap">
     <div class="pt-hero__copy">
-      {%- if section.settings.eyebrow != blank -%}
+      {%- if section.settings.eyebrow != blank and photos == false -%}
         <p class="pt-eyebrow pt-eyebrow--sun pt-hero__eyebrow">{{ section.settings.eyebrow | escape }}</p>
       {%- endif -%}
       <h1 class="pt-display pt-hero__title" id="{{ title_id }}">
         {%- render 'pt-split', text: section.settings.title, hl: section.settings.highlight -%}
       </h1>
       {%- if section.settings.subtitle != blank -%}
-        <p class="pt-hero__sub">{{ section.settings.subtitle | escape }}</p>
+        <p class="pt-hero__sub">{{ section.settings.subtitle | escape | replace: ' €', '&nbsp;€' }}</p>
       {%- endif -%}
       <div class="pt-hero__cta">
         <a class="pt-btn pt-btn--sun pt-btn--xl" href="#{{ target | escape }}" data-magnetic style="--pt-d:0">
@@ -107,12 +117,38 @@
         </ul>
       {%- endif -%}
     </div>
+    {%- if photos -%}
+      <ul class="pt-hero__photos" role="list">
+        {%- for i in (1..4) -%}
+          {%- liquid
+            assign img_key = 'photo_' | append: i
+            assign link_key = 'photo_link_' | append: i
+            assign alt_key = 'photo_alt_' | append: i
+            assign img = section.settings[img_key]
+            assign link = section.settings[link_key]
+            assign alt = section.settings[alt_key]
+          -%}
+          <li class="pt-hero__photo" style="--pt-d:{{ forloop.index0 }}">
+            {%- if link != blank -%}<a href="{{ link }}" class="pt-hero__photo-link">{%- endif -%}
+            {%- if img != blank -%}
+              {{ img | image_url: width: 720, height: 720, crop: 'center' | image_tag: widths: '400, 720', sizes: '(min-width: 900px) 22vw, 46vw', loading: 'eager', alt: alt }}
+            {%- else -%}
+              {%- assign base = 'pt-hero-photo-' | append: i -%}
+              <img src="{{ base | append: '.webp' | asset_url }}" srcset="{{ base | append: '-400.webp' | asset_url }} 400w, {{ base | append: '.webp' | asset_url }} 720w" sizes="(min-width: 900px) 22vw, 46vw" width="720" height="720" alt="{{ alt | escape }}" loading="eager" decoding="async"{% if forloop.first %} fetchpriority="high"{% endif %}>
+            {%- endif -%}
+            {%- if link != blank -%}</a>{%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
   </div>
 
+  {%- unless photos -%}
   <button type="button" class="pt-hero__pause" data-hero-pause aria-pressed="false" aria-label="{{ 'sections.hero.pause' | t }}">
     <span class="pt-hero__pause-i pt-hero__pause-i--pause">{% render 'icon', name: 'pause' %}</span>
     <span class="pt-hero__pause-i pt-hero__pause-i--play">{% render 'icon', name: 'play' %}</span>
   </button>
+  {%- endunless -%}
 </section>
 
 {% schema %}
@@ -121,6 +157,19 @@
   "enabled_on": { "templates": ["index"] },
   "settings": [
     { "type": "product", "id": "product", "label": "Produit (facultatif)", "info": "Son prix s’affiche dans le bouton. Vide = haut de page de la marque, sans prix (accueil multi-jouets)." },
+    { "type": "checkbox", "id": "show_photos", "label": "Mosaïque de 4 photos (à la place de la vidéo)", "default": false },
+    { "type": "image_picker", "id": "photo_1", "label": "Photo 1", "info": "Carrée de préférence. Vide = photo du thème (chat dans le panier igloo)." },
+    { "type": "url", "id": "photo_link_1", "label": "Lien de la photo 1" },
+    { "type": "text", "id": "photo_alt_1", "label": "Description de la photo 1 (accessibilité)", "default": "Un chat roulé en boule dans le panier igloo en peluche rose" },
+    { "type": "image_picker", "id": "photo_2", "label": "Photo 2", "info": "Vide = photo du thème (chien en harnais)." },
+    { "type": "url", "id": "photo_link_2", "label": "Lien de la photo 2" },
+    { "type": "text", "id": "photo_alt_2", "label": "Description de la photo 2", "default": "Un golden retriever qui court dans l’herbe avec un harnais rouge" },
+    { "type": "image_picker", "id": "photo_3", "label": "Photo 3", "info": "Vide = photo du thème (chat et canne à plumes)." },
+    { "type": "url", "id": "photo_link_3", "label": "Lien de la photo 3" },
+    { "type": "text", "id": "photo_alt_3", "label": "Description de la photo 3", "default": "Un chaton qui bondit vers la plume d’une canne à plumes" },
+    { "type": "image_picker", "id": "photo_4", "label": "Photo 4", "info": "Vide = photo du thème (chien et balles à garnir)." },
+    { "type": "url", "id": "photo_link_4", "label": "Lien de la photo 4" },
+    { "type": "text", "id": "photo_alt_4", "label": "Description de la photo 4", "default": "Un corgi allongé près de balles à garnir colorées" },
     { "type": "checkbox", "id": "show_video", "label": "Vidéo en boucle", "default": true },
     { "type": "video", "id": "video", "label": "Vidéo (facultatif)", "info": "Remplace la boucle fournie avec le thème : MP4 sans son, format 3:4." },
     { "type": "image_picker", "id": "image", "label": "Image fixe (facultatif)", "info": "Affichée avant la vidéo et si elle ne joue pas. Sinon, celle du thème." },
