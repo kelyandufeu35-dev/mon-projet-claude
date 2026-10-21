@@ -128,6 +128,32 @@
     <script src="{{ 'theme.js' | asset_url }}" defer></script>
     <script src="{{ 'motion.js' | asset_url }}" defer></script>
 
+    {%- comment -%}
+      Balise Google Ads, pour que Google Ads détecte la balise sur le site. Consentement refusé par défaut,
+      mis à jour avec le choix du visiteur dans la bannière cookies Shopify. Les achats restent comptés
+      par l’appli Google & YouTube (aucune conversion envoyée ici).
+    {%- endcomment -%}
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18518366921"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('consent', 'default', { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied', wait_for_update: 500 });
+      gtag('js', new Date());
+      gtag('config', 'AW-18518366921');
+      (function () {
+        function sync() {
+          try {
+            var p = window.Shopify && Shopify.customerPrivacy;
+            if (!p) return;
+            var ads = p.marketingAllowed() ? 'granted' : 'denied';
+            gtag('consent', 'update', { ad_storage: ads, ad_user_data: ads, ad_personalization: ads, analytics_storage: p.analyticsProcessingAllowed() ? 'granted' : 'denied' });
+          } catch (e) {}
+        }
+        document.addEventListener('visitorConsentCollected', sync);
+        addEventListener('load', sync);
+      })();
+    </script>
+
     {{ content_for_header }}
   </head>
 
