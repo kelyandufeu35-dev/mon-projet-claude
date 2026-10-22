@@ -9,6 +9,8 @@ Finalités et durées : traiter et livrer les commandes, répondre aux demandes,
 
 Destinataires : Shopify (hébergement et paiement), le transporteur et notre fournisseur, uniquement pour exécuter la commande. Aucune donnée n'est revendue.
 
+Transferts hors de l'Union européenne : pour expédier ta commande, ton nom, ton adresse de livraison et ton téléphone éventuel sont transmis à notre fournisseur, situé en Chine, qui envoie le colis. Shopify peut aussi traiter des données hors de l'Union européenne, avec les garanties prévues par le RGPD (clauses contractuelles types de la Commission européenne).
+
 Cookies : les cookies de mesure d'audience et de publicité ne sont déposés qu'avec ton accord, via la bannière de consentement.
 
 Tes droits : accès, rectification, effacement, opposition et portabilité, en nous écrivant depuis la page Contact. Tu peux aussi saisir la CNIL (cnil.fr).
