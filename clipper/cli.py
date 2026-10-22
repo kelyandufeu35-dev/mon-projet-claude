@@ -62,6 +62,14 @@ def cmd_titles(cfg, store, args):
     print(pipeline.cost_report(cfg, llm))
 
 
+def cmd_export(cfg, store, args):
+    slugs = _sources(store, cfg, args) if args.video else list(store.sources)
+    files = pipeline.step_export(cfg, store, slugs)
+    for f in files:
+        print(f)
+    print(f"{len(files)} fichier(s) texte prêts pour YouTube Studio.")
+
+
 def cmd_run(cfg, store, args):
     llm = LLM(fallbacks=cfg["claude"]["fallbacks"])
     for slug in _sources(store, cfg, args):
@@ -141,6 +149,12 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("--upload", action="store_true", help="puis publier dans la limite du quota")
     run.add_argument("--no-browser", action="store_true")
     run.set_defaults(func=cmd_run)
+
+    ex = sub.add_parser("export", help="fichiers .txt (titre, description, tags) pour "
+                                       "publier à la main dans YouTube Studio")
+    ex.add_argument("video", nargs="*", help="sources (toutes par défaut)")
+    ex.add_argument("--title", help=argparse.SUPPRESS)
+    ex.set_defaults(func=cmd_export)
 
     up = sub.add_parser("upload", help="publier (programmé) les clips prêts, dans le quota")
     up.add_argument("--max", type=int, help="nombre maximal de clips")

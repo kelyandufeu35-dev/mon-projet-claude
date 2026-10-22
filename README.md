@@ -53,6 +53,17 @@ python -m clipper upload
 python -m clipper stats
 ```
 
+### Publier à la main dans YouTube Studio
+
+Tant que le projet Google n'est pas audité, YouTube verrouille en privé les vidéos envoyées par
+l'API. Pour publier quand même, chaque clip est accompagné d'un fichier `NN.txt` qui contient
+son titre, sa description et ses tags, prêts à copier-coller dans YouTube Studio, avec la
+miniature `NN.jpg` et les sous-titres `NN.srt`. Pour régénérer ces fichiers :
+
+```bash
+python -m clipper export            # toutes les sources (ou : export <slug>)
+```
+
 Les étapes existent aussi une par une : `transcribe`, `select`, `cut`, `titles`.
 Chacune accepte `--force` pour être refaite, et un slug de source (affiché par `status`)
 à la place du chemin du fichier.
