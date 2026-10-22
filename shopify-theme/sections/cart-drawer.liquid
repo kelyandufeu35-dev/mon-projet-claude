@@ -1,0 +1,29 @@
+{%- comment -%}
+  Panier latéral. Rafraîchi par theme.js via l’API Section Rendering après
+  chaque ajout ou changement de quantité.
+{%- endcomment -%}
+<dialog id="cart-drawer" class="drawer" aria-labelledby="cart-drawer-title">
+  <div class="drawer__panel" data-cart-drawer-content>
+    <div class="drawer__head">
+      <h2 id="cart-drawer-title">{{ 'cart.title' | t }}</h2>
+      <button type="button" class="icon-btn" data-cart-close aria-label="{{ 'general.close' | t }}">{% render 'icon', name: 'close' %}</button>
+    </div>
+
+    {%- if cart.item_count == 0 -%}
+      <div class="drawer__empty">
+        <span class="drawer__empty-icon" aria-hidden="true">{% render 'icon', name: 'paw' %}</span>
+        <p>{{ 'cart.empty' | t }}</p>
+        <a href="{{ routes.all_products_collection_url }}" class="btn btn--sun" data-cart-close>{{ 'cart.discover' | t }}</a>
+      </div>
+    {%- else -%}
+      {% render 'cart-summary', compact: true %}
+    {%- endif -%}
+  </div>
+</dialog>
+
+{% schema %}
+{
+  "name": "Panier latéral",
+  "settings": []
+}
+{% endschema %}

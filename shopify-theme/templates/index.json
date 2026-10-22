@@ -1,0 +1,214 @@
+{
+  "sections": {
+    "haut": {
+      "type": "hero-banner",
+      "settings": {
+        "show_video": false,
+        "eyebrow": "Jouets et accessoires pour chats et chiens",
+        "title": "Tout pour son quotidien, du jeu à la sieste.",
+        "highlight": "du jeu à la sieste.",
+        "subtitle": "Jouets, paniers, harnais, gamelles, soins… Des objets simples et utiles pour ton chat ou ton chien. Livraison offerte dès 25 € en France, dans l’UE et en Suisse.",
+        "button_label": "Voir les rayons",
+        "target": "rayons",
+        "link_label": "Nos coups de cœur",
+        "link_target": "jouets",
+        "show_proof": true,
+        "proof_1": "Livraison offerte dès 25 €",
+        "proof_2": "Retour sous 14 jours (droit légal)",
+        "proof_3": "Paiement sécurisé",
+        "show_photos": true,
+        "photo_link_1": "shopify://collections/couchage",
+        "photo_link_2": "shopify://collections/promenade",
+        "photo_link_3": "shopify://collections/jouets",
+        "photo_link_4": "shopify://collections/jouets"
+      }
+    },
+    "rayons": {
+      "type": "collection-tiles",
+      "blocks": {
+        "r1": {
+          "type": "rayon",
+          "settings": {
+            "collection": "jouets",
+            "text": "De quoi chercher, chasser et se dépenser."
+          }
+        },
+        "r2": {
+          "type": "rayon",
+          "settings": {
+            "collection": "couchage",
+            "text": "Des paniers en peluche pour la sieste."
+          }
+        },
+        "r3": {
+          "type": "rayon",
+          "settings": {
+            "collection": "promenade",
+            "text": "Harnais, laisse et gourde pour la balade."
+          }
+        },
+        "r4": {
+          "type": "rayon",
+          "settings": {
+            "collection": "repas",
+            "text": "Gamelle, distributeur et tapis."
+          }
+        },
+        "r5": {
+          "type": "rayon",
+          "settings": {
+            "collection": "toilettage",
+            "text": "Brosse, peigne, gant et brosse à dents."
+          }
+        },
+        "r6": {
+          "type": "rayon",
+          "settings": {
+            "collection": "proprete",
+            "text": "Alèses, tapis de litière, ramasse-poils."
+          }
+        }
+      },
+      "block_order": [
+        "r1",
+        "r2",
+        "r3",
+        "r4",
+        "r5",
+        "r6"
+      ],
+      "settings": {
+        "eyebrow": "Nos rayons",
+        "title": "Par où commencer ?",
+        "lead": "Choisis un rayon : de quoi jouer, dormir, sortir, manger et prendre soin de lui.",
+        "anchor": "rayons"
+      }
+    },
+    "jouets": {
+      "type": "product-grid",
+      "settings": {
+        "chips": [
+          "pour-les-chats",
+          "pour-les-chiens"
+        ],
+        "limit": 8,
+        "show_type": false,
+        "anchor": "jouets",
+        "eyebrow": "Coups de cœur",
+        "title": "Nos coups de cœur.",
+        "lead": "Une petite sélection pour commencer : des jouets, un panier, de quoi sortir et prendre soin de lui.",
+        "collection": "coups-de-coeur"
+      }
+    },
+    "pourquoi": {
+      "type": "specs",
+      "blocks": {
+        "p1": {
+          "type": "spec",
+          "settings": {
+            "label": "Pour son quotidien",
+            "value": "Jouer, dormir, sortir, manger, se faire brosser : chaque produit a un usage clair."
+          }
+        },
+        "p2": {
+          "type": "spec",
+          "settings": {
+            "label": "Décrits honnêtement",
+            "value": "Tailles, matières et limites sont indiquées sur chaque fiche, photos à l’appui."
+          }
+        },
+        "p3": {
+          "type": "spec",
+          "settings": {
+            "label": "Colis suivi",
+            "value": "Un numéro de suivi par e-mail, et la livraison offerte dès 25 €."
+          }
+        },
+        "p4": {
+          "type": "spec",
+          "settings": {
+            "label": "Une vraie personne",
+            "value": "Une question avant ou après ta commande ? On te répond en français."
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2",
+        "p3",
+        "p4"
+      ],
+      "settings": {
+        "eyebrow": "Pourquoi Pattoune",
+        "title": "Des objets simples, bien expliqués.",
+        "warning": "Joue avec lui et garde un œil sur lui : aucun jouet n’est indestructible.",
+        "anchor": "pourquoi"
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "Livraison et retours ?",
+            "answer": "<p>La livraison est suivie et prend [delai_livraison], en [zone_livraison]. Elle est offerte dès [seuil_livraison] d’achat et coûte [frais_livraison] en dessous. Tu disposes de 14 jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "Peut-il jouer sans surveillance ?",
+            "answer": "<p>Non : garde toujours un œil sur ton animal pendant qu’il joue, surtout lors des premières séances. Retire le jouet s’il commence à le mâchouiller ou s’il est abîmé. Aucun jouet n’est indestructible.</p>"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "Comment choisir ?",
+            "answer": "<p>Commence par le rayon qui correspond à ton besoin : <a href=\"/collections/jouets\">jouets</a>, <a href=\"/collections/couchage\">couchage</a>, <a href=\"/collections/promenade\">promenade</a>, <a href=\"/collections/repas\">repas</a>, <a href=\"/collections/toilettage\">toilettage</a> ou <a href=\"/collections/proprete\">propreté</a>. Chaque fiche indique les tailles, les matières et les animaux à qui le produit convient. Pour un panier ou un harnais, mesure ton animal et compare avec les tailles de la fiche.</p>"
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "question": "Une question sur ta commande ?",
+            "answer": "<p>Écris-nous depuis la <a href=\"/pages/contact\">page Contact</a> : une vraie personne te répond, en français.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4"
+      ],
+      "settings": {
+        "eyebrow": "Questions",
+        "title": "Avant de te décider.",
+        "aside": "Une autre question ?",
+        "link_label": "Écris-nous",
+        "aside_after": ", une vraie personne te répond en français.",
+        "anchor": "faq"
+      }
+    },
+    "final": {
+      "type": "final-cta",
+      "settings": {
+        "title": "Un rayon pour chaque moment de sa journée.",
+        "highlight": "sa journée.",
+        "button_label": "Voir les rayons",
+        "button_anchor": "rayons",
+        "note": "Livraison offerte dès 25 € · Retour sous 14 jours (droit légal)"
+      }
+    }
+  },
+  "order": [
+    "haut",
+    "rayons",
+    "jouets",
+    "pourquoi",
+    "faq",
+    "final"
+  ]
+}

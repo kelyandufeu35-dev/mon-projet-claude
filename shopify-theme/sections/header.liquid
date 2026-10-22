@@ -1,0 +1,159 @@
+{%- comment -%}
+  En-tête « pastille » (v9 Cinéma). Fixe, transparent au-dessus du haut de page de l’accueil,
+  il devient une pastille floutée dès que la sentinelle [data-hd-sentinel] sort de l’écran
+  (classe .is-scrolled posée par motion.js, sans écouteur de défilement). Ailleurs, il est
+  d’emblée en pastille (.is-solid). Le bouton « Je commande » n’apparaît qu’en pastille : il mène
+  à la vitrine « Nos jouets » (#jouets) sur l’accueil et à la zone d’achat (#acheter) sur une page produit.
+{%- endcomment -%}
+{%- liquid
+  assign brand = settings.brand_name | default: shop.name
+  assign on_home = false
+  if template.name == 'index'
+    assign on_home = true
+  endif
+  assign anchor_base = ''
+  unless template.name == 'index' or template.name == 'product'
+    assign anchor_base = routes.root_url
+  endunless
+  assign shop_url = routes.all_products_collection_url
+  if on_home
+    assign shop_url = '#jouets'
+  endif
+  assign show_cta = false
+  assign cta_href = '#acheter'
+  if section.settings.show_cta and section.settings.cta_label != blank
+    if on_home
+      assign show_cta = true
+      assign cta_href = '#jouets'
+    elsif template.name == 'product'
+      assign show_cta = true
+    endif
+  endif
+-%}
+<header class="pt-hd{% unless on_home %} is-solid{% endunless %}" data-hd>
+  <div class="pt-hd__bar">
+    <a class="pt-logo" href="{{ routes.root_url }}" aria-label="{{ 'general.home_label' | t: brand: brand }}">
+      {%- if settings.logo != blank -%}
+        {%- assign logo_style = 'width: ' | append: settings.logo_width | append: 'px' -%}
+        {{ settings.logo | image_url: width: 480 | image_tag: alt: '', class: 'pt-logo__img', style: logo_style, widths: '160, 240, 320, 480', sizes: '240px' }}
+      {%- else -%}
+        {% render 'pt-logo-mark', id: 'hd' %}
+        <span class="pt-logo__name">{{ brand | escape }}</span>
+      {%- endif -%}
+    </a>
+
+    <nav class="pt-hd__nav" aria-label="{{ 'sections.header.nav_label' | t }}">
+      {%- if section.settings.menu != blank -%}
+        {%- for link in section.settings.menu.links -%}
+          <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+        {%- endfor -%}
+      {%- else -%}
+        {%- comment -%}
+          Liens par défaut tant qu’aucun menu n’est choisi : « Nos jouets » (vitrine #jouets sur l’accueil,
+          page « Tous les jouets » ailleurs) et « Questions » (#faq de l’accueil ou de la page produit).
+        {%- endcomment -%}
+        <a href="{{ shop_url }}">{{ 'sections.header.nav_shop' | t }}</a>
+        <a href="{{ anchor_base }}#faq">{{ 'sections.header.nav_faq' | t }}</a>
+      {%- endif -%}
+    </nav>
+
+    {%- comment -%}
+      Menu mobile et tablette (< 1100 px, où les liens ci-dessus sont masqués) : liens du menu choisi,
+      puis la page Contact. Se referme au clic à l’extérieur ou avec Échap (petit script ci-dessous).
+    {%- endcomment -%}
+    {%- if section.settings.menu != blank and section.settings.menu.links.size > 0 -%}
+      <details class="pt-mnav" data-mnav>
+        <summary class="pt-mnav__btn" aria-label="{{ 'general.menu' | t }}">
+          {% render 'icon', name: 'menu' %}
+          <span>{{ 'general.menu' | t }}</span>
+        </summary>
+        <nav class="pt-mnav__panel" aria-label="{{ 'sections.header.nav_label' | t }}">
+          {%- for link in section.settings.menu.links -%}
+            <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+          {%- endfor -%}
+          {%- if pages.contact != empty -%}
+            <a href="{{ pages.contact.url }}">{{ 'sections.footer.contact_link' | t }}</a>
+          {%- endif -%}
+          {%- comment -%} Langues : ici seulement sur petit écran (le sélecteur de l’en-tête y est masqué). {%- endcomment -%}
+          {%- if localization.available_languages.size > 1 -%}
+            {%- form 'localization', class: 'pt-mnav__lang' -%}
+              {%- for language in localization.available_languages -%}
+                <button type="submit" name="locale_code" value="{{ language.iso_code }}" lang="{{ language.iso_code }}"{% if language.iso_code == localization.language.iso_code %} aria-current="true"{% endif %}>
+                  {{- language.endonym_name | capitalize -}}
+                </button>
+              {%- endfor -%}
+            {%- endform -%}
+          {%- endif -%}
+        </nav>
+      </details>
+      <script>
+        (() => {
+          const m = document.querySelector('[data-mnav]');
+          if (!m || m.ptMnav) return;
+          m.ptMnav = true;
+          document.addEventListener('click', (e) => { if (m.open && !m.contains(e.target)) m.removeAttribute('open'); });
+          document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && m.open) { m.removeAttribute('open'); m.querySelector('summary').focus(); } });
+        })();
+      </script>
+    {%- endif -%}
+
+    {%- if show_cta -%}
+      <a class="pt-hd__cta pt-btn pt-btn--sun" href="{{ cta_href }}">
+        {{- section.settings.cta_label | escape -}}
+        <span class="pt-btn__arrow" aria-hidden="true">{% render 'icon', name: 'arrow' %}</span>
+      </a>
+    {%- endif -%}
+
+    {%- comment -%} Sélecteur de langue : n’apparaît que si plusieurs langues sont publiées. {%- endcomment -%}
+    {%- if localization.available_languages.size > 1 -%}
+      <details class="pt-lang" data-lang>
+        <summary class="pt-lang__btn" aria-label="{{ 'sections.header.language_label' | t }}">
+          {% render 'icon', name: 'globe' %}
+          <span>{{ localization.language.iso_code | upcase }}</span>
+        </summary>
+        {%- form 'localization', class: 'pt-lang__menu' -%}
+          {%- for language in localization.available_languages -%}
+            <button type="submit" name="locale_code" value="{{ language.iso_code }}" lang="{{ language.iso_code }}"{% if language.iso_code == localization.language.iso_code %} aria-current="true"{% endif %}>
+              {{- language.endonym_name | capitalize -}}
+            </button>
+          {%- endfor -%}
+        {%- endform -%}
+      </details>
+    {%- endif -%}
+
+    <a class="pt-hd__cart" href="{{ routes.cart_url }}" data-cart-open aria-label="{{ 'sections.header.cart_label' | t: count: cart.item_count }}">
+      {% render 'icon', name: 'bag' %}
+      <span class="pt-hd__cart-label">{{ 'sections.header.cart' | t }}</span>
+      <span class="pt-hd__count" data-cart-count{% if cart.item_count == 0 %} data-empty{% endif %}>{{ cart.item_count }}</span>
+    </a>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "En-tête",
+  "class": "section-header",
+  "enabled_on": { "groups": ["header"] },
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "info": "Vide = « Nos jouets » (la vitrine de l’accueil, sinon la page de tous les jouets) et « Questions »."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "label": "Bouton Je commande quand on fait défiler",
+      "default": true,
+      "info": "Sur l’accueil et la page produit, sur ordinateur. Il mène à « Nos jouets » sur l’accueil et à la zone d’achat sur une page produit."
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Texte du bouton",
+      "default": "Je commande"
+    }
+  ]
+}
+{% endschema %}

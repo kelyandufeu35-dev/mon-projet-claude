@@ -1,0 +1,25 @@
+{
+  "type": "header",
+  "name": "Groupe en-tête",
+  "sections": {
+    "noel": {
+      "type": "announcement-bar",
+      "settings": {
+        "text": "Pour Noël, commande avant le 28 novembre · Livraison offerte dès 25 €",
+        "link": "shopify://collections/all"
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "show_cta": true,
+        "cta_label": "Je commande",
+        "menu": "main-menu"
+      }
+    }
+  },
+  "order": [
+    "noel",
+    "header"
+  ]
+}

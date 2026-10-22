@@ -1,0 +1,11 @@
+<article class="page wrap">
+  <h1 class="h1">{{ page.title | escape }}</h1>
+  <div class="rte prose">{{ page.content }}</div>
+</article>
+
+{% schema %}
+{
+  "name": "Page",
+  "settings": []
+}
+{% endschema %}

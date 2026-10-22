@@ -1,0 +1,15 @@
+{%- comment -%}
+  Boutons de catégorie (pastilles) : « Tout voir » puis les collections choisies, sans les vides.
+  Paramètres : list (réglage collection_list, obligatoire) · current (collection affichée, facultatif).
+  Styles : .pt-chips (sections-v9.css).
+{%- endcomment -%}
+{%- if list != blank and list.size > 0 -%}
+  <nav class="pt-chips" aria-label="{{ 'sections.product_grid.chips_label' | t }}" data-reveal="up" style="--pt-d:3">
+    <a href="{{ routes.all_products_collection_url }}"{% if current.handle == 'all' %} aria-current="page"{% endif %}>{{ 'sections.product_grid.chips_all' | t }}</a>
+    {%- for c in list -%}
+      {%- if c.products_count > 0 -%}
+        <a href="{{ c.url }}"{% if current.handle == c.handle %} aria-current="page"{% endif %}>{{ c.title | escape }}</a>
+      {%- endif -%}
+    {%- endfor -%}
+  </nav>
+{%- endif -%}

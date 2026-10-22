@@ -1,0 +1,81 @@
+{%- comment -%}
+  « Nos rayons » (accueil) : une tuile photo par collection, qui mène à sa page. Image : celle du
+  bloc, sinon celle de la collection, sinon la première photo de son premier produit. Les collections
+  vides sont masquées. Grille : 2 colonnes sur mobile, 3 au-delà. Styles : assets/sections-v9.css
+  (.pt-rayons), sur le fond crème de la boutique (.pt-recos, .pt-shop : arche sous le haut de page).
+{%- endcomment -%}
+{%- liquid
+  assign anchor = section.settings.anchor | default: 'rayons'
+  assign title_id = 'pt-rayons-title-' | append: section.id
+-%}
+<section class="pt-recos pt-shop pt-rayons" id="{{ anchor | escape }}" aria-labelledby="{{ title_id }}">
+  <div class="pt-wrap">
+    <div class="pt-recos__head pt-shop__head">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="pt-eyebrow pt-eyebrow--red" data-reveal="up">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      <h2 class="pt-h2" id="{{ title_id }}" data-reveal="mask" style="--pt-d:1">{% render 'pt-split', text: section.settings.title %}</h2>
+      {%- if section.settings.lead != blank -%}
+        <p class="pt-lead" data-reveal="up" style="--pt-d:2">{{ section.settings.lead | escape }}</p>
+      {%- endif -%}
+    </div>
+    <ul class="pt-rayons__grid" data-reveal-group>
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign c = block.settings.collection
+          if c == blank or c.products_count == 0
+            continue
+          endif
+          assign tile_img = block.settings.image | default: c.featured_image
+          if tile_img == blank
+            assign tile_img = c.products.first.featured_media
+          endif
+          assign tile_title = block.settings.title | default: c.title
+        -%}
+        <li data-reveal="up" {{ block.shopify_attributes }}>
+          <a class="pt-rayon" href="{{ c.url }}">
+            <span class="pt-rayon__img">
+              {%- if tile_img -%}
+                {{ tile_img | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360, 540, 720, 900', sizes: '(min-width: 600px) 31vw, 46vw', alt: '' }}
+              {%- endif -%}
+            </span>
+            <span class="pt-rayon__body">
+              <span class="pt-rayon__title">{{ tile_title | escape }}</span>
+              {%- if block.settings.text != blank -%}
+                <span class="pt-rayon__text">{{ block.settings.text | escape }}</span>
+              {%- endif -%}
+            </span>
+            <span class="pt-rayon__go" aria-hidden="true">{% render 'icon', name: 'arrow' %}</span>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Nos rayons",
+  "class": "section-rayons",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Petit titre", "default": "Nos rayons" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "De quoi as-tu besoin ?" },
+    { "type": "text", "id": "lead", "label": "Phrase sous le titre" },
+    { "type": "text", "id": "anchor", "label": "Ancre de lien (sans #)", "default": "rayons" }
+  ],
+  "blocks": [
+    {
+      "type": "rayon",
+      "name": "Rayon",
+      "limit": 8,
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Collection" },
+        { "type": "image_picker", "id": "image", "label": "Photo (facultatif)", "info": "Vide = la photo de la collection, sinon celle de son premier produit." },
+        { "type": "text", "id": "title", "label": "Titre (facultatif)", "info": "Vide = le nom de la collection." },
+        { "type": "text", "id": "text", "label": "Petit texte" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Nos rayons" }]
+}
+{% endschema %}

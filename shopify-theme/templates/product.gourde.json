@@ -1,0 +1,87 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "title_as_h1": true,
+        "scene_first": false,
+        "eyebrow": "Pour les chiens",
+        "trust_1": "Colis suivi",
+        "trust_2": "Retour sous 14\u00a0jours (droit légal)",
+        "trust_3": "Paiement sécurisé",
+        "inbox": "1 gourde avec abreuvoir intégré et dragonne\nUn colis suivi, numéro envoyé par e-mail",
+        "size_guide": false,
+        "show_description": true,
+        "sticky_label": "Gourde Pattoune",
+        "anchor": "acheter",
+        "show_offers": false
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "Quelle contenance choisir\u202f?",
+            "answer": "<p>300 ou 350\u00a0ml pour une courte balade ou un petit chien, 550\u00a0ml pour les longues sorties ou les grands chiens. Ne mets que de l’eau froide ou tiède dans la version 300\u00a0ml.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "Comment ça marche\u202f?",
+            "answer": "<p>Appuie sur le bouton\u00a0: l’eau monte dans la coupelle. Quand ton chien a bu, appuie de nouveau pour faire redescendre le reste dans la gourde. Le verrou bloque le bouton quand elle est dans ton sac.</p>"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "Comment la nettoyer\u202f?",
+            "answer": "<p>Lave-la à l’eau savonneuse après chaque sortie, rince-la bien et laisse-la sécher ouverte.</p>"
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "question": "Livraison et retours\u202f?",
+            "answer": "<p>La livraison est suivie et prend [delai_livraison], en [zone_livraison]. Elle est offerte dès [seuil_livraison] d’achat et coûte [frais_livraison] en dessous. Tu disposes de 14\u00a0jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4"
+      ],
+      "settings": {
+        "eyebrow": "Questions",
+        "title": "Avant de te décider.",
+        "aside": "Une autre question\u202f?",
+        "link_label": "Écris-nous",
+        "aside_after": ", une vraie personne te répond en français.",
+        "anchor": "faq"
+      }
+    },
+    "final": {
+      "type": "final-cta",
+      "settings": {
+        "title": "Une gourde dans le sac, et la balade peut durer.",
+        "highlight": "durer.",
+        "button_label": "Je commande sa gourde",
+        "note": "Livraison offerte dès 25\u00a0€ · Retour sous 14\u00a0jours (droit légal)"
+      }
+    },
+    "recos": {
+      "type": "product-recos",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "faq",
+    "recos",
+    "final"
+  ]
+}

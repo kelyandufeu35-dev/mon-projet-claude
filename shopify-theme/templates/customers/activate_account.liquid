@@ -1,0 +1,9 @@
+<section class="page wrap">
+  <h1 class="h1">{{ 'customer.activate.title' | t }}</h1>
+  {%- form 'activate_customer_password', class: 'form' -%}
+    {{ form.errors | default_errors }}
+    <div class="field"><label for="ActPassword">{{ 'customer.fields.password' | t }}</label><input id="ActPassword" type="password" name="customer[password]" autocomplete="new-password" required></div>
+    <div class="field"><label for="ActConfirm">{{ 'customer.fields.password_confirm' | t }}</label><input id="ActConfirm" type="password" name="customer[password_confirmation]" autocomplete="new-password" required></div>
+    <button type="submit" class="btn btn--ink">{{ 'customer.activate.submit' | t }}</button>
+  {%- endform -%}
+</section>

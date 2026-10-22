@@ -1,0 +1,20 @@
+<section class="page wrap">
+  <h1 class="h1">{{ 'customer.login.title' | t }}</h1>
+  {%- form 'customer_login', class: 'form' -%}
+    {{ form.errors | default_errors }}
+    <div class="field"><label for="LoginEmail">{{ 'customer.fields.email' | t }}</label><input id="LoginEmail" type="email" name="customer[email]" autocomplete="email" required></div>
+    {%- if form.password_needed -%}
+      <div class="field"><label for="LoginPassword">{{ 'customer.fields.password' | t }}</label><input id="LoginPassword" type="password" name="customer[password]" autocomplete="current-password" required></div>
+    {%- endif -%}
+    <button type="submit" class="btn btn--ink">{{ 'customer.login.submit' | t }}</button>
+  {%- endform -%}
+  <p><a href="{{ routes.account_register_url }}">{{ 'customer.login.register' | t }}</a></p>
+  {%- form 'recover_customer_password', class: 'form' -%}
+    {{ form.errors | default_errors }}
+    {%- if form.posted_successfully? -%}<p class="notice notice--ok">{{ 'customer.login.reset_sent' | t }}</p>{%- endif -%}
+    <details><summary>{{ 'customer.login.forgot' | t }}</summary>
+      <div class="field"><label for="RecoverEmail">{{ 'customer.fields.email' | t }}</label><input id="RecoverEmail" type="email" name="email" autocomplete="email" required></div>
+      <button type="submit" class="btn btn--ghost">{{ 'customer.login.recover' | t }}</button>
+    </details>
+  {%- endform -%}
+</section>

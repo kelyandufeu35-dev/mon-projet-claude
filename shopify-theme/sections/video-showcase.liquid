@@ -1,0 +1,65 @@
+{%- liquid
+  assign featured = section.settings.product
+  assign video = blank
+  if featured != blank
+    for media in featured.media
+      if media.media_type == 'video'
+        assign video = media
+        break
+      endif
+    endfor
+  endif
+-%}
+{%- if video != blank -%}
+  <section class="section showcase" id="{{ section.settings.anchor | default: section.id }}">
+    <div class="wrap showcase__grid">
+      <div class="showcase__phone" data-video>
+        {{ video | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'metadata', image_size: '720x' }}
+        <button type="button" class="sound-btn" data-sound aria-pressed="false">{% render 'icon', name: 'sound' %}<span data-sound-label>{{ 'sections.video_showcase.sound_on' | t }}</span></button>
+      </div>
+      <div class="showcase__text">
+        {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+        {%- if section.settings.title != blank -%}<h2 class="h2">{{ section.settings.title | escape }}</h2>{%- endif -%}
+        <ul class="showcase__list">
+          {%- for block in section.blocks -%}
+            <li {{ block.shopify_attributes }}>
+              <span class="showcase__icon">{% render 'icon', name: block.settings.icon %}</span>
+              <span><strong>{{ block.settings.title | escape }}</strong>{{ block.settings.text | escape }}</span>
+            </li>
+          {%- endfor -%}
+        </ul>
+        {%- if section.settings.button_label != blank -%}
+          <a href="#contenu" class="btn btn--sun btn--lg" data-scroll-buy>{{ section.settings.button_label | escape }}</a>
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Vidéo en action",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Produit", "info": "La première vidéo du produit est jouée en boucle, sans le son." },
+    { "type": "text", "id": "eyebrow", "label": "Petit titre", "default": "En action" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Elle roule, il joue, les croquettes tombent." },
+    { "type": "text", "id": "button_label", "label": "Texte du bouton", "default": "Je commande ma balle" },
+    { "type": "text", "id": "anchor", "label": "Ancre de lien (sans #)", "default": "en-action" }
+  ],
+  "blocks": [
+    {
+      "type": "point",
+      "name": "Point fort",
+      "limit": 4,
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icône", "default": "spark", "options": [
+          { "value": "nose", "label": "Truffe" }, { "value": "clock", "label": "Horloge" }, { "value": "spark", "label": "Étincelle" },
+          { "value": "drop", "label": "Goutte" }, { "value": "truck", "label": "Camion" }, { "value": "paw", "label": "Patte" } ] },
+        { "type": "text", "id": "title", "label": "Titre", "default": "Point fort" },
+        { "type": "text", "id": "text", "label": "Texte" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Vidéo en action" }]
+}
+{% endschema %}

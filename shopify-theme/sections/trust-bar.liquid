@@ -1,0 +1,47 @@
+<section class="trust-bar" aria-label="{{ section.settings.label | escape }}">
+  <div class="wrap">
+    <ul class="trust-bar__list">
+      {%- for block in section.blocks -%}
+        <li class="trust-bar__item" {{ block.shopify_attributes }}>
+          <span class="trust-bar__icon">{% render 'icon', name: block.settings.icon %}</span>
+          <span>
+            <strong>{{ block.settings.title | escape }}</strong>
+            {%- if block.settings.text != blank -%}<small>{{ block.settings.text | escape }}</small>{%- endif -%}
+          </span>
+        </li>
+      {%- endfor -%}
+    </ul>
+    {%- if section.settings.show_payments and shop.enabled_payment_types.size > 0 -%}
+      <ul class="payments payments--center" aria-label="{{ 'sections.trust_bar.payments' | t }}">
+        {%- for type in shop.enabled_payment_types -%}
+          <li>{{ type | payment_type_svg_tag: class: 'payment-icon' }}</li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Bandeau de confiance",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Description pour les lecteurs d’écran", "default": "Nos garanties" },
+    { "type": "checkbox", "id": "show_payments", "label": "Afficher les moyens de paiement", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Garantie",
+      "limit": 4,
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icône", "default": "truck", "options": [
+          { "value": "truck", "label": "Camion" }, { "value": "return", "label": "Retour" }, { "value": "lock", "label": "Cadenas" },
+          { "value": "mail", "label": "Message" }, { "value": "paw", "label": "Patte" }, { "value": "check", "label": "Coche" } ] },
+        { "type": "text", "id": "title", "label": "Titre", "default": "Livraison offerte" },
+        { "type": "text", "id": "text", "label": "Texte" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Bandeau de confiance" }]
+}
+{% endschema %}

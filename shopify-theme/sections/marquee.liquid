@@ -1,0 +1,58 @@
+{%- if section.blocks.size > 0 -%}
+  <section class="marquee" aria-label="{{ section.settings.label | escape }}">
+    <div class="marquee__band">
+      {%- comment -%} Le texte est répété pour boucler sans trou ; la copie est masquée aux lecteurs d'écran. {%- endcomment -%}
+      {%- for copy in (1..2) -%}
+        <ul class="marquee__track"{% if copy == 2 %} aria-hidden="true"{% endif %}>
+          {%- for block in section.blocks -%}
+            <li {% if copy == 1 %}{{ block.shopify_attributes }}{% endif %}>{{ block.settings.text | escape }}</li>
+            <li class="marquee__star" aria-hidden="true">{% render 'icon', name: 'paw' %}</li>
+          {%- endfor -%}
+          {%- for block in section.blocks -%}
+            <li aria-hidden="true">{{ block.settings.text | escape }}</li>
+            <li class="marquee__star" aria-hidden="true">{% render 'icon', name: 'paw' %}</li>
+          {%- endfor -%}
+        </ul>
+      {%- endfor -%}
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Bandeau défilant",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Description pour les lecteurs d'écran",
+      "default": "Nos promesses"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Texte",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texte",
+          "default": "Livraison offerte"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bandeau défilant",
+      "blocks": [
+        { "type": "item", "settings": { "text": "Livraison offerte" } },
+        { "type": "item", "settings": { "text": "Pour chats et petits chiens" } },
+        { "type": "item", "settings": { "text": "Retour sous 14 jours (droit légal)" } },
+        { "type": "item", "settings": { "text": "Moins d’ennui, plus de flair" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

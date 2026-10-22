@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#020407" />
+    <meta name="description" content="NEXUS — laboratoire fictif. Découverte, assemblage et activation d’un cœur énergétique à confinement gyroscopique." />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>NEXUS — Cœur énergétique</title>
+    <style>
+      html { background: #020407; }
+      #boot {
+        position: fixed; inset: 0; z-index: 100; display: grid; place-items: center;
+        background: #020407; color: #d9f6ff; transition: opacity .8s ease, visibility .8s;
+        font: 500 12px/1.4 ui-monospace, 'JetBrains Mono Variable', monospace; letter-spacing: .24em; text-transform: uppercase;
+      }
+      #boot.is-done { opacity: 0; visibility: hidden; }
+      #boot .b { display: grid; gap: 18px; justify-items: center; }
+      #boot .l { width: 160px; height: 1px; background: rgba(88,240,255,.15); overflow: hidden; }
+      #boot .l::after { content: ''; display: block; width: 40%; height: 100%; background: #58f0ff; animation: boot 1.4s cubic-bezier(.6,0,.2,1) infinite; }
+      #boot .o { color: #ff7a2f; }
+      @keyframes boot { from { transform: translateX(-100%); } to { transform: translateX(260%); } }
+      @media (prefers-reduced-motion: reduce) { #boot .l::after { animation: none; width: 100%; opacity: .5; } }
+    </style>
+  </head>
+  <body>
+    <div id="boot" role="status" aria-live="polite">
+      <div class="b">
+        <span>Nexus<span class="o"> ·</span> initialisation du confinement</span>
+        <span class="l" aria-hidden="true"></span>
+      </div>
+    </div>
+    <div id="root"></div>
+    <noscript>
+      <p style="color:#d9f6ff;font-family:sans-serif;padding:2rem">NEXUS — laboratoire fictif. Ce site nécessite JavaScript pour afficher sa présentation.</p>
+    </noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,137 @@
+<section class="section section--tint" id="{{ section.settings.anchor | default: section.id }}">
+  <div class="wrap">
+    {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+    {%- if section.settings.title != blank -%}<h2 class="h2">{{ section.settings.title | escape }}</h2>{%- endif -%}
+    <div class="table-scroll">
+      <table class="compare">
+        <thead>
+          <tr>
+            <th scope="col"><span class="visually-hidden">{{ 'sections.comparison.criterion' | t }}</span></th>
+            <th scope="col">{{ section.settings.ours | default: settings.brand_name | default: shop.name | escape }}</th>
+            <th scope="col">{{ section.settings.other | escape }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%- for block in section.blocks -%}
+            <tr {{ block.shopify_attributes }}>
+              <th scope="row">{{ block.settings.label | escape }}</th>
+              <td>{% if block.settings.ours %}<span class="yes">{{ 'sections.comparison.yes' | t }}</span>{% else %}<span class="no">{{ 'sections.comparison.no' | t }}</span>{% endif %}</td>
+              <td>{% if block.settings.other %}<span class="yes">{{ 'sections.comparison.yes' | t }}</span>{% else %}<span class="no">{{ 'sections.comparison.no' | t }}</span>{% endif %}</td>
+            </tr>
+          {%- endfor -%}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Comparatif",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Petit titre",
+      "default": "Comparatif"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre",
+      "default": "Balle à friandises ou gamelle classique ?"
+    },
+    {
+      "type": "text",
+      "id": "ours",
+      "label": "Nom de ton produit (colonne 1)",
+      "info": "Vide = nom de la boutique."
+    },
+    {
+      "type": "text",
+      "id": "other",
+      "label": "Comparé à (colonne 2)",
+      "default": "Gamelle"
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Ancre de lien (sans #)",
+      "default": "comparatif"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Critère",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Critère",
+          "default": "Critère"
+        },
+        {
+          "type": "checkbox",
+          "id": "ours",
+          "label": "Oui pour ton produit",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "other",
+          "label": "Oui pour l’autre",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Comparatif",
+      "blocks": [
+        {
+          "type": "row",
+          "settings": {
+            "label": "Ralentit la prise des repas",
+            "ours": true,
+            "other": false
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "label": "Fait travailler le flair",
+            "ours": true,
+            "other": false
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "label": "Occupe pendant ton absence",
+            "ours": true,
+            "other": false
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "label": "Difficulté réglable",
+            "ours": true,
+            "other": false
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "label": "Passe sous l’eau",
+            "ours": true,
+            "other": true
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

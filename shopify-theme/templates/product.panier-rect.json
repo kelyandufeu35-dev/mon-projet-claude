@@ -1,0 +1,87 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "title_as_h1": true,
+        "scene_first": false,
+        "eyebrow": "Pour chats et chiens",
+        "trust_1": "Colis suivi",
+        "trust_2": "Retour sous 14\u00a0jours (droit légal)",
+        "trust_3": "Paiement sécurisé",
+        "inbox": "1 panier rectangulaire en peluche\nUn colis suivi, numéro envoyé par e-mail",
+        "size_guide": false,
+        "show_description": true,
+        "sticky_label": "Panier Pattoune",
+        "anchor": "acheter",
+        "show_offers": false
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "Quelle taille choisir\u202f?",
+            "answer": "<p>Mesure ton animal couché, étiré, du nez à la base de la queue, et ajoute une dizaine de centimètres. Le S et le M conviennent à la plupart des chats, le L et au-delà aux chiens.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "Les dimensions sont intérieures ou extérieures\u202f?",
+            "answer": "<p>Extérieures, bords compris. La place pour se coucher est un peu plus petite.</p>"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "Comment l’entretenir\u202f?",
+            "answer": "<p>Passe un coup d’aspirateur ou une brosse pour retirer les poils. Pour un lavage, préfère un programme doux à froid et un séchage à l’air libre.</p>"
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "question": "Livraison et retours\u202f?",
+            "answer": "<p>La livraison est suivie et prend [delai_livraison], en [zone_livraison]. Elle est offerte dès [seuil_livraison] d’achat et coûte [frais_livraison] en dessous. Tu disposes de 14\u00a0jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4"
+      ],
+      "settings": {
+        "eyebrow": "Questions",
+        "title": "Avant de te décider.",
+        "aside": "Une autre question\u202f?",
+        "link_label": "Écris-nous",
+        "aside_after": ", une vraie personne te répond en français.",
+        "anchor": "faq"
+      }
+    },
+    "final": {
+      "type": "final-cta",
+      "settings": {
+        "title": "Des bords pour poser la tête, et la sieste peut commencer.",
+        "highlight": "commencer.",
+        "button_label": "Je commande son panier",
+        "note": "Livraison offerte dès 25\u00a0€ · Retour sous 14\u00a0jours (droit légal)"
+      }
+    },
+    "recos": {
+      "type": "product-recos",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "faq",
+    "recos",
+    "final"
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "title_as_h1": true,
+        "scene_first": false,
+        "eyebrow": "Pour chats et chiens",
+        "trust_1": "Colis suivi",
+        "trust_2": "Retour sous 14\u00a0jours (droit légal)",
+        "trust_3": "Paiement sécurisé",
+        "inbox": "1 gant ramasse-poils\nUn colis suivi, numéro envoyé par e-mail",
+        "size_guide": false,
+        "show_description": true,
+        "sticky_label": "Gant Pattoune",
+        "anchor": "acheter",
+        "show_offers": false
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "Sur quels tissus l’utiliser\u202f?",
+            "answer": "<p>Sur le canapé, les coussins, les plaids, les vêtements ou les sièges de la voiture. Sur un tissu délicat, teste-le d’abord sur une petite zone discrète.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "Comment le nettoyer\u202f?",
+            "answer": "<p>Retire la boule de poils à la main, puis rince le gant à l’eau si besoin et laisse-le sécher.</p>"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "Je peux brosser mon animal avec\u202f?",
+            "answer": "<p>Non, il est fait pour les tissus. Pour brosser ton chat ou ton chien, utilise une brosse adaptée à son poil.</p>"
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "question": "Livraison et retours\u202f?",
+            "answer": "<p>La livraison est suivie et prend [delai_livraison], en [zone_livraison]. Elle est offerte dès [seuil_livraison] d’achat et coûte [frais_livraison] en dessous. Tu disposes de 14\u00a0jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4"
+      ],
+      "settings": {
+        "eyebrow": "Questions",
+        "title": "Avant de te décider.",
+        "aside": "Une autre question\u202f?",
+        "link_label": "Écris-nous",
+        "aside_after": ", une vraie personne te répond en français.",
+        "anchor": "faq"
+      }
+    },
+    "final": {
+      "type": "final-cta",
+      "settings": {
+        "title": "Un coup de gant, et les poils quittent le canapé.",
+        "highlight": "le canapé.",
+        "button_label": "Je commande mon gant",
+        "note": "Livraison offerte dès 25\u00a0€ · Retour sous 14\u00a0jours (droit légal)"
+      }
+    },
+    "recos": {
+      "type": "product-recos",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "faq",
+    "recos",
+    "final"
+  ]
+}

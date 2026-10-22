@@ -1,0 +1,18 @@
+PATTOUNE · CONCEPT DE SITE (à filmer pour TikTok)
+
+OUVRIR
+1. Décompresse le dossier.
+2. Double-clique sur index.html : il s'ouvre dans Chrome (ou Edge).
+3. Appuie sur F11 pour le plein écran (F11 à nouveau pour sortir).
+4. Recharge la page (F5) juste avant de filmer : le titre PATTOUNE apparaît lettre par lettre.
+
+FILMER (pièce sombre, luminosité de l'écran au maximum)
+- Lance l'enregistrement, puis recharge la page : on voit l'intro.
+- Attends 2 secondes, puis fais défiler LENTEMENT avec le pavé tactile :
+  PATTOUNE et la balle -> Jouer / Dormir / Sortir -> la galerie qui glisse
+  -> la balle qui roule -> le bandeau jaune -> la fin.
+- Tout le site dure environ 25 secondes en défilant doucement.
+
+ACCROCHE À ÉCRIRE SUR LA VIDÉO
+- « J'ai demandé à l'IA de refaire le site de ma boutique »
+- ou « Le site de ma boutique, version 2026 »

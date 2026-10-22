@@ -1,0 +1,5 @@
+{
+ "chien": [[0, "Ton chien s'ennuie quand tu pars ?"], [3.2, "Regarde ça ! La balle qui libère ses croquettes !"], [6.6, "Il la pousse, elle roule, et hop, une croquette !"], [10.2, "Occupé, même sans toi !"], [12.6, "Quatorze quatre-vingt-dix-neuf, livraison offerte ! Fonce, lien en bio !"]],
+ "chat": [[0, "Ton chat vide sa gamelle en dix secondes ?"], [3.2, "Avec cette balle, chaque croquette se mérite !"], [6.6, "Tu remplis, tu poses, et il joue en mangeant doucement !"], [10.2, "Des repas plus lents, un chat qui s'amuse !"], [12.6, "Quatorze quatre-vingt-dix-neuf, livraison offerte ! Fonce, lien en bio !"]],
+ "raisons": [[0, "Trois raisons d'adopter cette balle !"], [2.8, "Un : elle occupe ton animal quand tu pars !"], [6, "Deux : elle ralentit les gloutons !"], [9.2, "Trois : elle fait travailler son flair !"], [12.2, "Quatorze quatre-vingt-dix-neuf, livraison offerte ! Fonce, lien en bio !"]]
+}

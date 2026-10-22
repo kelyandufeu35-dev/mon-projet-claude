@@ -1,0 +1,41 @@
+{%- comment -%}
+  Découpe un texte en mots masqués pour les révélations (aucun JS).
+  text : texte brut (obligatoire) · hl : groupe de mots mis en valeur (facultatif)
+  from : index du premier mot (défaut 0) · hl_class : classe du <em> (défaut « pt-hl »)
+  Sortie : <span class="pt-w" style="--pt-wi:N"><span>mot</span></span> séparés par une espace ;
+  le groupe hl est entouré d’un <em>. Les espaces insécables restent dans le mot ; l’espace fine
+  (U+202F), trop étroite dans la police de titre, y devient une espace insécable (U+00A0).
+{%- endcomment -%}
+{%- liquid
+  assign pt_t = text | strip | escape | replace: ' ', ' '
+  assign pt_i = from | default: 0
+  assign pt_hc = hl_class | default: 'pt-hl'
+  if hl != blank
+    assign pt_h = hl | strip | escape | replace: ' ', ' '
+    if pt_t contains pt_h
+      assign pt_mark = '⟦' | append: pt_h | append: '⟧'
+      assign pt_t = pt_t | replace_first: pt_h, pt_mark
+    endif
+  endif
+  assign pt_words = pt_t | split: ' '
+  for pt_word in pt_words
+    assign pt_w = pt_word
+    if pt_w contains '⟦'
+      echo '<em class="' | append: pt_hc | append: '">'
+      assign pt_w = pt_w | remove: '⟦'
+    endif
+    assign pt_close = false
+    if pt_w contains '⟧'
+      assign pt_close = true
+      assign pt_w = pt_w | remove: '⟧'
+    endif
+    echo '<span class="pt-w" style="--pt-wi:' | append: pt_i | append: '"><span>' | append: pt_w | append: '</span></span>'
+    if pt_close
+      echo '</em>'
+    endif
+    unless forloop.last
+      echo ' '
+    endunless
+    assign pt_i = pt_i | plus: 1
+  endfor
+-%}

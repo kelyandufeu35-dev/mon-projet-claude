@@ -1,0 +1,82 @@
+{%- if section.blocks.size > 0 -%}
+<section class="section">
+  <div class="wrap">
+    {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+    {%- if section.settings.title != blank -%}<h2 class="h2">{{ section.settings.title | escape }}</h2>{%- endif -%}
+    <div class="reviews">
+      {%- for block in section.blocks -%}
+        <figure class="review" {{ block.shopify_attributes }}>
+          <p class="review__stars" aria-label="{{ 'sections.reviews.rating' | t: rating: block.settings.rating }}">
+            {%- for i in (1..5) -%}<span class="{% if i <= block.settings.rating %}on{% endif %}">{% render 'icon', name: 'star' %}</span>{%- endfor -%}
+          </p>
+          <blockquote>{{ block.settings.text | escape }}</blockquote>
+          <figcaption>{{ block.settings.name | escape }}{% if block.settings.detail != blank %} · {{ block.settings.detail | escape }}{% endif %}</figcaption>
+        </figure>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Avis clients",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "N’ajoute que de vrais avis de vrais clients : inventer des avis est interdit et sanctionné. La section reste invisible tant qu’elle est vide."
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Petit titre",
+      "default": "Avis clients"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre",
+      "default": "Ils l’ont adopté"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Avis",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Prénom du client",
+          "default": "Prénom"
+        },
+        {
+          "type": "text",
+          "id": "detail",
+          "label": "Détail (animal, date)"
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "label": "Note",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Avis",
+          "default": "Texte de l’avis"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Avis clients"
+    }
+  ]
+}
+{% endschema %}

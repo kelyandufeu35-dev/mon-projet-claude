@@ -1,0 +1,74 @@
+[
+  {
+    "handle": "occuper-chien-seul-maison",
+    "title": "Chien seul à la maison : comment l’occuper quand tu travailles",
+    "seo_title": "Occuper son chien seul à la maison : idées simples",
+    "seo_description": "Ton chien reste seul quand tu travailles ? Balade, coin calme, jouets à croquettes, habituation : des idées simples pour l’occuper sans stress.",
+    "summary": "<p>Ton chien reste seul pendant que tu travailles ? Voici comment le préparer, l’occuper avec des jeux de recherche et repérer les signes qui doivent t’alerter.</p>",
+    "tags": [
+      "Chien",
+      "Chien seul",
+      "Occupation",
+      "Conseils"
+    ],
+    "file": "occuper-chien-seul-maison.html"
+  },
+  {
+    "handle": "chat-s-ennuie-signes-solutions",
+    "title": "Mon chat s’ennuie : les signes à repérer et les solutions simples",
+    "seo_title": "Mon chat s’ennuie : signes et solutions d’enrichissement",
+    "seo_description": "Bêtises, miaulements, réveils la nuit… ton chat s’ennuie peut-être. Les signes à repérer et des idées simples pour enrichir son quotidien.",
+    "summary": "<p>Bêtises, miaulements, courses nocturnes : ton chat d’intérieur s’ennuie peut-être. Les signes à repérer et des idées concrètes pour l’occuper.</p>",
+    "tags": [
+      "Chat",
+      "Ennui",
+      "Enrichissement",
+      "Chat d’intérieur"
+    ],
+    "file": "chat-s-ennuie-signes-solutions.html"
+  },
+  {
+    "handle": "balle-distributrice-croquettes",
+    "title": "Balle distributrice de croquettes : à quoi ça sert, comment choisir",
+    "seo_title": "Balle distributrice de croquettes : utilité et choix",
+    "seo_description": "À quoi sert une balle distributrice de croquettes pour chien ou chat ? Fonctionnement, limites et critères pour bien la choisir : taille, matière.",
+    "summary": "<p>Comment fonctionne une balle distributrice de croquettes, ce qu’elle peut vraiment faire pour ton chien ou ton chat, et comment bien la choisir.</p>",
+    "tags": [
+      "Balle à friandises",
+      "Jouet distributeur",
+      "Chien",
+      "Chat",
+      "Guide d’achat"
+    ],
+    "file": "balle-distributrice-croquettes.html"
+  },
+  {
+    "handle": "chien-mange-trop-vite",
+    "title": "Mon chien mange trop vite : pourquoi et quelles solutions simples",
+    "seo_title": "Chien qui mange trop vite : causes et solutions simples",
+    "seo_description": "Ton chien avale sa gamelle en quelques secondes ? Causes, signes qui doivent alerter et solutions : gamelle anti-glouton, tapis de fouille, jouets.",
+    "summary": "<p>Ton chien vide sa gamelle en un clin d’œil ? Pourquoi il fait ça, quand consulter un vétérinaire et des solutions simples pour l’aider à ralentir.</p>",
+    "tags": [
+      "Chien",
+      "Alimentation",
+      "Gamelle anti-glouton",
+      "Santé"
+    ],
+    "file": "chien-mange-trop-vite.html"
+  },
+  {
+    "handle": "jeux-intelligence-chien-chat",
+    "title": "Jeux d’intelligence et de flair pour chien et chat à la maison",
+    "seo_title": "Jeux d’intelligence et de flair pour chien et chat",
+    "seo_description": "Des jeux de flair et d’intelligence faciles à faire à la maison pour occuper ton chien ou ton chat : chasse aux croquettes, gobelets, carton, tours.",
+    "summary": "<p>Chasse aux croquettes, jeu des gobelets, boîte à œufs, petits tours : des jeux d’intelligence et de flair faciles à faire à la maison avec ton chien ou ton chat.</p>",
+    "tags": [
+      "Jeux",
+      "Flair",
+      "Chien",
+      "Chat",
+      "Enrichissement"
+    ],
+    "file": "jeux-intelligence-chien-chat.html"
+  }
+]
