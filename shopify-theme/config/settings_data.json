@@ -12,7 +12,8 @@
     "bundle2_qty": 3,
     "bundle2_discount": 20,
     "bundle2_badge": "Meilleur prix",
-    "bundle_product": "balle-a-friandises-pattoune-1"
+    "bundle_product": "balle-a-friandises-pattoune-1",
+    "intro_enable": false
   },
   "presets": {
     "Default": {}
