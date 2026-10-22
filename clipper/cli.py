@@ -70,6 +70,15 @@ def cmd_export(cfg, store, args):
     print(f"{len(files)} fichier(s) texte prêts pour YouTube Studio.")
 
 
+def cmd_tiktok(cfg, store, args):
+    slugs = _sources(store, cfg, args) if args.video else list(store.sources)
+    files = [f for slug in slugs for f in pipeline.step_tiktok(cfg, store, slug, args.force)]
+    if files:
+        print(f"{len(files)} vidéo(s) TikTok prêtes dans : {files[0].parent}")
+    else:
+        print("Aucun clip titré : lance d'abord `run`.")
+
+
 def cmd_run(cfg, store, args):
     llm = LLM(fallbacks=cfg["claude"]["fallbacks"])
     for slug in _sources(store, cfg, args):
@@ -155,6 +164,12 @@ def build_parser() -> argparse.ArgumentParser:
     ex.add_argument("video", nargs="*", help="sources (toutes par défaut)")
     ex.add_argument("--title", help=argparse.SUPPRESS)
     ex.set_defaults(func=cmd_export)
+
+    tk = sub.add_parser("tiktok", help="versions verticales 9:16 des clips, pour TikTok")
+    tk.add_argument("video", nargs="*", help="sources (toutes par défaut)")
+    tk.add_argument("--title", help=argparse.SUPPRESS)
+    tk.add_argument("--force", action="store_true", help="refaire les vidéos existantes")
+    tk.set_defaults(func=cmd_tiktok)
 
     up = sub.add_parser("upload", help="publier (programmé) les clips prêts, dans le quota")
     up.add_argument("--max", type=int, help="nombre maximal de clips")

@@ -9,7 +9,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
-from . import media
+from . import media, vertical
 from .config import Config, slugify
 from .llm import LLM
 from .quota import Quota, clip_cost, next_slots, steps_for_clip
@@ -179,6 +179,33 @@ def write_info_file(clip: dict, ycfg: dict) -> Path:
     # Fins de ligne Windows pour le Bloc-notes.
     out.write_text(text, encoding="utf-8", newline="\r\n")
     return out
+
+
+def step_tiktok(cfg: Config, store: Store, slug: str, force: bool = False) -> list[Path]:
+    """Version 9:16 de chaque clip titré, avec sa légende TikTok (NN.txt)."""
+    tcfg = cfg["tiktok"]
+    sentences = load_transcript(cfg, slug)["sentences"]
+    out_dir = cfg.source_dir(slug) / "tiktok"
+    out_dir.mkdir(exist_ok=True)
+    done = []
+    for clip in store.clips_of(slug):
+        if not clip.get("title") or not clip.get("video"):
+            continue
+        out = out_dir / f"{clip['index']:02d}.mp4"
+        if out.exists() and not force:
+            done.append(out)
+            continue
+        ass = out.with_suffix(".ass")
+        ass.write_text(vertical.build_ass(sentences, clip["cut_start"], clip["cut_end"],
+                                          clip["title"], tcfg), encoding="utf-8")
+        log.info("TikTok %s…", out.name)
+        vertical.render_vertical(Path(clip["video"]), ass, out, cfg["cut"])
+        out.with_suffix(".txt").write_text(vertical.caption_text(clip, tcfg) + "\n",
+                                           encoding="utf-8", newline="\r\n")
+        clip["tiktok"] = str(out)
+        store.save()
+        done.append(out)
+    return done
 
 
 def step_export(cfg: Config, store: Store, slugs: list[str]) -> list[Path]:

@@ -91,6 +91,28 @@ titles:
     Extrait de « {source_title} ».
   default_tags: []
 
+tiktok:
+  # Version verticale 1080×1920 : vidéo entière au centre sur un fond flouté.
+  font: Arial Black          # police Windows ; remplacée automatiquement si absente
+  title:
+    enabled: true
+    font_size: 66
+    color: "#FFD400"
+    outline: 5
+    chars_per_line: 28
+    bottom_y: 620            # le titre se termine juste au-dessus de la vidéo (y ≈ 656)
+  subtitles:
+    enabled: true
+    font_size: 82
+    color: "#FFFFFF"
+    outline: 6
+    max_words: 3
+    max_chars: 18
+    uppercase: true
+    top_y: 1300              # juste sous la vidéo (y ≈ 1264)
+  extra_hashtags: ["#clip", "#twitchfr", "#pourtoi"]
+  max_hashtags: 8
+
 youtube:
   client_secrets: client_secret.json
   token_file: state/youtube_token.json
