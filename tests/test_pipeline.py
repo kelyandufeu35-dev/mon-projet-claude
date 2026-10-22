@@ -89,6 +89,10 @@ def test_full_pipeline(cfg, prepared, fake_llm):
     assert "Ma longue vidéo" in c1["description"]
     with Image.open(c1["thumbnail"]) as im:
         assert im.size == (1280, 720)
+    info = Path(c1["video"]).with_suffix(".txt").read_bytes().decode("utf-8")
+    assert info.startswith("TITRE\r\nTitre 1\r\n\r\nDESCRIPTION\r\nDesc.")
+    assert "podcast, interview" in info and "Miniature : 01.jpg" in info
+    assert len(pipeline.step_export(cfg, store, [slug])) == 3
 
     # 3 clips × 2100 unités (insert + miniature + playlist + sous-titres) : on en publie 3
     # le jour même seulement si le quota le permet (10000 // 2100 = 4).

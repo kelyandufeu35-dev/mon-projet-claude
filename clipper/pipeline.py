@@ -149,8 +149,41 @@ def step_titles(cfg: Config, store: Store, llm: LLM, slug: str, force: bool = Fa
         thumb = Path(clip["video"]).with_suffix(".jpg")
         media.render_thumbnail(frame, meta["thumbnail_text"], thumb, cfg["thumbnail"])
         clip.update(thumbnail=str(thumb), status=TITLED)
+        write_info_file(clip, cfg["youtube"])
         log.info("%s : « %s »", clip["id"], meta["title"])
     store.save()
+
+
+def _mmss(seconds: float) -> str:
+    s = int(round(seconds))
+    return f"{s // 60}:{s % 60:02d}"
+
+
+def write_info_file(clip: dict, ycfg: dict) -> Path:
+    """NN.txt à côté du clip : tout ce qu'il faut copier-coller dans YouTube Studio."""
+    video = Path(clip["video"])
+    duration = clip["end"] - clip["start"]
+    text = "\n".join([
+        "TITRE", clip["title"], "",
+        "DESCRIPTION", clip["description"].strip(), "",
+        "TAGS", ", ".join(clip["tags"]), "",
+        "FICHIERS",
+        f"Vidéo : {video.name}",
+        f"Miniature : {video.with_suffix('.jpg').name}",
+        f"Sous-titres : {video.with_suffix('.srt').name} (langue : {ycfg['caption_name']})", "",
+        f"Durée : {_mmss(duration)} (extrait de {_mmss(clip['start'])} à "
+        f"{_mmss(clip['end'])} dans la vidéo source)",
+        f"Score Claude : {clip['score']}/10 · {clip['hook']}", "",
+    ])
+    out = video.with_suffix(".txt")
+    # Fins de ligne Windows pour le Bloc-notes.
+    out.write_text(text, encoding="utf-8", newline="\r\n")
+    return out
+
+
+def step_export(cfg: Config, store: Store, slugs: list[str]) -> list[Path]:
+    return [write_info_file(c, cfg["youtube"]) for slug in slugs for c in store.clips_of(slug)
+            if c.get("title") and c.get("video")]
 
 
 def _resume_steps(clip: dict, ycfg: dict) -> list[str]:
