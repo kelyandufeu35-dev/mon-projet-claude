@@ -157,7 +157,8 @@ def test_tiktok_ass_layout(cfg):
     assert all(len(c) <= 3 for c in chunks)
     # Une fin de phrase termine toujours un groupe.
     assert all("." not in w["w"] for c in chunks for w in c[:-1])
-    ass = build_ass(s, 2.9, 9.0, "Un titre {avec} accolades", cfg["tiktok"])
+    tcfg = dict(cfg["tiktok"], title=dict(cfg["tiktok"]["title"], chars_per_line=20))
+    ass = build_ass(s, 2.9, 9.0, "Un titre {avec} accolades", tcfg)
     assert "PlayResX: 1080" in ass and "PlayResY: 1920" in ass
     assert "&H0000D4FF" in ass                          # jaune #FFD400 en BGR
     assert "Title,,0,0,0,,Un titre (avec)\\Naccolades" in ass   # accolades neutralisées, retour à la ligne
