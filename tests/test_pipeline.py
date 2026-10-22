@@ -1,6 +1,7 @@
 """Bout en bout sur une vraie vidéo ffmpeg, avec Claude et YouTube simulés."""
 
 import json
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -93,6 +94,16 @@ def test_full_pipeline(cfg, prepared, fake_llm):
     assert info.startswith("TITRE\r\nTitre 1\r\n\r\nDESCRIPTION\r\nDesc.")
     assert "podcast, interview" in info and "Miniature : 01.jpg" in info
     assert len(pipeline.step_export(cfg, store, [slug])) == 3
+
+    tiktok = pipeline.step_tiktok(cfg, store, slug)
+    assert len(tiktok) == 3 and tiktok[0].name == "01.mp4"
+    size = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries",
+                           "stream=width,height", "-of", "csv=p=0", str(tiktok[0])],
+                          capture_output=True, text=True, check=True).stdout.strip()
+    assert size == "1080,1920"
+    assert probe_duration(tiktok[0]) == pytest.approx(expected, abs=0.08)
+    caption = tiktok[0].with_suffix(".txt").read_text(encoding="utf-8")
+    assert caption.startswith("Titre 1\n\n#podcast #interview #clip")
 
     # 3 clips × 2100 unités (insert + miniature + playlist + sous-titres) : on en publie 3
     # le jour même seulement si le quota le permet (10000 // 2100 = 4).

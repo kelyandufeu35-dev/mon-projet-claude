@@ -64,6 +64,20 @@ miniature `NN.jpg` et les sous-titres `NN.srt`. Pour régénérer ces fichiers :
 python -m clipper export            # toutes les sources (ou : export <slug>)
 ```
 
+### Versions TikTok (9:16)
+
+```bash
+python -m clipper tiktok            # toutes les sources (ou : tiktok <slug>), --force pour refaire
+```
+
+Chaque clip déjà titré est décliné en 1080×1920 dans `work/<slug>/tiktok/NN.mp4` :
+- la vidéo entière est au centre, sur une copie agrandie, floutée et assombrie ;
+- le titre est en jaune au-dessus de la vidéo ;
+- les sous-titres sont incrustés par groupes de 3 mots, juste sous la vidéo, loin des boutons TikTok.
+
+La légende à coller (titre + hashtags) est dans `NN.txt`. Police, tailles, couleurs et
+hashtags se règlent dans la section `tiktok` de `config.yaml`.
+
 Les étapes existent aussi une par une : `transcribe`, `select`, `cut`, `titles`.
 Chacune accepte `--force` pour être refaite, et un slug de source (affiché par `status`)
 à la place du chemin du fichier.

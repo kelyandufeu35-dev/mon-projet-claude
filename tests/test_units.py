@@ -148,3 +148,21 @@ def test_llm_retries_with_error_feedback(fake_llm):
     assert [m["role"] for m in second["messages"]] == ["user", "assistant", "user"]
     assert "dure" in second["messages"][2]["content"]
     assert llm.usage["m"].calls == 2
+
+
+def test_tiktok_ass_layout(cfg):
+    from clipper.vertical import build_ass, caption_chunks, hashtag
+    s = make_sentences(4, seconds=3.0, words_per=5)
+    chunks = caption_chunks([w for x in s for w in x["words"]], max_words=3, max_chars=18)
+    assert all(len(c) <= 3 for c in chunks)
+    # Une fin de phrase termine toujours un groupe.
+    assert all("." not in w["w"] for c in chunks for w in c[:-1])
+    tcfg = dict(cfg["tiktok"], title=dict(cfg["tiktok"]["title"], chars_per_line=20))
+    ass = build_ass(s, 2.9, 9.0, "Un titre {avec} accolades", tcfg)
+    assert "PlayResX: 1080" in ass and "PlayResY: 1920" in ass
+    assert "&H0000D4FF" in ass                          # jaune #FFD400 en BGR
+    assert "Title,,0,0,0,,Un titre (avec)\\Naccolades" in ass   # accolades neutralisées, retour à la ligne
+    subs = [l for l in ass.splitlines() if ",Sub," in l]
+    assert subs[0].startswith("Dialogue: 1,0:00:00.10,") and "MOT1_0" in subs[0]
+    assert "MOT3_" not in ass                           # hors du clip
+    assert hashtag("anyme déménagement") == "#anymedemenagement"
