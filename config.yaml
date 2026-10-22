@@ -1,0 +1,113 @@
+# Configuration du pipeline « vidéo longue → clips YouTube ».
+# Les clés API se passent par variables d'environnement :
+#   DEEPGRAM_API_KEY, ANTHROPIC_API_KEY (ou un profil `ant auth login`).
+
+paths:
+  work_dir: work      # fichiers intermédiaires par vidéo source
+  state_dir: state    # base d'état (clips, quota, jeton OAuth)
+
+deepgram:
+  model: nova-3
+  language: fr
+  diarize: true
+  smart_format: true
+  audio_codec: opus          # opus (léger) ou flac (sans perte)
+  timeout_s: 3600
+  # Tarifs en $/min pour l'estimation des coûts.
+  price_per_min: 0.0043
+  diarization_price_per_min: 0.0020   # À VÉRIFIER sur deepgram.com/pricing
+
+claude:
+  # Repli côté serveur en cas de refus des classifieurs ("default" ou null).
+  fallbacks: default
+  selection:
+    model: claude-opus-5-5
+    effort: high               # low | medium | high | xhigh | max
+    max_tokens: 64000
+    price_in: 4.0              # $ / MTok
+    price_out: 20.0
+    # Le contexte fait 1M de tokens : on ne découpe qu'au-delà de ce seuil.
+    chunk_threshold_tokens: 600000
+    chunk_overlap_sentences: 40
+    chars_per_token: 3.2       # estimation pour le français
+    max_retries: 2             # relances quand la validation Python échoue
+  titles:
+    model: claude-sonnet-5-5
+    effort: medium
+    max_tokens: 16000
+    price_in: 2.0
+    price_out: 10.0
+
+selection:
+  clips_per_video: 8
+  min_duration_s: 45
+  max_duration_s: 180
+  guidelines: |
+    Chaque clip doit être compréhensible sans le reste de la vidéo :
+    il commence par une accroche forte et se termine sur une idée conclue.
+    Privilégie les moments à forte valeur : révélations, désaccords, anecdotes,
+    conseils concrets, chiffres surprenants, punchlines.
+    Évite les passages qui renvoient à « ce qu'on a dit tout à l'heure ».
+  # Boucle de rétroaction : les meilleurs et les pires clips publiés
+  # (durée moyenne de visionnage) sont injectés comme exemples.
+  feedback:
+    enabled: true
+    top_k: 3
+    bottom_k: 3
+    min_views: 100
+    min_age_days: 3
+    excerpt_chars: 400
+
+cut:
+  pad_before_s: 0.15
+  pad_after_s: 0.40
+  preset: medium
+  crf: 20
+  audio_bitrate: 160k
+
+subtitles:
+  max_chars_per_line: 42
+  max_lines: 2
+  max_cue_duration_s: 5.0
+  min_gap_split_s: 0.6       # un silence plus long coupe le sous-titre
+
+thumbnail:
+  candidates: 12             # frames testées pour trouver la plus nette
+  width: 1280
+  height: 720
+  font_path: null            # .ttf ; null = DejaVuSans-Bold si trouvée
+  font_size: 120
+  text_color: "#FFFFFF"
+  stroke_color: "#000000"
+  stroke_width: 10
+  position: bottom           # top | bottom
+  max_chars: 32
+  uppercase: true
+
+titles:
+  max_title_chars: 90        # YouTube autorise 100
+  description_footer: |
+
+    Extrait de « {source_title} ».
+  default_tags: []
+
+youtube:
+  client_secrets: client_secret.json
+  token_file: state/youtube_token.json
+  category_id: "22"          # 22 = People & Blogs
+  default_language: fr
+  made_for_kids: false
+  playlist_id: null          # ex. "PLxxxx" ; null = pas d'ajout en playlist
+  upload_captions: true      # captions.insert coûte 400 unités → 4 clips/jour
+  caption_name: Français
+  schedule:
+    timezone: Europe/Paris
+    times: ["12:00", "18:00"]
+    min_lead_minutes: 90
+  quota:
+    daily_limit: 10000       # remis à zéro à minuit, heure du Pacifique
+    costs:
+      videos.insert: 1600
+      thumbnails.set: 50
+      playlistItems.insert: 50
+      captions.insert: 400
