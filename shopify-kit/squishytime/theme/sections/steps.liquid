@@ -6,9 +6,18 @@
     <ol class="steps" role="list">
       {%- for block in section.blocks -%}
         <li class="step" {{ block.shopify_attributes }}>
-          <div class="step__visual step__visual--{{ forloop.index }}" aria-hidden="true">
-            {% render 'squishy-art' %}
-            <span class="step__num">{{ forloop.index }}</span>
+          <div class="step__visual step__visual--{{ forloop.index }}{% if block.settings.image != blank %} step__visual--photo{% endif %}">
+            {%- if block.settings.image != blank -%}
+              {{ block.settings.image | image_url: width: 400 | image_tag:
+                widths: '200, 300, 400',
+                sizes: '150px',
+                loading: 'lazy',
+                alt: block.settings.image.alt | default: block.settings.title
+              }}
+            {%- else -%}
+              <span class="step__art" aria-hidden="true">{% render 'squishy-art' %}</span>
+            {%- endif -%}
+            <span class="step__num" aria-hidden="true">{{ forloop.index }}</span>
           </div>
           <h3 class="h3">{{ block.settings.title | escape }}</h3>
           <p class="muted">{{ block.settings.text | escape }}</p>
@@ -44,6 +53,7 @@
       "type": "step",
       "name": "Étape",
       "settings": [
+        { "type": "image_picker", "id": "image", "label": "Photo (facultative)", "info": "Sans photo, la fraise dessinée s'affiche." },
         { "type": "text", "id": "title", "label": "Titre", "default": "Écrase" },
         { "type": "text", "id": "text", "label": "Texte", "default": "Serre-le dans ta main." }
       ]

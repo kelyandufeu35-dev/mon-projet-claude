@@ -23,7 +23,7 @@ Colle ce bloc dans la description, avec le bouton **`<>`** (afficher le HTML) de
 <ul>
   <li><strong>Remontée lente :</strong> elle se regonfle lentement après chaque écrasement.</li>
   <li><strong>2 tailles :</strong> 8 cm (tient dans la paume) ou 12 cm (à malaxer à pleines mains).</li>
-  <li><strong>Trop mignonne :</strong> une petite bouille de fraise qui fait sourire sur un bureau ou une étagère.</li>
+  <li><strong>Comme une vraie :</strong> rouge vif, petits grains en creux et couronne de feuilles vertes.</li>
 </ul>
 <p><strong>Attention :</strong> ne convient pas aux enfants de moins de 36 mois. Contient de petites pièces, risque d'étouffement. Ce n'est pas un aliment : ne pas mettre à la bouche.</p>
 <p>Tailles approximatives. Couleurs pouvant varier légèrement selon l'écran.</p>

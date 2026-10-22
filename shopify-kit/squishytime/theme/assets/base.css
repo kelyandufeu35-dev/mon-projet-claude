@@ -330,6 +330,9 @@ p { margin: 0 0 1em; }
 .steps { display: grid; gap: 28px; list-style: none; margin: 0; padding: 0; counter-reset: step; }
 .step { text-align: center; }
 .step__visual { position: relative; width: 150px; margin: 0 auto 14px; padding: 18px; border-radius: 50%; background: var(--c-surface); aspect-ratio: 1; display: grid; place-items: center; }
+.step__art { display: block; width: 100%; }
+.step__visual--photo { padding: 0; }
+.step__visual--photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 .step__visual--1 .squishy-art__body, .step__visual--1 .squishy-art__leaves { transform: scale(1.24, .58); }
 .step__visual--2 .squishy-art__body, .step__visual--2 .squishy-art__leaves { transform: scale(1.12, .8); }
 .step__num {
