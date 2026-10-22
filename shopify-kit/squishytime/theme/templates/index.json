@@ -35,7 +35,8 @@
         "use_product_image": false,
         "sticker": "12 cm",
         "background": "pink",
-        "scroll_to_buy": true
+        "scroll_to_buy": true,
+        "product": "squishy-fraise-geant"
       }
     },
     "steps": {
@@ -82,7 +83,8 @@
         "show_bundle": true,
         "show_dynamic_checkout": true,
         "show_age_warning": true,
-        "background": "mint"
+        "background": "mint",
+        "product": "squishy-fraise-geant"
       }
     },
     "benefits": {
