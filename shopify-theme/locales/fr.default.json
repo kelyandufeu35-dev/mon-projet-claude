@@ -163,7 +163,10 @@
       "discounts": "Remises",
       "free_note": "Livraison offerte · aucun frais ajouté au paiement.",
       "secure": "Paiement sécurisé par Shopify.",
-      "view_cart": "Voir le panier complet"
+      "view_cart": "Voir le panier complet",
+      "pair_title": "Ça va bien avec",
+      "pair_add": "Ajouter",
+      "pair_choose": "Choisir"
     },
     "product_buy": {
       "scene_alt": "{{ title }}, balle rouge à facettes sous un rai de lumière",

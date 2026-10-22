@@ -162,7 +162,10 @@
       "discounts": "Rabatte",
       "free_note": "Gratisversand · keine Zusatzkosten beim Bezahlen.",
       "secure": "Sichere Zahlung über Shopify.",
-      "view_cart": "Ganzen Warenkorb ansehen"
+      "view_cart": "Ganzen Warenkorb ansehen",
+      "pair_title": "Passt gut dazu",
+      "pair_add": "Hinzufügen",
+      "pair_choose": "Auswählen"
     },
     "product_buy": {
       "scene_alt": "{{ title }}, roter facettierter Ball im Lichtstrahl",

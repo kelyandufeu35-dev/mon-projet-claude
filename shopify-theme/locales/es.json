@@ -162,7 +162,10 @@
       "discounts": "Descuentos",
       "free_note": "Envío gratis · sin gastos adicionales al pagar.",
       "secure": "Pago seguro con Shopify.",
-      "view_cart": "Ver el carrito completo"
+      "view_cart": "Ver el carrito completo",
+      "pair_title": "Combina bien con",
+      "pair_add": "Añadir",
+      "pair_choose": "Elegir"
     },
     "product_buy": {
       "scene_alt": "{{ title }}, pelota roja facetada bajo un haz de luz",

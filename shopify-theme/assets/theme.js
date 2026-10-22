@@ -132,8 +132,30 @@
     refreshCount();
   }
 
+  // Produit qui va avec (snippets/cart-summary.liquid) : ajouté en un clic, panier rafraîchi.
+  async function addPair(variantId) {
+    if (document.querySelector('[data-cart-page]')) {
+      await fetch(routes().cartAdd, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ items: [{ id: variantId, quantity: 1 }] }),
+      });
+      window.location.reload();
+      return;
+    }
+    const res = await fetch(routes().cartAdd, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({ items: [{ id: variantId, quantity: 1 }], sections: [DRAWER_SECTION], sections_url: window.location.pathname }),
+    });
+    if (!res.ok) throw new Error('add failed');
+    const data = await res.json();
+    renderSections(data.sections);
+    refreshCount();
+  }
+
   document.addEventListener('click', (e) => {
-    const t = e.target.closest('[data-cart-open], [data-cart-close], [data-line], [data-scroll-buy]');
+    const t = e.target.closest('[data-cart-open], [data-cart-close], [data-line], [data-pair-add], [data-scroll-buy]');
     if (!t) {
       const d = drawer();
       if (d && e.target === d) closeDrawer(); // backdrop
@@ -147,6 +169,10 @@
       e.preventDefault();
       t.disabled = true;
       changeLine(Number(t.dataset.line), Math.max(0, Number(t.dataset.qty))).catch(() => window.location.reload());
+    } else if (t.matches('[data-pair-add]')) {
+      e.preventDefault();
+      t.disabled = true;
+      addPair(Number(t.dataset.pairAdd)).catch(() => window.location.reload());
     } else if (t.matches('[data-scroll-buy]') && t.getAttribute('href') === '#contenu') {
       const buy = document.querySelector('[data-product-form]');
       if (buy) {

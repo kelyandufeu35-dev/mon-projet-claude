@@ -162,7 +162,10 @@
       "discounts": "Discounts",
       "free_note": "Free shipping · no extra fees at checkout.",
       "secure": "Secure checkout powered by Shopify.",
-      "view_cart": "View full cart"
+      "view_cart": "View full cart",
+      "pair_title": "Goes well with",
+      "pair_add": "Add",
+      "pair_choose": "Choose"
     },
     "product_buy": {
       "scene_alt": "{{ title }}, faceted red ball under a beam of light",
