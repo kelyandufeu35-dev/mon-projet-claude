@@ -1,9 +1,9 @@
 CONDITIONS GÉNÉRALES DE VENTE
-(À coller dans Shopify : Paramètres → Politiques → Conditions d'utilisation)
-Dernière mise à jour : [date de mise en ligne]
+(À coller dans Shopify : Paramètres → Politiques → Conditions de vente)
+Dernière mise à jour : 22 octobre 2026
 
 1. Qui vend
-Le site SquishyTime est exploité par un entrepreneur individuel (micro-entreprise), sous le nom commercial SquishyTime, [adresse : la même que Pattoune], SIREN [le même que Pattoune]. Pour nous contacter : le formulaire de la page Contact du site.
+Le site SquishyTime est exploité par [Prénom NOM] EI, entrepreneur individuel (micro-entreprise), sous le nom commercial SquishyTime, 6 Rue du Parc, 35500 Balazé, France, SIREN 131 469 405. Pour nous contacter : le formulaire de la page Contact du site.
 
 2. Champ d'application
 Ces conditions s'appliquent à toute commande passée sur le site par un consommateur. Passer commande vaut acceptation de ces conditions.
