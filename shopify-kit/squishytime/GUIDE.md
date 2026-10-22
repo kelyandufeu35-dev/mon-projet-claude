@@ -66,7 +66,6 @@ Si un jour la livraison devient payante, décoche aussi **Personnaliser → Para
 Avant de coller :
 
 - remplace l'**adresse** et le **SIREN** entre crochets par ceux des mentions légales de Pattoune (même entreprise) ;
-- vérifie les **pays livrés** entre crochets ;
 - mets la date du jour en haut des CGV.
 
 Le pied de page affiche ces politiques tout seul.
