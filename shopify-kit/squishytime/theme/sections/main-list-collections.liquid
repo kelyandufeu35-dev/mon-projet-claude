@@ -1,0 +1,32 @@
+<section class="section">
+  <div class="page-width">
+    <h1 class="h1 section__title">Nos collections</h1>
+    <div class="grid">
+      {%- for coll in collections -%}
+        {%- if coll.products_count > 0 -%}
+          <article class="card">
+            <a class="card__link" href="{{ coll.url }}">
+              <div class="card__media">
+                {%- assign img = coll.featured_image | default: coll.products.first.featured_media -%}
+                {%- if img -%}
+                  {{ img | image_url: width: 720 | image_tag: widths: '240, 360, 480, 720', sizes: '(min-width: 990px) 280px, 50vw', loading: 'lazy', alt: coll.title }}
+                {%- else -%}
+                  {% render 'squishy-art', label: coll.title %}
+                {%- endif -%}
+              </div>
+              <h2 class="card__title">{{ coll.title | escape }}</h2>
+              <p class="card__price muted">{{ coll.products_count }} produit{% if coll.products_count > 1 %}s{% endif %}</p>
+            </a>
+          </article>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Liste des collections",
+  "settings": []
+}
+{% endschema %}

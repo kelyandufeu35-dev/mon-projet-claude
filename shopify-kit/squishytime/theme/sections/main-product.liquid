@@ -1,0 +1,89 @@
+<section class="section section--tight">
+  <div class="page-width">
+    <nav class="breadcrumbs" aria-label="Fil d'Ariane">
+      <a href="{{ routes.root_url }}">Accueil</a>
+      {%- if collection -%}
+        <span aria-hidden="true">/</span><a href="{{ collection.url }}">{{ collection.title | escape }}</a>
+      {%- endif -%}
+      <span aria-hidden="true">/</span><span aria-current="page">{{ product.title | escape }}</span>
+    </nav>
+
+    <div class="product">
+      <div class="product__media">
+        {% render 'product-media', product: product, section_id: section.id %}
+      </div>
+
+      <div class="product__info">
+        {% render 'product-buy', product: product, section_id: section.id, section_settings: section.settings, heading_tag: 'h1' %}
+
+        <div class="accordions">
+          {%- if product.description != blank -%}
+            <details class="accordion" {% if section.settings.open_description %}open{% endif %}>
+              <summary>Description {% render 'icon', name: 'chevron' %}</summary>
+              <div class="accordion__body rte">{{ product.description }}</div>
+            </details>
+          {%- endif -%}
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when 'collapsible' -%}
+                <details class="accordion" {{ block.shopify_attributes }}>
+                  <summary>{{ block.settings.heading | escape }} {% render 'icon', name: 'chevron' %}</summary>
+                  <div class="accordion__body rte">
+                    {{ block.settings.content }}
+                    {%- if block.settings.page != blank -%}{{ block.settings.page.content }}{%- endif -%}
+                  </div>
+                </details>
+            {%- endcase -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {%- assign variant = product.selected_or_first_available_variant -%}
+  <sticky-buy class="sticky-buy" data-section-id="{{ section.id }}" hidden>
+    <div class="sticky-buy__text">
+      <p class="sticky-buy__title">{{ product.title | escape }}</p>
+      <p class="sticky-buy__price" data-sticky-price>{{ variant.price | money }}</p>
+    </div>
+    <button type="button" class="button button--primary" data-sticky-add {% unless variant.available %}disabled{% endunless %}>Ajouter</button>
+  </sticky-buy>
+</section>
+
+{% schema %}
+{
+  "name": "Fiche produit",
+  "class": "section-main-product",
+  "settings": [
+    {
+      "type": "text",
+      "id": "hook",
+      "label": "Accroche par défaut",
+      "default": "Écrase-le, relâche-le… et regarde-le reprendre sa forme tout doucement.",
+      "info": "Pour une accroche propre à un produit, crée la métadonnée produit custom.accroche (texte)."
+    },
+    { "type": "checkbox", "id": "show_vendor", "label": "Afficher la marque", "default": false },
+    { "type": "checkbox", "id": "show_bundle", "label": "Afficher les offres de lot", "default": true },
+    { "type": "checkbox", "id": "show_dynamic_checkout", "label": "Afficher les boutons de paiement express", "default": true },
+    { "type": "checkbox", "id": "show_age_warning", "label": "Afficher l'avertissement moins de 3 ans", "default": true },
+    {
+      "type": "richtext",
+      "id": "age_warning_text",
+      "label": "Texte de l'avertissement",
+      "info": "Vide : texte standard « ne convient pas aux enfants de moins de 36 mois »."
+    },
+    { "type": "checkbox", "id": "open_description", "label": "Description ouverte par défaut", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "collapsible",
+      "name": "Onglet repliable",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Titre", "default": "Livraison et retours" },
+        { "type": "richtext", "id": "content", "label": "Contenu" },
+        { "type": "page", "id": "page", "label": "Ou contenu d'une page" }
+      ]
+    }
+  ]
+}
+{% endschema %}

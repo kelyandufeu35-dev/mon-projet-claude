@@ -1,0 +1,18 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-cart",
+      "settings": {}
+    },
+    "trust": {
+      "type": "trust-bar",
+      "settings": {
+        "background": "lilac"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "trust"
+  ]
+}

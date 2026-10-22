@@ -1,0 +1,131 @@
+{%- comment -%}
+  Colonne d'achat : titre, accroche, prix, tailles, lots, bouton, avertissement, réassurance.
+  Paramètres : product, section_id, section_settings (réglages de la section qui l'affiche), heading_tag ('h1' ou 'h2').
+{%- endcomment -%}
+{%- liquid
+  assign s = section_settings
+  assign variant = product.selected_or_first_available_variant
+  assign form_id = 'product-form-' | append: section_id
+  assign hook = product.metafields.custom.accroche.value | default: s.hook
+  assign show_bundle = false
+  if settings.bundle_enabled and s.show_bundle
+    assign show_bundle = true
+  endif
+  assign p2 = settings.bundle_2_percent
+  assign p3 = settings.bundle_3_percent
+-%}
+
+<product-buy class="buy" data-section-id="{{ section_id }}" data-p2="{{ p2 }}" data-p3="{{ p3 }}">
+  <script type="application/json" data-variants>{{ product.variants | json }}</script>
+
+  {%- if s.show_vendor and product.vendor != blank -%}
+    <p class="buy__eyebrow">{{ product.vendor | escape }}</p>
+  {%- endif -%}
+
+  <{{ heading_tag | default: 'h1' }} class="buy__title h2">{{ product.title | escape }}</{{ heading_tag | default: 'h1' }}>
+
+  {%- if hook != blank -%}
+    <p class="buy__hook">{{ hook | escape }}</p>
+  {%- endif -%}
+
+  <div class="buy__price" data-price-wrap>
+    <span class="price" data-price>{{ variant.price | money }}</span>
+    {%- if variant.compare_at_price > variant.price -%}
+      <s class="price price--old" data-compare>{{ variant.compare_at_price | money }}</s>
+    {%- else -%}
+      <s class="price price--old" data-compare hidden></s>
+    {%- endif -%}
+    {%- if variant.unit_price_measurement -%}
+      <small class="price__unit">{{ variant.unit_price | money }}/{{ variant.unit_price_measurement.reference_unit }}</small>
+    {%- endif -%}
+  </div>
+  <p class="buy__tax">TTC{% if settings.free_shipping %} · livraison offerte{% endif %}</p>
+
+  {%- form 'product', product, id: form_id, class: 'buy__form', novalidate: 'novalidate', data-product-form: '' -%}
+    <input type="hidden" name="id" value="{{ variant.id }}" data-variant-id>
+
+    {%- unless product.has_only_default_variant -%}
+      {%- for option in product.options_with_values -%}
+        <fieldset class="picker" data-option-index="{{ forloop.index0 }}">
+          <legend class="picker__label">
+            {{ option.name | escape }} : <span data-option-value>{{ option.selected_value | escape }}</span>
+          </legend>
+          <div class="picker__values">
+            {%- for value in option.values -%}
+              {%- assign input_id = section_id | append: '-opt-' | append: forloop.parentloop.index0 | append: '-' | append: forloop.index0 -%}
+              <input class="picker__input visually-hidden" type="radio" id="{{ input_id }}"
+                name="option-{{ forloop.parentloop.index0 }}" value="{{ value | escape }}"
+                {% if option.selected_value == value %}checked{% endif %}>
+              <label class="picker__pill" for="{{ input_id }}">{{ value | escape }}</label>
+            {%- endfor -%}
+          </div>
+        </fieldset>
+      {%- endfor -%}
+    {%- endunless -%}
+
+    {%- if show_bundle -%}
+      <fieldset class="bundles">
+        <legend class="picker__label">Combien en veux-tu ?</legend>
+        {%- for qty in (1..3) -%}
+          {%- liquid
+            case qty
+              when 1
+                assign pct = 0
+              when 2
+                assign pct = p2
+              else
+                assign pct = p3
+            endcase
+            assign full = variant.price | times: qty
+            assign keep = 100 | minus: pct
+            assign deal = full | times: keep | plus: 50 | divided_by: 100 | floor
+          -%}
+          <input class="bundles__input visually-hidden" type="radio" name="bundle" id="{{ section_id }}-bundle-{{ qty }}" value="{{ qty }}" data-pct="{{ pct }}" {% if qty == 1 %}checked{% endif %}>
+          <label class="bundles__card" for="{{ section_id }}-bundle-{{ qty }}">
+            <span class="bundles__radio" aria-hidden="true"></span>
+            <span class="bundles__name">
+              {{ qty }} squishy
+              {%- if pct > 0 %} <span class="badge">−{{ pct }} %</span>{% endif -%}
+              {%- if qty == 2 -%}<small>Tu peux mélanger les tailles dans le panier</small>{%- endif -%}
+            </span>
+            <span class="bundles__price">
+              <span data-bundle-price>{{ deal | money }}</span>
+              {%- if pct > 0 -%}<s data-bundle-full>{{ full | money }}</s>{%- endif -%}
+            </span>
+          </label>
+        {%- endfor -%}
+      </fieldset>
+      <input type="hidden" name="quantity" value="1" data-quantity>
+    {%- else -%}
+      <div class="qty-field">
+        <label class="picker__label" for="{{ section_id }}-qty">Quantité</label>
+        <quantity-input class="qty">
+          <button type="button" class="qty__btn" data-step="-1" aria-label="Retirer un">{% render 'icon', name: 'minus' %}</button>
+          <input id="{{ section_id }}-qty" class="qty__input" type="number" name="quantity" value="1" min="1" inputmode="numeric" data-quantity>
+          <button type="button" class="qty__btn" data-step="1" aria-label="Ajouter un">{% render 'icon', name: 'plus' %}</button>
+        </quantity-input>
+      </div>
+    {%- endif -%}
+
+    <div class="buy__actions">
+      <button type="submit" name="add" class="button button--primary button--full" data-add {% unless variant.available %}disabled{% endunless %}>
+        {% render 'icon', name: 'bag' %}
+        <span data-add-label>{% if variant.available %}Ajouter au panier{% else %}Épuisé{% endif %}</span>
+      </button>
+      {%- if s.show_dynamic_checkout -%}
+        {{ form | payment_button }}
+      {%- endif -%}
+    </div>
+    <p class="buy__error" role="alert" data-error hidden></p>
+  {%- endform -%}
+
+  {%- if s.show_age_warning -%}
+    {% render 'age-warning', text: s.age_warning_text %}
+  {%- endif -%}
+
+  <ul class="reassure" role="list">
+    <li>{% render 'icon', name: 'truck' %}<span>{% if settings.free_shipping %}Livraison offerte, {% endif %}reçu en {{ settings.delivery_time | escape }}</span></li>
+    <li>{% render 'icon', name: 'return' %}<span>14 jours pour changer d'avis</span></li>
+    <li>{% render 'icon', name: 'lock' %}<span>Paiement sécurisé</span></li>
+  </ul>
+</product-buy>

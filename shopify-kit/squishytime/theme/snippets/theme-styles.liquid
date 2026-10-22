@@ -1,0 +1,49 @@
+{%- comment -%}
+  Polices auto-hébergées (Fredoka pour les titres, Nunito pour le texte) et couleurs réglables dans
+  Personnaliser → Paramètres du thème → Couleurs.
+{%- endcomment -%}
+<style>
+  @font-face { font-family: 'Fredoka'; font-style: normal; font-weight: 600; font-display: swap;
+    src: url('{{ 'fredoka-latin-600-normal.woff2' | asset_url }}') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+  @font-face { font-family: 'Fredoka'; font-style: normal; font-weight: 600; font-display: swap;
+    src: url('{{ 'fredoka-latin-ext-600-normal.woff2' | asset_url }}') format('woff2');
+    unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+  @font-face { font-family: 'Fredoka'; font-style: normal; font-weight: 700; font-display: swap;
+    src: url('{{ 'fredoka-latin-700-normal.woff2' | asset_url }}') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+  @font-face { font-family: 'Fredoka'; font-style: normal; font-weight: 700; font-display: swap;
+    src: url('{{ 'fredoka-latin-ext-700-normal.woff2' | asset_url }}') format('woff2');
+    unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+  {%- assign body_weights = '400,700,800' | split: ',' -%}
+  {%- for weight in body_weights %}
+  @font-face { font-family: 'Nunito'; font-style: normal; font-weight: {{ weight }}; font-display: swap;
+    src: url('{{ 'nunito-latin-' | append: weight | append: '-normal.woff2' | asset_url }}') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+  @font-face { font-family: 'Nunito'; font-style: normal; font-weight: {{ weight }}; font-display: swap;
+    src: url('{{ 'nunito-latin-ext-' | append: weight | append: '-normal.woff2' | asset_url }}') format('woff2');
+    unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+  {%- endfor %}
+
+  :root {
+    --c-bg: {{ settings.color_background }};
+    --c-surface: {{ settings.color_surface }};
+    --c-ink: {{ settings.color_text }};
+    --c-muted: {{ settings.color_muted }};
+    --c-primary: {{ settings.color_primary }};
+    --c-primary-ink: {{ settings.color_primary_text }};
+    --c-pink: {{ settings.color_pink }};
+    --c-mint: {{ settings.color_mint }};
+    --c-leaf: {{ settings.color_leaf }};
+    --c-butter: {{ settings.color_butter }};
+    --c-lilac: {{ settings.color_lilac }};
+    --c-line: {{ settings.color_text | color_modify: 'alpha', 0.12 }};
+    --c-ink-soft: {{ settings.color_text | color_modify: 'alpha', 0.06 }};
+    --font-display: 'Fredoka', 'Nunito', ui-rounded, system-ui, sans-serif;
+    --font-body: 'Nunito', ui-rounded, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --radius: {{ settings.radius }}px;
+    --radius-sm: {{ settings.radius | divided_by: 2 }}px;
+    --page-width: 1180px;
+    --gutter: clamp(16px, 4vw, 32px);
+  }
+</style>

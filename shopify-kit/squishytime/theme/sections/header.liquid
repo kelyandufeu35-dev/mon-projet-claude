@@ -1,0 +1,91 @@
+{%- assign menu = section.settings.menu -%}
+<header class="header" data-header>
+  <div class="header__inner page-width">
+    {%- if menu.links.size > 0 -%}
+      <details class="mobile-nav" data-mobile-nav>
+        <summary class="icon-button mobile-nav__toggle" aria-label="Ouvrir le menu">
+          {% render 'icon', name: 'menu' %}
+        </summary>
+        <div class="mobile-nav__panel">
+          <nav aria-label="Menu principal">
+            <ul class="mobile-nav__list" role="list">
+              {%- for link in menu.links -%}
+                <li>
+                  <a href="{{ link.url }}" {% if link.current %}aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+                  {%- if link.links.size > 0 -%}
+                    <ul role="list">
+                      {%- for child in link.links -%}
+                        <li><a href="{{ child.url }}">{{ child.title | escape }}</a></li>
+                      {%- endfor -%}
+                    </ul>
+                  {%- endif -%}
+                </li>
+              {%- endfor -%}
+            </ul>
+          </nav>
+        </div>
+      </details>
+    {%- endif -%}
+
+    {%- if request.page_type == 'index' -%}<h1 class="header__brand">{%- else -%}<div class="header__brand">{%- endif -%}
+      <a href="{{ routes.root_url }}" class="logo">
+        {%- if settings.logo != blank -%}
+          {%- liquid
+            assign logo_w2 = settings.logo_width | times: 2
+            assign logo_h = settings.logo_width | divided_by: settings.logo.aspect_ratio | round
+          -%}
+          {{ settings.logo | image_url: width: logo_w2 | image_tag:
+            width: settings.logo_width,
+            height: logo_h,
+            alt: shop.name,
+            loading: 'eager',
+            class: 'logo__img'
+          }}
+        {%- else -%}
+          <svg class="logo__mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><path d="M32 14c-13 0-24 7-24 20 0 14 12 26 24 26s24-12 24-26c0-13-11-20-24-20z" fill="var(--c-primary)"/><path d="M20 10c4 0 8 2 12 6 4-4 8-6 12-6-1 5-4 8-8 9 3 1 6 0 8-1-3 4-8 5-12 3-4 2-9 1-12-3 2 1 5 2 8 1-4-1-7-4-8-9z" fill="var(--c-leaf)"/><circle cx="26" cy="37" r="2.6" fill="var(--c-ink)"/><circle cx="38" cy="37" r="2.6" fill="var(--c-ink)"/><path d="M29 41q3 3 6 0" stroke="var(--c-ink)" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+          <span class="logo__text">{{ shop.name | escape }}</span>
+        {%- endif -%}
+      </a>
+    {%- if request.page_type == 'index' -%}</h1>{%- else -%}</div>{%- endif -%}
+
+    {%- if menu.links.size > 0 -%}
+      <nav class="header__nav" aria-label="Menu principal">
+        <ul role="list">
+          {%- for link in menu.links -%}
+            <li><a href="{{ link.url }}" {% if link.current %}aria-current="page"{% endif %}>{{ link.title | escape }}</a></li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    {%- endif -%}
+
+    <div class="header__icons">
+      {%- if section.settings.show_search -%}
+        <a href="{{ routes.search_url }}" class="icon-button" aria-label="Rechercher">{% render 'icon', name: 'search' %}</a>
+      {%- endif -%}
+      {%- if shop.customer_accounts_enabled and section.settings.show_account -%}
+        <a href="{{ routes.account_url }}" class="icon-button" aria-label="Mon compte">{% render 'icon', name: 'user' %}</a>
+      {%- endif -%}
+      <a href="{{ routes.cart_url }}" class="icon-button cart-link" data-cart-open aria-label="Panier, {{ cart.item_count }} article{% if cart.item_count > 1 %}s{% endif %}">
+        {% render 'icon', name: 'bag' %}
+        <span class="cart-link__count" data-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>{{ cart.item_count }}</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "En-tête",
+  "class": "section-header",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    { "type": "checkbox", "id": "show_search", "label": "Afficher la recherche", "default": false },
+    { "type": "checkbox", "id": "show_account", "label": "Afficher le compte client", "default": false }
+  ]
+}
+{% endschema %}

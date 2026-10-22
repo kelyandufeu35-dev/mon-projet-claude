@@ -1,0 +1,43 @@
+<section class="section">
+  <div class="page-width">
+    <div class="section__head section__head--stack">
+      <h1 class="h1 section__title">{{ collection.title | escape }}</h1>
+      {%- if collection.description != blank -%}
+        <div class="rte muted">{{ collection.description }}</div>
+      {%- endif -%}
+    </div>
+
+    {%- paginate collection.products by section.settings.per_page -%}
+      {%- if collection.products.size > 0 -%}
+        <form class="sort" method="get">
+          <label for="SortBy" class="muted">Trier</label>
+          <select id="SortBy" name="sort_by" class="select" data-autosubmit>
+            {%- for option in collection.sort_options -%}
+              <option value="{{ option.value | escape }}" {% if option.value == collection.sort_by %}selected{% endif %}>{{ option.name | escape }}</option>
+            {%- endfor -%}
+          </select>
+        </form>
+        <div class="grid">
+          {%- for product in collection.products -%}
+            {%- if forloop.index <= 2 -%}{%- assign eager = 'eager' -%}{%- else -%}{%- assign eager = 'lazy' -%}{%- endif -%}
+            {% render 'product-card', product: product, eager: eager %}
+          {%- endfor -%}
+        </div>
+        {%- if paginate.pages > 1 -%}
+          <nav class="pagination" aria-label="Pages">{{ paginate | default_pagination: next: 'Suivant', previous: 'Précédent' }}</nav>
+        {%- endif -%}
+      {%- else -%}
+        <p class="muted">Aucun squishy ici pour l'instant. Reviens bientôt !</p>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection",
+  "settings": [
+    { "type": "range", "id": "per_page", "label": "Produits par page", "min": 8, "max": 48, "step": 4, "default": 24 }
+  ]
+}
+{% endschema %}

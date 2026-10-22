@@ -1,0 +1,109 @@
+{%- comment -%}
+  Contenu du panier, partagé entre le tiroir et la page panier.
+  Paramètre : context ('drawer' ou 'page').
+{%- endcomment -%}
+{%- liquid
+  assign count = cart.item_count
+  assign p2 = settings.bundle_2_percent
+  assign p3 = settings.bundle_3_percent
+-%}
+<div class="cart" data-cart-contents data-count="{{ count }}">
+  {%- if count == 0 -%}
+    <div class="cart__empty">
+      {% render 'squishy-art', label: 'Panier vide' %}
+      <p class="h3">Ton panier est tout vide</p>
+      <a href="{{ routes.all_products_collection_url }}" class="button button--primary">Voir les squishy</a>
+    </div>
+  {%- else -%}
+    {%- if settings.bundle_enabled -%}
+      {%- liquid
+        if count == 1
+          assign next_qty = 1
+          assign next_pct = p2
+          assign progress = 33
+        elsif count == 2
+          assign next_qty = 1
+          assign next_pct = p3
+          assign progress = 66
+        else
+          assign next_qty = 0
+          assign progress = 100
+        endif
+      -%}
+      <div class="cart__bundle">
+        <p>
+          {%- if next_qty > 0 -%}
+            Plus que <strong>{{ next_qty }} squishy</strong> pour <strong>−{{ next_pct }} %</strong> sur ton lot
+          {%- else -%}
+            {% render 'icon', name: 'sparkle' %} Lot de 3 ou plus : <strong>−{{ p3 }} %</strong>
+          {%- endif -%}
+        </p>
+        <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ progress }}" aria-label="Progression vers la remise">
+          <span style="width: {{ progress }}%"></span>
+        </div>
+      </div>
+    {%- endif -%}
+
+    <ul class="cart__items" role="list">
+      {%- for item in cart.items -%}
+        <li class="line" data-line="{{ forloop.index }}">
+          <a href="{{ item.url }}" class="line__media" tabindex="-1" aria-hidden="true">
+            {%- if item.image -%}
+              {{ item.image | image_url: width: 200 | image_tag: loading: 'lazy', alt: '' }}
+            {%- else -%}
+              {% render 'squishy-art' %}
+            {%- endif -%}
+          </a>
+          <div class="line__info">
+            <a href="{{ item.url }}" class="line__title">{{ item.product.title | escape }}</a>
+            {%- unless item.product.has_only_default_variant -%}
+              <p class="line__variant">{{ item.variant.title | escape }}</p>
+            {%- endunless -%}
+            {%- for prop in item.properties -%}
+              {%- unless prop.last == blank or prop.first contains '_' -%}
+                <p class="line__variant">{{ prop.first | escape }} : {{ prop.last | escape }}</p>
+              {%- endunless -%}
+            {%- endfor -%}
+            {%- for alloc in item.line_level_discount_allocations -%}
+              <p class="line__discount">{% render 'icon', name: 'sparkle' %} {{ alloc.discount_application.title | escape }} (−{{ alloc.amount | money }})</p>
+            {%- endfor -%}
+            <div class="line__row">
+              <quantity-input class="qty qty--small">
+                <button type="button" class="qty__btn" data-step="-1" aria-label="Retirer un {{ item.product.title | escape }}">{% render 'icon', name: 'minus' %}</button>
+                <input class="qty__input" type="number" value="{{ item.quantity }}" min="0" inputmode="numeric" data-line-qty="{{ forloop.index }}" aria-label="Quantité de {{ item.product.title | escape }}">
+                <button type="button" class="qty__btn" data-step="1" aria-label="Ajouter un {{ item.product.title | escape }}">{% render 'icon', name: 'plus' %}</button>
+              </quantity-input>
+              <div class="line__price">
+                {%- if item.original_line_price != item.final_line_price -%}
+                  <s>{{ item.original_line_price | money }}</s>
+                {%- endif -%}
+                <span>{{ item.final_line_price | money }}</span>
+              </div>
+            </div>
+            <a href="{{ item.url_to_remove }}" class="line__remove" data-line-remove="{{ forloop.index }}">Retirer</a>
+          </div>
+        </li>
+      {%- endfor -%}
+    </ul>
+
+    <div class="cart__footer">
+      {%- for discount in cart.cart_level_discount_applications -%}
+        <p class="cart__row cart__row--discount"><span>{{ discount.title | escape }}</span><span>−{{ discount.total_allocated_amount | money }}</span></p>
+      {%- endfor -%}
+      {%- if cart.total_discount > 0 -%}
+        <p class="cart__row cart__row--discount"><span>Tu économises</span><span>{{ cart.total_discount | money }}</span></p>
+      {%- endif -%}
+      <p class="cart__row"><span>Livraison</span><span>{% if settings.free_shipping %}Offerte{% else %}Calculée à l'étape suivante{% endif %}</span></p>
+      <p class="cart__row cart__row--total"><span>Total</span><span>{{ cart.total_price | money_with_currency }}</span></p>
+      <p class="cart__note">TTC. Livraison en {{ settings.delivery_time | escape }}.</p>
+      <form action="{{ routes.cart_url }}" method="post">
+        <button type="submit" name="checkout" class="button button--primary button--full">
+          {% render 'icon', name: 'lock' %} Commander
+        </button>
+      </form>
+      {%- if context == 'drawer' -%}
+        <a href="{{ routes.cart_url }}" class="cart__page-link">Voir le panier</a>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</div>

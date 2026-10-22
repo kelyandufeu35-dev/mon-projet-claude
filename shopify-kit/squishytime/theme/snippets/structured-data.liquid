@@ -1,0 +1,66 @@
+{%- comment -%}
+  Données structurées pour Google. Volontairement sans note ni avis : on n'affiche que des avis réels.
+{%- endcomment -%}
+{%- if request.page_type == 'index' -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": {{ shop.name | json }},
+      "url": {{ request.origin | append: routes.root_url | json }}
+      {%- if settings.logo -%},
+        "logo": {{ settings.logo | image_url: width: 600 | prepend: 'https:' | json }}
+      {%- endif -%}
+      {%- liquid
+        assign socials = ''
+        if settings.social_tiktok != blank
+          assign socials = socials | append: settings.social_tiktok | append: '|'
+        endif
+        if settings.social_instagram != blank
+          assign socials = socials | append: settings.social_instagram | append: '|'
+        endif
+        if settings.social_pinterest != blank
+          assign socials = socials | append: settings.social_pinterest | append: '|'
+        endif
+        assign socials = socials | split: '|'
+      -%}
+      {%- if socials.size > 0 -%},
+        "sameAs": {{ socials | json }}
+      {%- endif %}
+    }
+  </script>
+{%- elsif request.page_type == 'product' -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": {{ product.title | json }},
+      "url": {{ request.origin | append: product.url | json }},
+      {%- if product.featured_media -%}
+        "image": [{{ product.featured_media | image_url: width: 1200 | prepend: 'https:' | json }}],
+      {%- endif -%}
+      "description": {{ product.description | strip_html | strip_newlines | truncate: 500 | json }},
+      "brand": { "@type": "Brand", "name": {{ product.vendor | default: shop.name | json }} },
+      "offers": [
+        {%- for variant in product.variants -%}
+          {
+            "@type": "Offer",
+            {%- if variant.sku != blank -%}"sku": {{ variant.sku | json }},{%- endif -%}
+            "name": {{ variant.title | json }},
+            "availability": "http://schema.org/{% if variant.available %}InStock{% else %}OutOfStock{% endif %}",
+            "price": {{ variant.price | divided_by: 100.0 | json }},
+            "priceCurrency": {{ cart.currency.iso_code | json }},
+            "url": {{ request.origin | append: variant.url | json }}
+            {%- if settings.free_shipping -%},
+            "shippingDetails": {
+              "@type": "OfferShippingDetails",
+              "shippingRate": { "@type": "MonetaryAmount", "value": 0, "currency": {{ cart.currency.iso_code | json }} },
+              "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "FR" }
+            }
+            {%- endif %}
+          }{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ]
+    }
+  </script>
+{%- endif -%}

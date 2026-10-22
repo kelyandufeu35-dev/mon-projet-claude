@@ -1,0 +1,56 @@
+<section class="section">
+  <div class="page-width page-width--narrow">
+    <p><a href="{{ routes.account_url }}" class="link-arrow">Retour au compte</a></p>
+    <h1 class="h1 section__title">Mes adresses</h1>
+    {%- paginate customer.addresses by 10 -%}
+      {%- for address in customer.addresses -%}
+        <div class="card-box">
+          {%- if address == customer.default_address -%}<p class="badge">Par défaut</p>{%- endif -%}
+          <p>{{ address | format_address }}</p>
+          {%- form 'customer_address', address -%}
+            <div class="form__grid">
+              <div class="field"><label for="First{{ address.id }}">Prénom</label><input id="First{{ address.id }}" name="address[first_name]" value="{{ form.first_name }}" autocomplete="given-name"></div>
+              <div class="field"><label for="Last{{ address.id }}">Nom</label><input id="Last{{ address.id }}" name="address[last_name]" value="{{ form.last_name }}" autocomplete="family-name"></div>
+            </div>
+            <div class="field"><label for="Addr1{{ address.id }}">Adresse</label><input id="Addr1{{ address.id }}" name="address[address1]" value="{{ form.address1 }}" autocomplete="address-line1"></div>
+            <div class="field"><label for="Addr2{{ address.id }}">Complément</label><input id="Addr2{{ address.id }}" name="address[address2]" value="{{ form.address2 }}" autocomplete="address-line2"></div>
+            <div class="form__grid">
+              <div class="field"><label for="Zip{{ address.id }}">Code postal</label><input id="Zip{{ address.id }}" name="address[zip]" value="{{ form.zip }}" autocomplete="postal-code"></div>
+              <div class="field"><label for="City{{ address.id }}">Ville</label><input id="City{{ address.id }}" name="address[city]" value="{{ form.city }}" autocomplete="address-level2"></div>
+            </div>
+            <div class="field">
+              <label for="Country{{ address.id }}">Pays</label>
+              <select id="Country{{ address.id }}" name="address[country]" class="select" autocomplete="country">{{ all_country_option_tags }}</select>
+            </div>
+            <div class="field"><label for="Phone{{ address.id }}">Téléphone</label><input id="Phone{{ address.id }}" type="tel" name="address[phone]" value="{{ form.phone }}" autocomplete="tel"></div>
+            <label class="checkbox"><input type="checkbox" name="address[default]" value="1" {% if address == customer.default_address %}checked{% endif %}> Adresse par défaut</label>
+            <button type="submit" class="button button--primary">Enregistrer</button>
+          {%- endform -%}
+        </div>
+      {%- endfor -%}
+    {%- endpaginate -%}
+
+    <div class="card-box">
+      <h2 class="h3">Ajouter une adresse</h2>
+      {%- form 'customer_address', customer.new_address -%}
+        <div class="form__grid">
+          <div class="field"><label for="NewFirst">Prénom</label><input id="NewFirst" name="address[first_name]" autocomplete="given-name"></div>
+          <div class="field"><label for="NewLast">Nom</label><input id="NewLast" name="address[last_name]" autocomplete="family-name"></div>
+        </div>
+        <div class="field"><label for="NewAddr1">Adresse</label><input id="NewAddr1" name="address[address1]" autocomplete="address-line1"></div>
+        <div class="field"><label for="NewAddr2">Complément</label><input id="NewAddr2" name="address[address2]" autocomplete="address-line2"></div>
+        <div class="form__grid">
+          <div class="field"><label for="NewZip">Code postal</label><input id="NewZip" name="address[zip]" autocomplete="postal-code"></div>
+          <div class="field"><label for="NewCity">Ville</label><input id="NewCity" name="address[city]" autocomplete="address-level2"></div>
+        </div>
+        <div class="field">
+          <label for="NewCountry">Pays</label>
+          <select id="NewCountry" name="address[country]" class="select" autocomplete="country">{{ all_country_option_tags }}</select>
+        </div>
+        <div class="field"><label for="NewPhone">Téléphone</label><input id="NewPhone" type="tel" name="address[phone]" autocomplete="tel"></div>
+        <label class="checkbox"><input type="checkbox" name="address[default]" value="1"> Adresse par défaut</label>
+        <button type="submit" class="button button--primary">Ajouter</button>
+      {%- endform -%}
+    </div>
+  </div>
+</section>

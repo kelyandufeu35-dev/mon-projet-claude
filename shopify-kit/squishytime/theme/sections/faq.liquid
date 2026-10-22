@@ -1,0 +1,59 @@
+<section class="section section--{{ section.settings.background }}">
+  <div class="page-width page-width--narrow">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="h1 section__title section__title--center">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+    <div class="accordions">
+      {%- for block in section.blocks -%}
+        <details class="accordion" {{ block.shopify_attributes }}>
+          <summary>{{ block.settings.question | escape }} {% render 'icon', name: 'chevron' %}</summary>
+          <div class="accordion__body rte">{{ block.settings.answer }}</div>
+        </details>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Questions fréquentes",
+  "class": "section-faq",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Titre", "default": "Questions fréquentes" },
+    {
+      "type": "select",
+      "id": "background",
+      "label": "Fond",
+      "options": [
+        { "value": "plain", "label": "Fond de page" },
+        { "value": "pink", "label": "Rose" },
+        { "value": "mint", "label": "Menthe" },
+        { "value": "butter", "label": "Vanille" },
+        { "value": "lilac", "label": "Lilas" }
+      ],
+      "default": "plain"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question", "default": "Ta question ?" },
+        { "type": "richtext", "id": "answer", "label": "Réponse", "default": "<p>Ta réponse.</p>" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Questions fréquentes",
+      "blocks": [
+        { "type": "question", "settings": { "question": "Combien de temps pour la livraison ?", "answer": "<p>Compte 8 à 25 jours entre ta commande et la réception. Tu reçois un numéro de suivi par e-mail dès l'envoi. La livraison est offerte.</p>" } },
+        { "type": "question", "settings": { "question": "Et si je change d'avis ?", "answer": "<p>Tu as 14 jours après réception pour nous le renvoyer, sans te justifier. Écris-nous depuis la page Contact.</p>" } },
+        { "type": "question", "settings": { "question": "C'est pour quel âge ?", "answer": "<p>Ne convient pas aux enfants de moins de 36 mois : il contient de petites pièces. Ce n'est pas un aliment, même s'il ressemble à une fraise.</p>" } },
+        { "type": "question", "settings": { "question": "Comment marchent les lots ?", "answer": "<p>−10 % dès 2 squishy, −15 % dès 3. La remise s'applique toute seule dans le panier, même si tu mélanges les tailles.</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

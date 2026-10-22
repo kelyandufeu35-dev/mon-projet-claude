@@ -1,0 +1,15 @@
+<section class="section">
+  <div class="page-width page-width--narrow text-center">
+    <div class="notfound__art">{% render 'squishy-art', animated: true, label: 'Squishy perdu' %}</div>
+    <h1 class="h1">Oups, page introuvable</h1>
+    <p class="muted">Cette page s'est fait écraser… et elle n'est pas remontée.</p>
+    <p><a href="{{ routes.root_url }}" class="button button--primary">Retour à l'accueil</a></p>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Page 404",
+  "settings": []
+}
+{% endschema %}

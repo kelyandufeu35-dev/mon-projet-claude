@@ -1,0 +1,136 @@
+{%- liquid
+  assign product = section.settings.product
+  assign link = section.settings.button_link
+  if section.settings.scroll_to_buy
+    assign link = '#acheter'
+  endif
+  if link == blank and product
+    assign link = product.url
+  endif
+  if link == blank
+    assign link = routes.all_products_collection_url
+  endif
+-%}
+<section class="hero section--{{ section.settings.background }}">
+  <div class="hero__inner page-width">
+    <div class="hero__text">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      <h2 class="hero__title display">{{ section.settings.title | escape }}</h2>
+      {%- if section.settings.text != blank -%}
+        <div class="hero__sub rte">{{ section.settings.text }}</div>
+      {%- endif -%}
+      <div class="hero__cta">
+        <a href="{{ link }}" class="button button--primary button--lg">
+          {{ section.settings.button_label | escape }} {% render 'icon', name: 'arrow' %}
+        </a>
+        {%- if product -%}
+          <p class="hero__price">dès <strong>{{ product.price_min | money }}</strong>{% if settings.free_shipping %} · livraison offerte{% endif %}</p>
+        {%- endif -%}
+      </div>
+      {%- if section.blocks.size > 0 -%}
+        <ul class="chips" role="list">
+          {%- for block in section.blocks -%}
+            <li class="chip" {{ block.shopify_attributes }}>{{ block.settings.text | escape }}</li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+
+    <div class="hero__visual">
+      <div class="blob" aria-hidden="true"></div>
+      {%- if section.settings.image != blank -%}
+        {{ section.settings.image | image_url: width: 1200 | image_tag:
+          widths: '400, 600, 800, 1000, 1200',
+          sizes: '(min-width: 990px) 540px, 90vw',
+          loading: 'eager',
+          fetchpriority: 'high',
+          class: 'hero__img',
+          alt: section.settings.image.alt | default: section.settings.title
+        }}
+      {%- elsif product.featured_media and section.settings.use_product_image -%}
+        {{ product.featured_media | image_url: width: 1200 | image_tag:
+          widths: '400, 600, 800, 1000, 1200',
+          sizes: '(min-width: 990px) 540px, 90vw',
+          loading: 'eager',
+          fetchpriority: 'high',
+          class: 'hero__img',
+          alt: product.featured_media.alt | default: product.title
+        }}
+      {%- else -%}
+        {% render 'squishy-art', animated: true, label: 'Squishy fraise qui reprend sa forme' %}
+      {%- endif -%}
+      {%- if section.settings.sticker != blank -%}
+        <p class="sticker" aria-hidden="true">{{ section.settings.sticker | escape }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Grande bannière",
+  "class": "section-hero",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Petit texte au-dessus", "default": "Nouveau : le squishy fraise" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Écrase. Relâche. Regarde-le remonter." },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Texte",
+      "default": "<p>Un squishy fraise géant, tout moelleux, qui reprend sa forme tout doucement. En 8 cm ou en 12 cm.</p>"
+    },
+    { "type": "product", "id": "product", "label": "Produit mis en avant" },
+    { "type": "text", "id": "button_label", "label": "Texte du bouton", "default": "Je le veux" },
+    {
+      "type": "checkbox",
+      "id": "scroll_to_buy",
+      "label": "Le bouton descend jusqu'au produit vedette",
+      "default": true,
+      "info": "Décoché : le bouton mène au lien ci-dessous, ou au produit choisi."
+    },
+    { "type": "url", "id": "button_link", "label": "Lien du bouton" },
+    { "type": "image_picker", "id": "image", "label": "Image", "info": "Une photo détourée ou sur fond clair rend le mieux." },
+    {
+      "type": "checkbox",
+      "id": "use_product_image",
+      "label": "Sans image, utiliser la photo du produit",
+      "default": false,
+      "info": "Décoché : la fraise animée s'affiche."
+    },
+    { "type": "text", "id": "sticker", "label": "Pastille sur l'image", "default": "8 cm ou 12 cm" },
+    {
+      "type": "select",
+      "id": "background",
+      "label": "Fond",
+      "options": [
+        { "value": "pink", "label": "Rose" },
+        { "value": "mint", "label": "Menthe" },
+        { "value": "butter", "label": "Vanille" },
+        { "value": "lilac", "label": "Lilas" },
+        { "value": "plain", "label": "Fond de page" }
+      ],
+      "default": "pink"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "chip",
+      "name": "Pastille",
+      "settings": [{ "type": "text", "id": "text", "label": "Texte", "default": "Remontée lente" }]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Grande bannière",
+      "blocks": [
+        { "type": "chip", "settings": { "text": "Remontée lente" } },
+        { "type": "chip", "settings": { "text": "Tout doux" } },
+        { "type": "chip", "settings": { "text": "Livraison offerte" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

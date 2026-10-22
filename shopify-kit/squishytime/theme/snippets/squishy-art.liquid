@@ -1,0 +1,35 @@
+{%- comment -%}
+  Fraise kawaii dessinée en SVG, utilisée quand aucune photo n'est choisie.
+  Paramètres : animated (true/false), label (texte alternatif).
+{%- endcomment -%}
+<svg class="squishy-art{% if animated %} squishy-art--animated{% endif %}" viewBox="0 0 240 240" role="img" aria-label="{{ label | default: 'Squishy fraise' | escape }}">
+  <ellipse class="squishy-art__shadow" cx="120" cy="222" rx="70" ry="9" fill="currentColor" opacity=".12"/>
+  <g class="squishy-art__body">
+    <path d="M120 58c-50 0-88 26-88 74 0 52 46 88 88 88s88-36 88-88c0-48-38-74-88-74z" fill="var(--c-primary)"/>
+    <path d="M62 96c10-14 30-22 50-22" stroke="#fff" stroke-opacity=".45" stroke-width="10" stroke-linecap="round" fill="none"/>
+    <g fill="#FFE9A8">
+      <ellipse cx="66" cy="128" rx="4" ry="6" transform="rotate(-12 66 128)"/>
+      <ellipse cx="174" cy="128" rx="4" ry="6" transform="rotate(12 174 128)"/>
+      <ellipse cx="80" cy="170" rx="4" ry="6" transform="rotate(-18 80 170)"/>
+      <ellipse cx="160" cy="170" rx="4" ry="6" transform="rotate(18 160 170)"/>
+      <ellipse cx="120" cy="196" rx="4" ry="6"/>
+      <ellipse cx="100" cy="98" rx="4" ry="6"/>
+      <ellipse cx="146" cy="96" rx="4" ry="6"/>
+      <ellipse cx="190" cy="160" rx="3.5" ry="5" transform="rotate(24 190 160)"/>
+      <ellipse cx="52" cy="160" rx="3.5" ry="5" transform="rotate(-24 52 160)"/>
+    </g>
+    <ellipse cx="82" cy="150" rx="13" ry="8" fill="#FF9DB4" opacity=".8"/>
+    <ellipse cx="158" cy="150" rx="13" ry="8" fill="#FF9DB4" opacity=".8"/>
+    <g class="squishy-art__eyes" fill="var(--c-ink)">
+      <ellipse cx="96" cy="136" rx="8" ry="9"/>
+      <ellipse cx="144" cy="136" rx="8" ry="9"/>
+      <circle cx="99" cy="132" r="3" fill="#fff"/>
+      <circle cx="147" cy="132" r="3" fill="#fff"/>
+    </g>
+    <path d="M110 154q10 10 20 0" stroke="var(--c-ink)" stroke-width="5" stroke-linecap="round" fill="none"/>
+  </g>
+  <g class="squishy-art__leaves" fill="var(--c-leaf)">
+    <path d="M120 66c-14-16-34-22-54-18 8 14 24 22 42 22-12 6-20 16-22 28 18-2 30-12 34-26 4 14 16 24 34 26-2-12-10-22-22-28 18 0 34-8 42-22-20-4-40 2-54 18z"/>
+    <path d="M116 60c-2-14 2-28 12-38l8 6c-8 8-12 20-10 32z"/>
+  </g>
+</svg>

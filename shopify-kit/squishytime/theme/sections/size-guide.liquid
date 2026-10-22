@@ -1,0 +1,80 @@
+{%- liquid
+  assign max_size = 1
+  for block in section.blocks
+    if block.settings.size_cm > max_size
+      assign max_size = block.settings.size_cm
+    endif
+  endfor
+-%}
+<section class="section section--{{ section.settings.background }}">
+  <div class="page-width">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="h1 section__title section__title--center">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+    {%- if section.settings.text != blank -%}
+      <p class="section__lead">{{ section.settings.text | escape }}</p>
+    {%- endif -%}
+    <div class="sizes">
+      {%- for block in section.blocks -%}
+        {%- assign scale = block.settings.size_cm | times: 100 | divided_by: max_size -%}
+        <div class="size" {{ block.shopify_attributes }}>
+          <div class="size__visual" aria-hidden="true">
+            <div class="size__art" style="--scale: {{ scale }}%">{% render 'squishy-art' %}</div>
+          </div>
+          <p class="size__label display">{{ block.settings.size_cm }} cm</p>
+          <h3 class="h3">{{ block.settings.title | escape }}</h3>
+          <p class="muted">{{ block.settings.text | escape }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+    {%- if section.settings.note != blank -%}
+      <p class="sizes__note">{{ section.settings.note | escape }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Guide des tailles",
+  "class": "section-size-guide",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Titre", "default": "Quelle taille choisir ?" },
+    { "type": "text", "id": "text", "label": "Texte", "default": "Les dessins sont à l'échelle l'un de l'autre." },
+    { "type": "text", "id": "note", "label": "Remarque", "default": "Tailles approximatives, mesurées sur la hauteur de la fraise." },
+    {
+      "type": "select",
+      "id": "background",
+      "label": "Fond",
+      "options": [
+        { "value": "plain", "label": "Fond de page" },
+        { "value": "pink", "label": "Rose" },
+        { "value": "mint", "label": "Menthe" },
+        { "value": "butter", "label": "Vanille" },
+        { "value": "lilac", "label": "Lilas" }
+      ],
+      "default": "butter"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "size",
+      "name": "Taille",
+      "settings": [
+        { "type": "range", "id": "size_cm", "label": "Taille", "min": 2, "max": 40, "step": 1, "unit": "cm", "default": 8 },
+        { "type": "text", "id": "title", "label": "Titre", "default": "Mini" },
+        { "type": "text", "id": "text", "label": "Texte", "default": "Tient dans la paume de la main." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Guide des tailles",
+      "blocks": [
+        { "type": "size", "settings": { "size_cm": 8, "title": "La petite", "text": "Tient dans la paume, se glisse dans un sac ou une trousse." } },
+        { "type": "size", "settings": { "size_cm": 12, "title": "La géante", "text": "Plus grosse, à écraser à pleines mains." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

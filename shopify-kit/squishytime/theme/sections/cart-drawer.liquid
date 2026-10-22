@@ -1,0 +1,22 @@
+{%- comment -%}
+  Tiroir panier. Rechargé en JavaScript après chaque ajout ou changement de quantité.
+{%- endcomment -%}
+<cart-drawer class="drawer" data-cart-drawer>
+  <div class="drawer__overlay" data-cart-close></div>
+  <div class="drawer__panel" role="dialog" aria-modal="true" aria-labelledby="CartDrawerTitle" tabindex="-1">
+    <div class="drawer__head">
+      <p class="h3" id="CartDrawerTitle">Ton panier</p>
+      <button type="button" class="icon-button" data-cart-close aria-label="Fermer le panier">{% render 'icon', name: 'close' %}</button>
+    </div>
+    <div class="drawer__body" data-drawer-body>
+      {% render 'cart-contents', context: 'drawer' %}
+    </div>
+  </div>
+</cart-drawer>
+
+{% schema %}
+{
+  "name": "Tiroir panier",
+  "settings": []
+}
+{% endschema %}

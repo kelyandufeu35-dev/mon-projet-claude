@@ -1,0 +1,16 @@
+{
+  "type": "footer",
+  "name": "Pied de page",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "text": "<p>Des squishy tout doux qui reprennent leur forme lentement.</p>",
+        "menu": "footer",
+        "legal_menu": "",
+        "show_payment_icons": true
+      }
+    }
+  },
+  "order": ["footer"]
+}

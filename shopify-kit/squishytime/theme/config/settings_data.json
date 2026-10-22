@@ -1,0 +1,25 @@
+{
+  "current": "Default",
+  "presets": {
+    "Default": {
+      "logo_width": 150,
+      "color_background": "#FFF7F2",
+      "color_surface": "#FFFFFF",
+      "color_text": "#3B1F2B",
+      "color_muted": "#76525F",
+      "color_primary": "#D8325A",
+      "color_primary_text": "#FFFFFF",
+      "color_pink": "#FFE0E8",
+      "color_mint": "#D3F2E3",
+      "color_leaf": "#277A4B",
+      "color_butter": "#FFF1C2",
+      "color_lilac": "#ECE4FF",
+      "radius": 24,
+      "bundle_enabled": true,
+      "bundle_2_percent": 10,
+      "bundle_3_percent": 15,
+      "free_shipping": true,
+      "delivery_time": "8 à 25 jours"
+    }
+  }
+}

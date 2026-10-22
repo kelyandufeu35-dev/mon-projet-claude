@@ -1,0 +1,63 @@
+<section class="section section--{{ section.settings.background }}">
+  <div class="page-width">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="h1 section__title section__title--center">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+    <ol class="steps" role="list">
+      {%- for block in section.blocks -%}
+        <li class="step" {{ block.shopify_attributes }}>
+          <div class="step__visual step__visual--{{ forloop.index }}" aria-hidden="true">
+            {% render 'squishy-art' %}
+            <span class="step__num">{{ forloop.index }}</span>
+          </div>
+          <h3 class="h3">{{ block.settings.title | escape }}</h3>
+          <p class="muted">{{ block.settings.text | escape }}</p>
+        </li>
+      {%- endfor -%}
+    </ol>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Étapes illustrées",
+  "class": "section-steps",
+  "max_blocks": 3,
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Titre", "default": "Comment ça marche ?" },
+    {
+      "type": "select",
+      "id": "background",
+      "label": "Fond",
+      "options": [
+        { "value": "plain", "label": "Fond de page" },
+        { "value": "pink", "label": "Rose" },
+        { "value": "mint", "label": "Menthe" },
+        { "value": "butter", "label": "Vanille" },
+        { "value": "lilac", "label": "Lilas" }
+      ],
+      "default": "mint"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Étape",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Titre", "default": "Écrase" },
+        { "type": "text", "id": "text", "label": "Texte", "default": "Serre-le dans ta main." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Étapes illustrées",
+      "blocks": [
+        { "type": "step", "settings": { "title": "Écrase", "text": "Serre-le bien fort dans ta main : il s'aplatit tout mou." } },
+        { "type": "step", "settings": { "title": "Relâche", "text": "Ouvre la main et pose-le devant toi." } },
+        { "type": "step", "settings": { "title": "Regarde", "text": "Il reprend sa forme de fraise, tout lentement." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

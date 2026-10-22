@@ -1,0 +1,33 @@
+<section class="section">
+  <div class="page-width">
+    <h1 class="h1 section__title">{{ blog.title | escape }}</h1>
+    {%- paginate blog.articles by 12 -%}
+      <div class="grid grid--wide">
+        {%- for article in blog.articles -%}
+          <article class="card">
+            <a class="card__link" href="{{ article.url }}">
+              {%- if article.image -%}
+                <div class="card__media card__media--wide">
+                  {{ article.image | image_url: width: 800 | image_tag: widths: '400, 600, 800', sizes: '(min-width: 990px) 380px, 100vw', loading: 'lazy', alt: article.image.alt | default: article.title }}
+                </div>
+              {%- endif -%}
+              <h2 class="card__title">{{ article.title | escape }}</h2>
+              <p class="muted small">{{ article.published_at | date: '%d/%m/%Y' }}</p>
+              <p class="muted">{{ article.excerpt_or_content | strip_html | truncatewords: 24 }}</p>
+            </a>
+          </article>
+        {%- endfor -%}
+      </div>
+      {%- if paginate.pages > 1 -%}
+        <nav class="pagination" aria-label="Pages">{{ paginate | default_pagination: next: 'Suivant', previous: 'Précédent' }}</nav>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Blog",
+  "settings": []
+}
+{% endschema %}

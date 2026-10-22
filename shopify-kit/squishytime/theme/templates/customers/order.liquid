@@ -1,0 +1,43 @@
+<section class="section">
+  <div class="page-width">
+    <p><a href="{{ routes.account_url }}" class="link-arrow">Retour au compte</a></p>
+    <h1 class="h1 section__title">Commande {{ order.name }}</h1>
+    <p class="muted">Passée le {{ order.created_at | date: '%d/%m/%Y à %H:%M' }}</p>
+    {%- if order.cancelled -%}<p class="form__error">Commande annulée le {{ order.cancelled_at | date: '%d/%m/%Y' }}.</p>{%- endif -%}
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th>Produit</th><th>Prix</th><th>Quantité</th><th>Total</th></tr></thead>
+        <tbody>
+          {%- for line in order.line_items -%}
+            <tr>
+              <td>
+                {{ line.title | escape }}
+                {%- if line.fulfillment -%}
+                  <br><small>Envoyé le {{ line.fulfillment.created_at | date: '%d/%m/%Y' }}
+                  {%- if line.fulfillment.tracking_url %} · <a href="{{ line.fulfillment.tracking_url }}" target="_blank" rel="noopener">Suivre le colis</a>{% endif -%}</small>
+                {%- endif -%}
+              </td>
+              <td>{{ line.final_price | money }}</td>
+              <td>{{ line.quantity }}</td>
+              <td>{{ line.final_line_price | money }}</td>
+            </tr>
+          {%- endfor -%}
+        </tbody>
+        <tfoot>
+          <tr><td colspan="3">Sous-total</td><td>{{ order.line_items_subtotal_price | money }}</td></tr>
+          {%- for discount in order.cart_level_discount_applications -%}
+            <tr><td colspan="3">{{ discount.title | escape }}</td><td>−{{ discount.total_allocated_amount | money }}</td></tr>
+          {%- endfor -%}
+          {%- for line in order.shipping_methods -%}
+            <tr><td colspan="3">Livraison ({{ line.title | escape }})</td><td>{{ line.price | money }}</td></tr>
+          {%- endfor -%}
+          <tr><td colspan="3"><strong>Total</strong></td><td><strong>{{ order.total_price | money_with_currency }}</strong></td></tr>
+        </tfoot>
+      </table>
+    </div>
+    <div class="form__grid">
+      <div><h2 class="h3">Adresse de facturation</h2><p>{{ order.billing_address | format_address }}</p></div>
+      <div><h2 class="h3">Adresse de livraison</h2><p>{{ order.shipping_address | format_address }}</p></div>
+    </div>
+  </div>
+</section>

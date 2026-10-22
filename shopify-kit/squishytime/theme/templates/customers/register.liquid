@@ -1,0 +1,29 @@
+<section class="section">
+  <div class="page-width page-width--narrow">
+    <div class="card-box">
+      <h1 class="h2">Créer un compte</h1>
+      {%- form 'create_customer', class: 'form' -%}
+        {%- if form.errors -%}<div class="form__error" role="alert">{{ form.errors | default_errors }}</div>{%- endif -%}
+        <div class="form__grid">
+          <div class="field">
+            <label for="RegisterFirstName">Prénom</label>
+            <input id="RegisterFirstName" type="text" name="customer[first_name]" autocomplete="given-name">
+          </div>
+          <div class="field">
+            <label for="RegisterLastName">Nom</label>
+            <input id="RegisterLastName" type="text" name="customer[last_name]" autocomplete="family-name">
+          </div>
+        </div>
+        <div class="field">
+          <label for="RegisterEmail">E-mail</label>
+          <input id="RegisterEmail" type="email" name="customer[email]" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="RegisterPassword">Mot de passe</label>
+          <input id="RegisterPassword" type="password" name="customer[password]" autocomplete="new-password" required>
+        </div>
+        <button type="submit" class="button button--primary">Créer mon compte</button>
+      {%- endform -%}
+    </div>
+  </div>
+</section>

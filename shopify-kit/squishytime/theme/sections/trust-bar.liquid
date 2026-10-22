@@ -1,0 +1,31 @@
+<section class="trust section--{{ section.settings.background }}">
+  <ul class="trust__list page-width" role="list">
+    <li>{% render 'icon', name: 'truck' %}<span><strong>{% if settings.free_shipping %}Livraison offerte{% else %}Livraison suivie{% endif %}</strong>reçu en {{ settings.delivery_time | escape }}</span></li>
+    <li>{% render 'icon', name: 'return' %}<span><strong>14 jours</strong>pour changer d'avis</span></li>
+    <li>{% render 'icon', name: 'lock' %}<span><strong>Paiement sécurisé</strong>carte et paiements express</span></li>
+    <li>{% render 'icon', name: 'chat' %}<span><strong>Une question ?</strong><a href="{{ routes.root_url }}pages/contact">écris-nous</a></span></li>
+  </ul>
+</section>
+
+{% schema %}
+{
+  "name": "Bandeau confiance",
+  "class": "section-trust",
+  "settings": [
+    {
+      "type": "select",
+      "id": "background",
+      "label": "Fond",
+      "options": [
+        { "value": "plain", "label": "Fond de page" },
+        { "value": "pink", "label": "Rose" },
+        { "value": "mint", "label": "Menthe" },
+        { "value": "butter", "label": "Vanille" },
+        { "value": "lilac", "label": "Lilas" }
+      ],
+      "default": "lilac"
+    }
+  ],
+  "presets": [{ "name": "Bandeau confiance" }]
+}
+{% endschema %}

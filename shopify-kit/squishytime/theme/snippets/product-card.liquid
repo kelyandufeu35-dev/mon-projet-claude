@@ -1,0 +1,33 @@
+{%- comment -%} Carte produit pour les grilles. Paramètres : product, eager (facultatif). {%- endcomment -%}
+<article class="card">
+  <a class="card__link" href="{{ product.url }}">
+    <div class="card__media">
+      {%- if product.featured_media -%}
+        {{ product.featured_media | image_url: width: 720 | image_tag:
+          widths: '240, 360, 480, 720',
+          sizes: '(min-width: 990px) 280px, 50vw',
+          loading: eager | default: 'lazy',
+          alt: product.featured_media.alt | default: product.title
+        }}
+        {%- if product.media.size > 1 and product.media[1].media_type == 'image' -%}
+          {{ product.media[1] | image_url: width: 720 | image_tag:
+            widths: '240, 360, 480, 720',
+            sizes: '(min-width: 990px) 280px, 50vw',
+            loading: 'lazy',
+            class: 'card__alt',
+            alt: ''
+          }}
+        {%- endif -%}
+      {%- else -%}
+        {% render 'squishy-art', label: product.title %}
+      {%- endif -%}
+      {%- unless product.available -%}<span class="card__tag">Épuisé</span>{%- endunless -%}
+    </div>
+    <h3 class="card__title">{{ product.title | escape }}</h3>
+    <p class="card__price">
+      {%- if product.price_varies -%}dès {% endif -%}
+      {{ product.price_min | money }}
+      {%- if product.compare_at_price_min > product.price_min %} <s>{{ product.compare_at_price_min | money }}</s>{% endif -%}
+    </p>
+  </a>
+</article>

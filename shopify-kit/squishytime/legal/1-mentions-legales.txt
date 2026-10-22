@@ -1,0 +1,20 @@
+MENTIONS LÉGALES
+(À coller dans Shopify : Paramètres → Politiques → Mentions légales)
+Remplace les 2 éléments entre crochets en recopiant les mentions légales de Pattoune (même entreprise).
+
+Éditeur du site
+Le site SquishyTime est édité par un entrepreneur individuel (micro-entreprise), sous le nom commercial SquishyTime.
+Adresse : [la même adresse que dans les mentions légales de Pattoune]
+SIREN : [le même numéro que Pattoune]
+TVA non applicable, article 293 B du Code général des impôts.
+Contact : le formulaire de la page Contact du site.
+Directeur de la publication : l'entrepreneur individuel éditeur du site.
+
+Hébergement
+Shopify International Limited, Victoria Buildings, 2e étage, 1-2 Haddington Road, Dublin 4, D04 XN32, Irlande.
+
+Propriété intellectuelle
+Les textes, visuels et éléments graphiques de ce site appartiennent à SquishyTime ou sont utilisés avec autorisation. Toute reproduction sans accord écrit est interdite.
+
+Médiation
+En cas de litige non résolu avec notre service client, tu peux recourir gratuitement à un médiateur de la consommation, dont les coordonnées seront indiquées ici dès notre adhésion.

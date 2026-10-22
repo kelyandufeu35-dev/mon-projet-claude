@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="{{ settings.color_primary }}">
+    <link rel="canonical" href="{{ canonical_url }}">
+
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 64, height: 64 }}">
+    {%- else -%}
+      <link rel="icon" type="image/svg+xml" href="{{ 'st-favicon.svg' | asset_url }}">
+    {%- endif -%}
+
+    {{ 'fredoka-latin-700-normal.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+    {{ 'nunito-latin-400-normal.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+
+    {%- liquid
+      assign page_title_full = page_title
+      if current_tags
+        assign tags_text = current_tags | join: ', '
+        assign page_title_full = page_title_full | append: ' – ' | append: tags_text
+      endif
+      if current_page != 1
+        assign page_title_full = page_title_full | append: ' – page ' | append: current_page
+      endif
+      unless page_title contains shop.name
+        assign page_title_full = page_title_full | append: ' – ' | append: shop.name
+      endunless
+    -%}
+    <title>{{ page_title_full }}</title>
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
+
+    {% render 'meta-tags' %}
+
+    {% render 'theme-styles' %}
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+
+    <script>
+      window.SquishyTime = {
+        moneyFormat: {{ shop.money_format | strip_html | json }},
+        cartAddUrl: {{ routes.cart_add_url | json }},
+        cartChangeUrl: {{ routes.cart_change_url | json }}
+      };
+    </script>
+    <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+
+    {{ content_for_header }}
+  </head>
+
+  <body class="template-{{ template.name }}{% if template.suffix %} template-{{ template.name }}-{{ template.suffix }}{% endif %}">
+    <a class="skip-link" href="#main">Aller au contenu</a>
+
+    {% sections 'header-group' %}
+
+    <main id="main" class="main" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {% sections 'footer-group' %}
+
+    {% section 'cart-drawer' %}
+
+    {% render 'structured-data' %}
+  </body>
+</html>

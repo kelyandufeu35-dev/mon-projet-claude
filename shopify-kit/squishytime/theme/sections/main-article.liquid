@@ -1,0 +1,20 @@
+<article class="section">
+  <div class="page-width page-width--narrow">
+    <p class="muted small"><a href="{{ blog.url }}">{{ blog.title | escape }}</a> · {{ article.published_at | date: '%d/%m/%Y' }}</p>
+    <h1 class="h1 section__title">{{ article.title | escape }}</h1>
+    {%- if article.image -%}
+      <div class="article__image">
+        {{ article.image | image_url: width: 1400 | image_tag: widths: '600, 900, 1200, 1400', sizes: '(min-width: 800px) 760px, 100vw', loading: 'eager', alt: article.image.alt | default: article.title }}
+      </div>
+    {%- endif -%}
+    <div class="rte">{{ article.content }}</div>
+    <p><a href="{{ blog.url }}" class="link-arrow">Tous les articles {% render 'icon', name: 'arrow' %}</a></p>
+  </div>
+</article>
+
+{% schema %}
+{
+  "name": "Article",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,20 @@
+<section class="section">
+  <div class="page-width page-width--narrow">
+    <div class="card-box">
+      <h1 class="h2">Activer mon compte</h1>
+      {%- form 'activate_customer_password', class: 'form' -%}
+        {%- if form.errors -%}<div class="form__error" role="alert">{{ form.errors | default_errors }}</div>{%- endif -%}
+        <div class="field">
+          <label for="ActivatePassword">Mot de passe</label>
+          <input id="ActivatePassword" type="password" name="customer[password]" autocomplete="new-password" required>
+        </div>
+        <div class="field">
+          <label for="ActivateConfirm">Confirme le mot de passe</label>
+          <input id="ActivateConfirm" type="password" name="customer[password_confirmation]" autocomplete="new-password" required>
+        </div>
+        <button type="submit" class="button button--primary">Activer</button>
+        <button type="submit" name="decline" class="button">Refuser l'invitation</button>
+      {%- endform -%}
+    </div>
+  </div>
+</section>

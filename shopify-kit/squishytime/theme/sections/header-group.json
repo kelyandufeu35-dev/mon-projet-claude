@@ -1,0 +1,20 @@
+{
+  "type": "header",
+  "name": "En-tête",
+  "sections": {
+    "announcement": {
+      "type": "announcement-bar",
+      "blocks": {
+        "msg-1": { "type": "message", "settings": { "text": "Livraison offerte", "link": "" } },
+        "msg-2": { "type": "message", "settings": { "text": "−10 % dès 2 squishy, −15 % dès 3", "link": "" } }
+      },
+      "block_order": ["msg-1", "msg-2"],
+      "settings": {}
+    },
+    "header": {
+      "type": "header",
+      "settings": { "menu": "main-menu", "show_search": false, "show_account": false }
+    }
+  },
+  "order": ["announcement", "header"]
+}

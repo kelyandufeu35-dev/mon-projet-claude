@@ -1,0 +1,125 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "shipping": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "Livraison et retours",
+            "content": "<p>Livraison offerte, avec suivi. Compte 8 à 25 jours entre ta commande et la réception.</p><p>Tu as 14 jours après réception pour changer d'avis. Écris-nous depuis la page Contact.</p>"
+          }
+        },
+        "care": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "Conseils d'utilisation",
+            "content": "<p>Ne convient pas aux enfants de moins de 36 mois. Ce n'est pas un aliment : ne pas le mettre à la bouche.</p><p>Garde-le à l'abri du soleil direct et de la chaleur, et éloigne-le des animaux qui pourraient le mâchouiller.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "shipping",
+        "care"
+      ],
+      "settings": {
+        "hook": "Écrase-le, relâche-le… et regarde-le reprendre sa forme tout doucement.",
+        "show_vendor": false,
+        "show_bundle": true,
+        "show_dynamic_checkout": true,
+        "show_age_warning": true,
+        "open_description": true
+      }
+    },
+    "steps": {
+      "type": "steps",
+      "blocks": {
+        "step-1": {
+          "type": "step",
+          "settings": {
+            "title": "Écrase",
+            "text": "Serre-le bien fort dans ta main : il s'aplatit tout mou."
+          }
+        },
+        "step-2": {
+          "type": "step",
+          "settings": {
+            "title": "Relâche",
+            "text": "Ouvre la main et pose-le devant toi."
+          }
+        },
+        "step-3": {
+          "type": "step",
+          "settings": {
+            "title": "Regarde",
+            "text": "Il reprend sa forme, tout lentement."
+          }
+        }
+      },
+      "block_order": [
+        "step-1",
+        "step-2",
+        "step-3"
+      ],
+      "settings": {
+        "heading": "Comment ça marche ?",
+        "background": "mint"
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q-1": {
+          "type": "question",
+          "settings": {
+            "question": "Combien de temps pour la livraison ?",
+            "answer": "<p>Compte 8 à 25 jours entre ta commande et la réception. Tu reçois un numéro de suivi par e-mail dès l'envoi. La livraison est offerte.</p>"
+          }
+        },
+        "q-2": {
+          "type": "question",
+          "settings": {
+            "question": "Comment marchent les lots ?",
+            "answer": "<p>−10 % dès 2 squishy, −15 % dès 3. La remise s'applique toute seule dans le panier, même si tu mélanges les tailles.</p>"
+          }
+        },
+        "q-3": {
+          "type": "question",
+          "settings": {
+            "question": "Et si je change d'avis ?",
+            "answer": "<p>Tu as 14 jours après réception pour nous le renvoyer, sans te justifier. Écris-nous depuis la page Contact.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q-1",
+        "q-2",
+        "q-3"
+      ],
+      "settings": {
+        "heading": "Questions fréquentes",
+        "background": "plain"
+      }
+    },
+    "recos": {
+      "type": "product-recommendations",
+      "settings": {
+        "heading": "Tu aimeras aussi",
+        "limit": 4
+      }
+    },
+    "trust": {
+      "type": "trust-bar",
+      "settings": {
+        "background": "lilac"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "steps",
+    "faq",
+    "recos",
+    "trust"
+  ]
+}

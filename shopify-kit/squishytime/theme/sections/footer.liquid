@@ -1,0 +1,83 @@
+{%- liquid
+  assign menu = section.settings.menu
+  assign legal = section.settings.legal_menu
+-%}
+<footer class="footer">
+  <div class="footer__inner page-width">
+    <div class="footer__brand">
+      <p class="footer__name">{{ shop.name | escape }}</p>
+      {%- if section.settings.text != blank -%}
+        <div class="footer__text rte">{{ section.settings.text }}</div>
+      {%- endif -%}
+      {%- if settings.social_tiktok != blank or settings.social_instagram != blank or settings.social_pinterest != blank -%}
+        <ul class="socials" role="list">
+          {%- if settings.social_tiktok != blank -%}<li><a href="{{ settings.social_tiktok }}" class="icon-button" aria-label="TikTok" rel="noopener" target="_blank">{% render 'icon', name: 'tiktok' %}</a></li>{%- endif -%}
+          {%- if settings.social_instagram != blank -%}<li><a href="{{ settings.social_instagram }}" class="icon-button" aria-label="Instagram" rel="noopener" target="_blank">{% render 'icon', name: 'instagram' %}</a></li>{%- endif -%}
+          {%- if settings.social_pinterest != blank -%}<li><a href="{{ settings.social_pinterest }}" class="icon-button" aria-label="Pinterest" rel="noopener" target="_blank">{% render 'icon', name: 'pinterest' %}</a></li>{%- endif -%}
+        </ul>
+      {%- endif -%}
+    </div>
+
+    {%- if menu.links.size > 0 -%}
+      <nav class="footer__col" aria-label="{{ menu.title | escape }}">
+        <p class="footer__heading">{{ menu.title | escape }}</p>
+        <ul role="list">
+          {%- for link in menu.links -%}
+            <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    {%- endif -%}
+
+    <nav class="footer__col" aria-label="Informations légales">
+      <p class="footer__heading">Infos légales</p>
+      <ul role="list">
+        {%- if legal.links.size > 0 -%}
+          {%- for link in legal.links -%}
+            <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
+          {%- endfor -%}
+        {%- else -%}
+          {%- comment -%} Sans menu choisi, on liste les politiques remplies dans Shopify. {%- endcomment -%}
+          {%- for policy in shop.policies -%}
+            <li><a href="{{ policy.url }}">{{ policy.title | escape }}</a></li>
+          {%- endfor -%}
+          <li><a href="{{ routes.root_url }}pages/contact">Contact</a></li>
+        {%- endif -%}
+      </ul>
+    </nav>
+  </div>
+
+  <div class="footer__bottom page-width">
+    <p>© {{ 'now' | date: '%Y' }} {{ shop.name | escape }}</p>
+    {%- if section.settings.show_payment_icons and shop.enabled_payment_types.size > 0 -%}
+      <ul class="payments" role="list" aria-label="Moyens de paiement">
+        {%- for type in shop.enabled_payment_types -%}
+          <li>{{ type | payment_type_svg_tag: class: 'payments__icon' }}</li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Pied de page",
+  "class": "section-footer",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Texte",
+      "default": "<p>Des squishy tout doux qui reprennent leur forme lentement.</p>"
+    },
+    { "type": "link_list", "id": "menu", "label": "Menu boutique", "default": "footer" },
+    {
+      "type": "link_list",
+      "id": "legal_menu",
+      "label": "Menu légal",
+      "info": "Laisse vide : les politiques remplies dans Paramètres → Politiques s'affichent toutes seules."
+    },
+    { "type": "checkbox", "id": "show_payment_icons", "label": "Afficher les moyens de paiement", "default": true }
+  ]
+}
+{% endschema %}

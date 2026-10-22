@@ -1,0 +1,132 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "SquishyTime",
+    "theme_version": "1.0.0",
+    "theme_author": "SquishyTime",
+    "theme_documentation_url": "https://help.shopify.com/fr/manual/online-store/themes",
+    "theme_support_url": "https://help.shopify.com/fr"
+  },
+  {
+    "name": "Logo et favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo (image)",
+        "info": "Laisse vide pour afficher le nom de la boutique avec la petite fraise."
+      },
+      {
+        "type": "range",
+        "id": "logo_width",
+        "label": "Largeur du logo",
+        "min": 80,
+        "max": 260,
+        "step": 10,
+        "unit": "px",
+        "default": 150
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon",
+        "info": "Image carrée de 64 × 64 px. Sans image, une petite fraise s'affiche."
+      }
+    ]
+  },
+  {
+    "name": "Couleurs",
+    "settings": [
+      { "type": "color", "id": "color_background", "label": "Fond de page", "default": "#FFF7F2" },
+      { "type": "color", "id": "color_surface", "label": "Fond des cartes", "default": "#FFFFFF" },
+      { "type": "color", "id": "color_text", "label": "Texte", "default": "#3B1F2B" },
+      { "type": "color", "id": "color_muted", "label": "Texte secondaire", "default": "#76525F" },
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Fraise (boutons)",
+        "default": "#D8325A",
+        "info": "Garde une couleur assez foncée pour que le texte des boutons reste lisible."
+      },
+      { "type": "color", "id": "color_primary_text", "label": "Texte des boutons", "default": "#FFFFFF" },
+      { "type": "color", "id": "color_pink", "label": "Rose pastel", "default": "#FFE0E8" },
+      { "type": "color", "id": "color_mint", "label": "Menthe pastel", "default": "#D3F2E3" },
+      { "type": "color", "id": "color_leaf", "label": "Vert feuille", "default": "#277A4B" },
+      { "type": "color", "id": "color_butter", "label": "Jaune vanille", "default": "#FFF1C2" },
+      { "type": "color", "id": "color_lilac", "label": "Lilas pastel", "default": "#ECE4FF" },
+      {
+        "type": "range",
+        "id": "radius",
+        "label": "Arrondi des coins",
+        "min": 8,
+        "max": 32,
+        "step": 2,
+        "unit": "px",
+        "default": 24
+      }
+    ]
+  },
+  {
+    "name": "Offres et livraison",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Ces chiffres sont seulement affichés. Pour que la remise soit vraiment appliquée, crée les réductions automatiques correspondantes dans Shopify (voir le guide)."
+      },
+      { "type": "checkbox", "id": "bundle_enabled", "label": "Afficher les offres de lot", "default": true },
+      {
+        "type": "range",
+        "id": "bundle_2_percent",
+        "label": "Remise dès 2 squishy",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "unit": "%",
+        "default": 10
+      },
+      {
+        "type": "range",
+        "id": "bundle_3_percent",
+        "label": "Remise dès 3 squishy",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "unit": "%",
+        "default": 15
+      },
+      {
+        "type": "checkbox",
+        "id": "free_shipping",
+        "label": "Livraison toujours offerte",
+        "default": true,
+        "info": "Doit correspondre au tarif réglé dans Paramètres → Expédition et livraison."
+      },
+      {
+        "type": "text",
+        "id": "delivery_time",
+        "label": "Délai de livraison affiché",
+        "default": "8 à 25 jours",
+        "info": "Mets le vrai délai de ton fournisseur, préparation comprise."
+      }
+    ]
+  },
+  {
+    "name": "Réseaux sociaux",
+    "settings": [
+      { "type": "url", "id": "social_tiktok", "label": "TikTok" },
+      { "type": "url", "id": "social_instagram", "label": "Instagram" },
+      { "type": "url", "id": "social_pinterest", "label": "Pinterest" }
+    ]
+  },
+  {
+    "name": "Partage et SEO",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "share_image",
+        "label": "Image de partage par défaut",
+        "info": "Utilisée quand une page n'a pas d'image (1200 × 630 px conseillé)."
+      }
+    ]
+  }
+]

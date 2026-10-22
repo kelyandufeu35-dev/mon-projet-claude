@@ -1,0 +1,18 @@
+{%- comment -%}
+  Avertissement petites pièces (moins de 36 mois), avec le pictogramme habituel « 0-3 barré ».
+  Paramètre : text (facultatif).
+{%- endcomment -%}
+<div class="age-warning" role="note">
+  <svg class="age-warning__picto" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+    <circle cx="24" cy="24" r="21" fill="#fff" stroke="currentColor" stroke-width="4"/>
+    <text x="24" y="29" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="14" fill="currentColor">0-3</text>
+    <path d="M9 9l30 30" stroke="currentColor" stroke-width="4"/>
+  </svg>
+  <div class="age-warning__text">
+    {%- if text != blank -%}
+      {{ text }}
+    {%- else -%}
+      <strong>Attention :</strong> ne convient pas aux enfants de moins de 36 mois. Contient de petites pièces, risque d'étouffement.
+    {%- endif -%}
+  </div>
+</div>

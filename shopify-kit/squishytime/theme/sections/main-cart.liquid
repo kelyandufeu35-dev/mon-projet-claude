@@ -1,0 +1,13 @@
+<section class="section page-width page-width--narrow" data-cart-page>
+  <h1 class="h1 section__title">Ton panier</h1>
+  <div data-cart-page-body>
+    {% render 'cart-contents', context: 'page' %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Panier",
+  "settings": []
+}
+{% endschema %}

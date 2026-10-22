@@ -1,0 +1,73 @@
+{%- comment -%}
+  Page contact : uniquement un formulaire. Aucun e-mail, téléphone ni adresse perso n'est affiché :
+  les messages arrivent sur l'adresse e-mail de la boutique réglée dans Shopify.
+{%- endcomment -%}
+<section class="section">
+  <div class="page-width page-width--narrow">
+    <h1 class="h1 section__title">{{ page.title | default: 'Contact' | escape }}</h1>
+    {%- if page.content != blank -%}
+      <div class="rte">{{ page.content }}</div>
+    {%- elsif section.settings.intro != blank -%}
+      <div class="rte">{{ section.settings.intro }}</div>
+    {%- endif -%}
+
+    <div class="card-box">
+      {%- form 'contact', class: 'form', id: 'ContactForm' -%}
+        {%- if form.posted_successfully? -%}
+          <p class="form__success" role="status" tabindex="-1" autofocus>{% render 'icon', name: 'check' %} Merci ! Ton message est bien parti, on te répond vite.</p>
+        {%- elsif form.errors -%}
+          <div class="form__error" role="alert">
+            <p>Oups, vérifie ces champs :</p>
+            {{ form.errors | default_errors }}
+          </div>
+        {%- endif -%}
+
+        <div class="form__grid">
+          <div class="field">
+            <label for="ContactName">Prénom et nom</label>
+            <input id="ContactName" type="text" name="contact[name]" autocomplete="name" value="{{ form.name }}">
+          </div>
+          <div class="field">
+            <label for="ContactEmail">E-mail <span aria-hidden="true">*</span></label>
+            <input id="ContactEmail" type="email" name="contact[email]" autocomplete="email" required aria-required="true" value="{{ form.email }}">
+          </div>
+        </div>
+        <div class="field">
+          <label for="ContactOrder">Numéro de commande (si tu en as un)</label>
+          <input id="ContactOrder" type="text" name="contact[Numéro de commande]" placeholder="#1001">
+        </div>
+        <div class="field">
+          <label for="ContactSubject">Sujet</label>
+          <select id="ContactSubject" name="contact[Sujet]" class="select">
+            <option>Question sur un produit</option>
+            <option>Suivi de commande</option>
+            <option>Retour ou rétractation</option>
+            <option>Produit abîmé ou non conforme</option>
+            <option>Autre</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="ContactBody">Message <span aria-hidden="true">*</span></label>
+          <textarea id="ContactBody" name="contact[body]" rows="6" required aria-required="true">{{ form.body }}</textarea>
+        </div>
+        <p class="muted small">Tes informations servent seulement à te répondre. Voir notre <a href="{{ shop.privacy_policy.url | default: '/policies/privacy-policy' }}">politique de confidentialité</a>.</p>
+        <button type="submit" class="button button--primary">Envoyer</button>
+      {%- endform -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Formulaire de contact",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Texte d'introduction",
+      "default": "<p>Une question sur un squishy, une commande ou un retour ? Écris-nous, on te répond au plus vite.</p>",
+      "info": "Utilisé si la page Contact n'a pas de contenu."
+    }
+  ]
+}
+{% endschema %}
