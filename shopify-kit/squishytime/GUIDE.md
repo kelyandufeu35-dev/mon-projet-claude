@@ -21,7 +21,7 @@ Dans ce dossier :
 
 ## 2. Préparer le produit
 
-Importe le squishy avec DSers, puis ouvre-le dans **Produits** et suis `fiche-produit.md` : titre, description, tailles **8 cm à 12,99 €** et **12 cm à 15,99 €**, photos, référencement.
+Importe le squishy avec DSers, puis ouvre-le dans **Produits** et suis `fiche-produit.md` : titre, description, taille unique **12 cm à 15,99 €**, photos, référencement.
 
 Vérifie aussi le **coût de livraison facturé par DSers** : la livraison est offerte au client, donc ce coût sort de ta marge.
 
@@ -94,7 +94,7 @@ Les clients voient l'e-mail d'expéditeur dans les confirmations de commande (**
 
 **Boutique en ligne → Thèmes → Personnaliser** sur SquishyTime.
 
-1. **Grande bannière** : choisis ton produit (affiche « dès 12,99 € »). Ajoute une belle photo détourée si tu en as une, sinon la fraise animée reste.
+1. **Grande bannière** : choisis ton produit (affiche « 15,99 € · livraison offerte »). Ajoute une belle photo détourée si tu en as une, sinon la fraise animée reste.
 2. **Produit vedette** : choisis ton produit. C'est ici qu'on achète directement depuis l'accueil.
 3. **Grille de produits** : choisis la collection « Tous les squishy ».
 4. **Paramètres du thème → Logo et favicon** : ton logo si tu en as un (sinon le nom avec la petite fraise).
@@ -105,14 +105,14 @@ Les clients voient l'e-mail d'expéditeur dans les confirmations de commande (**
 **Boutique en ligne → Préférences.**
 
 - Titre : `SquishyTime – Squishy fraise à remontée lente`
-- Méta-description : `Des squishy tout doux qui reprennent leur forme lentement. Squishy fraise en 8 cm ou 12 cm, livraison offerte.`
+- Méta-description : `Des squishy tout doux qui reprennent leur forme lentement. Squishy fraise géant de 12 cm, livraison offerte.`
 - Image de partage sur les réseaux : une belle photo du squishy (1200 × 630 px).
 
 ## 11. Tester une commande
 
 1. **Paramètres → Paiements** : active le mode test de Shopify Payments.
 2. Sur la boutique, mets **2 squishy** au panier : le panier doit afficher **Lot −10 %**. Puis 3 : **Lot −15 %**.
-3. Pour la taille 8 cm, les totaux attendus sont 23,38 € (×2) et 33,12 € (×3). Pour la 12 cm : 28,78 € (×2) et 40,77 € (×3).
+3. Les totaux attendus sont 28,78 € (×2) et 40,77 € (×3).
 4. Va jusqu'au paiement test, puis désactive le mode test.
 
 ## 12. Domaine et publication

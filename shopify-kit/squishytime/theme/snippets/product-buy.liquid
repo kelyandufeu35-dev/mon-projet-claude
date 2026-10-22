@@ -86,7 +86,7 @@
             <span class="bundles__name">
               {{ qty }} squishy
               {%- if pct > 0 %} <span class="badge">−{{ pct }} %</span>{% endif -%}
-              {%- if qty == 2 -%}<small>Tu peux mélanger les tailles dans le panier</small>{%- endif -%}
+              {%- if qty == 2 and product.variants.size > 1 -%}<small>Tu peux mélanger les tailles dans le panier</small>{%- endif -%}
             </span>
             <span class="bundles__price">
               <span data-bundle-price>{{ deal | money }}</span>

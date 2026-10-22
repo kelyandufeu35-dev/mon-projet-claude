@@ -80,7 +80,7 @@
           "type": "question",
           "settings": {
             "question": "Comment marchent les lots ?",
-            "answer": "<p>−10 % dès 2 squishy, −15 % dès 3. La remise s'applique toute seule dans le panier, même si tu mélanges les tailles.</p>"
+            "answer": "<p>−10 % dès 2 squishy, −15 % dès 3. La remise s'applique toute seule dans le panier.</p>"
           }
         },
         "q-3": {

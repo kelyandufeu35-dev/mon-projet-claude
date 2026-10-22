@@ -26,7 +26,7 @@
           {{ section.settings.button_label | escape }} {% render 'icon', name: 'arrow' %}
         </a>
         {%- if product -%}
-          <p class="hero__price">dès <strong>{{ product.price_min | money }}</strong>{% if settings.free_shipping %} · livraison offerte{% endif %}</p>
+          <p class="hero__price">{% if product.price_varies %}dès {% endif %}<strong>{{ product.price_min | money }}</strong>{% if settings.free_shipping %} · livraison offerte{% endif %}</p>
         {%- endif -%}
       </div>
       {%- if section.blocks.size > 0 -%}
@@ -80,7 +80,7 @@
       "type": "richtext",
       "id": "text",
       "label": "Texte",
-      "default": "<p>Un squishy fraise géant, tout moelleux, qui reprend sa forme tout doucement. En 8 cm ou en 12 cm.</p>"
+      "default": "<p>Un squishy fraise géant de 12 cm, tout moelleux, qui reprend sa forme tout doucement.</p>"
     },
     { "type": "product", "id": "product", "label": "Produit mis en avant" },
     { "type": "text", "id": "button_label", "label": "Texte du bouton", "default": "Je le veux" },
@@ -100,7 +100,7 @@
       "default": false,
       "info": "Décoché : la fraise animée s'affiche."
     },
-    { "type": "text", "id": "sticker", "label": "Pastille sur l'image", "default": "8 cm ou 12 cm" },
+    { "type": "text", "id": "sticker", "label": "Pastille sur l'image", "default": "12 cm" },
     {
       "type": "select",
       "id": "background",

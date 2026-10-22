@@ -22,7 +22,7 @@ Colle ce bloc dans la description, avec le bouton **`<>`** (afficher le HTML) de
 <p>Une fraise géante toute moelleuse : écrase-la dans ta main, relâche… et regarde-la reprendre sa forme tout doucement.</p>
 <ul>
   <li><strong>Remontée lente :</strong> elle se regonfle lentement après chaque écrasement.</li>
-  <li><strong>2 tailles :</strong> 8 cm (tient dans la paume) ou 12 cm (à malaxer à pleines mains).</li>
+  <li><strong>Taille géante :</strong> 12 cm de haut, à malaxer à pleines mains.</li>
   <li><strong>Comme une vraie :</strong> rouge vif, petits grains en creux et couronne de feuilles vertes.</li>
 </ul>
 <p><strong>Attention :</strong> ne convient pas aux enfants de moins de 36 mois. Contient de petites pièces, risque d'étouffement. Ce n'est pas un aliment : ne pas mettre à la bouche.</p>
@@ -31,14 +31,14 @@ Colle ce bloc dans la description, avec le bouton **`<>`** (afficher le HTML) de
 
 ## Variantes et prix
 
+Une seule taille : **12 cm à 15,99 €**. Le 8 cm est retiré (en rupture chez le fournisseur).
+
 | Option « Taille » | Prix | Prix avant réduction |
 | --- | --- | --- |
-| 8 cm | **12,99 €** | vide |
 | 12 cm | **15,99 €** | vide |
 
 - Laisse « Prix avant réduction » **vide** : un prix barré doit être un prix réellement pratiqué avant (le plus bas des 30 derniers jours).
-- Si DSers a nommé l'option « Size » ou « Color », renomme-la **Taille**, et les valeurs **8 cm** et **12 cm**.
-- Associe à chaque taille **sa photo** : la galerie change de photo quand on choisit la taille.
+- Si DSers a nommé l'option « Size » ou « Color », renomme-la **Taille**, et la valeur **12 cm**.
 
 ## Organisation
 
@@ -49,7 +49,7 @@ Colle ce bloc dans la description, avec le bouton **`<>`** (afficher le HTML) de
 ## Référencement (en bas de la fiche, « Référencement sur les moteurs de recherche »)
 
 - **Titre de la page** : `Squishy Fraise Géant à Remontée Lente | SquishyTime`
-- **Méta-description** : `Squishy fraise tout moelleux qui reprend sa forme lentement. En 8 cm ou 12 cm, livraison offerte. −10 % dès 2, −15 % dès 3.`
+- **Méta-description** : `Squishy fraise géant de 12 cm, tout moelleux, qui reprend sa forme lentement. Livraison offerte. −10 % dès 2, −15 % dès 3.`
 - **Adresse URL** : `squishy-fraise-geant`
 
 ## Texte alternatif des photos
@@ -57,8 +57,7 @@ Colle ce bloc dans la description, avec le bouton **`<>`** (afficher le HTML) de
 Clique sur chaque photo → « Ajouter un texte alternatif » :
 
 - Photo principale : `Squishy fraise géant à remontée lente`
-- Photo 8 cm : `Squishy fraise taille 8 cm`
-- Photo 12 cm : `Squishy fraise taille 12 cm`
+- Photo de face : `Squishy fraise de 12 cm`
 - Photo écrasée : `Squishy fraise écrasé dans une main`
 
 Adapte selon ce que montre vraiment chaque photo.

@@ -30,10 +30,10 @@
       "settings": {
         "eyebrow": "Nouveau : le squishy fraise",
         "title": "Écrase. Relâche. Regarde-le remonter.",
-        "text": "<p>Un squishy fraise géant, tout moelleux, qui reprend sa forme tout doucement. En 8 cm ou en 12 cm.</p>",
+        "text": "<p>Un squishy fraise géant de 12 cm, tout moelleux, qui reprend sa forme tout doucement.</p>",
         "button_label": "Je le veux",
         "use_product_image": false,
-        "sticker": "8 cm ou 12 cm",
+        "sticker": "12 cm",
         "background": "pink",
         "scroll_to_buy": true
       }
@@ -76,7 +76,7 @@
     "featured": {
       "type": "featured-product",
       "settings": {
-        "heading": "Choisis ta taille",
+        "heading": "Le squishy fraise",
         "hook": "Écrase-le, relâche-le… et regarde-le reprendre sa forme tout doucement.",
         "show_vendor": false,
         "show_bundle": true,
@@ -108,8 +108,8 @@
           "type": "benefit",
           "settings": {
             "icon": "ruler",
-            "title": "2 tailles",
-            "text": "8 cm pour la poche, 12 cm pour les deux mains."
+            "title": "Taille géante",
+            "text": "12 cm de haut, à écraser à pleines mains."
           }
         },
         "b-4": {
@@ -130,37 +130,6 @@
       "settings": {
         "heading": "Pourquoi on l'adore",
         "background": "plain"
-      }
-    },
-    "sizes": {
-      "type": "size-guide",
-      "blocks": {
-        "s-8": {
-          "type": "size",
-          "settings": {
-            "size_cm": 8,
-            "title": "La petite",
-            "text": "Tient dans la paume, se glisse dans un sac ou une trousse."
-          }
-        },
-        "s-12": {
-          "type": "size",
-          "settings": {
-            "size_cm": 12,
-            "title": "La géante",
-            "text": "Plus grosse, à écraser à pleines mains."
-          }
-        }
-      },
-      "block_order": [
-        "s-8",
-        "s-12"
-      ],
-      "settings": {
-        "heading": "Quelle taille choisir ?",
-        "text": "Les dessins sont à l'échelle l'un de l'autre.",
-        "note": "Tailles approximatives, mesurées sur la hauteur de la fraise.",
-        "background": "butter"
       }
     },
     "all-squishy": {
@@ -201,7 +170,7 @@
           "type": "question",
           "settings": {
             "question": "Comment marchent les lots ?",
-            "answer": "<p>−10 % dès 2 squishy, −15 % dès 3. La remise s'applique toute seule dans le panier, même si tu mélanges les tailles.</p>"
+            "answer": "<p>−10 % dès 2 squishy, −15 % dès 3. La remise s'applique toute seule dans le panier.</p>"
           }
         }
       },
@@ -228,7 +197,6 @@
     "steps",
     "featured",
     "benefits",
-    "sizes",
     "all-squishy",
     "faq",
     "trust"
