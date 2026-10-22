@@ -19,7 +19,10 @@
       "bundle_2_percent": 10,
       "bundle_3_percent": 15,
       "free_shipping": true,
-      "delivery_time": "8 à 25 jours"
+      "delivery_time": "8 à 25 jours",
+      "delivery_days_min": 8,
+      "delivery_days_max": 25,
+      "share_image": "shopify://shop_images/S63dd4018e67544a4a34f87e3cf81ef5en.webp"
     }
   }
 }

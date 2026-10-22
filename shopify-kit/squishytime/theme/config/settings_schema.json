@@ -37,10 +37,30 @@
   {
     "name": "Couleurs",
     "settings": [
-      { "type": "color", "id": "color_background", "label": "Fond de page", "default": "#FFF7F2" },
-      { "type": "color", "id": "color_surface", "label": "Fond des cartes", "default": "#FFFFFF" },
-      { "type": "color", "id": "color_text", "label": "Texte", "default": "#3B1F2B" },
-      { "type": "color", "id": "color_muted", "label": "Texte secondaire", "default": "#76525F" },
+      {
+        "type": "color",
+        "id": "color_background",
+        "label": "Fond de page",
+        "default": "#FFF7F2"
+      },
+      {
+        "type": "color",
+        "id": "color_surface",
+        "label": "Fond des cartes",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Texte",
+        "default": "#3B1F2B"
+      },
+      {
+        "type": "color",
+        "id": "color_muted",
+        "label": "Texte secondaire",
+        "default": "#76525F"
+      },
       {
         "type": "color",
         "id": "color_primary",
@@ -48,12 +68,42 @@
         "default": "#D8325A",
         "info": "Garde une couleur assez foncée pour que le texte des boutons reste lisible."
       },
-      { "type": "color", "id": "color_primary_text", "label": "Texte des boutons", "default": "#FFFFFF" },
-      { "type": "color", "id": "color_pink", "label": "Rose pastel", "default": "#FFE0E8" },
-      { "type": "color", "id": "color_mint", "label": "Menthe pastel", "default": "#D3F2E3" },
-      { "type": "color", "id": "color_leaf", "label": "Vert feuille", "default": "#277A4B" },
-      { "type": "color", "id": "color_butter", "label": "Jaune vanille", "default": "#FFF1C2" },
-      { "type": "color", "id": "color_lilac", "label": "Lilas pastel", "default": "#ECE4FF" },
+      {
+        "type": "color",
+        "id": "color_primary_text",
+        "label": "Texte des boutons",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "color_pink",
+        "label": "Rose pastel",
+        "default": "#FFE0E8"
+      },
+      {
+        "type": "color",
+        "id": "color_mint",
+        "label": "Menthe pastel",
+        "default": "#D3F2E3"
+      },
+      {
+        "type": "color",
+        "id": "color_leaf",
+        "label": "Vert feuille",
+        "default": "#277A4B"
+      },
+      {
+        "type": "color",
+        "id": "color_butter",
+        "label": "Jaune vanille",
+        "default": "#FFF1C2"
+      },
+      {
+        "type": "color",
+        "id": "color_lilac",
+        "label": "Lilas pastel",
+        "default": "#ECE4FF"
+      },
       {
         "type": "range",
         "id": "radius",
@@ -73,7 +123,12 @@
         "type": "paragraph",
         "content": "Ces chiffres sont seulement affichés. Pour que la remise soit vraiment appliquée, crée les réductions automatiques correspondantes dans Shopify (voir le guide)."
       },
-      { "type": "checkbox", "id": "bundle_enabled", "label": "Afficher les offres de lot", "default": true },
+      {
+        "type": "checkbox",
+        "id": "bundle_enabled",
+        "label": "Afficher les offres de lot",
+        "default": true
+      },
       {
         "type": "range",
         "id": "bundle_2_percent",
@@ -107,15 +162,48 @@
         "label": "Délai de livraison affiché",
         "default": "8 à 25 jours",
         "info": "Mets le vrai délai de ton fournisseur, préparation comprise."
+      },
+      {
+        "type": "range",
+        "id": "delivery_days_min",
+        "label": "Délai minimum (pour Google)",
+        "min": 1,
+        "max": 30,
+        "step": 1,
+        "unit": "j",
+        "default": 8,
+        "info": "Commande → réception, préparation comprise. Doit correspondre au délai affiché."
+      },
+      {
+        "type": "range",
+        "id": "delivery_days_max",
+        "label": "Délai maximum (pour Google)",
+        "min": 2,
+        "max": 60,
+        "step": 1,
+        "unit": "j",
+        "default": 25
       }
     ]
   },
   {
     "name": "Réseaux sociaux",
     "settings": [
-      { "type": "url", "id": "social_tiktok", "label": "TikTok" },
-      { "type": "url", "id": "social_instagram", "label": "Instagram" },
-      { "type": "url", "id": "social_pinterest", "label": "Pinterest" }
+      {
+        "type": "url",
+        "id": "social_tiktok",
+        "label": "TikTok"
+      },
+      {
+        "type": "url",
+        "id": "social_instagram",
+        "label": "Instagram"
+      },
+      {
+        "type": "url",
+        "id": "social_pinterest",
+        "label": "Pinterest"
+      }
     ]
   },
   {

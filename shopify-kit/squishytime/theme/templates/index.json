@@ -32,8 +32,8 @@
         "title": "Écrase. Relâche. Regarde-le remonter.",
         "text": "<p>Un squishy fraise géant de 12 cm, tout moelleux, qui reprend sa forme tout doucement.</p>",
         "button_label": "Je le veux",
-        "use_product_image": false,
-        "sticker": "12 cm",
+        "use_product_image": true,
+        "sticker": "Géant : 12 cm",
         "background": "pink",
         "scroll_to_buy": true,
         "product": "squishy-fraise-geant"

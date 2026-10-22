@@ -30,6 +30,11 @@
     }
   </script>
 {%- elsif request.page_type == 'product' -%}
+  {%- liquid
+    # Délai total affiché (ex. 8 à 25 jours) = préparation (1 à 3 jours) + transport.
+    assign transit_min = settings.delivery_days_min | minus: 1 | at_least: 1
+    assign transit_max = settings.delivery_days_max | minus: 3 | at_least: transit_min
+  -%}
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -55,9 +60,30 @@
             "shippingDetails": {
               "@type": "OfferShippingDetails",
               "shippingRate": { "@type": "MonetaryAmount", "value": 0, "currency": {{ cart.currency.iso_code | json }} },
-              "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "FR" }
+              "shippingDestination": [
+                {%- for country in localization.available_countries -%}
+                  { "@type": "DefinedRegion", "addressCountry": {{ country.iso_code | json }} }{% unless forloop.last %},{% endunless %}
+                {%- endfor -%}
+              ],
+              "deliveryTime": {
+                "@type": "ShippingDeliveryTime",
+                "handlingTime": { "@type": "QuantitativeValue", "minValue": 1, "maxValue": 3, "unitCode": "DAY" },
+                "transitTime": { "@type": "QuantitativeValue", "minValue": {{ transit_min }}, "maxValue": {{ transit_max }}, "unitCode": "DAY" }
+              }
             }
-            {%- endif %}
+            {%- endif -%},
+            "hasMerchantReturnPolicy": {
+              "@type": "MerchantReturnPolicy",
+              "applicableCountry": [
+                {%- for country in localization.available_countries -%}
+                  {{ country.iso_code | json }}{% unless forloop.last %},{% endunless %}
+                {%- endfor -%}
+              ],
+              "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+              "merchantReturnDays": 14,
+              "returnMethod": "https://schema.org/ReturnByMail",
+              "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility"
+            }
           }{% unless forloop.last %},{% endunless %}
         {%- endfor -%}
       ]
