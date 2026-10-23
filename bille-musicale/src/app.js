@@ -622,6 +622,17 @@ function setupApp() {
     state.settings.showTitle = e.target.checked;
     restyle();
   });
+  for (const id of ['evolveColors', 'livelyDecor']) {
+    $(id).addEventListener('change', (e) => {
+      state.settings[id] = e.target.checked;
+      restyle();
+    });
+  }
+  $('variedCourse').addEventListener('change', (e) => {
+    state.settings.variedCourse = e.target.checked;
+    saveSettings();
+    rebuild(true); // la forme du parcours change : il faut le recalculer
+  });
   $('drums').addEventListener('change', (e) => {
     state.settings.drums = e.target.checked;
     saveSettings();
@@ -763,6 +774,7 @@ function setupApp() {
     $('showTitle').checked = s.showTitle;
     $('showNoteNames').checked = s.showNoteNames;
     $('drums').checked = s.drums;
+    for (const id of ['evolveColors', 'variedCourse', 'livelyDecor']) $(id).checked = s[id];
     $('offset').value = String(s.audioOffsetMs);
     $('offsetLabel').textContent = `${s.audioOffsetMs} ms`;
     for (const input of document.querySelectorAll('[data-color]')) input.value = s.colors[input.dataset.color];

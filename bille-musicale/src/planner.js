@@ -69,10 +69,27 @@ const DX_FACTORS = [1, 0.8, 1.25, 0.6, 1.55, 0.45, 1.9];
 const RISE_FACTORS = [1, 0.6, 1.7, 2.6, 0.35, 3.8];
 const DROP_FACTORS = [1, 1.5, 2.2, 3.2, 4.5];
 
-function hopCandidates(dt, x, dir, i, o) {
+// Styles de parcours, un par partie du morceau : facteurs sur le déplacement horizontal, la
+// hauteur des rebonds et la descente. Le planificateur garde ses garanties (aucune collision).
+export const COURSE_STYLES = {
+  zigzag: { dx: 1, rise: 1, drop: 1 },
+  traversee: { dx: 1.7, rise: 0.8, drop: 0.9 }, // grands déplacements d'un bord à l'autre
+  escalier: { dx: 0.55, rise: 0.55, drop: 1.5 }, // marches serrées qui descendent vite
+  flottant: { dx: 1.2, rise: 1.45, drop: 1.05 }, // rebonds plus hauts et amples
+};
+const NEUTRAL = COURSE_STYLES.zigzag;
+
+export function styleAt(o, t) {
+  let style = NEUTRAL;
+  for (const s of o.sections || []) if (s.t0 <= t + 1e-9) style = COURSE_STYLES[s.style] || NEUTRAL;
+  return style;
+}
+
+function hopCandidates(dt, x, dir, i, o, style = NEUTRAL) {
   const minX = o.marginX;
   const maxX = o.width - o.marginX;
-  const nominal = clamp(o.vxBase * dt * (0.85 + 0.3 * hash(i)), o.dxMin, o.dxMax);
+  const span = maxX - minX;
+  const nominal = clamp(o.vxBase * dt * (0.85 + 0.3 * hash(i)) * style.dx, o.dxMin * Math.min(1, style.dx), Math.min(o.dxMax * style.dx, span * 0.85));
   // Un demi-tour se fait de préférence sur une note longue, quand la bille approche du bord.
   const room = dir > 0 ? maxX - x : x - minX;
   const wantTurn = room < nominal * 1.6 && dt >= 0.4;
@@ -225,7 +242,8 @@ export function buildCourse(inputNotes, options = {}) {
   let i = 0;
 
   const evaluate = (c, st, dt, width, idx) => {
-    const { rise, drop } = hopShape(dt, o, c.fr, c.fd);
+    const style = styleAt(o, times[idx]);
+    const { rise, drop } = hopShape(dt, o, c.fr * style.rise, c.fd * style.drop);
     const { vy, g } = solveHop(dt, rise, drop);
     const hop = { t0: times[idx], t1: times[idx] + dt, x0: st.x, y0: st.y, vx: c.dx / dt, vy, g };
     const vout = { x: hop.vx, y: vy };
@@ -241,7 +259,7 @@ export function buildCourse(inputNotes, options = {}) {
     const width = o.platformWidth + clamp((notes[i].duration || 0) * 40, 0, o.platformExtraWidth);
     let step = steps[i];
     if (!step) {
-      step = { state, candidates: hopCandidates(dt, state.x, state.dir, i, o), next: 0, best: null };
+      step = { state, candidates: hopCandidates(dt, state.x, state.dir, i, o, styleAt(o, times[i])), next: 0, best: null };
       steps[i] = step;
     }
     let chosen = null;

@@ -29,6 +29,25 @@ function pill(ctx, w, h) {
   ctx.closePath();
 }
 
+const smooth = (x) => (x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x));
+
+// Couleurs du décor à l'instant t : celles de la partie en cours, en fondu (1,8 s) depuis la
+// partie précédente. Le fondu commence un peu avant la frontière pour l'annoncer.
+function paletteAt(scene, t, st) {
+  const sections = scene.sections;
+  if (!sections?.length || !scene.settings.evolveColors) return { bgTop: st.bgTop, bgBottom: st.bgBottom, accents: st.accents };
+  let k = 0;
+  while (k + 1 < sections.length && sections[k + 1].t0 <= t + 0.3) k++;
+  const cur = sections[k].rgb;
+  const prev = sections[Math.max(0, k - 1)].rgb;
+  const f = k === 0 ? 1 : smooth((t - sections[k].t0 + 0.3) / 1.8);
+  return {
+    bgTop: mix(prev.bgTop, cur.bgTop, f),
+    bgBottom: mix(prev.bgBottom, cur.bgBottom, f),
+    accents: [mix(prev.low, cur.low, f), mix(prev.mid, cur.mid, f), mix(prev.high, cur.high, f)],
+  };
+}
+
 export class Renderer {
   constructor(canvas) {
     this.canvas = canvas;
@@ -53,11 +72,25 @@ export class Renderer {
         r: 50 + hash(k, 3) * 150,
         a: 0.035 + hash(k, 4) * 0.07,
         p: 0.12 + hash(k, 5) * 0.3,
-        c: accents[k % 3],
+        c: k % 3,
         ph: hash(k, 6) * TAU,
       });
     }
-    this.style = { bgTop, bgBottom, ball, accents, bokeh };
+    // Poussières lumineuses : petites, nombreuses, montent doucement et scintillent.
+    const dust = [];
+    for (let k = 0; k < 70; k++) {
+      dust.push({
+        x: hash(k, 11) * WORLD_W,
+        y: hash(k, 12) * 2400,
+        r: 1.2 + hash(k, 13) * 3,
+        p: 0.3 + hash(k, 14) * 0.5,
+        v: 6 + hash(k, 15) * 22,
+        f: 0.4 + hash(k, 16) * 1.6,
+        ph: hash(k, 17) * TAU,
+        c: k % 3,
+      });
+    }
+    this.style = { bgTop, bgBottom, ball, accents, bokeh, dust };
     return this.style;
   }
 
@@ -70,6 +103,8 @@ export class Renderer {
     const offX = (W - WORLD_W * s) / 2;
     const offY = (H - WORLD_H * s) / 2;
     const top = cameraAt(scene.lanes[0].camera, t);
+    const pal = paletteAt(scene, t, st);
+    const lively = scene.settings.livelyDecor;
     // Zone visible en unités du monde : au-delà du cadre 9:16 si l'écran est plus haut ou plus large.
     const x0 = -offX / s;
     const y0 = -offY / s;
@@ -80,8 +115,8 @@ export class Renderer {
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.globalCompositeOperation = 'source-over';
     const bg = ctx.createLinearGradient(0, 0, 0, H);
-    bg.addColorStop(0, rgba(st.bgTop));
-    bg.addColorStop(1, rgba(st.bgBottom));
+    bg.addColorStop(0, rgba(pal.bgTop));
+    bg.addColorStop(1, rgba(pal.bgBottom));
     ctx.fillStyle = bg;
     ctx.fillRect(0, 0, W, H);
 
@@ -92,13 +127,26 @@ export class Renderer {
       const y = ((((b.y - top * b.p) % span) + span) % span) - 340 + y0;
       const x = b.x + Math.sin(t * 0.25 + b.ph) * 30;
       const g = ctx.createRadialGradient(x, y, 0, x, y, b.r);
-      g.addColorStop(0, rgba(b.c, b.a));
-      g.addColorStop(1, rgba(b.c, 0));
+      const c = pal.accents[b.c];
+      g.addColorStop(0, rgba(c, b.a));
+      g.addColorStop(1, rgba(c, 0));
       ctx.fillStyle = g;
       ctx.fillRect(x - b.r, y - b.r, b.r * 2, b.r * 2);
     }
-    // Lumière douce venant du haut, qui pulse légèrement sur chaque grosse caisse.
-    const kicks = scene.kicks || [];
+    if (lively) {
+      for (const d of st.dust) {
+        const span = 2400;
+        const y = ((((d.y - top * d.p - t * d.v) % span) + span) % span) - 240 + y0;
+        const x = d.x + Math.sin(t * 0.4 + d.ph) * 18;
+        const tw = 0.25 + 0.75 * Math.sin(t * d.f + d.ph) ** 2;
+        ctx.beginPath();
+        ctx.arc(x, y, d.r, 0, TAU);
+        ctx.fillStyle = rgba(mix(WHITE, pal.accents[d.c], 0.45), 0.55 * tw);
+        ctx.fill();
+      }
+    }
+    // Lumière douce venant du haut, qui pulse sur les temps forts (grosse caisse ou 1er temps).
+    const kicks = lively ? scene.pulses || [] : scene.kicks || [];
     let k = 0;
     let kEnd = kicks.length;
     while (k < kEnd) {
@@ -108,7 +156,7 @@ export class Renderer {
     }
     const pulse = k > 0 ? Math.exp(-(t - kicks[k - 1]) / 0.16) : 0;
     const light = ctx.createRadialGradient(WORLD_W * 0.3, -WORLD_H * 0.15, 0, WORLD_W * 0.3, -WORLD_H * 0.15, WORLD_H * 1.05);
-    light.addColorStop(0, rgba(mix(st.ball, st.bgTop, 0.3), 0.16 + 0.07 * pulse));
+    light.addColorStop(0, rgba(mix(st.ball, pal.bgTop, 0.3), 0.16 + (lively ? 0.1 : 0.07) * pulse));
     light.addColorStop(1, rgba(st.ball, 0));
     ctx.fillStyle = light;
     ctx.fillRect(x0, y0, vw, vh);
@@ -142,6 +190,28 @@ export class Renderer {
         ctx.fillStyle = g;
         ctx.fillRect(x - 1, y0, 2, vh);
       }
+    }
+
+    // Changement de partie : éclair doux sur tout l'écran et onde qui part de chaque bille.
+    if (lively && scene.sections) {
+      ctx.setTransform(s, 0, 0, s, offX, offY);
+      ctx.globalCompositeOperation = 'lighter';
+      for (const sec of scene.sections) {
+        const tau = t - sec.t0;
+        if (sec.t0 <= 0 || tau < 0 || tau >= 1.6) continue;
+        const k = 1 - tau / 1.6;
+        ctx.fillStyle = rgba(pal.accents[1], 0.14 * Math.exp(-tau / 0.25));
+        ctx.fillRect(x0, y0, vw, vh);
+        for (const lane of lanes) {
+          const b = ballAt(lane.course, t);
+          ctx.beginPath();
+          ctx.arc(lane.x + b.x, b.y - cameraAt(lane.camera, t), 60 + tau * 1100, 0, TAU);
+          ctx.strokeStyle = rgba(mix(WHITE, pal.accents[2], 0.5), 0.45 * k);
+          ctx.lineWidth = 2 + 10 * k;
+          ctx.stroke();
+        }
+      }
+      ctx.globalCompositeOperation = 'source-over';
     }
 
     // Titre (premières secondes) et vignettage.
@@ -216,7 +286,7 @@ export class Renderer {
     }
     for (let j = lo; j < impacts.length && impacts[j].y < viewMax; j++) {
       const tau = t - impacts[j].t;
-      if (tau >= 0 && tau < 0.8) this.drawBurst(lane, j, tau);
+      if (tau >= 0 && tau < 0.95) this.drawBurst(lane, j, tau, scene.settings.livelyDecor);
     }
     this.drawBall(lane, t, st);
   }
@@ -290,7 +360,7 @@ export class Renderer {
     ctx.restore();
   }
 
-  drawBurst(lane, j, tau) {
+  drawBurst(lane, j, tau, lively = false) {
     const { ctx } = this;
     const imp = lane.course.impacts[j];
     const base = mix(lane.colors[j], WHITE, 0.4);
@@ -311,13 +381,28 @@ export class Renderer {
       ctx.stroke();
       ctx.restore();
     }
+    // Note accentuée (forte ou sur un premier temps) : deuxième onde plus large, plus d'étincelles.
+    const strong = lively && imp.strong;
+    if (strong && tau >= 0.06 && tau < 0.7) {
+      const k = (tau - 0.06) / 0.64;
+      ctx.save();
+      ctx.translate(imp.x - imp.nx * R, imp.y - imp.ny * R);
+      ctx.rotate(imp.platform.angle);
+      ctx.scale(1, 0.45);
+      ctx.beginPath();
+      ctx.arc(0, 0, (40 + k * 300) * u, 0, TAU);
+      ctx.strokeStyle = rgba(mix(base, WHITE, 0.3), 0.4 * (1 - k));
+      ctx.lineWidth = (4 * (1 - k) + 1) * u;
+      ctx.stroke();
+      ctx.restore();
+    }
     // Étincelles projetées vers le haut, retombant sous la gravité.
-    const count = 9;
-    const life = 0.75;
+    const count = strong ? 18 : 9;
+    const life = strong ? 0.95 : 0.75;
     const spread = Math.atan2(imp.ny, imp.nx);
     for (let k = 0; k < count; k++) {
       const a = spread + (hash(j, k) - 0.5) * 2.4;
-      const v = (170 + hash(j, k + 50) * 380 * (0.5 + imp.velocity)) * u;
+      const v = (170 + hash(j, k + 50) * 380 * (0.5 + imp.velocity)) * u * (strong ? 1.35 : 1);
       const x = imp.x - imp.nx * R + Math.cos(a) * v * tau;
       const y = imp.y - imp.ny * R + Math.sin(a) * v * tau + 700 * u * tau * tau;
       const f = 1 - tau / life;

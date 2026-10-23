@@ -2,7 +2,9 @@
 
 import { buildCourse, buildCamera, laneOptions, DEFAULTS, WORLD_W } from './planner.js';
 import { verifyCourse } from './verify.js';
-import { PALETTES, platformColor } from './palettes.js';
+import { PALETTES, platformColor, rotateColors, hexToRgb } from './palettes.js';
+
+const SECTION_STYLES = ['zigzag', 'traversee', 'escalier', 'flottant'];
 
 export const DEFAULT_SETTINGS = {
   tempo: 1,
@@ -15,6 +17,9 @@ export const DEFAULT_SETTINGS = {
   showNoteNames: false,
   showTitle: true,
   drums: true,
+  evolveColors: true, // une palette par partie du morceau
+  variedCourse: true, // une forme de parcours par partie
+  livelyDecor: true, // poussières, pulsations, ondes de changement de partie
   lane2Volume: 0.5, // la deuxième bille (l'accompagnement) environ 6 dB sous la mélodie
   audioOffsetMs: 0,
 };
@@ -47,7 +52,18 @@ export function buildScene(project, settingsIn) {
     .filter((part) => part.notes.length);
   // Même amorce pour toutes les pistes : les billes partagent la même horloge.
   const first = Math.min(...parts.map((p) => p.notes[0].time));
-  const options = { ...laneOptions(parts.length), lead: Math.max(0, DEFAULTS.leadIn - first) };
+  const lead = Math.max(0, DEFAULTS.leadIn - first);
+  // Parties du morceau : toutes les 8 mesures quand le tempo est connu (une phrase musicale),
+  // 4 pour un morceau court,
+  // sinon toutes les 12 s. Chacune a sa forme de parcours et sa palette.
+  const last = Math.max(...parts.map((p) => p.notes.at(-1).time)) + lead;
+  const bar = project.bpm ? (4 * 60) / (project.bpm * tempo) : 0;
+  const sectionLength = bar ? ((last - lead - first) / bar >= 24 ? 8 : 4) * bar : 12; // morceau court : toutes les 4 mesures
+  const sections = [{ t0: 0, style: 'zigzag' }];
+  for (let i = 1; lead + first + i * sectionLength < last; i++) {
+    sections.push({ t0: lead + first + i * sectionLength, style: settings.variedCourse ? SECTION_STYLES[i % SECTION_STYLES.length] : 'zigzag' });
+  }
+  const options = { ...laneOptions(parts.length), lead, sections };
   const courses = parts.map((part) => buildCourse(part.notes, options));
   const duration = Math.max(...courses.map((c) => c.duration));
   const lanes = courses.map((course, i) => {
@@ -71,6 +87,13 @@ export function buildScene(project, settingsIn) {
     .flatMap((c, lane) => c.impacts.map((imp) => ({ t: imp.t, lane, midi: imp.midi, chord: imp.chord, velocity: imp.velocity, duration: imp.duration })))
     .sort((a, b) => a.t - b.t);
   const beat = project.beat && settings.drums ? beatEvents(project.beat, tempo, options.lead, duration) : [];
+  // Pulsations du décor : grosse caisse s'il y a une batterie, sinon premier temps de chaque mesure.
+  const kicks = beat.filter((e) => e.drum === 'kick').map((e) => e.t);
+  const pulses = kicks.length ? kicks : downbeats(project.bpm && project.bpm * tempo, lead + first, duration);
+  // Notes accentuées (fortes ou sur un premier temps) : impacts plus spectaculaires.
+  for (const c of courses) {
+    for (const imp of c.impacts) imp.strong = imp.velocity >= 0.85 || pulses.some((p) => Math.abs(p - imp.t) < 0.02);
+  }
   return restyleScene(
     {
       title: project.title || '',
@@ -81,7 +104,9 @@ export function buildScene(project, settingsIn) {
       camera: lanes[0].camera,
       events,
       beat,
-      kicks: beat.filter((e) => e.drum === 'kick').map((e) => e.t),
+      kicks,
+      pulses,
+      sections,
       duration,
       verification,
       mix: laneMix(settings, lanes.length),
@@ -106,14 +131,37 @@ export function laneMix(settings, lanes) {
 // Changement d'apparence seulement : les parcours et les horaires restent identiques.
 export function restyleScene(scene, settingsIn) {
   const settings = normalizeSettings(settingsIn);
+  const order = Object.keys(PALETTES);
+  const start = order.indexOf(settings.palette);
+  // Palette de chaque partie : celle choisie d'abord, puis les suivantes de la liste (ou, pour
+  // une palette personnalisée, la même aux teintes tournées). La bille garde sa couleur.
+  const sections = (scene.sections || [{ t0: 0 }]).map((sec, i) => {
+    let colors = settings.colors;
+    if (i > 0 && settings.evolveColors) {
+      colors = start >= 0 ? { ...PALETTES[order[(start + i) % order.length]], ball: settings.colors.ball } : rotateColors(settings.colors, 55 * i);
+    }
+    return { ...sec, colors, rgb: Object.fromEntries(['bgTop', 'bgBottom', 'low', 'mid', 'high'].map((k) => [k, hexToRgb(colors[k])])) };
+  });
+  const sectionAt = (t) => {
+    let k = 0;
+    while (k + 1 < sections.length && sections[k + 1].t0 <= t + 1e-9) k++;
+    return sections[k];
+  };
   const lanes = scene.lanes.map((lane) => {
     const midis = lane.course.impacts.map((imp) => imp.midi);
     const minMidi = Math.min(...midis);
     const maxMidi = Math.max(...midis);
-    const colors = lane.course.impacts.map((imp) => platformColor(settings.colors, settings.colorMode, imp.midi, minMidi, maxMidi));
+    const colors = lane.course.impacts.map((imp) => platformColor(sectionAt(imp.t).colors, settings.colorMode, imp.midi, minMidi, maxMidi));
     return { ...lane, colors };
   });
-  return { ...scene, settings, lanes, colors: lanes[0].colors };
+  return { ...scene, settings, lanes, sections, colors: lanes[0].colors };
+}
+
+function downbeats(bpm, from, duration) {
+  if (!bpm) return [];
+  const out = [];
+  for (let t = from; t < duration; t += (4 * 60) / bpm) out.push(t);
+  return out;
 }
 
 // Rythmes sur 16 doubles-croches par mesure.

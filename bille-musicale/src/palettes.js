@@ -65,3 +65,19 @@ export function platformColor(colors, mode, midi, minMidi, maxMidi) {
   const t = maxMidi > minMidi ? (midi - minMidi) / (maxMidi - minMidi) : 0.5;
   return t < 0.5 ? mixHue(low, mid, t * 2) : mixHue(mid, high, (t - 0.5) * 2);
 }
+
+const toHex = (c) => '#' + c.map((v) => Math.round(Math.max(0, Math.min(255, v))).toString(16).padStart(2, '0')).join('');
+
+// Même palette, teintes tournées de `deg` degrés (pour faire évoluer une palette personnalisée).
+export function rotateColors(colors, deg) {
+  const out = {};
+  for (const [k, hex] of Object.entries(colors)) {
+    if (typeof hex !== 'string' || k === 'ball' || k === 'label') {
+      out[k] = hex;
+      continue;
+    }
+    const [h, s, l] = toHsl(hexToRgb(hex));
+    out[k] = toHex(hsl((h + deg + 360) % 360, s, l));
+  }
+  return out;
+}
