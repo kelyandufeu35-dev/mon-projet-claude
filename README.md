@@ -1,5 +1,8 @@
 # mon-projet-claude — vidéo longue → clips YouTube
 
+> Le dossier [`bille-musicale/`](bille-musicale/README.md) contient une application web distincte :
+> des animations de parcours musical de bille pour TikTok, synchronisées note par note.
+
 Le pipeline prend une vidéo longue en français, la transcrit, demande à Claude de choisir
 les meilleurs extraits, les découpe à la frame près, rédige leurs titres et leurs miniatures,
 puis les publie en programmé sur YouTube sans dépasser le quota quotidien de l'API.

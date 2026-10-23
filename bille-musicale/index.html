@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0c0a18">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="Générateur d’animations de parcours musical de bille, synchronisées note par note, au format vertical 9:16.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <title>Bille musicale</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <main class="stage-area">
+      <div class="stage" id="stage">
+        <canvas id="view" width="540" height="960" aria-label="Animation du parcours de bille"></canvas>
+        <button class="overlay-play" id="overlayPlay" type="button" aria-label="Lecture">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
+        </button>
+        <div class="hud" id="hud" hidden></div>
+        <div class="exit-hint" id="exitHint">Double-touchez ou Échap pour quitter</div>
+      </div>
+    </main>
+
+    <aside class="panel" id="panel">
+      <header class="brand">
+        <h1>Bille musicale</h1>
+        <p>Chaque rebond joue une note de la mélodie.</p>
+      </header>
+
+      <div class="card transport">
+        <div class="buttons">
+          <button class="btn primary" id="btnPlay" type="button">
+            <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
+            <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
+            <span id="playLabel">Lecture</span>
+          </button>
+          <button class="btn" id="btnRestart" type="button" title="Recommencer (R)">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5a7 7 0 1 1-6.6 4.7l1.9.6A5 5 0 1 0 12 7v3L7.5 6 12 2z"/></svg>
+            Recommencer
+          </button>
+          <button class="btn" id="btnFull" type="button" title="Plein écran (F)">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v2H6v4H4zm10 0h6v6h-2V6h-4zM4 14h2v4h4v2H4zm14 0h2v6h-6v-2h4z"/></svg>
+            Plein écran
+          </button>
+        </div>
+        <div class="seek-row">
+          <input type="range" id="seek" min="0" max="1000" value="0" aria-label="Position">
+          <span class="time" id="time">0:00 / 0:00</span>
+        </div>
+      </div>
+
+      <section class="card">
+        <h2>Mélodie</h2>
+        <div class="row">
+          <button class="btn" id="btnDemo" type="button">Démo</button>
+          <label class="btn" for="fileInput">Importer un MIDI…</label>
+          <input type="file" id="fileInput" accept=".mid,.midi,.json,audio/midi,audio/x-midi" hidden>
+        </div>
+        <div id="midiOptions" class="stack" hidden>
+          <label class="field">Piste mélodique
+            <select id="trackSelect"></select>
+          </label>
+          <div class="row">
+            <label class="field small">Durée max (s)
+              <input type="number" id="maxDuration" min="5" max="600" step="5" value="60">
+            </label>
+            <label class="field small">Écart min (ms)
+              <input type="number" id="minGap" min="30" max="400" step="10" value="70">
+            </label>
+          </div>
+        </div>
+        <p class="hint" id="melodyInfo"></p>
+      </section>
+
+      <section class="card">
+        <h2>Son</h2>
+        <div class="row">
+          <label class="field">Instrument
+            <select id="instrument"></select>
+          </label>
+          <label class="field small">Octave
+            <select id="transpose">
+              <option value="-2">−2</option><option value="-1">−1</option><option value="0" selected>0</option>
+              <option value="1">+1</option><option value="2">+2</option>
+            </select>
+          </label>
+        </div>
+        <label class="field">Volume
+          <input type="range" id="volume" min="0" max="1" step="0.05" value="0.8">
+        </label>
+        <label class="field">Tempo <output id="tempoLabel">100 %</output>
+          <input type="range" id="tempo" min="50" max="160" step="5" value="100">
+        </label>
+      </section>
+
+      <section class="card">
+        <h2>Couleurs</h2>
+        <div class="palettes" id="palettes"></div>
+        <div class="colors">
+          <label><input type="color" data-color="bgTop"><span>Fond haut</span></label>
+          <label><input type="color" data-color="bgBottom"><span>Fond bas</span></label>
+          <label><input type="color" data-color="ball"><span>Bille</span></label>
+          <label><input type="color" data-color="low"><span>Graves</span></label>
+          <label><input type="color" data-color="mid"><span>Médiums</span></label>
+          <label><input type="color" data-color="high"><span>Aigus</span></label>
+        </div>
+        <label class="field">Plateformes
+          <select id="colorMode"></select>
+        </label>
+        <label class="check"><input type="checkbox" id="showTitle"> Afficher le titre au début</label>
+        <label class="check"><input type="checkbox" id="showNoteNames"> Noms des notes sur les plateformes</label>
+      </section>
+
+      <section class="card">
+        <h2>Vidéo</h2>
+        <button class="btn block" id="btnScreenRec" type="button">Mode enregistrement d’écran</button>
+        <p class="hint">Écran propre sans interface : l’animation reste figée 2 s puis démarre seule. Lancez d’abord l’enregistrement d’écran du téléphone ou de l’ordinateur.</p>
+        <div class="row">
+          <button class="btn" id="btnRecord" type="button" style="flex:1">Enregistrer la vidéo avec le son</button>
+          <label class="field small">Résolution
+            <select id="recordSize">
+              <option value="1080">1080×1920</option>
+              <option value="720">720×1280</option>
+            </select>
+          </label>
+        </div>
+        <p class="hint" id="recordInfo"></p>
+        <div class="row">
+          <button class="btn" id="btnWav" type="button">Audio WAV</button>
+          <button class="btn" id="btnProject" type="button">Projet .json</button>
+        </div>
+        <p class="hint">Pour un MP4 parfait image par image, téléchargez le projet puis lancez <code>npm run export -- --project projet.json</code> (voir README).</p>
+      </section>
+
+      <section class="card">
+        <h2>Synchronisation</h2>
+        <div class="report" id="courseReport"></div>
+        <div class="report" id="audioReport"></div>
+        <button class="btn block" id="btnVerify" type="button">Vérifier le son rendu</button>
+        <label class="field">Décalage audio <output id="offsetLabel">0 ms</output>
+          <input type="range" id="offset" min="-250" max="250" step="5" value="0">
+        </label>
+        <label class="check"><input type="checkbox" id="showHud"> Afficher le diagnostic</label>
+      </section>
+    </aside>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>

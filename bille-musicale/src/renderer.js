@@ -1,0 +1,324 @@
+// Dessin d'une image de la scène à l'instant t. Fonction pure du temps : aucun état n'est
+// conservé d'une image à l'autre, donc la lecture, l'enregistrement et l'export image par image
+// produisent exactement la même chose.
+
+import { WORLD_W, WORLD_H, ballAt, cameraAt, lastImpactIndex } from './planner.js';
+import { hexToRgb, mix, rgba } from './palettes.js';
+import { noteName } from './melody.js';
+
+const TAU = Math.PI * 2;
+const WHITE = [255, 255, 255];
+const BLACK = [0, 0, 0];
+
+function hash(i, salt) {
+  let x = Math.imul(i + 11, 0x9e3779b1) ^ Math.imul(salt + 3, 0x85ebca6b);
+  x ^= x >>> 15;
+  x = Math.imul(x, 0x2c1b3c6d);
+  x ^= x >>> 12;
+  return (x >>> 0) / 4294967296;
+}
+
+function pill(ctx, w, h) {
+  const r = h / 2;
+  ctx.beginPath();
+  ctx.moveTo(-w / 2 + r, -r);
+  ctx.lineTo(w / 2 - r, -r);
+  ctx.arc(w / 2 - r, 0, r, -Math.PI / 2, Math.PI / 2);
+  ctx.lineTo(-w / 2 + r, r);
+  ctx.arc(-w / 2 + r, 0, r, Math.PI / 2, (3 * Math.PI) / 2);
+  ctx.closePath();
+}
+
+export class Renderer {
+  constructor(canvas) {
+    this.canvas = canvas;
+    this.ctx = canvas.getContext('2d', { alpha: false });
+    this.styleKey = null;
+  }
+
+  prepare(scene) {
+    const c = scene.settings.colors;
+    const key = scene;
+    if (this.styleKey === key) return this.style;
+    this.styleKey = key;
+    const bgTop = hexToRgb(c.bgTop);
+    const bgBottom = hexToRgb(c.bgBottom);
+    const ball = hexToRgb(c.ball);
+    const accents = [hexToRgb(c.low), hexToRgb(c.mid), hexToRgb(c.high)];
+    const bokeh = [];
+    for (let k = 0; k < 22; k++) {
+      bokeh.push({
+        x: hash(k, 1) * WORLD_W,
+        y: hash(k, 2) * 2600,
+        r: 50 + hash(k, 3) * 150,
+        a: 0.035 + hash(k, 4) * 0.07,
+        p: 0.12 + hash(k, 5) * 0.3,
+        c: accents[k % 3],
+        ph: hash(k, 6) * TAU,
+      });
+    }
+    this.style = { bgTop, bgBottom, ball, accents, bokeh };
+    return this.style;
+  }
+
+  draw(scene, t) {
+    const { ctx, canvas } = this;
+    const W = canvas.width;
+    const H = canvas.height;
+    const st = this.prepare(scene);
+    const s = Math.min(W / WORLD_W, H / WORLD_H);
+    const offX = (W - WORLD_W * s) / 2;
+    const offY = (H - WORLD_H * s) / 2;
+    const course = scene.course;
+    const o = course.options;
+    const top = cameraAt(scene.camera, t);
+    // Zone visible en unités du monde : au-delà du cadre 9:16 si l'écran est plus haut ou plus large.
+    const x0 = -offX / s;
+    const y0 = -offY / s;
+    const vw = W / s;
+    const vh = H / s;
+
+    // Fond : dégradé vertical, halos flous en parallaxe, lumière douce venant du haut.
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.globalCompositeOperation = 'source-over';
+    const bg = ctx.createLinearGradient(0, 0, 0, H);
+    bg.addColorStop(0, rgba(st.bgTop));
+    bg.addColorStop(1, rgba(st.bgBottom));
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.setTransform(s, 0, 0, s, offX, offY);
+    ctx.globalCompositeOperation = 'lighter';
+    for (const b of st.bokeh) {
+      const span = 2600;
+      const y = ((((b.y - top * b.p) % span) + span) % span) - 340 + y0;
+      const x = b.x + Math.sin(t * 0.25 + b.ph) * 30;
+      const g = ctx.createRadialGradient(x, y, 0, x, y, b.r);
+      g.addColorStop(0, rgba(b.c, b.a));
+      g.addColorStop(1, rgba(b.c, 0));
+      ctx.fillStyle = g;
+      ctx.fillRect(x - b.r, y - b.r, b.r * 2, b.r * 2);
+    }
+    const light = ctx.createRadialGradient(WORLD_W * 0.3, -WORLD_H * 0.15, 0, WORLD_W * 0.3, -WORLD_H * 0.15, WORLD_H * 1.05);
+    light.addColorStop(0, rgba(mix(st.ball, st.bgTop, 0.3), 0.16));
+    light.addColorStop(1, rgba(st.ball, 0));
+    ctx.fillStyle = light;
+    ctx.fillRect(x0, y0, vw, vh);
+
+    // Monde : la caméra ne fait que décaler verticalement.
+    ctx.setTransform(s, 0, 0, s, offX, offY - top * s);
+    const impacts = course.impacts;
+    const viewMin = top + y0 - 240;
+    const viewMax = top + y0 + vh + 240;
+    let first = 0;
+    let lo = 0;
+    let hi = impacts.length;
+    while (lo < hi) {
+      const mid = (lo + hi) >> 1;
+      if (impacts[mid].y < viewMin - o.maxRise) lo = mid + 1;
+      else hi = mid;
+    }
+    first = lo;
+
+    for (let j = first; j < impacts.length && impacts[j].y < viewMax; j++) {
+      if (impacts[j].platform.cy < viewMin) continue;
+      this.drawPlatform(scene, j, t - impacts[j].t, st);
+    }
+    for (let j = first; j < impacts.length && impacts[j].y < viewMax; j++) {
+      const tau = t - impacts[j].t;
+      if (tau >= 0 && tau < 0.8) this.drawBurst(scene, j, tau);
+    }
+    this.drawBall(scene, t, st);
+
+    // Titre (premières secondes) et vignettage.
+    ctx.setTransform(s, 0, 0, s, offX, offY);
+    ctx.globalCompositeOperation = 'source-over';
+    if (scene.settings.showTitle && scene.title) {
+      const a = t < 3.2 ? 1 : Math.max(0, 1 - (t - 3.2) / 0.6);
+      if (a > 0) {
+        ctx.fillStyle = rgba(WHITE, 0.92 * a);
+        ctx.font = '600 54px system-ui, -apple-system, "Segoe UI", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.shadowColor = 'rgba(0,0,0,0.45)';
+        ctx.shadowBlur = 18;
+        ctx.fillText(`♪ ${scene.title}`, WORLD_W / 2, 170);
+        ctx.shadowBlur = 0;
+      }
+    }
+    const vig = ctx.createRadialGradient(WORLD_W / 2, WORLD_H * 0.45, WORLD_H * 0.32, WORLD_W / 2, WORLD_H * 0.45, Math.max(vh, vw) * 0.82);
+    vig.addColorStop(0, 'rgba(0,0,0,0)');
+    vig.addColorStop(1, 'rgba(0,0,0,0.5)');
+    ctx.fillStyle = vig;
+    ctx.fillRect(x0, y0, vw, vh);
+  }
+
+  drawPlatform(scene, j, tau, st) {
+    const { ctx } = this;
+    const imp = scene.course.impacts[j];
+    const p = imp.platform;
+    const base = scene.colors[j];
+    const hit = tau >= 0;
+    const flash = hit ? Math.exp(-tau / 0.32) : 0;
+    // Petit enfoncement amorti sous l'impact.
+    const dip = hit ? 9 * Math.exp(-tau / 0.1) * Math.sin(Math.min(tau * 32, Math.PI * 3)) * (0.5 + 0.5 * imp.velocity) : 0;
+    const cx = p.cx - p.nx * dip;
+    const cy = p.cy - p.ny * dip;
+    const body = hit ? mix(base, WHITE, 0.45 * flash) : mix(base, st.bgTop, 0.18);
+
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(p.angle);
+
+    if (flash > 0.01 || hit) {
+      // Halo additif : fort à l'impact, faible lueur résiduelle ensuite.
+      const glow = 0.12 + 0.75 * flash;
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.save();
+      ctx.scale(1, 0.5);
+      const r = p.width * (0.9 + 0.5 * flash);
+      const g = ctx.createRadialGradient(0, 0, 0, 0, 0, r);
+      g.addColorStop(0, rgba(base, glow));
+      g.addColorStop(1, rgba(base, 0));
+      ctx.fillStyle = g;
+      ctx.fillRect(-r, -r, r * 2, r * 2);
+      ctx.restore();
+    }
+
+    ctx.globalCompositeOperation = 'source-over';
+    // Ombre portée douce.
+    ctx.save();
+    ctx.translate(0, 14);
+    pill(ctx, p.width + 6, p.thickness + 6);
+    ctx.fillStyle = 'rgba(0,0,0,0.28)';
+    ctx.fill();
+    ctx.restore();
+
+    pill(ctx, p.width, p.thickness);
+    const grad = ctx.createLinearGradient(0, -p.thickness / 2, 0, p.thickness / 2);
+    grad.addColorStop(0, rgba(mix(body, WHITE, 0.35)));
+    grad.addColorStop(0.45, rgba(body));
+    grad.addColorStop(1, rgba(mix(body, BLACK, 0.4)));
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Reflet sur l'arête supérieure.
+    ctx.beginPath();
+    ctx.moveTo(-p.width / 2 + p.thickness / 2, -p.thickness / 2 + 3);
+    ctx.lineTo(p.width / 2 - p.thickness / 2, -p.thickness / 2 + 3);
+    ctx.strokeStyle = rgba(WHITE, 0.35 + 0.55 * flash);
+    ctx.lineWidth = 3;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+
+    if (scene.settings.showNoteNames) {
+      ctx.fillStyle = rgba(hit ? BLACK : WHITE, 0.72);
+      ctx.font = '700 15px system-ui, -apple-system, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(noteName(imp.midi), 0, 1);
+    }
+    ctx.restore();
+  }
+
+  drawBurst(scene, j, tau) {
+    const { ctx } = this;
+    const imp = scene.course.impacts[j];
+    const base = mix(scene.colors[j], WHITE, 0.4);
+    const R = scene.course.options.ballRadius;
+    ctx.globalCompositeOperation = 'lighter';
+    // Onde circulaire dans le plan de la plateforme.
+    if (tau < 0.45) {
+      const k = tau / 0.45;
+      ctx.save();
+      ctx.translate(imp.x - imp.nx * R, imp.y - imp.ny * R);
+      ctx.rotate(imp.platform.angle);
+      ctx.scale(1, 0.38);
+      ctx.beginPath();
+      ctx.arc(0, 0, 20 + k * 150, 0, TAU);
+      ctx.strokeStyle = rgba(base, 0.55 * (1 - k));
+      ctx.lineWidth = 6 * (1 - k) + 1;
+      ctx.stroke();
+      ctx.restore();
+    }
+    // Étincelles projetées vers le haut, retombant sous la gravité.
+    const count = 9;
+    const life = 0.75;
+    const spread = Math.atan2(imp.ny, imp.nx);
+    for (let k = 0; k < count; k++) {
+      const a = spread + (hash(j, k) - 0.5) * 2.4;
+      const v = 170 + hash(j, k + 50) * 380 * (0.5 + imp.velocity);
+      const x = imp.x - imp.nx * R + Math.cos(a) * v * tau;
+      const y = imp.y - imp.ny * R + Math.sin(a) * v * tau + 700 * tau * tau;
+      const f = 1 - tau / life;
+      if (f <= 0) continue;
+      ctx.beginPath();
+      ctx.arc(x, y, (2 + hash(j, k + 90) * 4) * f, 0, TAU);
+      ctx.fillStyle = rgba(base, 0.85 * f);
+      ctx.fill();
+    }
+  }
+
+  drawBall(scene, t, st) {
+    const { ctx } = this;
+    const course = scene.course;
+    const R = course.options.ballRadius;
+    const b = ballAt(course, t);
+    const li = lastImpactIndex(course, t);
+    const reflect = li >= 0 ? scene.colors[li] : st.accents[1];
+
+    // Traînée lumineuse.
+    ctx.globalCompositeOperation = 'lighter';
+    for (let k = 8; k >= 1; k--) {
+      const tk = t - k * 0.014;
+      if (tk < course.start.t) continue;
+      const p = ballAt(course, tk);
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, R * (1 - k * 0.07), 0, TAU);
+      ctx.fillStyle = rgba(mix(st.ball, reflect, 0.5), 0.07 * (1 - k / 9));
+      ctx.fill();
+    }
+    const halo = ctx.createRadialGradient(b.x, b.y, R * 0.6, b.x, b.y, R * 3.2);
+    halo.addColorStop(0, rgba(mix(st.ball, reflect, 0.3), 0.28));
+    halo.addColorStop(1, rgba(st.ball, 0));
+    ctx.fillStyle = halo;
+    ctx.fillRect(b.x - R * 3.2, b.y - R * 3.2, R * 6.4, R * 6.4);
+
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.save();
+    ctx.translate(b.x, b.y);
+    // Écrasement bref à l'impact, dans l'axe de la normale.
+    if (li >= 0) {
+      const since = t - course.impacts[li].t;
+      const imp = course.impacts[li];
+      const k = 0.24 * Math.exp(-since / 0.03) * (0.5 + 0.5 * imp.velocity);
+      if (k > 0.004) {
+        const ang = Math.atan2(imp.ny, imp.nx);
+        ctx.rotate(ang);
+        ctx.scale(1 - k, 1 + k * 0.6);
+        ctx.rotate(-ang);
+      }
+    }
+    const body = ctx.createRadialGradient(-R * 0.38, -R * 0.42, R * 0.05, 0, 0, R);
+    body.addColorStop(0, rgba(WHITE));
+    body.addColorStop(0.28, rgba(st.ball));
+    body.addColorStop(0.78, rgba(mix(st.ball, BLACK, 0.42)));
+    body.addColorStop(1, rgba(mix(st.ball, BLACK, 0.62)));
+    ctx.beginPath();
+    ctx.arc(0, 0, R, 0, TAU);
+    ctx.fillStyle = body;
+    ctx.fill();
+    // Liseré coloré renvoyé par la dernière plateforme touchée.
+    ctx.beginPath();
+    ctx.arc(0, 0, R - 1.5, Math.PI * 0.1, Math.PI * 0.9);
+    ctx.strokeStyle = rgba(reflect, 0.55);
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    // Reflet spéculaire.
+    ctx.beginPath();
+    ctx.ellipse(-R * 0.36, -R * 0.42, R * 0.26, R * 0.16, -0.6, 0, TAU);
+    ctx.fillStyle = 'rgba(255,255,255,0.9)';
+    ctx.fill();
+    ctx.restore();
+  }
+}
