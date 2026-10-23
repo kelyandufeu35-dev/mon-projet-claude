@@ -97,7 +97,10 @@ function setupRenderMode() {
   canvas.height = 1920;
   let scene = null;
   window.billeRender = {
-    setup(file) {
+    // `width` : 1080 (Full HD), 1440 (2K) ou 2160 (4K) ; le dessin étant vectoriel, il reste net.
+    setup(file, width = 1080) {
+      canvas.width = width;
+      canvas.height = Math.round((width * 16) / 9);
       const { project, settings } = file ? readProject(file) : { project: demoProject(), settings: undefined };
       scene = buildScene(project, settings);
       return {
@@ -107,7 +110,7 @@ function setupRenderMode() {
         verification: scene.verification,
       };
     },
-    frames(start, count, fps, quality = 0.93) {
+    frames(start, count, fps, quality = 0.96) {
       const out = [];
       for (let i = 0; i < count; i++) {
         renderer.draw(scene, (start + i) / fps);

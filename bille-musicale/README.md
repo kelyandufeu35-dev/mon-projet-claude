@@ -174,7 +174,10 @@ npm install && npx playwright install chromium     # une seule fois
 npm run export -- --out demo.mp4
 
 # Votre mélodie : dans l'application, « Projet .json » télécharge la mélodie et tous les réglages
-npm run export -- --project mon-projet.json --out ma-video.mp4 [--fps 60] [--crf 18]
+npm run export -- --project mon-projet.json --out ma-video.mp4 [--fps 60] [--crf 16]
+
+# En 4K (2160×3840) ; les images sont dessinées par plusieurs navigateurs en parallèle
+npm run export -- --project mon-projet.json --width 2160 --fps 30 [--workers 4]
 ```
 
 Le script dessine chaque image à l'instant exact `image / fps` avec le code de l'application,

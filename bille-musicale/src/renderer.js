@@ -160,11 +160,41 @@ export class Renderer {
         ctx.shadowBlur = 0;
       }
     }
+    this.drawGrain(t);
     const vig = ctx.createRadialGradient(WORLD_W / 2, WORLD_H * 0.45, WORLD_H * 0.32, WORLD_W / 2, WORLD_H * 0.45, Math.max(vh, vw) * 0.82);
     vig.addColorStop(0, 'rgba(0,0,0,0)');
     vig.addColorStop(1, 'rgba(0,0,0,0.5)');
     ctx.fillStyle = vig;
     ctx.fillRect(x0, y0, vw, vh);
+  }
+
+  // Grain très léger (±1,5 % de luminosité), redessiné à chaque image : il casse les « marches »
+  // des dégradés sombres, que la compression vidéo en 8 bits rend sinon très visibles.
+  drawGrain(t) {
+    const { ctx, canvas } = this;
+    if (!this.grain) {
+      const tile = document.createElement('canvas');
+      tile.width = tile.height = 256;
+      const g = tile.getContext('2d');
+      const img = g.createImageData(256, 256);
+      let seed = 12345;
+      for (let i = 0; i < img.data.length; i += 4) {
+        seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+        const v = 128 + ((seed >> 8) % 64) - 32;
+        img.data[i] = img.data[i + 1] = img.data[i + 2] = v;
+        img.data[i + 3] = 255;
+      }
+      g.putImageData(img, 0, 0);
+      this.grain = ctx.createPattern(tile, 'repeat');
+    }
+    const frame = Math.floor(t * 60);
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, (frame * 97) % 256, (frame * 61) % 256);
+    ctx.globalCompositeOperation = 'overlay';
+    ctx.globalAlpha = 0.09;
+    ctx.fillStyle = this.grain;
+    ctx.fillRect(-256, -256, canvas.width + 512, canvas.height + 512);
+    ctx.restore();
   }
 
   drawLane(scene, lane, t, top, y0, vh, st) {
