@@ -10,20 +10,24 @@
 </section>
 
 {%- comment -%}
-  Avis clients Judge.me (vrais acheteurs uniquement, jamais d'avis importés).
-  Le script vient de l'intégration « Judge.me » (Personnaliser → Intégrations d'applications),
-  qui remplit ce conteneur.
+  Blocs d'applications (ex. widget d'avis Judge.me : vrais acheteurs uniquement, jamais
+  d'avis importés). S'ajoutent dans l'éditeur : section Produit → Ajouter un bloc → Applications.
 {%- endcomment -%}
-{%- if section.settings.show_reviews -%}
-  <section class="pt-reviews-app">
+{%- if section.blocks.size > 0 -%}
+  <div class="pt-app-blocks">
     <div class="pt-wrap">
-      <div class="jdgm-widget jdgm-review-widget jdgm-outside-widget" data-id="{{ product.id }}" data-product-title="{{ product.title | escape }}">{{ product.metafields.judgeme.widget }}</div>
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when '@app' -%}
+            {% render block %}
+        {%- endcase -%}
+      {%- endfor -%}
     </div>
-  </section>
+  </div>
 {%- endif -%}
 
 {% stylesheet %}
-  .pt-reviews-app {
+  .pt-app-blocks {
     padding-block: 32px 48px;
   }
 {% endstylesheet %}
@@ -45,13 +49,6 @@
       "label": "Animation 3D en premier dans la galerie",
       "default": true,
       "info": "La balle de la publicité, sur scène sombre, avant les photos. Idéal pour les visiteurs qui arrivent d’une pub."
-    },
-    {
-      "type": "checkbox",
-      "id": "show_reviews",
-      "label": "Afficher les avis clients (Judge.me)",
-      "default": true,
-      "info": "Nécessite l’intégration Judge.me activée dans Intégrations d’applications."
     },
     {
       "type": "text",
@@ -162,6 +159,11 @@
       "label": "Ancre de la zone d’achat (sans #)",
       "default": "acheter",
       "info": "Les boutons « Je commande » pointent vers « acheter »."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
     }
   ]
 }
