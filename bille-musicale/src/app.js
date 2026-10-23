@@ -7,6 +7,7 @@ import { Transport } from './transport.js';
 import { INSTRUMENTS, renderOffline, encodeWav } from './synth.js';
 import { PALETTES, COLOR_MODES } from './palettes.js';
 import { measureAttacks } from './verify.js';
+import { transcribe, decodeAudioFile, excerpt, loudness } from './transcribe.js';
 import { pickRecorderFormat, startRecording, download, hosted, canSave } from './recorder.js';
 
 const $ = (id) => document.getElementById(id);
@@ -190,8 +191,12 @@ function setupApp() {
   function updateMelodyInfo() {
     const n = state.project.notes.length;
     const d = state.scene.duration;
-    const origin = state.midi ? `MIDI « ${state.midi.name} »` : `Démo originale « ${state.project.title} »`;
-    $('melodyInfo').textContent = `${origin} · ${n} notes · ${fmtTime(d)}${state.midiDropped ? ` · ${state.midiDropped} notes d’accord ou trop rapprochées retirées` : ''}`;
+    const origin = state.midi
+      ? `MIDI « ${state.midi.name} »`
+      : state.audio
+        ? `Son « ${state.audio.name} »`
+        : `Mélodie « ${state.project.title} »`;
+    $('melodyInfo').textContent = `${origin} · ${n} notes · ${fmtTime(d)}${state.dropped ? ` · ${state.dropped} notes d’accord ou trop rapprochées retirées` : ''}`;
   }
 
   function updateTempoLabel() {
@@ -345,13 +350,36 @@ function setupApp() {
     else if (e.key === 'Escape') exitImmersive();
   });
 
-  // --- Mélodie : démo, MIDI, projet -----------------------------------------
+  // --- Mélodie : démo, MIDI, son, projet ------------------------------------
+  // Une seule source à la fois : la démo, une piste MIDI, ou la mélodie retrouvée dans un son.
+  function setSource(kind) {
+    if (kind !== 'midi') state.midi = null;
+    if (kind !== 'audio') state.audio = null;
+    state.dropped = 0;
+    $('sourceOptions').hidden = kind !== 'midi' && kind !== 'audio';
+    $('trackField').hidden = kind !== 'midi';
+    $('audioModeField').hidden = kind !== 'audio';
+    $('removeVoiceField').hidden = kind !== 'audio';
+    $('audioHint').hidden = kind !== 'audio';
+    $('btnDemo').classList.toggle('active', kind === 'demo');
+  }
+
+  function passage() {
+    return {
+      start: Math.max(0, Number($('startAt').value) || 0),
+      duration: Math.max(5, Number($('maxDuration').value) || 60),
+      minGap: Math.max(0.03, Number($('minGap').value) / 1000 || 0.07),
+    };
+  }
+
+  function applySource() {
+    if (state.midi) applyMidiPart();
+    else if (state.audio) analyzeAudio();
+  }
+
   $('btnDemo').onclick = () => {
-    state.midi = null;
-    state.midiDropped = 0;
+    setSource('demo');
     state.project = demoProject();
-    $('midiOptions').hidden = true;
-    $('btnDemo').classList.add('active');
     rebuild();
   };
 
@@ -362,11 +390,9 @@ function setupApp() {
     try {
       if (/\.json$/i.test(file.name)) {
         const { project, settings } = readProject(JSON.parse(await file.text()));
-        state.midi = null;
-        state.midiDropped = 0;
+        setSource('project');
         state.project = project;
         if (settings) state.settings = normalizeSettings(settings);
-        $('midiOptions').hidden = true;
         syncControls();
         rebuild();
         toast(`Projet « ${project.title} » chargé`);
@@ -375,6 +401,7 @@ function setupApp() {
       const midi = parseMidi(await file.arrayBuffer());
       const parts = extractParts(midi).filter((p) => p.notes.length);
       if (!parts.length) throw new Error('Ce fichier MIDI ne contient aucune note.');
+      setSource('midi');
       state.midi = { name: file.name.replace(/\.midi?$/i, ''), bpm: firstTempoBpm(midi), parts };
       const suggested = suggestMelodyPart(parts);
       const select = $('trackSelect');
@@ -387,8 +414,7 @@ function setupApp() {
         select.append(opt);
       }
       select.value = suggested.id;
-      $('midiOptions').hidden = false;
-      $('btnDemo').classList.remove('active');
+      $('startAt').value = '0';
       applyMidiPart();
       toast(`« ${state.midi.name} » : ${parts.length} piste(s). La piste ★ semble porter la mélodie.`);
     } catch (err) {
@@ -399,17 +425,87 @@ function setupApp() {
 
   function applyMidiPart() {
     const part = state.midi.parts.find((p) => p.id === $('trackSelect').value);
-    const minGap = Math.max(0.03, Number($('minGap').value) / 1000 || 0.07);
-    const maxDuration = Math.max(5, Number($('maxDuration').value) || 60);
+    const { start, duration, minGap } = passage();
     const mono = toMonophonic(part.notes, { minGap });
-    const notes = trimMelody(mono.notes, maxDuration);
-    state.midiDropped = mono.dropped;
+    const notes = trimMelody(mono.notes, duration, start);
+    if (!notes.length) {
+      toast('Aucune note dans ce passage : choisissez un début plus tôt.');
+      return;
+    }
+    state.dropped = mono.dropped;
     state.project = { title: state.midi.name, bpm: state.midi.bpm, notes };
     rebuild();
   }
-  $('trackSelect').addEventListener('change', applyMidiPart);
-  $('minGap').addEventListener('change', applyMidiPart);
-  $('maxDuration').addEventListener('change', applyMidiPart);
+
+  $('audioInput').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    e.target.value = '';
+    if (!file) return;
+    $('melodyInfo').textContent = `Lecture de « ${file.name} »…`;
+    try {
+      const audio = await decodeAudioFile(await file.arrayBuffer());
+      setSource('audio');
+      state.audio = { name: file.name.replace(/\.[^.]+$/, ''), ...audio };
+      $('startAt').value = '0';
+      toast(`« ${state.audio.name} » : ${fmtTime(audio.duration)} de son. Choisissez le passage avec « Début » et « Durée ».`, 5000);
+      analyzeAudio();
+    } catch (err) {
+      console.error(err);
+      updateMelodyInfo();
+      toast(err.message || 'Impossible de lire ce son.');
+    }
+  });
+
+  // L'analyse peut prendre quelques secondes : un nouveau réglage annule celle en cours.
+  let analysis = 0;
+  async function analyzeAudio() {
+    const run = ++analysis;
+    const { start, duration, minGap } = passage();
+    let clip = excerpt(state.audio, start, duration);
+    if (clip.length < state.audio.rate * 0.5) {
+      toast(`Ce passage est vide : le son dure ${fmtTime(state.audio.duration)}.`);
+      return;
+    }
+    if ($('removeVoice').checked) {
+      const withoutVoice = excerpt(state.audio, start, duration, { removeVoice: true });
+      // Un son mono (ou un mixage où tout est au centre) s'annule entièrement.
+      if (!state.audio.stereo || loudness(withoutVoice) < 0.05 * loudness(clip)) {
+        $('removeVoice').checked = false;
+        toast('Impossible d’enlever la voix : ce son est en mono, ou tout y est placé au centre.', 5000);
+      } else clip = withoutVoice;
+    }
+    const label = (p) => ($('melodyInfo').textContent = `Recherche des notes… ${Math.round(p * 100)} %`);
+    label(0);
+    try {
+      const { notes } = await transcribe(clip, state.audio.rate, {
+        mode: $('audioMode').value,
+        onProgress: (p) => {
+          if (run !== analysis) throw new Error('annulée');
+          label(p);
+        },
+      });
+      if (run !== analysis) return;
+      if (notes.length < 2) {
+        updateMelodyInfo();
+        toast('Aucune mélodie trouvée dans ce passage. Essayez un autre passage ou l’autre type de son.', 5000);
+        return;
+      }
+      const mono = toMonophonic(notes, { minGap });
+      state.dropped = mono.dropped;
+      state.project = { title: state.audio.name, bpm: null, notes: trimMelody(mono.notes) };
+      rebuild();
+    } catch (err) {
+      if (err.message === 'annulée') return;
+      console.error(err);
+      updateMelodyInfo();
+      toast(`Analyse impossible : ${err.message}`);
+    }
+  }
+
+  $('trackSelect').addEventListener('change', applySource);
+  $('audioMode').addEventListener('change', applySource);
+  $('removeVoice').addEventListener('change', applySource);
+  for (const id of ['startAt', 'maxDuration', 'minGap']) $(id).addEventListener('change', applySource);
 
   // --- Son et tempo ---------------------------------------------------------
   for (const [key, inst] of Object.entries(INSTRUMENTS)) $('instrument').append(new Option(inst.label, key));
@@ -611,7 +707,7 @@ function setupApp() {
   }
 
   syncControls();
-  $('btnDemo').classList.add('active');
+  setSource('demo');
   rebuild();
   resizeCanvas();
   requestAnimationFrame(frame);

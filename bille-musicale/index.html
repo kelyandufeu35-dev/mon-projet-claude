@@ -58,20 +58,33 @@
         <div class="row">
           <button class="btn" id="btnDemo" type="button">Démo</button>
           <label class="btn" for="fileInput">Importer un MIDI…</label>
+          <label class="btn" for="audioInput">Importer un son…</label>
           <input type="file" id="fileInput" accept=".mid,.midi,.json,audio/midi,audio/x-midi" hidden>
+          <input type="file" id="audioInput" accept="audio/*,video/*,.mp3,.m4a,.wav,.aac,.ogg,.flac,.mp4,.mov" hidden>
         </div>
-        <div id="midiOptions" class="stack" hidden>
-          <label class="field">Piste mélodique
+        <div id="sourceOptions" class="stack" hidden>
+          <label class="field" id="trackField">Piste mélodique
             <select id="trackSelect"></select>
           </label>
+          <label class="field" id="audioModeField">Type de son
+            <select id="audioMode">
+              <option value="mix">Morceau avec accompagnement (reprise piano, instru…)</option>
+              <option value="solo">Mélodie seule (voix fredonnée, sifflement, un instrument)</option>
+            </select>
+          </label>
+          <label class="check" id="removeVoiceField"><input type="checkbox" id="removeVoice"> Enlever la voix (chant placé au centre du mixage)</label>
           <div class="row">
-            <label class="field small">Durée max (s)
+            <label class="field small">Début (s)
+              <input type="number" id="startAt" min="0" max="3600" step="1" value="0">
+            </label>
+            <label class="field small">Durée (s)
               <input type="number" id="maxDuration" min="5" max="600" step="5" value="60">
             </label>
             <label class="field small">Écart min (ms)
               <input type="number" id="minGap" min="30" max="400" step="10" value="70">
             </label>
           </div>
+          <p class="hint" id="audioHint">L’appli suit la note la plus aiguë et la plus présente. Le résultat est meilleur avec une reprise au piano ou une mélodie fredonnée qu’avec le morceau original (voix rappée, basse, batterie).</p>
         </div>
         <p class="hint" id="melodyInfo"></p>
       </section>

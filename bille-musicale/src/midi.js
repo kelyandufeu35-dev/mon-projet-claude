@@ -242,11 +242,12 @@ export function toMonophonic(notes, { chordWindow = 0.03, minGap = 0.07 } = {}) 
   return { notes: out, dropped };
 }
 
-// Commence la mélodie à 0 s et la limite à une durée maximale (vidéos courtes).
-export function trimMelody(notes, maxDuration = Infinity) {
-  if (!notes.length) return [];
-  const offset = notes[0].time;
-  return notes
+// Garde le passage qui commence à `start` (s) et dure au plus `maxDuration`, recalé à 0 s.
+export function trimMelody(notes, maxDuration = Infinity, start = 0) {
+  const kept = notes.filter((n) => n.time >= start - 1e-9);
+  if (!kept.length) return [];
+  const offset = kept[0].time;
+  return kept
     .map((n) => ({ ...n, time: n.time - offset }))
     .filter((n) => n.time <= maxDuration + 1e-9);
 }

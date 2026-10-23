@@ -63,6 +63,25 @@ gardée, et les notes à moins de « Écart min » (70 ms par défaut) de la pr�
 pour que chaque rebond reste lisible. Le nombre de notes retirées est affiché. « Durée max »
 (60 s par défaut) coupe les morceaux longs.
 
+## Import d'un son
+
+« Importer un son… » accepte un MP3, un M4A, un WAV ou une vidéo (MP4, MOV) : l'appli y cherche la
+mélodie note par note (`src/transcribe.js`), puis construit le parcours comme pour un MIDI.
+
+- **Type de son** : « Mélodie seule » (voix fredonnée, sifflement, un instrument) suit la hauteur
+  avec l'algorithme YIN ; « Morceau avec accompagnement » (reprise piano, instru) cherche dans le
+  spectre la voix aiguë la plus présente en écartant les harmoniques des basses.
+- **Enlever la voix** : garde la différence entre les canaux gauche et droit, ce qui annule ce qui
+  est au centre du mixage (en général le chant, mais aussi souvent la basse et la grosse caisse).
+  Sans effet sur un son mono. Pour une séparation plus propre, passez d'abord le morceau dans un
+  outil dédié (application Moises, sites de suppression de voix), puis importez l'instrumental.
+- **Début / Durée** : le passage analysé, par exemple le refrain.
+
+Les tests vérifient la transcription sur des mélodies connues : toutes les notes retrouvées au
+piano ou fredonnées, au moins 95 % avec des accords et une batterie, et la mélodie retrouvée sous
+une voix centrée une fois celle-ci enlevée. Sur un morceau réel complet, attendez-vous à des
+erreurs : relancez avec un autre passage ou l'autre type de son.
+
 ## Comment la synchronisation est garantie
 
 1. **Le parcours est construit à partir des horaires.** La note i devient un impact à l'instant
@@ -173,6 +192,7 @@ npm test     # parseur MIDI, planificateur (contacts, collisions, caméra), mesu
 | `src/melody.js` | Noms des notes, mélodie de démonstration originale « Cascade de verre » |
 | `src/midi.js` | Lecture MIDI, carte des tempos, choix de la piste, réduction à une note à la fois |
 | `src/planner.js` | Parcours : impacts, paraboles, plateformes, recherche sans collision, caméra |
+| `src/transcribe.js` | Son → mélodie : décodage, hauteur (YIN ou saillance harmonique), découpage en notes, voix enlevée |
 | `src/verify.js` | Contrôle géométrique, mesure des attaques sonores, détection des éclairs à l'image |
 | `src/scene.js` | Projet + réglages → scène (parcours, couleurs, événements sonores) |
 | `src/renderer.js` | Dessin Canvas 2D d'une image à l'instant t |

@@ -73,6 +73,7 @@ test('réduit une partie à une note à la fois en gardant la note du dessus', (
 test('recale la mélodie à 0 s et la limite en durée', () => {
   const notes = [1, 2, 3, 40].map((time) => ({ time, midi: 60, duration: 0.2 }));
   assert.deepEqual(trimMelody(notes, 30).map((n) => n.time), [0, 1, 2]);
+  assert.deepEqual(trimMelody(notes, 30, 2).map((n) => n.time), [0, 1]); // passage à partir de 2 s
 });
 
 test('refuse un fichier qui n’est pas un MIDI', () => {
