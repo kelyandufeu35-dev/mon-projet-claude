@@ -62,6 +62,14 @@ haut-parleur de téléphone), calé sur la même grille que les notes et environ
 mélodie. La batterie est jouée et exportée avec le reste ; la vérification de synchronisation
 mesure la mélodie seule.
 
+## Deux billes
+
+Pour un MIDI qui a plusieurs parties (par exemple les deux mains d'un piano), « Deuxième bille »
+ajoute une seconde piste : l'écran est partagé en deux colonnes, chacune avec sa bille, ses
+plateformes et sa caméra. Les deux pistes partagent la même amorce et la même horloge ; sur la
+deuxième, les notes jouées ensemble restent un seul impact qui sonne l'accord entier. Quand le
+fichier a exactement deux parties, la deuxième bille est proposée d'office.
+
 ## Import MIDI
 
 « Importer un MIDI… » accepte les fichiers `.mid`/`.midi` (formats 0 et 1, changements de tempo

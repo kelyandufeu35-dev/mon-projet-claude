@@ -216,7 +216,8 @@ export function suggestMelodyPart(parts) {
 
 // Réduit une partie à une note à la fois : la note la plus aiguë de chaque accord est gardée,
 // puis les notes trop rapprochées sont retirées pour que chaque rebond reste lisible.
-export function toMonophonic(notes, { chordWindow = 0.03, minGap = 0.07 } = {}) {
+// Avec `chords`, les notes jouées ensemble restent un seul impact qui sonne l'accord entier.
+export function toMonophonic(notes, { chordWindow = 0.03, minGap = 0.07, chords = false } = {}) {
   const sorted = [...notes].sort((a, b) => a.time - b.time || b.midi - a.midi);
   const out = [];
   let dropped = 0;
@@ -225,28 +226,33 @@ export function toMonophonic(notes, { chordWindow = 0.03, minGap = 0.07 } = {}) 
     const start = sorted[i].time;
     let top = sorted[i];
     let j = i;
+    const together = [];
     while (j < sorted.length && sorted[j].time - start <= chordWindow) {
       if (sorted[j].midi > top.midi) top = sorted[j];
+      together.push(sorted[j].midi);
       j++;
     }
-    dropped += j - i - 1;
+    if (!chords) dropped += j - i - 1;
     const prev = out[out.length - 1];
     if (prev && start - prev.time < minGap) {
       dropped++;
     } else {
       if (prev) prev.duration = Math.min(prev.duration, start - prev.time);
-      out.push({ time: start, midi: top.midi, duration: top.duration, velocity: top.velocity });
+      const note = { time: start, midi: top.midi, duration: top.duration, velocity: top.velocity };
+      if (chords && together.length > 1) note.chord = [...new Set(together)].sort((a, b) => b - a);
+      out.push(note);
     }
     i = j;
   }
   return { notes: out, dropped };
 }
 
-// Garde le passage qui commence à `start` (s) et dure au plus `maxDuration`, recalé à 0 s.
-export function trimMelody(notes, maxDuration = Infinity, start = 0) {
+// Garde le passage qui commence à `start` (s) et dure au plus `maxDuration`, recalé à 0 s
+// (sur la première note gardée, ou sur `offset` pour garder plusieurs pistes alignées).
+export function trimMelody(notes, maxDuration = Infinity, start = 0, offset = null) {
   const kept = notes.filter((n) => n.time >= start - 1e-9);
   if (!kept.length) return [];
-  const offset = kept[0].time;
+  offset ??= kept[0].time;
   return kept
     .map((n) => ({ ...n, time: n.time - offset }))
     .filter((n) => n.time <= maxDuration + 1e-9);

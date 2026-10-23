@@ -86,3 +86,24 @@ test('mélodies de l’appli : parcours valides à tous les tempos, batterie sur
     assert.equal(buildScene(libraryProject(entry.id), { drums: false }).beat.length, 0);
   }
 });
+
+test('deux billes : deux pistes côte à côte, même horloge, accords joués ensemble', async () => {
+  const { toMonophonic } = await import('../src/midi.js');
+  const right = demoProject().notes.map((n) => ({ ...n, time: n.time + 1 }));
+  const chordsIn = [];
+  for (let b = 0; b < 9; b++) for (const midi of [43, 50, 55]) chordsIn.push({ time: b * 2.14, midi, duration: 2, velocity: 0.7 });
+  const left = toMonophonic(chordsIn, { chords: true }).notes;
+  assert.deepEqual(left[0].chord, [55, 50, 43]);
+  const scene = buildScene({ title: 'Deux mains', notes: right, parts: [{ name: 'droite', notes: right }, { name: 'gauche', notes: left }] });
+  assert.equal(scene.lanes.length, 2);
+  assert.ok(scene.verification.ok, JSON.stringify(scene.verification));
+  assert.equal(scene.verification.count, right.length + left.length);
+  // Même amorce : la main gauche commence à 0,9 s, la droite 1 s plus tard.
+  const [a, b] = scene.lanes.map((l) => l.course);
+  assert.equal(a.lead, b.lead);
+  assert.ok(Math.abs(b.impacts[0].t - 0.9) < 1e-9 && Math.abs(a.impacts[0].t - 1.9) < 1e-9);
+  for (const lane of scene.lanes) {
+    for (const imp of lane.course.impacts) assert.ok(imp.platform.cx > 0 && imp.platform.cx < lane.width, 'plateforme hors de sa piste');
+  }
+  assert.ok(scene.events.some((e) => e.chord?.length === 3));
+});

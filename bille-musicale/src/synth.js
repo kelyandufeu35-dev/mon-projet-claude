@@ -220,6 +220,11 @@ export const INSTRUMENTS = {
 
 export function playNote(ctx, out, instrument, when, note) {
   if (note.drum) return drum(ctx, out, when, note);
+  if (note.chord?.length > 1) {
+    // Accord : toutes ses notes à la fois, un peu moins fort chacune.
+    for (const midi of note.chord) playNote(ctx, out, instrument, when, { ...note, midi, chord: null, velocity: (note.velocity ?? 0.8) * 0.75 });
+    return;
+  }
   (INSTRUMENTS[instrument] || INSTRUMENTS.xylophone).play(ctx, out, when, note.midi, note.velocity ?? 0.8, note.duration ?? 0.3);
 }
 

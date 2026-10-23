@@ -49,7 +49,8 @@ async function checkSync(scene, sampleRate = 48000) {
     volume: scene.settings.volume,
     sampleRate,
   });
-  return measureAttacks(monoMix(buffer), sampleRate, scene.events.map((e) => e.t));
+  const times = [...new Set(scene.events.map((e) => e.t))];
+  return measureAttacks(monoMix(buffer), sampleRate, times);
 }
 
 function toBase64(bytes) {
@@ -70,6 +71,7 @@ function projectFile(project, settings) {
       duration: +(n.duration ?? 0.3).toFixed(6),
       velocity: +(n.velocity ?? 0.8).toFixed(3),
     })),
+    parts: project.parts?.map((p) => ({ name: p.name, notes: p.notes })) ?? null,
     beat: project.beat ?? null,
     settings,
   };
@@ -78,7 +80,7 @@ function projectFile(project, settings) {
 function readProject(json) {
   if (json.format !== 'bille-musicale' || !Array.isArray(json.notes)) throw new Error('Ce fichier .json n’est pas un projet Bille musicale.');
   return {
-    project: { title: json.title || 'Sans titre', bpm: json.bpm || null, notes: json.notes, beat: json.beat || null },
+    project: { title: json.title || 'Sans titre', bpm: json.bpm || null, notes: json.notes, parts: json.parts || undefined, beat: json.beat || null },
     settings: json.settings,
   };
 }
@@ -206,14 +208,15 @@ function setupApp() {
   }
 
   function updateMelodyInfo() {
-    const n = state.project.notes.length;
+    const lanes = state.project.parts?.length || 1;
+    const n = state.scene.verification.count;
     const d = state.scene.duration;
     const origin = state.midi
       ? `MIDI « ${state.midi.name} »`
       : state.audio
         ? `Son « ${state.audio.name} »`
         : `Mélodie « ${state.project.title} »`;
-    $('melodyInfo').textContent = `${origin} · ${n} notes · ${fmtTime(d)}${state.dropped ? ` · ${state.dropped} notes d’accord ou trop rapprochées retirées` : ''}`;
+    $('melodyInfo').textContent = `${origin} · ${lanes > 1 ? `${lanes} billes · ` : ''}${n} notes · ${fmtTime(d)}${state.dropped ? ` · ${state.dropped} notes d’accord ou trop rapprochées retirées` : ''}`;
   }
 
   function updateTempoLabel() {
@@ -375,6 +378,7 @@ function setupApp() {
     state.dropped = 0;
     $('sourceOptions').hidden = kind !== 'midi' && kind !== 'audio';
     $('trackField').hidden = kind !== 'midi';
+    $('track2Field').hidden = kind !== 'midi';
     $('audioModeField').hidden = kind !== 'audio';
     $('removeVoiceField').hidden = kind !== 'audio';
     $('audioHint').hidden = kind !== 'audio';
@@ -433,6 +437,13 @@ function setupApp() {
         select.append(opt);
       }
       select.value = suggested.id;
+      // Deuxième bille : proposée d'office quand le fichier a exactement deux parties (deux mains).
+      const second = $('track2Select');
+      second.innerHTML = '';
+      second.append(new Option('Aucune (une seule bille)', ''));
+      for (const opt of select.options) second.append(new Option(opt.textContent.replace(' ★', ''), opt.value));
+      const melodic = parts.filter((p) => !p.isDrums);
+      second.value = melodic.length === 2 ? melodic.find((p) => p !== suggested).id : '';
       $('startAt').value = '0';
       applyMidiPart();
       toast(`« ${state.midi.name} » : ${parts.length} piste(s). La piste ★ semble porter la mélodie.`);
@@ -444,15 +455,24 @@ function setupApp() {
 
   function applyMidiPart() {
     const part = state.midi.parts.find((p) => p.id === $('trackSelect').value);
+    const part2 = state.midi.parts.find((p) => p.id === $('track2Select').value && p !== part);
     const { start, duration, minGap } = passage();
     const mono = toMonophonic(part.notes, { minGap });
-    const notes = trimMelody(mono.notes, duration, start);
-    if (!notes.length) {
+    // La deuxième bille garde ses accords : un impact joue toutes les notes frappées ensemble.
+    const mono2 = part2 ? toMonophonic(part2.notes, { minGap, chords: true }) : null;
+    // Les deux pistes sont recalées sur la même origine pour rester ensemble.
+    const firstFrom = (notes) => notes.find((n) => n.time >= start - 1e-9)?.time ?? Infinity;
+    const offset = Math.min(firstFrom(mono.notes), mono2 ? firstFrom(mono2.notes) : Infinity);
+    if (!Number.isFinite(offset)) {
       toast('Aucune note dans ce passage : choisissez un début plus tôt.');
       return;
     }
+    const notes = trimMelody(mono.notes, duration, start, offset);
+    const parts = [{ name: part.name, notes }];
+    if (mono2) parts.push({ name: part2.name, notes: trimMelody(mono2.notes, duration, start, offset) });
+    const kept = parts.filter((p) => p.notes.length);
     state.dropped = mono.dropped;
-    state.project = { title: state.midi.name, bpm: state.midi.bpm, notes };
+    state.project = { title: state.midi.name, bpm: state.midi.bpm, notes: kept[0].notes, parts: kept.length > 1 ? kept : undefined };
     rebuild();
   }
 
@@ -522,6 +542,7 @@ function setupApp() {
   }
 
   $('trackSelect').addEventListener('change', applySource);
+  $('track2Select').addEventListener('change', applySource);
   $('audioMode').addEventListener('change', applySource);
   $('removeVoice').addEventListener('change', applySource);
   for (const id of ['startAt', 'maxDuration', 'minGap']) $(id).addEventListener('change', applySource);

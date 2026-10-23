@@ -1,6 +1,6 @@
 // Assemble un projet (notes + réglages) en scène prête à jouer et à dessiner.
 
-import { buildCourse, buildCamera } from './planner.js';
+import { buildCourse, buildCamera, laneOptions, DEFAULTS, WORLD_W } from './planner.js';
 import { verifyCourse } from './verify.js';
 import { PALETTES, platformColor } from './palettes.js';
 
@@ -24,44 +24,81 @@ export function normalizeSettings(settings = {}) {
   return s;
 }
 
+// Une piste par main (ou par partie) : `project.parts` en donne plusieurs, sinon `project.notes`.
+export function projectParts(project) {
+  return project.parts?.length ? project.parts : [{ name: project.title, notes: project.notes }];
+}
+
 export function buildScene(project, settingsIn) {
   const settings = normalizeSettings(settingsIn ?? project.settings);
   const tempo = Math.max(0.25, Math.min(3, settings.tempo));
-  const notes = project.notes.map((n) => ({
-    time: n.time / tempo,
-    duration: (n.duration ?? 0.3) / tempo,
-    midi: n.midi + 12 * settings.transpose,
-    velocity: n.velocity ?? 0.8,
-  }));
-  const course = buildCourse(notes);
-  const camera = buildCamera(course);
-  const verification = verifyCourse(course);
-  // Un événement sonore par impact, au même instant : c'est la seule source d'horaires de la
-  // mélodie. La batterie suit la même grille, décalée de la même amorce.
-  const events = course.impacts.map((imp) => ({ t: imp.t, midi: imp.midi, velocity: imp.velocity, duration: imp.duration }));
-  const beat = project.beat && settings.drums ? beatEvents(project.beat, tempo, course.lead, course.duration) : [];
-  return restyleScene({
-    title: project.title || '',
-    bpm: project.bpm ? project.bpm * tempo : null,
+  const parts = projectParts(project)
+    .map((part) => ({
+      name: part.name,
+      notes: part.notes.map((n) => ({
+        time: n.time / tempo,
+        duration: (n.duration ?? 0.3) / tempo,
+        midi: n.midi + 12 * settings.transpose,
+        chord: n.chord?.map((m) => m + 12 * settings.transpose),
+        velocity: n.velocity ?? 0.8,
+      })),
+    }))
+    .filter((part) => part.notes.length);
+  // Même amorce pour toutes les pistes : les billes partagent la même horloge.
+  const first = Math.min(...parts.map((p) => p.notes[0].time));
+  const options = { ...laneOptions(parts.length), lead: Math.max(0, DEFAULTS.leadIn - first) };
+  const courses = parts.map((part) => buildCourse(part.notes, options));
+  const duration = Math.max(...courses.map((c) => c.duration));
+  const lanes = courses.map((course, i) => {
+    course.duration = duration;
+    return { name: parts[i].name, course, camera: buildCamera(course), x: (i * WORLD_W) / courses.length, width: WORLD_W / courses.length };
+  });
+  const checks = courses.map((c) => verifyCourse(c));
+  const verification = {
+    ok: checks.every((v) => v.ok),
+    count: checks.reduce((a, v) => a + v.count, 0),
+    maxContactErrorPx: Math.max(...checks.map((v) => v.maxContactErrorPx)),
+    maxTimeErrorMs: Math.max(...checks.map((v) => v.maxTimeErrorMs)),
+    collisions: checks.reduce((a, v) => a + v.collisions, 0),
+    wrongSide: checks.reduce((a, v) => a + v.wrongSide, 0),
+    warnings: checks.flatMap((v) => v.warnings),
+    lanes: checks.length,
+  };
+  // Un événement sonore par impact, au même instant : c'est la seule source d'horaires des notes.
+  // La batterie suit la même grille, décalée de la même amorce.
+  const events = courses
+    .flatMap((c) => c.impacts.map((imp) => ({ t: imp.t, midi: imp.midi, chord: imp.chord, velocity: imp.velocity, duration: imp.duration })))
+    .sort((a, b) => a.t - b.t);
+  const beat = project.beat && settings.drums ? beatEvents(project.beat, tempo, options.lead, duration) : [];
+  return restyleScene(
+    {
+      title: project.title || '',
+      bpm: project.bpm ? project.bpm * tempo : null,
+      settings,
+      lanes,
+      course: lanes[0].course,
+      camera: lanes[0].camera,
+      events,
+      beat,
+      kicks: beat.filter((e) => e.drum === 'kick').map((e) => e.t),
+      duration,
+      verification,
+    },
     settings,
-    course,
-    camera,
-    events,
-    beat,
-    kicks: beat.filter((e) => e.drum === 'kick').map((e) => e.t),
-    duration: course.duration,
-    verification,
-  }, settings);
+  );
 }
 
-// Changement d'apparence seulement : le parcours et les horaires restent identiques.
+// Changement d'apparence seulement : les parcours et les horaires restent identiques.
 export function restyleScene(scene, settingsIn) {
   const settings = normalizeSettings(settingsIn);
-  const midis = scene.course.impacts.map((imp) => imp.midi);
-  const minMidi = Math.min(...midis);
-  const maxMidi = Math.max(...midis);
-  const colors = scene.course.impacts.map((imp) => platformColor(settings.colors, settings.colorMode, imp.midi, minMidi, maxMidi));
-  return { ...scene, settings, colors };
+  const lanes = scene.lanes.map((lane) => {
+    const midis = lane.course.impacts.map((imp) => imp.midi);
+    const minMidi = Math.min(...midis);
+    const maxMidi = Math.max(...midis);
+    const colors = lane.course.impacts.map((imp) => platformColor(settings.colors, settings.colorMode, imp.midi, minMidi, maxMidi));
+    return { ...lane, colors };
+  });
+  return { ...scene, settings, lanes, colors: lanes[0].colors };
 }
 
 // Rythmes sur 16 doubles-croches par mesure.

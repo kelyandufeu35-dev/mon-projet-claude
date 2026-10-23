@@ -23,7 +23,7 @@ if (!video) {
 }
 const file = pi >= 0 ? JSON.parse(await readFile(resolve(argv[pi + 1]), 'utf8')) : null;
 const scene = file ? buildScene(file, file.settings) : buildScene(demoProject());
-const impacts = scene.events.map((e) => e.t);
+const impacts = [...new Set(scene.events.map((e) => e.t))];
 
 function ffmpeg(args) {
   const r = spawnSync('ffmpeg', ['-v', 'error', '-i', resolve(video), ...args, '-'], { maxBuffer: 2 ** 31 });

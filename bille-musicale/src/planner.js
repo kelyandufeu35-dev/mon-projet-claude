@@ -14,6 +14,8 @@ export const WORLD_W = 1080;
 export const WORLD_H = 1920;
 
 export const DEFAULTS = {
+  width: WORLD_W, // largeur de la piste (plus étroite quand plusieurs billes se partagent l'écran)
+  lead: null, // amorce imposée (s) : plusieurs pistes partagent la même
   ballRadius: 34,
   platformThickness: 28,
   platformWidth: 150,
@@ -69,7 +71,7 @@ const DROP_FACTORS = [1, 1.5, 2.2, 3.2, 4.5];
 
 function hopCandidates(dt, x, dir, i, o) {
   const minX = o.marginX;
-  const maxX = WORLD_W - o.marginX;
+  const maxX = o.width - o.marginX;
   const nominal = clamp(o.vxBase * dt * (0.85 + 0.3 * hash(i)), o.dxMin, o.dxMax);
   // Un demi-tour se fait de préférence sur une note longue, quand la bille approche du bord.
   const room = dir > 0 ? maxX - x : x - minX;
@@ -202,11 +204,11 @@ export function buildCourse(inputNotes, options = {}) {
     .filter((n) => Number.isFinite(n.time) && Number.isFinite(n.midi))
     .sort((a, b) => a.time - b.time);
   if (!notes.length) {
-    return { options: o, lead: 0, impacts: [], hops: [], start: { t: 0, x: WORLD_W / 2, y: 0 }, lastT: 0, duration: 3, warnings: [] };
+    return { options: o, lead: 0, impacts: [], hops: [], start: { t: 0, x: o.width / 2, y: 0 }, lastT: 0, duration: 3, warnings: [] };
   }
-  const lead = Math.max(0, o.leadIn - notes[0].time);
+  const lead = o.lead ?? Math.max(0, o.leadIn - notes[0].time);
   const times = notes.map((n) => n.time + lead);
-  const x0 = o.marginX + (WORLD_W - 2 * o.marginX) * 0.3;
+  const x0 = o.marginX + (o.width - 2 * o.marginX) * 0.3;
   const dropTime = Math.min(o.dropTime, times[0]);
   const start = { t: times[0] - dropTime, x: x0, y: -0.5 * o.gravity * dropTime * dropTime };
   const dropHop = { t0: start.t, t1: times[0], x0, y0: start.y, vx: 0, vy: 0, g: o.gravity };
@@ -275,6 +277,7 @@ export function buildCourse(inputNotes, options = {}) {
       midi: note.midi,
       velocity: note.velocity ?? 0.8,
       duration: note.duration ?? dt,
+      chord: note.chord,
       x: step.state.x,
       y: step.state.y,
       vin: step.state.vin,
@@ -375,4 +378,15 @@ export function cameraAt(camera, t) {
   const i = Math.floor(f);
   const j = Math.min(i + 1, camera.top.length - 1);
   return camera.top[i] + (camera.top[j] - camera.top[i]) * (f - i);
+}
+
+// Réglages d'une piste plus étroite : toutes les longueurs (et la gravité, en px/s²) suivent
+// l'échelle, pour que les rebonds gardent la même allure.
+const LENGTHS = ['ballRadius', 'platformThickness', 'platformWidth', 'platformExtraWidth', 'marginX', 'gravity', 'minRise', 'minDrop', 'maxRise', 'maxDrop', 'vxBase', 'dxMin', 'dxMax'];
+export function laneOptions(lanes) {
+  if (lanes <= 1) return {};
+  const scale = 0.62;
+  const o = { width: WORLD_W / lanes };
+  for (const k of LENGTHS) o[k] = DEFAULTS[k] * scale;
+  return o;
 }

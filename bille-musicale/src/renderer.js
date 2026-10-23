@@ -69,9 +69,7 @@ export class Renderer {
     const s = Math.min(W / WORLD_W, H / WORLD_H);
     const offX = (W - WORLD_W * s) / 2;
     const offY = (H - WORLD_H * s) / 2;
-    const course = scene.course;
-    const o = course.options;
-    const top = cameraAt(scene.camera, t);
+    const top = cameraAt(scene.lanes[0].camera, t);
     // Zone visible en unités du monde : au-delà du cadre 9:16 si l'écran est plus haut ou plus large.
     const x0 = -offX / s;
     const y0 = -offY / s;
@@ -115,30 +113,36 @@ export class Renderer {
     ctx.fillStyle = light;
     ctx.fillRect(x0, y0, vw, vh);
 
-    // Monde : la caméra ne fait que décaler verticalement.
-    ctx.setTransform(s, 0, 0, s, offX, offY - top * s);
-    const impacts = course.impacts;
-    const viewMin = top + y0 - 240;
-    const viewMax = top + y0 + vh + 240;
-    let first = 0;
-    let lo = 0;
-    let hi = impacts.length;
-    while (lo < hi) {
-      const mid = (lo + hi) >> 1;
-      if (impacts[mid].y < viewMin - o.maxRise) lo = mid + 1;
-      else hi = mid;
+    // Monde : une piste par bille, chacune avec sa caméra (qui ne fait que décaler verticalement).
+    const lanes = scene.lanes;
+    lanes.forEach((lane, li) => {
+      const laneTop = cameraAt(lane.camera, t);
+      ctx.save();
+      ctx.setTransform(s, 0, 0, s, offX + lane.x * s, offY - laneTop * s);
+      if (lanes.length > 1) {
+        // Chaque piste reste dans sa colonne ; celles du bord vont jusqu'au bord de l'écran.
+        const left = li === 0 ? x0 - lane.x : 0;
+        const right = li === lanes.length - 1 ? x0 + vw - lane.x : lane.width;
+        ctx.beginPath();
+        ctx.rect(left, laneTop + y0, right - left, vh);
+        ctx.clip();
+      }
+      this.drawLane(scene, lane, t, laneTop, y0, vh, st);
+      ctx.restore();
+    });
+    if (lanes.length > 1) {
+      // Séparation discrète entre les pistes.
+      ctx.setTransform(s, 0, 0, s, offX, offY);
+      for (let li = 1; li < lanes.length; li++) {
+        const x = lanes[li].x;
+        const g = ctx.createLinearGradient(0, y0, 0, y0 + vh);
+        g.addColorStop(0, rgba(WHITE, 0));
+        g.addColorStop(0.5, rgba(WHITE, 0.12));
+        g.addColorStop(1, rgba(WHITE, 0));
+        ctx.fillStyle = g;
+        ctx.fillRect(x - 1, y0, 2, vh);
+      }
     }
-    first = lo;
-
-    for (let j = first; j < impacts.length && impacts[j].y < viewMax; j++) {
-      if (impacts[j].platform.cy < viewMin) continue;
-      this.drawPlatform(scene, j, t - impacts[j].t, st);
-    }
-    for (let j = first; j < impacts.length && impacts[j].y < viewMax; j++) {
-      const tau = t - impacts[j].t;
-      if (tau >= 0 && tau < 0.8) this.drawBurst(scene, j, tau);
-    }
-    this.drawBall(scene, t, st);
 
     // Titre (premières secondes) et vignettage.
     ctx.setTransform(s, 0, 0, s, offX, offY);
@@ -163,15 +167,40 @@ export class Renderer {
     ctx.fillRect(x0, y0, vw, vh);
   }
 
-  drawPlatform(scene, j, tau, st) {
+  drawLane(scene, lane, t, top, y0, vh, st) {
+    const course = lane.course;
+    const o = course.options;
+    const impacts = course.impacts;
+    const viewMin = top + y0 - 240;
+    const viewMax = top + y0 + vh + 240;
+    let lo = 0;
+    let hi = impacts.length;
+    while (lo < hi) {
+      const mid = (lo + hi) >> 1;
+      if (impacts[mid].y < viewMin - o.maxRise) lo = mid + 1;
+      else hi = mid;
+    }
+    for (let j = lo; j < impacts.length && impacts[j].y < viewMax; j++) {
+      if (impacts[j].platform.cy < viewMin) continue;
+      this.drawPlatform(scene, lane, j, t - impacts[j].t, st);
+    }
+    for (let j = lo; j < impacts.length && impacts[j].y < viewMax; j++) {
+      const tau = t - impacts[j].t;
+      if (tau >= 0 && tau < 0.8) this.drawBurst(lane, j, tau);
+    }
+    this.drawBall(lane, t, st);
+  }
+
+  drawPlatform(scene, lane, j, tau, st) {
     const { ctx } = this;
-    const imp = scene.course.impacts[j];
+    const imp = lane.course.impacts[j];
     const p = imp.platform;
-    const base = scene.colors[j];
+    const base = lane.colors[j];
     const hit = tau >= 0;
     const flash = hit ? Math.exp(-tau / 0.32) : 0;
     // Petit enfoncement amorti sous l'impact.
-    const dip = hit ? 9 * Math.exp(-tau / 0.1) * Math.sin(Math.min(tau * 32, Math.PI * 3)) * (0.5 + 0.5 * imp.velocity) : 0;
+    const u = p.thickness / 28; // échelle de la piste (plus petite à deux billes)
+    const dip = hit ? 9 * u * Math.exp(-tau / 0.1) * Math.sin(Math.min(tau * 32, Math.PI * 3)) * (0.5 + 0.5 * imp.velocity) : 0;
     const cx = p.cx - p.nx * dip;
     const cy = p.cy - p.ny * dip;
     const body = hit ? mix(base, WHITE, 0.45 * flash) : mix(base, st.bgTop, 0.18);
@@ -198,8 +227,8 @@ export class Renderer {
     ctx.globalCompositeOperation = 'source-over';
     // Ombre portée douce.
     ctx.save();
-    ctx.translate(0, 14);
-    pill(ctx, p.width + 6, p.thickness + 6);
+    ctx.translate(0, 14 * u);
+    pill(ctx, p.width + 6 * u, p.thickness + 6 * u);
     ctx.fillStyle = 'rgba(0,0,0,0.28)';
     ctx.fill();
     ctx.restore();
@@ -223,7 +252,7 @@ export class Renderer {
 
     if (scene.settings.showNoteNames) {
       ctx.fillStyle = rgba(hit ? BLACK : WHITE, 0.72);
-      ctx.font = '700 15px system-ui, -apple-system, sans-serif';
+      ctx.font = `700 ${Math.round(p.thickness * 0.55)}px system-ui, -apple-system, sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(noteName(imp.midi), 0, 1);
@@ -231,11 +260,12 @@ export class Renderer {
     ctx.restore();
   }
 
-  drawBurst(scene, j, tau) {
+  drawBurst(lane, j, tau) {
     const { ctx } = this;
-    const imp = scene.course.impacts[j];
-    const base = mix(scene.colors[j], WHITE, 0.4);
-    const R = scene.course.options.ballRadius;
+    const imp = lane.course.impacts[j];
+    const base = mix(lane.colors[j], WHITE, 0.4);
+    const R = lane.course.options.ballRadius;
+    const u = R / 34;
     ctx.globalCompositeOperation = 'lighter';
     // Onde circulaire dans le plan de la plateforme.
     if (tau < 0.45) {
@@ -245,9 +275,9 @@ export class Renderer {
       ctx.rotate(imp.platform.angle);
       ctx.scale(1, 0.38);
       ctx.beginPath();
-      ctx.arc(0, 0, 20 + k * 150, 0, TAU);
+      ctx.arc(0, 0, (20 + k * 150) * u, 0, TAU);
       ctx.strokeStyle = rgba(base, 0.55 * (1 - k));
-      ctx.lineWidth = 6 * (1 - k) + 1;
+      ctx.lineWidth = (6 * (1 - k) + 1) * u;
       ctx.stroke();
       ctx.restore();
     }
@@ -257,25 +287,25 @@ export class Renderer {
     const spread = Math.atan2(imp.ny, imp.nx);
     for (let k = 0; k < count; k++) {
       const a = spread + (hash(j, k) - 0.5) * 2.4;
-      const v = 170 + hash(j, k + 50) * 380 * (0.5 + imp.velocity);
+      const v = (170 + hash(j, k + 50) * 380 * (0.5 + imp.velocity)) * u;
       const x = imp.x - imp.nx * R + Math.cos(a) * v * tau;
-      const y = imp.y - imp.ny * R + Math.sin(a) * v * tau + 700 * tau * tau;
+      const y = imp.y - imp.ny * R + Math.sin(a) * v * tau + 700 * u * tau * tau;
       const f = 1 - tau / life;
       if (f <= 0) continue;
       ctx.beginPath();
-      ctx.arc(x, y, (2 + hash(j, k + 90) * 4) * f, 0, TAU);
+      ctx.arc(x, y, (2 + hash(j, k + 90) * 4) * f * u, 0, TAU);
       ctx.fillStyle = rgba(base, 0.85 * f);
       ctx.fill();
     }
   }
 
-  drawBall(scene, t, st) {
+  drawBall(lane, t, st) {
     const { ctx } = this;
-    const course = scene.course;
+    const course = lane.course;
     const R = course.options.ballRadius;
     const b = ballAt(course, t);
     const li = lastImpactIndex(course, t);
-    const reflect = li >= 0 ? scene.colors[li] : st.accents[1];
+    const reflect = li >= 0 ? lane.colors[li] : st.accents[1];
 
     // Traînée lumineuse.
     ctx.globalCompositeOperation = 'lighter';
