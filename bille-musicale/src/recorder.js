@@ -41,7 +41,22 @@ export function startRecording(canvas, audioStream, format, fps = 60) {
   };
 }
 
-export function download(blob, name) {
+// Dans claude.ai, la page tourne dans un cadre qui bloque les téléchargements directs : le fichier
+// passe par la capacité « downloads » (le téléphone propose alors de l'enregistrer ou de le
+// partager). Ailleurs (npm start, hébergement statique), un simple lien de téléchargement suffit.
+export const hosted = typeof window !== 'undefined' && !!window.claude?.use;
+const downloads = hosted ? window.claude.use('downloads') : Promise.resolve(null);
+
+export async function canSave() {
+  return !hosted || !!(await downloads);
+}
+
+export async function download(blob, name) {
+  if (hosted) {
+    const d = await downloads;
+    if (!d) throw new Error('L’enregistrement de fichiers n’est pas disponible ici.');
+    return d.save({ filename: name, data: blob });
+  }
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;

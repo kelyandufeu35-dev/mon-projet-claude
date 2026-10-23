@@ -26,6 +26,17 @@ est un site statique : n'importe quel hébergeur statique convient (GitHub Pages
 modules JavaScript ne se chargent pas en double-cliquant sur `index.html` (`file://`) : passez
 par un serveur.
 
+### Version en fichier unique
+
+```bash
+node tools/build-single.mjs        # crée dist/bille-musicale.html
+```
+
+Ce fichier contient toute l'application (styles et scripts intégrés) : il s'ouvre d'un
+double-clic, sans serveur, et peut être mis en ligne tel quel. Publiée dans claude.ai, la page
+enregistre les vidéos et projets par la fenêtre d'enregistrement du téléphone (pas d'audio WAV
+dans ce cas, format refusé par l'hôte).
+
 ### Commandes
 
 | Commande | Effet |

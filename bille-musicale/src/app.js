@@ -7,7 +7,7 @@ import { Transport } from './transport.js';
 import { INSTRUMENTS, renderOffline, encodeWav } from './synth.js';
 import { PALETTES, COLOR_MODES } from './palettes.js';
 import { measureAttacks } from './verify.js';
-import { pickRecorderFormat, startRecording, download } from './recorder.js';
+import { pickRecorderFormat, startRecording, download, hosted, canSave } from './recorder.js';
 
 const $ = (id) => document.getElementById(id);
 const canvas = $('view');
@@ -508,9 +508,30 @@ function setupApp() {
   // --- Vidéo ----------------------------------------------------------------
   const format = pickRecorderFormat();
   $('recordInfo').textContent = format
-    ? `Enregistrement en temps réel, fichier ${format.ext.toUpperCase()}${format.ext === 'webm' ? ' (conversion MP4 : tools/webm-vers-mp4.sh)' : ''}. Gardez l’onglet au premier plan ; en cas d’à-coups, choisissez 720×1280.`
-    : 'Ce navigateur ne permet pas l’enregistrement intégré : utilisez le mode enregistrement d’écran ou l’export MP4.';
+    ? `Enregistrement en temps réel, fichier ${format.ext.toUpperCase()}${format.ext === 'webm' && !hosted ? ' (conversion MP4 : tools/webm-vers-mp4.sh)' : ''}. Gardez la page au premier plan ; en cas d’à-coups, choisissez 720×1280.`
+    : 'Ce navigateur ne permet pas l’enregistrement intégré : utilisez le mode enregistrement d’écran.';
   $('btnRecord').disabled = !format;
+  // En ligne (claude.ai), seuls certains formats peuvent être enregistrés : pas de WAV.
+  $('btnWav').hidden = hosted;
+  canSave().then((ok) => {
+    if (ok) return;
+    $('btnRecord').disabled = true;
+    $('btnProject').hidden = true;
+    $('recordInfo').textContent = 'L’enregistrement de fichiers n’est pas disponible ici : utilisez le mode enregistrement d’écran.';
+  });
+
+  // La dernière vidéo reste disponible si l'enregistrement du fichier a été refusé ou a échoué.
+  let lastVideo = null;
+  async function saveVideo() {
+    try {
+      await download(lastVideo.blob, lastVideo.name);
+      toast(`Vidéo enregistrée (${(lastVideo.blob.size / 1e6).toFixed(1)} Mo)`);
+    } catch (err) {
+      $('btnSaveVideo').hidden = false;
+      if (err?.code !== 'declined') toast(`Impossible d’enregistrer la vidéo : ${err.message || err.code}`);
+    }
+  }
+  $('btnSaveVideo').onclick = saveVideo;
 
   $('btnRecord').onclick = async () => {
     if (state.recording) return;
@@ -545,8 +566,8 @@ function setupApp() {
       await ended;
       await wait(400);
       const blob = await rec.stop();
-      download(blob, `${slug(state.project.title)}.${format.ext}`);
-      toast(`Vidéo enregistrée (${(blob.size / 1e6).toFixed(1)} Mo)`);
+      lastVideo = { blob, name: `${slug(state.project.title)}.${format.ext}` };
+      saveVideo();
     } catch (err) {
       console.error(err);
       toast(`Enregistrement interrompu : ${err.message}`);
@@ -568,7 +589,9 @@ function setupApp() {
   };
   $('btnProject').onclick = () => {
     const json = JSON.stringify(projectFile(state.project, state.settings), null, 1);
-    download(new Blob([json], { type: 'application/json' }), `${slug(state.project.title)}.json`);
+    download(new Blob([json], { type: 'application/json' }), `${slug(state.project.title)}.json`).catch((err) => {
+      if (err?.code !== 'declined') toast(`Impossible d’enregistrer le projet : ${err.message || err.code}`);
+    });
   };
 
   // --- Contrôles ↔ réglages -------------------------------------------------

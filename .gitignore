@@ -8,3 +8,4 @@ client_secret*.json
 .env
 node_modules/
 bille-musicale/*.mp4
+bille-musicale/dist/
