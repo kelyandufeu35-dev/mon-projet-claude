@@ -7,7 +7,7 @@
         "scene_first": false,
         "eyebrow": "Pour chats et chiens",
         "trust_1": "Colis suivi",
-        "trust_2": "Retour sous 14\u00a0jours (droit légal)",
+        "trust_2": "Retour sous 14 jours (droit légal)",
         "trust_3": "Paiement sécurisé",
         "inbox": "1 peigne démêloir, lames en acier inoxydable\nUn colis suivi, numéro envoyé par e-mail",
         "size_guide": false,
@@ -15,7 +15,16 @@
         "sticky_label": "Peigne Pattoune",
         "anchor": "acheter",
         "show_offers": false
-      }
+      },
+      "blocks": {
+        "judgeme_reviews": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "judgeme_reviews"
+      ]
     },
     "faq": {
       "type": "faq",
@@ -23,29 +32,29 @@
         "q1": {
           "type": "question",
           "settings": {
-            "question": "Comment l’utiliser\u202f?",
+            "question": "Comment l’utiliser ?",
             "answer": "<p>Tiens le poil à la base d’une main et passe le peigne doucement dans le sens du poil, par petites zones. Ne tire jamais sur un nœud.</p>"
           }
         },
         "q2": {
           "type": "question",
           "settings": {
-            "question": "Quelle taille choisir\u202f?",
+            "question": "Quelle taille choisir ?",
             "answer": "<p>Le petit pour les chats et les petits chiens, le grand pour les chiens moyens et grands.</p>"
           }
         },
         "q3": {
           "type": "question",
           "settings": {
-            "question": "Et si le nœud est collé à la peau\u202f?",
-            "answer": "<p>N’insiste pas\u00a0: les lames sont tranchantes. Demande à un toiletteur ou à ton vétérinaire de s’en occuper.</p>"
+            "question": "Et si le nœud est collé à la peau ?",
+            "answer": "<p>N’insiste pas : les lames sont tranchantes. Demande à un toiletteur ou à ton vétérinaire de s’en occuper.</p>"
           }
         },
         "q4": {
           "type": "question",
           "settings": {
-            "question": "Livraison et retours\u202f?",
-            "answer": "<p>La livraison est suivie et prend [delai_livraison], en [zone_livraison]. Elle est offerte dès [seuil_livraison] d’achat et coûte [frais_livraison] en dessous. Tu disposes de 14\u00a0jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
+            "question": "Livraison et retours ?",
+            "answer": "<p>La livraison est suivie et prend [delai_livraison], en [zone_livraison]. Elle est offerte dès [seuil_livraison] d’achat et coûte [frais_livraison] en dessous. Tu disposes de 14 jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
           }
         }
       },
@@ -58,7 +67,7 @@
       "settings": {
         "eyebrow": "Questions",
         "title": "Avant de te décider.",
-        "aside": "Une autre question\u202f?",
+        "aside": "Une autre question ?",
         "link_label": "Écris-nous",
         "aside_after": ", une vraie personne te répond en français.",
         "anchor": "faq"
@@ -70,7 +79,7 @@
         "title": "Quelques coups de peigne, et les petits nœuds s’en vont.",
         "highlight": "s’en vont.",
         "button_label": "Je commande mon peigne",
-        "note": "Livraison offerte dès 25\u00a0€ · Retour sous 14\u00a0jours (droit légal)"
+        "note": "Livraison offerte dès 25 € · Retour sous 14 jours (droit légal)"
       }
     },
     "recos": {

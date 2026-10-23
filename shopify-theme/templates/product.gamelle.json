@@ -7,7 +7,7 @@
         "scene_first": false,
         "eyebrow": "Pour les chats",
         "trust_1": "Colis suivi",
-        "trust_2": "Retour sous 14\u00a0jours (droit légal)",
+        "trust_2": "Retour sous 14 jours (droit légal)",
         "trust_3": "Paiement sécurisé",
         "inbox": "1 bol en inox et son support incliné\nUn colis suivi, numéro envoyé par e-mail",
         "size_guide": false,
@@ -15,7 +15,16 @@
         "sticky_label": "Gamelle Pattoune",
         "anchor": "acheter",
         "show_offers": false
-      }
+      },
+      "blocks": {
+        "judgeme_reviews": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "judgeme_reviews"
+      ]
     },
     "faq": {
       "type": "faq",
@@ -23,29 +32,29 @@
         "q1": {
           "type": "question",
           "settings": {
-            "question": "Pourquoi une gamelle inclinée\u202f?",
-            "answer": "<p>Le bol est penché à 15° et posé sur un petit support\u00a0: la nourriture est présentée vers ton chat, au lieu d’être au ras du sol.</p>"
+            "question": "Pourquoi une gamelle inclinée ?",
+            "answer": "<p>Le bol est penché à 15° et posé sur un petit support : la nourriture est présentée vers ton chat, au lieu d’être au ras du sol.</p>"
           }
         },
         "q2": {
           "type": "question",
           "settings": {
-            "question": "Comment la laver\u202f?",
+            "question": "Comment la laver ?",
             "answer": "<p>Lave le bol à l’eau chaude savonneuse et rince-le bien. Essuie le support avec une éponge humide.</p>"
           }
         },
         "q3": {
           "type": "question",
           "settings": {
-            "question": "Pour quels animaux\u202f?",
-            "answer": "<p>Elle est pensée pour les chats. Le bol mesure environ 10,7\u00a0cm de diamètre.</p>"
+            "question": "Pour quels animaux ?",
+            "answer": "<p>Elle est pensée pour les chats. Le bol mesure environ 10,7 cm de diamètre.</p>"
           }
         },
         "q4": {
           "type": "question",
           "settings": {
-            "question": "Livraison et retours\u202f?",
-            "answer": "<p>La livraison est suivie et prend [delai_livraison], en [zone_livraison]. Elle est offerte dès [seuil_livraison] d’achat et coûte [frais_livraison] en dessous. Tu disposes de 14\u00a0jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
+            "question": "Livraison et retours ?",
+            "answer": "<p>La livraison est suivie et prend [delai_livraison], en [zone_livraison]. Elle est offerte dès [seuil_livraison] d’achat et coûte [frais_livraison] en dessous. Tu disposes de 14 jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
           }
         }
       },
@@ -58,7 +67,7 @@
       "settings": {
         "eyebrow": "Questions",
         "title": "Avant de te décider.",
-        "aside": "Une autre question\u202f?",
+        "aside": "Une autre question ?",
         "link_label": "Écris-nous",
         "aside_after": ", une vraie personne te répond en français.",
         "anchor": "faq"
@@ -70,7 +79,7 @@
         "title": "Un bol penché vers lui, et le repas est servi.",
         "highlight": "servi.",
         "button_label": "Je commande sa gamelle",
-        "note": "Livraison offerte dès 25\u00a0€ · Retour sous 14\u00a0jours (droit légal)"
+        "note": "Livraison offerte dès 25 € · Retour sous 14 jours (droit légal)"
       }
     },
     "recos": {

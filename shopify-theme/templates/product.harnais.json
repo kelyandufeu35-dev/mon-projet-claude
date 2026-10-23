@@ -7,7 +7,7 @@
         "scene_first": false,
         "eyebrow": "Pour les chiens",
         "trust_1": "Colis suivi",
-        "trust_2": "Retour sous 14\u00a0jours (droit légal)",
+        "trust_2": "Retour sous 14 jours (droit légal)",
         "trust_3": "Paiement sécurisé",
         "inbox": "1 harnais réglable (laisse non incluse)\nUn colis suivi, numéro envoyé par e-mail",
         "size_guide": false,
@@ -15,7 +15,16 @@
         "sticky_label": "Harnais Pattoune",
         "anchor": "acheter",
         "show_offers": false
-      }
+      },
+      "blocks": {
+        "judgeme_reviews": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "judgeme_reviews"
+      ]
     },
     "faq": {
       "type": "faq",
@@ -23,29 +32,29 @@
         "q1": {
           "type": "question",
           "settings": {
-            "question": "Comment prendre ses mesures\u202f?",
-            "answer": "<p>Passe un mètre ruban autour de son poitrail, juste derrière les pattes avant, là où il est le plus large. Compare avec le guide des tailles\u202f; entre deux tailles, prends la plus grande.</p>"
+            "question": "Comment prendre ses mesures ?",
+            "answer": "<p>Passe un mètre ruban autour de son poitrail, juste derrière les pattes avant, là où il est le plus large. Compare avec le guide des tailles ; entre deux tailles, prends la plus grande.</p>"
           }
         },
         "q2": {
           "type": "question",
           "settings": {
-            "question": "Comment savoir s’il est bien réglé\u202f?",
-            "answer": "<p>Tu dois pouvoir glisser deux doigts sous chaque sangle. Plus serré, il gêne\u202f; plus lâche, il peut s’en dégager.</p>"
+            "question": "Comment savoir s’il est bien réglé ?",
+            "answer": "<p>Tu dois pouvoir glisser deux doigts sous chaque sangle. Plus serré, il gêne ; plus lâche, il peut s’en dégager.</p>"
           }
         },
         "q3": {
           "type": "question",
           "settings": {
-            "question": "Où j’accroche la laisse\u202f?",
+            "question": "Où j’accroche la laisse ?",
             "answer": "<p>Sur l’anneau métallique du dos. La poignée sert à le retenir près de toi un court instant, pas à le soulever.</p>"
           }
         },
         "q4": {
           "type": "question",
           "settings": {
-            "question": "Livraison et retours\u202f?",
-            "answer": "<p>La livraison est suivie et prend [delai_livraison], en [zone_livraison]. Elle est offerte dès [seuil_livraison] d’achat et coûte [frais_livraison] en dessous. Tu disposes de 14\u00a0jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
+            "question": "Livraison et retours ?",
+            "answer": "<p>La livraison est suivie et prend [delai_livraison], en [zone_livraison]. Elle est offerte dès [seuil_livraison] d’achat et coûte [frais_livraison] en dessous. Tu disposes de 14 jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
           }
         }
       },
@@ -58,7 +67,7 @@
       "settings": {
         "eyebrow": "Questions",
         "title": "Avant de te décider.",
-        "aside": "Une autre question\u202f?",
+        "aside": "Une autre question ?",
         "link_label": "Écris-nous",
         "aside_after": ", une vraie personne te répond en français.",
         "anchor": "faq"
@@ -70,7 +79,7 @@
         "title": "Un harnais bien réglé, et la balade est plus douce.",
         "highlight": "plus douce.",
         "button_label": "Je commande son harnais",
-        "note": "Livraison offerte dès 25\u00a0€ · Retour sous 14\u00a0jours (droit légal)"
+        "note": "Livraison offerte dès 25 € · Retour sous 14 jours (droit légal)"
       }
     },
     "recos": {

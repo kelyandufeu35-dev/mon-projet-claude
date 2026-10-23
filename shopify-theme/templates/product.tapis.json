@@ -7,7 +7,7 @@
         "scene_first": false,
         "eyebrow": "Pour chats et chiens",
         "trust_1": "Colis suivi",
-        "trust_2": "Retour sous 14\u00a0jours (droit légal)",
+        "trust_2": "Retour sous 14 jours (droit légal)",
         "trust_3": "Paiement sécurisé",
         "inbox": "1 tapis de gamelle (gamelles non incluses)\nUn colis suivi, numéro envoyé par e-mail",
         "size_guide": false,
@@ -15,7 +15,16 @@
         "sticky_label": "Tapis Pattoune",
         "anchor": "acheter",
         "show_offers": false
-      }
+      },
+      "blocks": {
+        "judgeme_reviews": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "judgeme_reviews"
+      ]
     },
     "faq": {
       "type": "faq",
@@ -23,29 +32,29 @@
         "q1": {
           "type": "question",
           "settings": {
-            "question": "Quelle taille choisir\u202f?",
-            "answer": "<p>Le petit (20\u00a0×\u00a030\u00a0cm) pour une seule gamelle, le moyen (30\u00a0×\u00a050\u00a0cm) pour deux petites gamelles, le grand (40\u00a0×\u00a060\u00a0cm) pour deux gamelles ou une grande. Mesure la place sous ses gamelles avant de choisir.</p>"
+            "question": "Quelle taille choisir ?",
+            "answer": "<p>Le petit (20 × 30 cm) pour une seule gamelle, le moyen (30 × 50 cm) pour deux petites gamelles, le grand (40 × 60 cm) pour deux gamelles ou une grande. Mesure la place sous ses gamelles avant de choisir.</p>"
           }
         },
         "q2": {
           "type": "question",
           "settings": {
-            "question": "Comment l’entretenir\u202f?",
+            "question": "Comment l’entretenir ?",
             "answer": "<p>Passe un chiffon humide ou rince-le à l’eau, puis laisse-le sécher à plat.</p>"
           }
         },
         "q3": {
           "type": "question",
           "settings": {
-            "question": "Les gamelles sont-elles fournies\u202f?",
+            "question": "Les gamelles sont-elles fournies ?",
             "answer": "<p>Non, le tapis est vendu seul.</p>"
           }
         },
         "q4": {
           "type": "question",
           "settings": {
-            "question": "Livraison et retours\u202f?",
-            "answer": "<p>La livraison est suivie et prend [delai_livraison], en [zone_livraison]. Elle est offerte dès [seuil_livraison] d’achat et coûte [frais_livraison] en dessous. Tu disposes de 14\u00a0jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
+            "question": "Livraison et retours ?",
+            "answer": "<p>La livraison est suivie et prend [delai_livraison], en [zone_livraison]. Elle est offerte dès [seuil_livraison] d’achat et coûte [frais_livraison] en dessous. Tu disposes de 14 jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
           }
         }
       },
@@ -58,7 +67,7 @@
       "settings": {
         "eyebrow": "Questions",
         "title": "Avant de te décider.",
-        "aside": "Une autre question\u202f?",
+        "aside": "Une autre question ?",
         "link_label": "Écris-nous",
         "aside_after": ", une vraie personne te répond en français.",
         "anchor": "faq"
@@ -70,7 +79,7 @@
         "title": "Un tapis sous ses gamelles, et le sol reste au sec.",
         "highlight": "au sec.",
         "button_label": "Je commande son tapis",
-        "note": "Livraison offerte dès 25\u00a0€ · Retour sous 14\u00a0jours (droit légal)"
+        "note": "Livraison offerte dès 25 € · Retour sous 14 jours (droit légal)"
       }
     },
     "recos": {

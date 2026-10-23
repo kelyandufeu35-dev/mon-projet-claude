@@ -7,15 +7,24 @@
         "scene_first": false,
         "eyebrow": "Pour les chats",
         "trust_1": "Colis suivi",
-        "trust_2": "Retour sous 14\u00a0jours (droit légal)",
+        "trust_2": "Retour sous 14 jours (droit légal)",
         "trust_3": "Paiement sécurisé",
-        "inbox": "1 puzzle de chasse en feutrine, à monter sans outil\n1 balle de 4\u00a0cm à faire rouler dedans\nUn colis suivi, numéro envoyé par e-mail",
+        "inbox": "1 puzzle de chasse en feutrine, à monter sans outil\n1 balle de 4 cm à faire rouler dedans\nUn colis suivi, numéro envoyé par e-mail",
         "size_guide": false,
         "show_description": true,
         "sticky_label": "Puzzle Pattoune",
         "anchor": "acheter",
         "show_offers": false
-      }
+      },
+      "blocks": {
+        "judgeme_reviews": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "judgeme_reviews"
+      ]
     },
     "faq": {
       "type": "faq",
@@ -23,36 +32,36 @@
         "q1": {
           "type": "question",
           "settings": {
-            "question": "Comment ça marche\u202f?",
-            "answer": "<p>Glisse quelques croquettes ou friandises dans les trous, ou laisse la balle à l’intérieur\u00a0: ton chat les fait sortir avec la patte. Montre-lui le jeu les premières fois avec des trous faciles.</p>"
+            "question": "Comment ça marche ?",
+            "answer": "<p>Glisse quelques croquettes ou friandises dans les trous, ou laisse la balle à l’intérieur : ton chat les fait sortir avec la patte. Montre-lui le jeu les premières fois avec des trous faciles.</p>"
           }
         },
         "q2": {
           "type": "question",
           "settings": {
-            "question": "Carré ou rond, lequel choisir\u202f?",
+            "question": "Carré ou rond, lequel choisir ?",
             "answer": "<p>Les deux se jouent de la même façon. Choisis selon la place que tu as et la couleur qui va le mieux chez toi.</p>"
           }
         },
         "q3": {
           "type": "question",
           "settings": {
-            "question": "Peut-il jouer sans surveillance\u202f?",
+            "question": "Peut-il jouer sans surveillance ?",
             "answer": "<p>Garde un œil sur lui quand il joue, surtout au début. Range le puzzle s’il commence à mâchouiller la feutrine ou si une pièce est abîmée. Aucun jouet n’est indestructible.</p>"
           }
         },
         "q4": {
           "type": "question",
           "settings": {
-            "question": "Comment l’entretenir\u202f?",
+            "question": "Comment l’entretenir ?",
             "answer": "<p>Retire les miettes, puis passe un chiffon à peine humide sur la feutrine et laisse sécher. Ne le mets pas à la machine.</p>"
           }
         },
         "q5": {
           "type": "question",
           "settings": {
-            "question": "Livraison et retours\u202f?",
-            "answer": "<p>La livraison est suivie et prend [delai_livraison], en [zone_livraison]. Elle est offerte dès [seuil_livraison] d’achat et coûte [frais_livraison] en dessous. Tu disposes de 14\u00a0jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
+            "question": "Livraison et retours ?",
+            "answer": "<p>La livraison est suivie et prend [delai_livraison], en [zone_livraison]. Elle est offerte dès [seuil_livraison] d’achat et coûte [frais_livraison] en dessous. Tu disposes de 14 jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
           }
         }
       },
@@ -66,7 +75,7 @@
       "settings": {
         "eyebrow": "Questions",
         "title": "Avant de te décider.",
-        "aside": "Une autre question\u202f?",
+        "aside": "Une autre question ?",
         "link_label": "Écris-nous",
         "aside_after": ", une vraie personne te répond en français.",
         "anchor": "faq"
@@ -78,7 +87,7 @@
         "title": "Quelques croquettes, un chat qui chasse, et le salon redevient calme.",
         "highlight": "calme.",
         "button_label": "Je commande mon puzzle",
-        "note": "Livraison offerte dès 25\u00a0€ · Retour sous 14\u00a0jours (droit légal)"
+        "note": "Livraison offerte dès 25 € · Retour sous 14 jours (droit légal)"
       }
     },
     "recos": {

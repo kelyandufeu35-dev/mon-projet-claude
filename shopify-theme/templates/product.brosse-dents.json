@@ -7,7 +7,7 @@
         "scene_first": false,
         "eyebrow": "Pour chats et chiens",
         "trust_1": "Colis suivi",
-        "trust_2": "Retour sous 14\u00a0jours (droit légal)",
+        "trust_2": "Retour sous 14 jours (droit légal)",
         "trust_3": "Paiement sécurisé",
         "inbox": "1 brosse à dents à doigt en silicone\n1 boîte de rangement\nUn colis suivi, numéro envoyé par e-mail",
         "size_guide": false,
@@ -15,7 +15,16 @@
         "sticky_label": "Brosse à dents Pattoune",
         "anchor": "acheter",
         "show_offers": false
-      }
+      },
+      "blocks": {
+        "judgeme_reviews": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "judgeme_reviews"
+      ]
     },
     "faq": {
       "type": "faq",
@@ -23,29 +32,29 @@
         "q1": {
           "type": "question",
           "settings": {
-            "question": "Comment l’habituer au brossage\u202f?",
-            "answer": "<p>Vas-y par étapes\u00a0: laisse-le d’abord renifler la brosse, puis touche doucement ses babines, puis quelques dents. Des séances courtes, dans le calme, avec une récompense à la fin.</p>"
+            "question": "Comment l’habituer au brossage ?",
+            "answer": "<p>Vas-y par étapes : laisse-le d’abord renifler la brosse, puis touche doucement ses babines, puis quelques dents. Des séances courtes, dans le calme, avec une récompense à la fin.</p>"
           }
         },
         "q2": {
           "type": "question",
           "settings": {
-            "question": "Quel dentifrice utiliser\u202f?",
+            "question": "Quel dentifrice utiliser ?",
             "answer": "<p>Un dentifrice fait pour les animaux, jamais un dentifrice pour humains. Ton vétérinaire peut t’en conseiller un.</p>"
           }
         },
         "q3": {
           "type": "question",
           "settings": {
-            "question": "Et s’il refuse ou semble avoir mal\u202f?",
+            "question": "Et s’il refuse ou semble avoir mal ?",
             "answer": "<p>N’insiste pas. S’il semble avoir mal, si ses gencives saignent ou s’il refuse qu’on touche sa bouche, demande conseil à ton vétérinaire.</p>"
           }
         },
         "q4": {
           "type": "question",
           "settings": {
-            "question": "Livraison et retours\u202f?",
-            "answer": "<p>La livraison est suivie et prend [delai_livraison], en [zone_livraison]. Elle est offerte dès [seuil_livraison] d’achat et coûte [frais_livraison] en dessous. Tu disposes de 14\u00a0jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
+            "question": "Livraison et retours ?",
+            "answer": "<p>La livraison est suivie et prend [delai_livraison], en [zone_livraison]. Elle est offerte dès [seuil_livraison] d’achat et coûte [frais_livraison] en dessous. Tu disposes de 14 jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
           }
         }
       },
@@ -58,7 +67,7 @@
       "settings": {
         "eyebrow": "Questions",
         "title": "Avant de te décider.",
-        "aside": "Une autre question\u202f?",
+        "aside": "Une autre question ?",
         "link_label": "Écris-nous",
         "aside_after": ", une vraie personne te répond en français.",
         "anchor": "faq"
@@ -70,7 +79,7 @@
         "title": "Un peu de douceur au bout du doigt, et le brossage devient un rituel.",
         "highlight": "un rituel.",
         "button_label": "Je commande sa brosse",
-        "note": "Livraison offerte dès 25\u00a0€ · Retour sous 14\u00a0jours (droit légal)"
+        "note": "Livraison offerte dès 25 € · Retour sous 14 jours (droit légal)"
       }
     },
     "recos": {

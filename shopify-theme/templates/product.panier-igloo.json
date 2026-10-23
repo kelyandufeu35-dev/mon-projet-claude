@@ -7,15 +7,24 @@
         "scene_first": false,
         "eyebrow": "Pour les chats",
         "trust_1": "Colis suivi",
-        "trust_2": "Retour sous 14\u00a0jours (droit légal)",
+        "trust_2": "Retour sous 14 jours (droit légal)",
         "trust_3": "Paiement sécurisé",
-        "inbox": "1 panier igloo en peluche (40\u00a0cm)\nUn colis suivi, numéro envoyé par e-mail",
+        "inbox": "1 panier igloo en peluche (40 cm)\nUn colis suivi, numéro envoyé par e-mail",
         "size_guide": false,
         "show_description": true,
         "sticky_label": "Panier igloo Pattoune",
         "anchor": "acheter",
         "show_offers": false
-      }
+      },
+      "blocks": {
+        "judgeme_reviews": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "judgeme_reviews"
+      ]
     },
     "faq": {
       "type": "faq",
@@ -23,29 +32,29 @@
         "q1": {
           "type": "question",
           "settings": {
-            "question": "Il convient à quel animal\u202f?",
-            "answer": "<p>À un chat ou un petit chien jusqu’à 40\u00a0cm de long, environ 2,5\u00a0kg. Pour un animal plus grand, regarde plutôt notre panier rond, qui existe jusqu’à 70\u00a0cm.</p>"
+            "question": "Il convient à quel animal ?",
+            "answer": "<p>À un chat ou un petit chien jusqu’à 40 cm de long, environ 2,5 kg. Pour un animal plus grand, regarde plutôt notre panier rond, qui existe jusqu’à 70 cm.</p>"
           }
         },
         "q2": {
           "type": "question",
           "settings": {
-            "question": "Comment marche la couverture\u202f?",
-            "answer": "<p>Elle est cousue sur le bord. Rabattue, ton chat se glisse dessous comme dans un abri\u202f; relevée, c’est un panier ouvert.</p>"
+            "question": "Comment marche la couverture ?",
+            "answer": "<p>Elle est cousue sur le bord. Rabattue, ton chat se glisse dessous comme dans un abri ; relevée, c’est un panier ouvert.</p>"
           }
         },
         "q3": {
           "type": "question",
           "settings": {
-            "question": "Il arrive tout plat\u202f?",
+            "question": "Il arrive tout plat ?",
             "answer": "<p>Oui, il voyage compressé sous vide. Secoue-le et laisse-le reprendre sa forme pendant 1 à 2 jours.</p>"
           }
         },
         "q4": {
           "type": "question",
           "settings": {
-            "question": "Livraison et retours\u202f?",
-            "answer": "<p>La livraison est suivie et prend [delai_livraison], en [zone_livraison]. Elle est offerte dès [seuil_livraison] d’achat et coûte [frais_livraison] en dessous. Tu disposes de 14\u00a0jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
+            "question": "Livraison et retours ?",
+            "answer": "<p>La livraison est suivie et prend [delai_livraison], en [zone_livraison]. Elle est offerte dès [seuil_livraison] d’achat et coûte [frais_livraison] en dessous. Tu disposes de 14 jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
           }
         }
       },
@@ -58,7 +67,7 @@
       "settings": {
         "eyebrow": "Questions",
         "title": "Avant de te décider.",
-        "aside": "Une autre question\u202f?",
+        "aside": "Une autre question ?",
         "link_label": "Écris-nous",
         "aside_after": ", une vraie personne te répond en français.",
         "anchor": "faq"
@@ -70,7 +79,7 @@
         "title": "Une couverture à rabattre, et il disparaît dessous.",
         "highlight": "dessous.",
         "button_label": "Je commande son panier",
-        "note": "Livraison offerte dès 25\u00a0€ · Retour sous 14\u00a0jours (droit légal)"
+        "note": "Livraison offerte dès 25 € · Retour sous 14 jours (droit légal)"
       }
     },
     "recos": {

@@ -6,19 +6,29 @@
         "title_as_h1": true,
         "scene_first": true,
         "eyebrow": "Chiens et chats",
+        "show_offers": true,
         "preselect_offer": 2,
-        "offers_legend": "Combien de balles\u202f?",
+        "offers_legend": "Combien de balles ?",
         "unit_singular": "balle",
         "unit_plural": "balles",
         "trust_1": "Colis suivi",
-        "trust_2": "Retour sous 14\u00a0jours (droit légal)",
+        "trust_2": "Retour sous 14 jours (droit légal)",
         "trust_3": "Paiement sécurisé",
-        "inbox": "1 balle à friandises de 8\u00a0cm, en caoutchouc souple (TPE)\nUne ouverture pour glisser les croquettes sèches\nUn colis suivi, numéro envoyé par e-mail",
+        "inbox": "1 balle à friandises de 8 cm, en caoutchouc souple (TPE)\nUne ouverture pour glisser les croquettes sèches\nUn colis suivi, numéro envoyé par e-mail",
         "size_guide": true,
         "show_description": false,
         "sticky_label": "Balle Pattoune",
         "anchor": "acheter"
-      }
+      },
+      "blocks": {
+        "judgeme_reviews": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "judgeme_reviews"
+      ]
     },
     "principe": {
       "type": "steps",
@@ -29,7 +39,8 @@
             "label": "Remplis",
             "title": "Glisse quelques croquettes dedans.",
             "text": "De petites croquettes sèches, par l’ouverture de la balle. Ses croquettes habituelles font l’affaire si elles passent.",
-            "image": "shopify://shop_images/balle-pattoune-2-croquettes.jpg"
+            "image": "shopify://shop_images/balle-pattoune-2-croquettes.jpg",
+            "theme_loop": false
           }
         },
         "s2": {
@@ -37,8 +48,9 @@
           "settings": {
             "label": "Donne",
             "title": "Pose-la devant lui. Il renifle, il pousse.",
-            "text": "Du bout du nez ou de la patte\u00a0: son flair se met au travail au lieu d’attendre devant la porte.",
-            "image": "shopify://shop_images/balle-pattoune-chien.jpg"
+            "text": "Du bout du nez ou de la patte : son flair se met au travail au lieu d’attendre devant la porte.",
+            "image": "shopify://shop_images/balle-pattoune-chien.jpg",
+            "theme_loop": false
           }
         },
         "s3": {
@@ -46,7 +58,7 @@
           "settings": {
             "label": "Laisse jouer",
             "title": "Elle roule, les croquettes tombent une à une.",
-            "text": "Chaque croquette se mérite\u00a0: le repas dure plus longtemps et son flair travaille.",
+            "text": "Chaque croquette se mérite : le repas dure plus longtemps et son flair travaille.",
             "image": "shopify://shop_images/balle-pattoune-chat.jpg",
             "theme_loop": true
           }
@@ -63,6 +75,7 @@
         "line_2": "Elle roule.",
         "line_3": "Il mange.",
         "text": "Une balle à facettes qui libère ses croquettes une à une. Ton animal cherche, s’occupe et mange plus lentement.",
+        "show_ball": true,
         "anchor": "principe"
       }
     },
@@ -72,8 +85,8 @@
         "p1": {
           "type": "spec",
           "settings": {
-            "label": "8\u00a0cm",
-            "value": "De diamètre\u00a0: parfaite pour les chats et les petits chiens."
+            "label": "8 cm",
+            "value": "De diamètre : parfaite pour les chats et les petits chiens."
           }
         },
         "p2": {
@@ -118,29 +131,29 @@
         "q1": {
           "type": "question",
           "settings": {
-            "question": "Quelle taille fait la balle\u202f?",
-            "answer": "<p>Elle mesure 8\u00a0cm de diamètre. Elle convient aux chats et aux petits chiens\u202f; ne la donne pas à un grand chien, qui pourrait l’avaler.</p>"
+            "question": "Quelle taille fait la balle ?",
+            "answer": "<p>Elle mesure 8 cm de diamètre. Elle convient aux chats et aux petits chiens ; ne la donne pas à un grand chien, qui pourrait l’avaler.</p>"
           }
         },
         "q2": {
           "type": "question",
           "settings": {
-            "question": "Quelles croquettes mettre dedans\u202f?",
+            "question": "Quelles croquettes mettre dedans ?",
             "answer": "<p>Des croquettes sèches de petite taille, qui passent facilement par l’ouverture.</p>"
           }
         },
         "q3": {
           "type": "question",
           "settings": {
-            "question": "Peut-il jouer sans surveillance\u202f?",
+            "question": "Peut-il jouer sans surveillance ?",
             "answer": "<p>Surveille les premières séances pour voir comment il joue. Retire le jouet s’il commence à le mâchouiller ou s’il est abîmé. Aucun jouet n’est indestructible.</p>"
           }
         },
         "q4": {
           "type": "question",
           "settings": {
-            "question": "Livraison et retours\u202f?",
-            "answer": "<p>La livraison est suivie et prend [delai_livraison], en [zone_livraison]. Elle est offerte dès [seuil_livraison] d’achat et coûte [frais_livraison] en dessous. Tu disposes de 14\u00a0jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
+            "question": "Livraison et retours ?",
+            "answer": "<p>La livraison est suivie et prend [delai_livraison], en [zone_livraison]. Elle est offerte dès [seuil_livraison] d’achat et coûte [frais_livraison] en dessous. Tu disposes de 14 jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
           }
         }
       },
@@ -153,10 +166,16 @@
       "settings": {
         "eyebrow": "Questions",
         "title": "Avant de te décider.",
-        "aside": "Une autre question\u202f?",
+        "aside": "Une autre question ?",
         "link_label": "Écris-nous",
         "aside_after": ", une vraie personne te répond en français.",
         "anchor": "faq"
+      }
+    },
+    "recos": {
+      "type": "product-recos",
+      "settings": {
+        "exclude": ""
       }
     },
     "final": {
@@ -165,12 +184,10 @@
         "title": "Une balle, quelques croquettes, et le salon redevient calme.",
         "highlight": "calme.",
         "button_label": "Je commande ma balle",
-        "note": "Livraison offerte dès 25\u00a0€ · Retour sous 14\u00a0jours (droit légal)"
+        "button_link": "",
+        "button_anchor": "acheter",
+        "note": "Livraison offerte dès 25 € · Retour sous 14 jours (droit légal)"
       }
-    },
-    "recos": {
-      "type": "product-recos",
-      "settings": {}
     }
   },
   "order": [

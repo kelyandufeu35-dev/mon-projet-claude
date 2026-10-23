@@ -7,7 +7,7 @@
         "scene_first": false,
         "eyebrow": "Pour les chiens",
         "trust_1": "Colis suivi",
-        "trust_2": "Retour sous 14\u00a0jours (droit légal)",
+        "trust_2": "Retour sous 14 jours (droit légal)",
         "trust_3": "Paiement sécurisé",
         "inbox": "1 laisse en corde avec poignée et mousqueton\nUn colis suivi, numéro envoyé par e-mail",
         "size_guide": false,
@@ -15,7 +15,16 @@
         "sticky_label": "Laisse Pattoune",
         "anchor": "acheter",
         "show_offers": false
-      }
+      },
+      "blocks": {
+        "judgeme_reviews": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "judgeme_reviews"
+      ]
     },
     "faq": {
       "type": "faq",
@@ -23,29 +32,29 @@
         "q1": {
           "type": "question",
           "settings": {
-            "question": "Quelle épaisseur choisir\u202f?",
-            "answer": "<p>0,8\u00a0cm pour un chiot ou un petit chien, 1,0\u00a0cm pour un chien moyen, 1,2\u00a0cm pour un grand chien ou un chien qui tire.</p>"
+            "question": "Quelle épaisseur choisir ?",
+            "answer": "<p>0,8 cm pour un chiot ou un petit chien, 1,0 cm pour un chien moyen, 1,2 cm pour un grand chien ou un chien qui tire.</p>"
           }
         },
         "q2": {
           "type": "question",
           "settings": {
-            "question": "Quelle longueur\u202f?",
-            "answer": "<p>120 ou 150\u00a0cm pour marcher en ville à tes côtés. 200 ou 300\u00a0cm pour lui laisser explorer dans un endroit calme.</p>"
+            "question": "Quelle longueur ?",
+            "answer": "<p>120 ou 150 cm pour marcher en ville à tes côtés. 200 ou 300 cm pour lui laisser explorer dans un endroit calme.</p>"
           }
         },
         "q3": {
           "type": "question",
           "settings": {
-            "question": "Elle s’accroche à quoi\u202f?",
+            "question": "Elle s’accroche à quoi ?",
             "answer": "<p>À l’anneau d’un collier ou d’un harnais. Le mousqueton pivote, ce qui évite que la corde se vrille.</p>"
           }
         },
         "q4": {
           "type": "question",
           "settings": {
-            "question": "Livraison et retours\u202f?",
-            "answer": "<p>La livraison est suivie et prend [delai_livraison], en [zone_livraison]. Elle est offerte dès [seuil_livraison] d’achat et coûte [frais_livraison] en dessous. Tu disposes de 14\u00a0jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
+            "question": "Livraison et retours ?",
+            "answer": "<p>La livraison est suivie et prend [delai_livraison], en [zone_livraison]. Elle est offerte dès [seuil_livraison] d’achat et coûte [frais_livraison] en dessous. Tu disposes de 14 jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
           }
         }
       },
@@ -58,7 +67,7 @@
       "settings": {
         "eyebrow": "Questions",
         "title": "Avant de te décider.",
-        "aside": "Une autre question\u202f?",
+        "aside": "Une autre question ?",
         "link_label": "Écris-nous",
         "aside_after": ", une vraie personne te répond en français.",
         "anchor": "faq"
@@ -70,7 +79,7 @@
         "title": "Une laisse dans la main, et c’est parti pour la balade.",
         "highlight": "la balade.",
         "button_label": "Je commande sa laisse",
-        "note": "Livraison offerte dès 25\u00a0€ · Retour sous 14\u00a0jours (droit légal)"
+        "note": "Livraison offerte dès 25 € · Retour sous 14 jours (droit légal)"
       }
     },
     "recos": {

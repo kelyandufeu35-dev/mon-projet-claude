@@ -7,7 +7,7 @@
         "scene_first": false,
         "eyebrow": "Pour les chats",
         "trust_1": "Colis suivi",
-        "trust_2": "Retour sous 14\u00a0jours (droit légal)",
+        "trust_2": "Retour sous 14 jours (droit légal)",
         "trust_3": "Paiement sécurisé",
         "inbox": "1 peluche garnie d’herbe à chat\nUn colis suivi, numéro envoyé par e-mail",
         "size_guide": false,
@@ -15,7 +15,16 @@
         "sticky_label": "Peluche Pattoune",
         "anchor": "acheter",
         "show_offers": false
-      }
+      },
+      "blocks": {
+        "judgeme_reviews": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "judgeme_reviews"
+      ]
     },
     "faq": {
       "type": "faq",
@@ -23,29 +32,29 @@
         "q1": {
           "type": "question",
           "settings": {
-            "question": "Mon chat va-t-il réagir\u202f?",
+            "question": "Mon chat va-t-il réagir ?",
             "answer": "<p>Beaucoup de chats adorent l’odeur de l’herbe à chat, d’autres y restent indifférents, c’est normal. Même sans cet effet, la peluche reste un petit jouet à attraper et à lancer.</p>"
           }
         },
         "q2": {
           "type": "question",
           "settings": {
-            "question": "Comment jouer avec\u202f?",
-            "answer": "<p>Lance-la, fais-la glisser au sol ou cache-la sous un coussin. Range-la après la séance\u00a0: elle gardera son intérêt plus longtemps.</p>"
+            "question": "Comment jouer avec ?",
+            "answer": "<p>Lance-la, fais-la glisser au sol ou cache-la sous un coussin. Range-la après la séance : elle gardera son intérêt plus longtemps.</p>"
           }
         },
         "q3": {
           "type": "question",
           "settings": {
-            "question": "Et si elle s’abîme\u202f?",
+            "question": "Et si elle s’abîme ?",
             "answer": "<p>Vérifie-la de temps en temps. Dès qu’une couture s’ouvre ou que le tissu se déchire, retire-la pour qu’il n’avale pas le rembourrage.</p>"
           }
         },
         "q4": {
           "type": "question",
           "settings": {
-            "question": "Livraison et retours\u202f?",
-            "answer": "<p>La livraison est suivie et prend [delai_livraison], en [zone_livraison]. Elle est offerte dès [seuil_livraison] d’achat et coûte [frais_livraison] en dessous. Tu disposes de 14\u00a0jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
+            "question": "Livraison et retours ?",
+            "answer": "<p>La livraison est suivie et prend [delai_livraison], en [zone_livraison]. Elle est offerte dès [seuil_livraison] d’achat et coûte [frais_livraison] en dessous. Tu disposes de 14 jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
           }
         }
       },
@@ -58,7 +67,7 @@
       "settings": {
         "eyebrow": "Questions",
         "title": "Avant de te décider.",
-        "aside": "Une autre question\u202f?",
+        "aside": "Une autre question ?",
         "link_label": "Écris-nous",
         "aside_after": ", une vraie personne te répond en français.",
         "anchor": "faq"
@@ -70,7 +79,7 @@
         "title": "Une petite peluche, une grande séance de chasse.",
         "highlight": "chasse.",
         "button_label": "Je commande sa peluche",
-        "note": "Livraison offerte dès 25\u00a0€ · Retour sous 14\u00a0jours (droit légal)"
+        "note": "Livraison offerte dès 25 € · Retour sous 14 jours (droit légal)"
       }
     },
     "recos": {

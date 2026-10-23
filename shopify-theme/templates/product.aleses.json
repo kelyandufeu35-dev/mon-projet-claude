@@ -7,7 +7,7 @@
         "scene_first": false,
         "eyebrow": "Pour chiots et chiens",
         "trust_1": "Colis suivi",
-        "trust_2": "Retour sous 14\u00a0jours (droit légal)",
+        "trust_2": "Retour sous 14 jours (droit légal)",
         "trust_3": "Paiement sécurisé",
         "inbox": "Un paquet d’alèses (format au choix)\nUn colis suivi, numéro envoyé par e-mail",
         "size_guide": false,
@@ -15,7 +15,16 @@
         "sticky_label": "Alèses Pattoune",
         "anchor": "acheter",
         "show_offers": false
-      }
+      },
+      "blocks": {
+        "judgeme_reviews": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "judgeme_reviews"
+      ]
     },
     "faq": {
       "type": "faq",
@@ -23,29 +32,29 @@
         "q1": {
           "type": "question",
           "settings": {
-            "question": "Quel format choisir\u202f?",
-            "answer": "<p>Le S (33\u00a0×\u00a045\u00a0cm) pour un chiot ou un petit chien, le M (45\u00a0×\u00a060\u00a0cm) pour un chien moyen, le L (60\u00a0×\u00a060\u00a0cm) pour un grand chien ou pour couvrir plus de surface. Le lot de 20 permet d’essayer avant d’en prendre plus.</p>"
+            "question": "Quel format choisir ?",
+            "answer": "<p>Le S (33 × 45 cm) pour un chiot ou un petit chien, le M (45 × 60 cm) pour un chien moyen, le L (60 × 60 cm) pour un grand chien ou pour couvrir plus de surface. Le lot de 20 permet d’essayer avant d’en prendre plus.</p>"
           }
         },
         "q2": {
           "type": "question",
           "settings": {
-            "question": "Où les poser\u202f?",
-            "answer": "<p>Toujours au même endroit pendant l’apprentissage, près de la porte de sortie si possible\u00a0: il comprend plus vite où aller. Elles servent aussi au fond de la caisse de transport ou dans la voiture.</p>"
+            "question": "Où les poser ?",
+            "answer": "<p>Toujours au même endroit pendant l’apprentissage, près de la porte de sortie si possible : il comprend plus vite où aller. Elles servent aussi au fond de la caisse de transport ou dans la voiture.</p>"
           }
         },
         "q3": {
           "type": "question",
           "settings": {
-            "question": "Ça remplace les sorties\u202f?",
+            "question": "Ça remplace les sorties ?",
             "answer": "<p>Non, c’est une aide, surtout pour un chiot ou pendant la nuit. Continue à le sortir souvent et récompense-le quand il fait dehors.</p>"
           }
         },
         "q4": {
           "type": "question",
           "settings": {
-            "question": "Livraison et retours\u202f?",
-            "answer": "<p>La livraison est suivie et prend [delai_livraison], en [zone_livraison]. Elle est offerte dès [seuil_livraison] d’achat et coûte [frais_livraison] en dessous. Tu disposes de 14\u00a0jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
+            "question": "Livraison et retours ?",
+            "answer": "<p>La livraison est suivie et prend [delai_livraison], en [zone_livraison]. Elle est offerte dès [seuil_livraison] d’achat et coûte [frais_livraison] en dessous. Tu disposes de 14 jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
           }
         }
       },
@@ -58,7 +67,7 @@
       "settings": {
         "eyebrow": "Questions",
         "title": "Avant de te décider.",
-        "aside": "Une autre question\u202f?",
+        "aside": "Une autre question ?",
         "link_label": "Écris-nous",
         "aside_after": ", une vraie personne te répond en français.",
         "anchor": "faq"
@@ -70,7 +79,7 @@
         "title": "Une alèse au bon endroit, et le sol reste propre.",
         "highlight": "reste propre.",
         "button_label": "Je commande ses alèses",
-        "note": "Livraison offerte dès 25\u00a0€ · Retour sous 14\u00a0jours (droit légal)"
+        "note": "Livraison offerte dès 25 € · Retour sous 14 jours (droit légal)"
       }
     },
     "recos": {
