@@ -1,6 +1,41 @@
 <section class="page wrap">
   {%- if section.settings.title != blank -%}<h1 class="h1">{{ section.settings.title | escape }}</h1>{%- endif -%}
   {%- if section.settings.text != blank -%}<p class="lead">{{ section.settings.text | escape }}</p>{%- endif -%}
+  {%- comment -%}
+    Deuxième moyen de contact visible (exigence Google Merchant Center) :
+    l'e-mail de la boutique (Paramètres → Coordonnées), jamais une adresse perso.
+  {%- endcomment -%}
+  {%- if section.settings.show_email and shop.email != blank -%}
+    {%- liquid
+      case request.locale.iso_code
+        when 'en'
+          assign l_email = 'Email us:'
+          assign l_reply = 'Reply time:'
+          assign l_time = 'within 48 business hours'
+          assign l_legal = 'Our full business details (legal notice)'
+        when 'de'
+          assign l_email = 'Schreib uns:'
+          assign l_reply = 'Antwortzeit:'
+          assign l_time = 'innerhalb von 48 Werktagsstunden'
+          assign l_legal = 'Unsere vollständigen Angaben (Impressum)'
+        when 'es'
+          assign l_email = 'Escríbenos:'
+          assign l_reply = 'Plazo de respuesta:'
+          assign l_time = 'en 48 horas laborables'
+          assign l_legal = 'Nuestros datos completos (aviso legal)'
+        else
+          assign l_email = 'Écris-nous :'
+          assign l_reply = 'Délai de réponse :'
+          assign l_time = settings.response_time
+          assign l_legal = 'Nos coordonnées complètes (mentions légales)'
+      endcase
+    -%}
+    <ul class="pt-contact-info">
+      <li><strong>{{ l_email }}</strong> <a href="mailto:{{ shop.email }}">{{ shop.email }}</a></li>
+      {%- if l_time != blank -%}<li><strong>{{ l_reply }}</strong> {{ l_time }}</li>{%- endif -%}
+      <li><a href="{{ routes.root_url | append: '/policies/legal-notice' | replace: '//', '/' }}">{{ l_legal }}</a></li>
+    </ul>
+  {%- endif -%}
   {%- form 'contact', class: 'form' -%}
     {%- if form.posted_successfully? -%}
       <p class="notice notice--ok" role="status">{{ 'sections.contact_form.success' | t: time: settings.response_time }}</p>
@@ -30,6 +65,19 @@
   {%- endform -%}
 </section>
 
+{% stylesheet %}
+  .pt-contact-info {
+    list-style: none;
+    margin: 0 0 24px;
+    padding: 16px 20px;
+    border-radius: var(--radius-sm);
+    background: var(--card);
+    display: grid;
+    gap: 6px;
+    overflow-wrap: anywhere;
+  }
+{% endstylesheet %}
+
 {% schema %}
 {
   "name": "Formulaire de contact",
@@ -45,6 +93,13 @@
       "id": "text",
       "label": "Texte",
       "default": "Une question sur le jouet ou ta commande ? On te répond sous 48 h ouvrées."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_email",
+      "label": "Afficher l’e-mail de la boutique",
+      "info": "L’adresse de Paramètres → Coordonnées de la boutique. Google Merchant Center demande au moins deux moyens de contact visibles.",
+      "default": true
     }
   ],
   "presets": [
