@@ -9,6 +9,25 @@
   </div>
 </section>
 
+{%- comment -%}
+  Avis clients Judge.me (vrais acheteurs uniquement, jamais d'avis importés).
+  Le script vient de l'intégration « Judge.me » (Personnaliser → Intégrations d'applications),
+  qui remplit ce conteneur.
+{%- endcomment -%}
+{%- if section.settings.show_reviews -%}
+  <section class="pt-reviews-app">
+    <div class="pt-wrap">
+      <div class="jdgm-widget jdgm-review-widget jdgm-outside-widget" data-id="{{ product.id }}" data-product-title="{{ product.title | escape }}">{{ product.metafields.judgeme.widget }}</div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% stylesheet %}
+  .pt-reviews-app {
+    padding-block: 32px 48px;
+  }
+{% endstylesheet %}
+
 {% schema %}
 {
   "name": "Produit",
@@ -26,6 +45,13 @@
       "label": "Animation 3D en premier dans la galerie",
       "default": true,
       "info": "La balle de la publicité, sur scène sombre, avant les photos. Idéal pour les visiteurs qui arrivent d’une pub."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_reviews",
+      "label": "Afficher les avis clients (Judge.me)",
+      "default": true,
+      "info": "Nécessite l’intégration Judge.me activée dans Intégrations d’applications."
     },
     {
       "type": "text",
