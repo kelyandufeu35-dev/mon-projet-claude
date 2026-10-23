@@ -51,6 +51,17 @@ dans ce cas, format refusé par l'hôte).
 
 Les réglages sont mémorisés dans le navigateur.
 
+## Mélodies de l'appli
+
+Cinq mélodies originales, composées pour l'appli et donc libres de droits sur TikTok :
+« Nuit sur la ville » (trap, 140 BPM), « Drill nocturne » (drill, 142 BPM), « Rêve en or »
+(trap, 120 BPM), « Mirage oriental » (boom-bap, gamme orientale, 100 BPM) et « Cascade de verre »
+(la démo, 112 BPM). La case « Batterie et basse 808 » ajoute un instru synthétisé (grosse caisse,
+caisse claire ou clap, charleston avec roulements, basse 808 saturée pour rester audible sur un
+haut-parleur de téléphone), calé sur la même grille que les notes et environ 6 dB sous la
+mélodie. La batterie est jouée et exportée avec le reste ; la vérification de synchronisation
+mesure la mélodie seule.
+
 ## Import MIDI
 
 « Importer un MIDI… » accepte les fichiers `.mid`/`.midi` (formats 0 et 1, changements de tempo

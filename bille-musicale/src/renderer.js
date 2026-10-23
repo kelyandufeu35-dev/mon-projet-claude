@@ -99,8 +99,18 @@ export class Renderer {
       ctx.fillStyle = g;
       ctx.fillRect(x - b.r, y - b.r, b.r * 2, b.r * 2);
     }
+    // Lumière douce venant du haut, qui pulse légèrement sur chaque grosse caisse.
+    const kicks = scene.kicks || [];
+    let k = 0;
+    let kEnd = kicks.length;
+    while (k < kEnd) {
+      const mid = (k + kEnd) >> 1;
+      if (kicks[mid] <= t) k = mid + 1;
+      else kEnd = mid;
+    }
+    const pulse = k > 0 ? Math.exp(-(t - kicks[k - 1]) / 0.16) : 0;
     const light = ctx.createRadialGradient(WORLD_W * 0.3, -WORLD_H * 0.15, 0, WORLD_W * 0.3, -WORLD_H * 0.15, WORLD_H * 1.05);
-    light.addColorStop(0, rgba(mix(st.ball, st.bgTop, 0.3), 0.16));
+    light.addColorStop(0, rgba(mix(st.ball, st.bgTop, 0.3), 0.16 + 0.07 * pulse));
     light.addColorStop(1, rgba(st.ball, 0));
     ctx.fillStyle = light;
     ctx.fillRect(x0, y0, vw, vh);

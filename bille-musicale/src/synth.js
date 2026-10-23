@@ -148,6 +148,70 @@ function piano(ctx, out, t, midi, vel, dur) {
   click(ctx, out, t, f0 * 6, 0.9, 0.9 * amp, 0.006); // attaque du marteau
 }
 
+// Batterie de type rap : grosse caisse, caisse claire, clap, charleston et basse 808.
+const shapers = new WeakMap();
+function saturation(ctx) {
+  if (!shapers.has(ctx)) {
+    // Saturation douce : ajoute des harmoniques pour que la 808 s'entende sur un haut-parleur
+    // de téléphone, qui ne restitue pas les fréquences sous 100 Hz.
+    const curve = new Float32Array(1024);
+    for (let i = 0; i < curve.length; i++) curve[i] = Math.tanh(((i / (curve.length - 1)) * 2 - 1) * 3);
+    shapers.set(ctx, curve);
+  }
+  const ws = ctx.createWaveShaper();
+  ws.curve = shapers.get(ctx);
+  return ws;
+}
+
+// La batterie reste environ 6 dB sous la mélodie : chaque rebond doit s'entendre nettement.
+const DRUM_LEVEL = 0.6;
+
+function drum(ctx, out, t, e) {
+  const v = (e.velocity ?? 1) * DRUM_LEVEL;
+  if (e.drum === 'kick') {
+    const osc = ctx.createOscillator();
+    osc.frequency.setValueAtTime(160, t);
+    osc.frequency.exponentialRampToValueAtTime(48, t + 0.11);
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(0.5 * v, t + 0.002);
+    g.gain.setTargetAtTime(0, t + 0.002, 0.08);
+    osc.connect(g).connect(out);
+    osc.start(t);
+    osc.stop(t + 0.6);
+    click(ctx, out, t, 3500, 0.7, 0.07 * v, 0.003);
+  } else if (e.drum === 'bass') {
+    const f = mtof(e.midi);
+    const osc = ctx.createOscillator();
+    osc.frequency.setValueAtTime(f * 1.3, t);
+    osc.frequency.exponentialRampToValueAtTime(f, t + 0.05);
+    const drive = ctx.createGain();
+    drive.gain.value = 1.6;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(0.2 * v, t + 0.004);
+    g.gain.setTargetAtTime(0, t + 0.004, (e.duration ?? 0.6) * 0.5);
+    osc.connect(drive).connect(saturation(ctx)).connect(g).connect(out);
+    osc.start(t);
+    osc.stop(t + (e.duration ?? 0.6) * 3 + 0.1);
+  } else if (e.drum === 'snare') {
+    click(ctx, out, t, 1900, 0.7, 0.3 * v, 0.05);
+    const osc = ctx.createOscillator();
+    osc.frequency.value = 190;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.16 * v, t);
+    g.gain.setTargetAtTime(0, t, 0.035);
+    osc.connect(g).connect(out);
+    osc.start(t);
+    osc.stop(t + 0.3);
+  } else if (e.drum === 'clap') {
+    for (const d of [0, 0.011, 0.022]) click(ctx, out, t + d, 1500, 1.1, 0.24 * v, 0.008);
+    click(ctx, out, t + 0.03, 1400, 0.9, 0.2 * v, 0.06);
+  } else if (e.drum === 'hat') {
+    click(ctx, out, t, 9000, 0.8, 0.09 * v, 0.012);
+  }
+}
+
 export const INSTRUMENTS = {
   xylophone: { label: 'Xylophone', play: xylophone },
   piano: { label: 'Piano', play: piano },
@@ -155,6 +219,7 @@ export const INSTRUMENTS = {
 };
 
 export function playNote(ctx, out, instrument, when, note) {
+  if (note.drum) return drum(ctx, out, when, note);
   (INSTRUMENTS[instrument] || INSTRUMENTS.xylophone).play(ctx, out, when, note.midi, note.velocity ?? 0.8, note.duration ?? 0.3);
 }
 

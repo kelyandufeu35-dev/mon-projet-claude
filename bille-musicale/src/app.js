@@ -1,4 +1,4 @@
-import { demoProject, noteName } from './melody.js';
+import { demoProject, noteName, LIBRARY, libraryProject } from './melody.js';
 import { parseMidi, extractParts, suggestMelodyPart, toMonophonic, trimMelody, firstTempoBpm } from './midi.js';
 import { buildScene, normalizeSettings, restyleScene } from './scene.js';
 import { lastImpactIndex } from './planner.js';
@@ -32,13 +32,24 @@ function monoMix(buffer) {
   return out;
 }
 
-async function renderAudio(scene, sampleRate = 48000) {
+// Piste complète (mélodie + batterie), telle qu'elle est entendue et exportée.
+function renderTrack(scene, sampleRate = 48000) {
+  return renderOffline([...scene.events, ...scene.beat], scene.duration, {
+    instrument: scene.settings.instrument,
+    volume: scene.settings.volume,
+    sampleRate,
+  });
+}
+
+// Vérification de la synchronisation : la mélodie seule est rendue, pour que chaque attaque
+// mesurée soit bien celle d'une note (et non un coup de batterie).
+async function checkSync(scene, sampleRate = 48000) {
   const buffer = await renderOffline(scene.events, scene.duration, {
     instrument: scene.settings.instrument,
     volume: scene.settings.volume,
     sampleRate,
   });
-  return { buffer, sync: measureAttacks(monoMix(buffer), sampleRate, scene.events.map((e) => e.t)) };
+  return measureAttacks(monoMix(buffer), sampleRate, scene.events.map((e) => e.t));
 }
 
 function toBase64(bytes) {
@@ -59,13 +70,17 @@ function projectFile(project, settings) {
       duration: +(n.duration ?? 0.3).toFixed(6),
       velocity: +(n.velocity ?? 0.8).toFixed(3),
     })),
+    beat: project.beat ?? null,
     settings,
   };
 }
 
 function readProject(json) {
   if (json.format !== 'bille-musicale' || !Array.isArray(json.notes)) throw new Error('Ce fichier .json n’est pas un projet Bille musicale.');
-  return { project: { title: json.title || 'Sans titre', bpm: json.bpm || null, notes: json.notes }, settings: json.settings };
+  return {
+    project: { title: json.title || 'Sans titre', bpm: json.bpm || null, notes: json.notes, beat: json.beat || null },
+    settings: json.settings,
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -96,8 +111,8 @@ function setupRenderMode() {
       return out;
     },
     async audio(sampleRate = 48000) {
-      const { buffer, sync } = await renderAudio(scene, sampleRate);
-      return { wav: toBase64(encodeWav(buffer)), sync };
+      const buffer = await renderTrack(scene, sampleRate);
+      return { wav: toBase64(encodeWav(buffer)), sync: await checkSync(scene, sampleRate) };
     },
   };
   window.billeReady = true;
@@ -150,7 +165,9 @@ function setupApp() {
     const t0 = performance.now();
     state.scene = buildScene(state.project, state.settings);
     applyAudioSettings();
-    transport.setTrack(state.scene.events, state.scene.duration, keepPosition);
+    const track = [...state.scene.events, ...state.scene.beat].sort((a, b) => a.t - b.t);
+    transport.setTrack(track, state.scene.duration, keepPosition);
+    $('drumsField').hidden = !state.project.beat;
     state.dirty = true;
     applyStageColor();
     renderReport(performance.now() - t0);
@@ -361,7 +378,7 @@ function setupApp() {
     $('audioModeField').hidden = kind !== 'audio';
     $('removeVoiceField').hidden = kind !== 'audio';
     $('audioHint').hidden = kind !== 'audio';
-    $('btnDemo').classList.toggle('active', kind === 'demo');
+    if (kind !== 'library') $('library').value = '';
   }
 
   function passage() {
@@ -377,11 +394,13 @@ function setupApp() {
     else if (state.audio) analyzeAudio();
   }
 
-  $('btnDemo').onclick = () => {
-    setSource('demo');
-    state.project = demoProject();
+  for (const m of LIBRARY) $('library').append(new Option(`${m.title} (${m.bpm} BPM)`, m.id));
+  $('library').addEventListener('change', (e) => {
+    if (!e.target.value) return;
+    setSource('library');
+    state.project = libraryProject(e.target.value);
     rebuild();
-  };
+  });
 
   $('fileInput').addEventListener('change', async (e) => {
     const file = e.target.files[0];
@@ -567,6 +586,11 @@ function setupApp() {
     state.settings.showTitle = e.target.checked;
     restyle();
   });
+  $('drums').addEventListener('change', (e) => {
+    state.settings.drums = e.target.checked;
+    saveSettings();
+    rebuild(true);
+  });
   $('showNoteNames').addEventListener('change', (e) => {
     state.settings.showNoteNames = e.target.checked;
     restyle();
@@ -588,7 +612,7 @@ function setupApp() {
     btn.disabled = true;
     btn.textContent = 'Rendu du son…';
     try {
-      const { sync } = await renderAudio(state.scene);
+      const sync = await checkSync(state.scene);
       const ok = sync.matched === sync.expected && sync.maxErrorMs < 5;
       $('audioReport').innerHTML =
         `<span class="${ok ? 'ok' : 'ko'}">${ok ? '✓' : '✗'}</span> ${sync.matched}/${sync.expected} attaques retrouvées dans le son rendu, ` +
@@ -680,7 +704,7 @@ function setupApp() {
   };
 
   $('btnWav').onclick = async () => {
-    const { buffer } = await renderAudio(state.scene);
+    const buffer = await renderTrack(state.scene);
     download(new Blob([encodeWav(buffer)], { type: 'audio/wav' }), `${slug(state.project.title)}.wav`);
   };
   $('btnProject').onclick = () => {
@@ -700,6 +724,7 @@ function setupApp() {
     $('colorMode').value = s.colorMode;
     $('showTitle').checked = s.showTitle;
     $('showNoteNames').checked = s.showNoteNames;
+    $('drums').checked = s.drums;
     $('offset').value = String(s.audioOffsetMs);
     $('offsetLabel').textContent = `${s.audioOffsetMs} ms`;
     for (const input of document.querySelectorAll('[data-color]')) input.value = s.colors[input.dataset.color];
@@ -707,7 +732,9 @@ function setupApp() {
   }
 
   syncControls();
-  setSource('demo');
+  setSource('library');
+  $('library').value = 'nuit';
+  state.project = libraryProject('nuit');
   rebuild();
   resizeCanvas();
   requestAnimationFrame(frame);

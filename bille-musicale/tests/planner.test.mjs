@@ -67,3 +67,22 @@ test('la scène programme un son par impact, au même instant', () => {
   });
   assert.equal(scene.events[0].midi, demoProject().notes[0].midi + 12);
 });
+
+test('mélodies de l’appli : parcours valides à tous les tempos, batterie sur la même grille', async () => {
+  const { LIBRARY, libraryProject } = await import('../src/melody.js');
+  for (const entry of LIBRARY) {
+    for (const bar of entry.bars) assert.equal(bar.reduce((s, [, beats]) => s + beats, 0), 4, `${entry.id} : mesure de 4 temps`);
+    for (const tempo of [0.75, 1, 1.25]) {
+      const scene = buildScene(libraryProject(entry.id), { tempo });
+      assert.ok(scene.verification.ok, `${entry.id} à ${tempo} : ${JSON.stringify(scene.verification)}`);
+      // Le premier temps de la batterie tombe sur la première note.
+      assert.ok(Math.abs(scene.beat[0].t - scene.events[0].t) < 1e-9);
+      const step = 60 / entry.bpm / tempo / 4;
+      for (const e of scene.beat) {
+        const k = (e.t - scene.events[0].t) / step;
+        assert.ok(Math.abs(k - Math.round(k)) < 1e-6, `${entry.id} : coup hors grille`);
+      }
+    }
+    assert.equal(buildScene(libraryProject(entry.id), { drums: false }).beat.length, 0);
+  }
+});
