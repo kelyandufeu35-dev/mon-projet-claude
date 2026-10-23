@@ -21,6 +21,21 @@
   </div>
 </dialog>
 
+{% stylesheet %}
+  /* Rappel du code de bienvenue (snippets/cart-summary.liquid). */
+  .pt-promo {
+    margin: 0;
+    padding: 12px 16px;
+    border-radius: 16px;
+    background: var(--pt-sun, #ffc23a);
+    color: var(--pt-ink, #14162b);
+    font-size: var(--step--1);
+    line-height: 1.4;
+  }
+  .pt-promo strong { letter-spacing: 0.04em; white-space: nowrap; }
+  .pt-promo__hint { display: block; opacity: 0.75; }
+{% endstylesheet %}
+
 {% schema %}
 {
   "name": "Panier latéral",

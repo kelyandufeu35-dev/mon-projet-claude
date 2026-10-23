@@ -46,6 +46,31 @@
   endif
 -%}
 
+{%- comment -%}
+  Rappel du code de bienvenue (−5 %, 1re commande). Masqué dès qu’une remise s’applique :
+  le code ne se cumule pas avec les offres groupées. Styles dans sections/cart-drawer.liquid.
+{%- endcomment -%}
+{%- if cart.total_discount == 0 -%}
+  {%- case request.locale.iso_code -%}
+    {%- when 'en' -%}
+      {%- assign promo_text = '−5% off your first order with the code' -%}
+      {%- assign promo_hint = 'Enter it at checkout.' -%}
+    {%- when 'de' -%}
+      {%- assign promo_text = '−5 % auf deine erste Bestellung mit dem Code' -%}
+      {%- assign promo_hint = 'An der Kasse eingeben.' -%}
+    {%- when 'es' -%}
+      {%- assign promo_text = '−5 % en tu primer pedido con el código' -%}
+      {%- assign promo_hint = 'Introdúcelo al pagar.' -%}
+    {%- else -%}
+      {%- assign promo_text = '−5 % sur ta 1ʳᵉ commande avec le code' -%}
+      {%- assign promo_hint = 'À saisir au moment du paiement.' -%}
+  {%- endcase -%}
+  <p class="pt-promo">
+    {{ promo_text }} <strong>BIENVENUE5</strong>
+    <span class="pt-promo__hint">{{ promo_hint }}</span>
+  </p>
+{%- endif -%}
+
 {%- if threshold == 0 -%}
   <p class="ship-free">{% render 'icon', name: 'truck' %} {{ 'snippets.cart_summary.free_html' | t }}</p>
 {%- else -%}
