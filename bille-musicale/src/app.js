@@ -1,6 +1,6 @@
 import { demoProject, noteName, LIBRARY, libraryProject } from './melody.js';
 import { parseMidi, extractParts, suggestMelodyPart, toMonophonic, trimMelody, firstTempoBpm } from './midi.js';
-import { buildScene, normalizeSettings, restyleScene } from './scene.js';
+import { buildScene, normalizeSettings, restyleScene, laneMix } from './scene.js';
 import { lastImpactIndex } from './planner.js';
 import { Renderer } from './renderer.js';
 import { Transport } from './transport.js';
@@ -37,6 +37,7 @@ function renderTrack(scene, sampleRate = 48000) {
   return renderOffline([...scene.events, ...scene.beat], scene.duration, {
     instrument: scene.settings.instrument,
     volume: scene.settings.volume,
+    mix: scene.mix,
     sampleRate,
   });
 }
@@ -172,6 +173,7 @@ function setupApp() {
     const track = [...state.scene.events, ...state.scene.beat].sort((a, b) => a.t - b.t);
     transport.setTrack(track, state.scene.duration, keepPosition);
     $('drumsField').hidden = !state.project.beat;
+    $('lane2VolumeField').hidden = state.scene.lanes.length < 2;
     state.dirty = true;
     applyStageColor();
     renderReport(performance.now() - t0);
@@ -194,6 +196,7 @@ function setupApp() {
 
   function applyAudioSettings() {
     transport.instrument = state.settings.instrument;
+    transport.mix = state.scene ? laneMix(state.settings, state.scene.lanes.length) : null;
     transport.setVolume(state.settings.volume);
     transport.offsetMs = state.settings.audioOffsetMs;
   }
@@ -556,6 +559,13 @@ function setupApp() {
     applyAudioSettings();
     saveSettings();
   });
+  $('lane2Volume').addEventListener('input', (e) => {
+    state.settings.lane2Volume = Number(e.target.value);
+    $('lane2VolumeLabel').textContent = `${Math.round(state.settings.lane2Volume * 100)} %`;
+    state.scene = { ...state.scene, mix: laneMix(state.settings, state.scene.lanes.length) };
+    applyAudioSettings();
+    saveSettings();
+  });
   $('volume').addEventListener('input', (e) => {
     state.settings.volume = Number(e.target.value);
     applyAudioSettings();
@@ -743,6 +753,8 @@ function setupApp() {
     $('instrument').value = s.instrument;
     $('transpose').value = String(s.transpose);
     $('volume').value = String(s.volume);
+    $('lane2Volume').value = String(s.lane2Volume);
+    $('lane2VolumeLabel').textContent = `${Math.round(s.lane2Volume * 100)} %`;
     $('tempo').value = String(Math.round(s.tempo * 100));
     $('colorMode').value = s.colorMode;
     $('showTitle').checked = s.showTitle;

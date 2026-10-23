@@ -15,6 +15,7 @@ export const DEFAULT_SETTINGS = {
   showNoteNames: false,
   showTitle: true,
   drums: true,
+  lane2Volume: 0.5, // la deuxième bille (l'accompagnement) environ 6 dB sous la mélodie
   audioOffsetMs: 0,
 };
 
@@ -67,7 +68,7 @@ export function buildScene(project, settingsIn) {
   // Un événement sonore par impact, au même instant : c'est la seule source d'horaires des notes.
   // La batterie suit la même grille, décalée de la même amorce.
   const events = courses
-    .flatMap((c) => c.impacts.map((imp) => ({ t: imp.t, midi: imp.midi, chord: imp.chord, velocity: imp.velocity, duration: imp.duration })))
+    .flatMap((c, lane) => c.impacts.map((imp) => ({ t: imp.t, lane, midi: imp.midi, chord: imp.chord, velocity: imp.velocity, duration: imp.duration })))
     .sort((a, b) => a.t - b.t);
   const beat = project.beat && settings.drums ? beatEvents(project.beat, tempo, options.lead, duration) : [];
   return restyleScene(
@@ -83,9 +84,23 @@ export function buildScene(project, settingsIn) {
       kicks: beat.filter((e) => e.drum === 'kick').map((e) => e.t),
       duration,
       verification,
+      mix: laneMix(settings, lanes.length),
     },
     settings,
   );
+}
+
+// Dosage des billes : la première (la mélodie) à plein volume un peu à gauche, les suivantes
+// plus bas et un peu à droite, comme à l'écran.
+export function laneMix(settings, lanes) {
+  if (lanes < 2) return null;
+  const gains = [1];
+  const pans = [-0.3];
+  for (let i = 1; i < lanes; i++) {
+    gains.push(settings.lane2Volume ?? DEFAULT_SETTINGS.lane2Volume);
+    pans.push(0.3);
+  }
+  return { gains, pans };
 }
 
 // Changement d'apparence seulement : les parcours et les horaires restent identiques.

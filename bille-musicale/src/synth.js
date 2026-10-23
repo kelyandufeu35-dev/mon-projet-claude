@@ -253,8 +253,20 @@ export const INSTRUMENTS = {
   musicbox: { label: 'Boîte à musique', play: musicBox },
 };
 
-export function playNote(ctx, out, instrument, when, note) {
+// `mix` dose chaque bille : volume et place dans le stéréo (la bille de gauche un peu à gauche…).
+export function playNote(ctx, out, instrument, when, note, mix = null) {
   if (note.drum) return drum(ctx, out, when, note);
+  if (mix && note.lane != null && mix.gains[note.lane] !== undefined) {
+    const gain = ctx.createGain();
+    gain.gain.value = mix.gains[note.lane];
+    const pan = ctx.createStereoPanner ? ctx.createStereoPanner() : null;
+    if (pan) {
+      pan.pan.value = mix.pans[note.lane] ?? 0;
+      gain.connect(pan).connect(out);
+    } else gain.connect(out);
+    playNote(ctx, gain, instrument, when, note);
+    return;
+  }
   if (note.chord?.length > 1) {
     // Accord : toutes ses notes à la fois, chacune moins fort pour que l'accord ne couvre pas la mélodie.
     const v = ((note.velocity ?? 0.8) * 1.1) / Math.sqrt(note.chord.length);
@@ -265,10 +277,10 @@ export function playNote(ctx, out, instrument, when, note) {
 }
 
 // Rendu hors ligne de toute la piste, avec les mêmes instruments et la même chaîne de sortie.
-export async function renderOffline(events, duration, { instrument, volume = 0.8, sampleRate = 48000 } = {}) {
+export async function renderOffline(events, duration, { instrument, volume = 0.8, sampleRate = 48000, mix = null } = {}) {
   const ctx = new OfflineAudioContext(2, Math.ceil(duration * sampleRate), sampleRate);
   const out = createOutput(ctx, ctx.destination, { volume });
-  for (const e of events) playNote(ctx, out.input, instrument, e.t, e);
+  for (const e of events) playNote(ctx, out.input, instrument, e.t, e, mix);
   return ctx.startRendering();
 }
 

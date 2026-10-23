@@ -14,6 +14,7 @@ export class Transport {
     this.events = [];
     this.duration = 0;
     this.instrument = 'xylophone';
+    this.mix = null; // volume et stéréo de chaque bille
     this.volume = 0.8;
     this.offsetMs = 0; // réglage manuel (casque Bluetooth, etc.)
     this.playing = false;
@@ -130,7 +131,7 @@ export class Transport {
       const e = this.events[s.next++];
       const when = s.origin + e.t;
       // Une note en retard (onglet gelé) est sautée plutôt que jouée à contretemps.
-      if (when >= ctx.currentTime - 0.01) playNote(ctx, s.bus, this.instrument, Math.max(when, ctx.currentTime), e);
+      if (when >= ctx.currentTime - 0.01) playNote(ctx, s.bus, this.instrument, Math.max(when, ctx.currentTime), e, this.mix);
     }
     if (this.time >= this.duration) {
       this.position = this.duration;
