@@ -148,6 +148,40 @@ function piano(ctx, out, t, midi, vel, dur) {
   click(ctx, out, t, f0 * 6, 0.9, 0.9 * amp, 0.006); // attaque du marteau
 }
 
+// Piano feutré : attaque plus lente, timbre sombre, presque pas de bruit de marteau. Le son
+// démarre toujours à l'instant de la note : seule la montée (12 ms) est plus douce.
+function softPiano(ctx, out, t, midi, vel, dur) {
+  const f0 = mtof(midi);
+  const amp = 0.14 * (0.35 + 0.65 * vel);
+  const decay = clamp(3 * Math.pow(2, -(midi - 60) / 20), 0.5, 4.5);
+  const release = t + Math.max(dur, 0.15);
+  const stopAt = release + 1.2;
+  const vca = ctx.createGain();
+  vca.gain.setValueAtTime(0, t);
+  vca.gain.linearRampToValueAtTime(amp, t + 0.012);
+  vca.gain.setValueAtTime(amp, release);
+  vca.gain.setTargetAtTime(0, release, 0.25);
+  const lp = ctx.createBiquadFilter();
+  lp.type = 'lowpass';
+  lp.Q.value = 0.4;
+  lp.frequency.setValueAtTime(clamp(f0 * (2.5 + 3 * vel), 300, 5000), t);
+  lp.frequency.setTargetAtTime(clamp(f0 * 1.6, 250, 5000), t, decay * 0.5);
+  lp.connect(vca).connect(out);
+  for (let n = 1; n <= 5; n++) {
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(1 / Math.pow(n, 1.6), t);
+    g.gain.setTargetAtTime(0, t, (decay * 1.5) / (1 + 0.7 * (n - 1)));
+    g.connect(lp);
+    const osc = ctx.createOscillator();
+    osc.frequency.value = f0 * n * Math.sqrt(1 + 0.0003 * n * n);
+    osc.detune.value = n === 1 ? 0.8 : 0;
+    osc.connect(g);
+    osc.start(t);
+    osc.stop(stopAt);
+  }
+  click(ctx, out, t, f0 * 2, 0.7, 0.18 * amp, 0.012); // feutre du marteau
+}
+
 // Batterie de type rap : grosse caisse, caisse claire, clap, charleston et basse 808.
 const shapers = new WeakMap();
 function saturation(ctx) {
@@ -215,14 +249,16 @@ function drum(ctx, out, t, e) {
 export const INSTRUMENTS = {
   xylophone: { label: 'Xylophone', play: xylophone },
   piano: { label: 'Piano', play: piano },
+  softpiano: { label: 'Piano doux (feutré)', play: softPiano },
   musicbox: { label: 'Boîte à musique', play: musicBox },
 };
 
 export function playNote(ctx, out, instrument, when, note) {
   if (note.drum) return drum(ctx, out, when, note);
   if (note.chord?.length > 1) {
-    // Accord : toutes ses notes à la fois, un peu moins fort chacune.
-    for (const midi of note.chord) playNote(ctx, out, instrument, when, { ...note, midi, chord: null, velocity: (note.velocity ?? 0.8) * 0.75 });
+    // Accord : toutes ses notes à la fois, chacune moins fort pour que l'accord ne couvre pas la mélodie.
+    const v = ((note.velocity ?? 0.8) * 1.1) / Math.sqrt(note.chord.length);
+    for (const midi of note.chord) playNote(ctx, out, instrument, when, { ...note, midi, chord: null, velocity: v });
     return;
   }
   (INSTRUMENTS[instrument] || INSTRUMENTS.xylophone).play(ctx, out, when, note.midi, note.velocity ?? 0.8, note.duration ?? 0.3);

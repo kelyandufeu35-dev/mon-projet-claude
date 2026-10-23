@@ -43,9 +43,11 @@ function renderTrack(scene, sampleRate = 48000) {
 
 // Vérification de la synchronisation : la mélodie seule est rendue, pour que chaque attaque
 // mesurée soit bien celle d'une note (et non un coup de batterie).
+// Le piano feutré monte trop doucement pour qu'on repère ses attaques dans un accord : il est
+// contrôlé avec le piano classique, qui suit exactement la même programmation des notes.
 async function checkSync(scene, sampleRate = 48000) {
   const buffer = await renderOffline(scene.events, scene.duration, {
-    instrument: scene.settings.instrument,
+    instrument: scene.settings.instrument === 'softpiano' ? 'piano' : scene.settings.instrument,
     volume: scene.settings.volume,
     sampleRate,
   });
