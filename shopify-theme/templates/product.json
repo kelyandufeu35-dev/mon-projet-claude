@@ -6,7 +6,7 @@
         "title_as_h1": true,
         "scene_first": true,
         "eyebrow": "Chiens et chats",
-        "show_offers": true,
+        "show_offers": false,
         "preselect_offer": 2,
         "offers_legend": "Combien de balles ?",
         "unit_singular": "balle",
