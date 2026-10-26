@@ -1,0 +1,96 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "title_as_h1": true,
+        "scene_first": false,
+        "eyebrow": "Pour les chats",
+        "trust_1": "Colis suivi",
+        "trust_2": "Retour sous 14\u00a0jours (droit légal)",
+        "trust_3": "Paiement sécurisé",
+        "inbox": "1 bac à litière, 1 rebord transparent, 1 pelle\nUn colis suivi, numéro envoyé par e-mail",
+        "size_guide": false,
+        "show_description": true,
+        "sticky_label": "Bac semi-couvert Pattoune",
+        "anchor": "acheter",
+        "show_offers": false
+      },
+      "blocks": {
+        "judgeme_reviews": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "judgeme_reviews"
+      ]
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "Il convient à quel chat\u202f?",
+            "answer": "<p>Il mesure environ 40\u00a0×\u00a028\u00a0×\u00a016\u00a0cm\u00a0: il convient aux chatons et aux chats jusqu’à environ 5\u00a0kg. Pour un grand chat, prends un bac plus grand.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "Quelle litière utiliser\u202f?",
+            "answer": "<p>Toutes les litières en grains ou en granulés. Remplis-le sur quelques centimètres, sans dépasser le bas du rebord.</p>"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "Comment le nettoyer\u202f?",
+            "answer": "<p>Retire le rebord transparent, vide la litière, lave le bac à l’eau savonneuse et sèche-le bien avant de le remplir.</p>"
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "question": "Livraison et retours\u202f?",
+            "answer": "<p>La livraison est suivie et prend [delai_livraison], en [zone_livraison]. Elle est offerte dès [seuil_livraison] d’achat et coûte [frais_livraison] en dessous. Tu disposes de 14\u00a0jours après réception pour changer d’avis, sans avoir à te justifier.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4"
+      ],
+      "settings": {
+        "eyebrow": "Questions",
+        "title": "Avant de te décider.",
+        "aside": "Une autre question\u202f?",
+        "link_label": "Écris-nous",
+        "aside_after": ", une vraie personne te répond en français.",
+        "anchor": "faq"
+      }
+    },
+    "final": {
+      "type": "final-cta",
+      "settings": {
+        "title": "Des rebords hauts, et la litière reste dans le bac.",
+        "highlight": "reste dans le bac.",
+        "button_label": "Je commande son bac",
+        "note": "Livraison offerte dès 25\u00a0€ · Retour sous 14\u00a0jours (droit légal)"
+      }
+    },
+    "recos": {
+      "type": "product-recos",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "faq",
+    "recos",
+    "final"
+  ]
+}
