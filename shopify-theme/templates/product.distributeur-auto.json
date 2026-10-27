@@ -9,7 +9,7 @@
         "trust_1": "Colis suivi",
         "trust_2": "Retour sous 14\u00a0jours (droit légal)",
         "trust_3": "Paiement sécurisé",
-        "inbox": "1 distributeur de croquettes automatique (modèle au choix)\nUn colis suivi, numéro envoyé par e-mail",
+        "inbox": "1 distributeur de croquettes automatique (couleur au choix)\nUn colis suivi, numéro envoyé par e-mail",
         "size_guide": false,
         "show_description": true,
         "sticky_label": "Distributeur auto Pattoune",
@@ -32,8 +32,8 @@
         "q1": {
           "type": "question",
           "settings": {
-            "question": "Boutons ou Wi-Fi\u202f?",
-            "answer": "<p>Le modèle à boutons se règle sur l’appareil. Le modèle Wi-Fi se règle aussi depuis une appli, à condition d’avoir un réseau Wi-Fi 2,4\u00a0GHz.</p>"
+            "question": "Il marche sur piles\u202f?",
+            "answer": "<p>Oui, avec des piles (non fournies) ou branché avec le câble USB. Il se règle avec les boutons de l’appareil, sans appli.</p>"
           }
         },
         "q2": {
