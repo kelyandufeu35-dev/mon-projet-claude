@@ -1,8 +1,9 @@
 {
   "current": {
     "intro_enable": false,
-    "free_shipping_threshold": 25,
-    "shipping_fee": "3.99",
+    "free_shipping_threshold": 30,
+    "shipping_fee": "4.99",
+    "home_description": "Jouets, paniers, harnais, gamelles, soins : tout pour le quotidien de ton chat ou de ton chien. Livraison offerte dès 30 € en France, dans l’UE et en Suisse.",
     "delivery_text": "8 à 25 jours",
     "processing_days": 2,
     "delivery_min_days": 6,

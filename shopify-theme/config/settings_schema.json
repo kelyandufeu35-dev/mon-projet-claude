@@ -27,7 +27,7 @@
         "type": "textarea",
         "id": "home_description",
         "label": "Description de la page d’accueil (Google)",
-        "default": "Jouets, paniers, harnais, gamelles, soins : tout pour le quotidien de ton chat ou de ton chien. Livraison offerte dès 25 € en France, dans l’UE et en Suisse."
+        "default": "Jouets, paniers, harnais, gamelles, soins : tout pour le quotidien de ton chat ou de ton chien. Livraison offerte dès 30 € en France, dans l’UE et en Suisse."
       }
     ]
   },
@@ -122,15 +122,15 @@
         "type": "number",
         "id": "free_shipping_threshold",
         "label": "Livraison offerte dès (€)",
-        "default": 25,
+        "default": 30,
         "info": "0 = livraison offerte sans minimum (pas de jauge). Garde la même valeur que la condition de prix des tarifs Shopify."
       },
       {
         "type": "text",
         "id": "shipping_fee",
         "label": "Frais de livraison sous le seuil (€)",
-        "default": "3.99",
-        "info": "Avec un point, par exemple 3.99. Affiché dans les questions et les données Google : garde le même montant que le tarif Shopify."
+        "default": "4.99",
+        "info": "Avec un point, par exemple 4.99. Affiché dans les questions et les données Google : garde le même montant que le tarif Shopify."
       },
       {
         "type": "text",

@@ -5,7 +5,7 @@
     "noel": {
       "type": "announcement-bar",
       "settings": {
-        "text": "Livraison offerte dès 25 € · Colis suivi jusqu’à chez toi",
+        "text": "Livraison offerte dès 30 € · Colis suivi jusqu’à chez toi",
         "link": "shopify://collections/all"
       }
     },
