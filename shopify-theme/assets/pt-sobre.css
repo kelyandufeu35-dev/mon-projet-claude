@@ -1,0 +1,167 @@
+/* Pattoune v33 « sobre » : palette blanc cassé / noir doux, formes calmes.
+   Chargé après toutes les autres feuilles. Les couleurs principales viennent des
+   réglages du thème (fond, texte, bandes, boutons) ; ce fichier remplace les teintes
+   bleu nuit codées en dur et calme les formes. Le retirer de layout/theme.liquid
+   rend l'ancien style. */
+
+/* 1. Jetons neutres (remplacent ceux de theme.css et motion.css). */
+:root {
+  --tint: #ece8e0;
+  --line: #e0dbd1;
+  --ink-2: #57534c;
+  --mint: #d9d2c5;
+  --lilac: #cfc9be;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --soft: 0 1px 2px rgb(31 30 27 / .05), 0 10px 30px -12px rgb(31 30 27 / .16);
+  --soft-lg: 0 2px 4px rgb(31 30 27 / .05), 0 24px 60px -20px rgb(31 30 27 / .22);
+  --pt-ink-deep: #161513;
+  --pt-ink-2: #2b2a27;
+  --pt-paper: #faf8f4;
+  --pt-sand: #e9e4da;
+  --pt-on-dark-2: #c9c3b8;
+  --pt-on-light-2: #57534c;
+  --pt-muted-title: #8a8478;
+  --pt-line-light: rgb(31 30 27 / .14);
+  --pt-r-lg: 18px;
+  --pt-r-md: 12px;
+  --pt-r-sm: 8px;
+}
+
+/* 2. Surfaces sombres : anthracite au lieu du bleu nuit. */
+.pt-hero__bg {
+  background: linear-gradient(180deg, #191816 0%, var(--pt-ink) 45%, var(--pt-ink) 100%) !important;
+}
+.pt-hero__bg::after { display: none; }
+.pt-hero__copy::before {
+  background: linear-gradient(to bottom, rgb(31 30 27 / 0), rgb(31 30 27 / .85) 120px, rgb(31 30 27 / .85)) !important;
+}
+.pt-gallery__slide--scene {
+  background: linear-gradient(180deg, #191816, var(--pt-ink) 40%) !important;
+}
+.pt-hd:is(.is-scrolled, .is-solid) .pt-hd__bar,
+.pt-sticky { background: rgb(31 30 27 / .92) !important; }
+.pt-lang__menu,
+.pt-mnav__panel { background: rgb(31 30 27 / .97) !important; }
+.pt-gallery__count { background: rgb(31 30 27 / .72) !important; }
+.pt-thumb__play { background: rgb(31 30 27 / .25) !important; }
+.drawer::backdrop { background: rgb(31 30 27 / .45); }
+.footer,
+.footer ul a { color: #c9c3b8; }
+.step p { color: #e9e4da; }
+.pt-footer__word { -webkit-text-fill-color: #1f1e1b !important; }
+
+/* 3. Boutons : plats, sans ombre ni reflet.
+   Fond clair : noir doux, texte clair. Fond sombre : clair, texte noir doux. */
+.btn--sun,
+.pt-btn--sun,
+.pt-btn--sun:hover,
+:is(#cart-drawer, [data-cart-page]) .btn--sun {
+  background: var(--ink) !important;
+  color: var(--paper) !important;
+  box-shadow: none !important;
+}
+.btn--sun:hover,
+:is(#cart-drawer, [data-cart-page]) .btn--sun:hover {
+  background: #000 !important;
+  color: var(--paper) !important;
+}
+:is(.pt-dark, .pt-hero, .pt-hd, .pt-sticky, .section--cobalt) :is(.btn--sun, .pt-btn--sun),
+:is(.pt-dark, .pt-hero, .pt-hd, .pt-sticky, .section--cobalt) :is(.btn--sun, .pt-btn--sun):hover {
+  background: var(--paper) !important;
+  color: var(--ink) !important;
+}
+.pt-btn--ink,
+.pt-btn--ink:hover,
+.add-btn,
+.add-btn[data-added] {
+  box-shadow: none !important;
+}
+.pt-btn::after { display: none !important; }
+.pt-btn__arrow,
+.pt-btn--ink .pt-btn__arrow {
+  width: 22px;
+  height: 22px;
+  margin-right: -4px;
+  background: transparent !important;
+  color: currentColor !important;
+}
+.pt-btn:active { scale: 1; }
+
+/* Petites flèches rondes des rayons : noir doux, flèche claire. */
+.pt-rayon__go {
+  background: var(--ink) !important;
+  color: var(--paper) !important;
+}
+
+/* 4. Plus rien de penché ni de rebondissant. */
+.eyebrow,
+.logo__mark,
+.logo:hover .logo__mark,
+.sticker-deal,
+.sticker-spin,
+.offer__badge,
+.step__num,
+.hero__paw,
+.benefit:hover {
+  transform: none !important;
+  animation: none !important;
+}
+
+/* 5. Pas de motifs à pois ni de taches de couleur derrière les blocs. */
+.hero__visual,
+.section--cobalt,
+.final,
+.lead-hero {
+  background-image: none !important;
+}
+.hero__blob,
+.kibble-burst,
+.marquee__star { display: none !important; }
+
+/* 6. Étiquettes et pastilles : discrètes. */
+.eyebrow {
+  background: transparent !important;
+  padding-inline: 0 !important;
+  box-shadow: none !important;
+}
+.tag,
+.offer__badge,
+.pet-card__tag,
+.pt-badge--sun,
+.lead-hero__badge {
+  background: var(--tint) !important;
+  color: var(--ink) !important;
+}
+
+/* 7. Avis clients (Judge.me) : bouton dans la même palette. */
+.jdgm-write-rev-link,
+.jdgm-widget .jdgm-btn,
+.jdgm-rev-widg__summary .jdgm-write-rev-link {
+  background: var(--ink) !important;
+  border-color: var(--ink) !important;
+  color: var(--paper) !important;
+  border-radius: 999px !important;
+}
+.jdgm-star { color: var(--ink) !important; }
+
+/* 8. Bandeau du haut : l'en-tête fixe se place dessous tant qu'on n'a pas défilé
+   (avant, il le recouvrait : texte caché sur les pages produit, mêlé au logo sur mobile).
+   Bandeau tenu sur une ligne ; dès qu'on défile (repère de 40 px), l'en-tête remonte. */
+:root { --pt-ann-h: 36px; }
+.announce {
+  height: var(--pt-ann-h);
+  padding: 0 var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: .8125rem;
+}
+.announce a { overflow: hidden; text-overflow: ellipsis; }
+body:has(.announce) .pt-hd { top: var(--pt-ann-h); transition: top 240ms var(--pt-e-ui, ease); }
+body:has(.announce) .pt-hd.is-scrolled { top: 0; }
+@media (max-width: 420px) {
+  .announce { font-size: .75rem; letter-spacing: 0; }
+}

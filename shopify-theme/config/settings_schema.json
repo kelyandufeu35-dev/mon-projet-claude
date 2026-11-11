@@ -65,37 +65,37 @@
         "type": "color",
         "id": "color_paper",
         "label": "Fond clair (crème)",
-        "default": "#f4ece2"
+        "default": "#f6f4ef"
       },
       {
         "type": "color",
         "id": "color_ink",
         "label": "Texte",
-        "default": "#14162b"
+        "default": "#1f1e1b"
       },
       {
         "type": "color",
         "id": "color_accent",
         "label": "Couleur principale (bleu)",
-        "default": "#2338e8"
+        "default": "#2b2a27"
       },
       {
         "type": "color",
         "id": "color_button",
         "label": "Bouton d’achat (jaune)",
-        "default": "#ffc23a"
+        "default": "#e8e2d6"
       },
       {
         "type": "color",
         "id": "color_pop",
         "label": "Couleur d’accent (rose)",
-        "default": "#ff7aa8"
+        "default": "#d9d2c5"
       },
       {
         "type": "color",
         "id": "color_ball",
         "label": "Rouge de la balle (accents)",
-        "default": "#c4140f"
+        "default": "#8a8478"
       }
     ]
   },

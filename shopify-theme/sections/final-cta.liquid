@@ -38,7 +38,22 @@
       </a>
     {%- endif -%}
     {%- if section.settings.note != blank -%}
-      <p class="pt-fin__note" data-reveal="up" style="--pt-d:4">{{ section.settings.note | escape }}</p>
+      {%- liquid
+        comment
+          Les notes déjà saisies citent l'ancien seuil (25 €) : on affiche celui réglé dans
+          Paramètres du thème → Livraison, quelle que soit la langue (« 25 € », « €25 »).
+        endcomment
+        assign fin_note = section.settings.note
+        assign fin_thr = settings.free_shipping_threshold | default: 0
+        if fin_thr > 0
+          assign fin_thr = fin_thr | append: ''
+          assign fin_new_a = fin_thr | append: ' €'
+          assign fin_new_b = fin_thr | append: ' €'
+          assign fin_new_c = '€' | append: fin_thr
+          assign fin_note = fin_note | replace: '25 €', fin_new_a | replace: '25 €', fin_new_b | replace: '€25', fin_new_c
+        endif
+      -%}
+      <p class="pt-fin__note" data-reveal="up" style="--pt-d:4">{{ fin_note | escape }}</p>
     {%- endif -%}
   </div>
 </section>

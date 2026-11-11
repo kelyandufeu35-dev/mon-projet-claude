@@ -7,13 +7,13 @@
         "eyebrow": "Jouets et accessoires pour chats et chiens",
         "title": "Tout pour son quotidien, du jeu à la sieste.",
         "highlight": "du jeu à la sieste.",
-        "subtitle": "Jouets, paniers, harnais, gamelles, soins… Des objets simples et utiles pour ton chat ou ton chien. Livraison offerte dès 25 € en France, dans l’UE et en Suisse.",
+        "subtitle": "Jouets, paniers, harnais, gamelles, soins… Des objets simples et utiles pour ton chat ou ton chien. Livraison offerte dès 30 € en France, dans l’UE et en Suisse.",
         "button_label": "Voir les rayons",
         "target": "rayons",
         "link_label": "Nos coups de cœur",
         "link_target": "jouets",
         "show_proof": true,
-        "proof_1": "Livraison offerte dès 25 €",
+        "proof_1": "Livraison offerte dès 30 €",
         "proof_2": "Retour sous 14 jours (droit légal)",
         "proof_3": "Paiement sécurisé",
         "show_photos": true,
@@ -121,7 +121,7 @@
           "type": "spec",
           "settings": {
             "label": "Colis suivi",
-            "value": "Un numéro de suivi par e-mail, et la livraison offerte dès 25 €."
+            "value": "Un numéro de suivi par e-mail, et la livraison offerte dès 30 €."
           }
         },
         "p4": {
@@ -199,7 +199,7 @@
         "highlight": "sa journée.",
         "button_label": "Voir les rayons",
         "button_anchor": "rayons",
-        "note": "Livraison offerte dès 25 € · Retour sous 14 jours (droit légal)"
+        "note": "Livraison offerte dès 30 € · Retour sous 14 jours (droit légal)"
       }
     }
   },

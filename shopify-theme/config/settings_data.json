@@ -1,6 +1,12 @@
 {
   "current": {
     "intro_enable": false,
+    "color_ball": "#8a8478",
+    "color_pop": "#d9d2c5",
+    "color_button": "#e8e2d6",
+    "color_accent": "#2b2a27",
+    "color_ink": "#1f1e1b",
+    "color_paper": "#f6f4ef",
     "free_shipping_threshold": 30,
     "shipping_fee": "4.99",
     "home_description": "Jouets, paniers, harnais, gamelles, soins : tout pour le quotidien de ton chat ou de ton chien. Livraison offerte dès 30 € en France, dans l’UE et en Suisse.",
